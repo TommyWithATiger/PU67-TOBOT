@@ -1,4 +1,7 @@
 
+# do not commit database login information
+java/src/META-INF/db_login.xml
+
 # Created by https://www.gitignore.io/api/java,osx,vim,windows,intellij,eclipse,linux
 
 ### Eclipse ###
