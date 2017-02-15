@@ -11,6 +11,7 @@
     <persistence-unit name="Eclipselink_JPA" transaction-type="RESOURCE_LOCAL">
 
         <!-- <class>EntityClassname</class>  -->
+        <class>data.Topic</class>
 
         <properties>
             &login;
