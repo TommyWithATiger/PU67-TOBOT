@@ -105,7 +105,7 @@ modules.xml
 .idea/misc.xml
 *.ipr
 .idea/
-out/
+/java/target/
 
 ### Java ###
 *.class
