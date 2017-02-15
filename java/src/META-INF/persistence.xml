@@ -12,7 +12,7 @@
 
         <!-- <class>EntityClassname</class>  -->
         <class>data.Topic</class>
-        <class>users.Employee</class>
+        <class>users.User</class>
 
         <properties>
             &login;
