@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE doc [
-        <!ENTITY login SYSTEM "java/src/META-INF/db_login.xml" >
+        <!ENTITY login SYSTEM "src/META-INF/db_login.xml" >
         ] >
 
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
