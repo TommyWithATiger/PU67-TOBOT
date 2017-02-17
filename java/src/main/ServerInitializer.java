@@ -1,9 +1,14 @@
 package main;
 
-public class ServerInitializer {
-    public static void main(String[] args) {
-        System.setProperty("javax.xml.accessExternalDTD", "all");
+import api.connection.SocketHandler;
 
-        // TODO: do actual stuff here
-    }
+public class ServerInitializer {
+
+  public static void main(String[] args) {
+    System.setProperty("javax.xml.accessExternalDTD", "all");
+
+    // Should include all setup files for the project
+
+    new SocketHandler();
+  }
 }
