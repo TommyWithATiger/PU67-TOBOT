@@ -32,22 +32,21 @@ public class UserTests extends BaseTest {
     when(entityManager.getTransaction()).thenReturn(entityTransaction);
   }
 
-  @After
-  public void destroy() {
-    entityManagerFactory.close();
-  }
-
-  @Test
-  public void testCreateUser() throws Exception {
-
+  private User makeUser(){
     User user = new User(entityManagerFactory);
     user.setId(100);
     user.setUsername("username");
     user.setEmail("email@email.com");
     user.setHashword("aduhaophao");
     user.setSalt("afoiahfoh");
-
     user.create();
+    return user;
+  }
+
+  @Test
+  public void testCreateUser() throws Exception {
+
+    User user = makeUser();
 
     assertEquals("username",        user.getUsername());
     assertEquals("email@email.com", user.getEmail());
@@ -62,6 +61,47 @@ public class UserTests extends BaseTest {
     inOrder.verify(entityManager).getTransaction();
     inOrder.verify(entityTransaction).begin();
     inOrder.verify(entityManager).persist(user);
+    inOrder.verify(entityTransaction).commit();
+    inOrder.verify(entityManager).close();
+  }
+
+  @Test
+  public void testDeleteUser() throws Exception {
+
+    User user = makeUser();
+
+    user.delete();
+
+    user.close();
+
+    InOrder inOrder = Mockito.inOrder(entityManagerFactory, entityManager, entityTransaction);
+
+    inOrder.verify(entityManagerFactory).createEntityManager();
+    inOrder.verify(entityManager).getTransaction();
+    inOrder.verify(entityTransaction).begin();
+    inOrder.verify(entityManager).remove(user);
+    inOrder.verify(entityTransaction).commit();
+    inOrder.verify(entityManager).close();
+  }
+
+  @Test
+  public void testUpdateUser() throws Exception {
+
+    User user = makeUser();
+
+    user.setEmail("email");
+    user.update();
+
+    assertEquals(user.getEmail(), "email");
+
+    user.close();
+
+    InOrder inOrder = Mockito.inOrder(entityManagerFactory, entityManager, entityTransaction);
+
+    inOrder.verify(entityManagerFactory).createEntityManager();
+    inOrder.verify(entityManager).getTransaction();
+    inOrder.verify(entityTransaction).begin();
+    inOrder.verify(entityManager).merge(user);
     inOrder.verify(entityTransaction).commit();
     inOrder.verify(entityManager).close();
   }
