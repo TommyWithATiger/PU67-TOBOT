@@ -1,5 +1,6 @@
 package users;
 
+import java.util.Date;
 import javax.persistence.*;
 
 @Entity
@@ -14,27 +15,56 @@ public class User {
     private String email;
     private String hashword;
     private String salt;
+    private String sessionToken;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date sessionTokenExpireDate;
+
+    @Transient
+    private EntityManager entityManager;
 
     protected User() {
+    // needed to satisfy JPA
     }
 
-    protected User(String username, String email, String hashword, String salt) {
-        this.username = username;
-        this.email = email;
-        this.hashword = hashword;
-        this.salt = salt;
+    public User(EntityManagerFactory entityManagerFactory) {
+        assignEntityManager(entityManagerFactory);
     }
 
-    protected User(int id, String username, String email, String hashword, String salt) {
-      this(username, email, hashword, salt);
-      this.id = id;
+    public void assignEntityManager(EntityManagerFactory entityManagerFactory){
+      entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    public void create(){
+        EntityTransaction et = entityManager.getTransaction();
+        et.begin();
+        entityManager.persist(this);
+        et.commit();
+    }
+
+    public void update(){
+        EntityTransaction et = entityManager.getTransaction();
+        et.begin();
+        entityManager.merge(this);
+        et.commit();
+    }
+
+    public void delete(){
+        EntityTransaction et = entityManager.getTransaction();
+        et.begin();
+        entityManager.remove(this);
+        et.commit();
+    }
+
+    public void close(){
+        entityManager.close();
     }
 
     public int getId() {
         return id;
     }
 
-    void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -42,7 +72,7 @@ public class User {
         return username;
     }
 
-    void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -50,7 +80,7 @@ public class User {
         return email;
     }
 
-    void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -58,7 +88,7 @@ public class User {
         return hashword;
     }
 
-    void setHashword(String hash) {
+    public void setHashword(String hash) {
         this.hashword = hash;
     }
 
@@ -66,7 +96,23 @@ public class User {
         return salt;
     }
 
-    void setSalt(String salt) {
+    public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public String getSessionToken() {
+      return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+      this.sessionToken = sessionToken;
+    }
+
+    public Date getSessionTokenExpireDate() {
+      return sessionTokenExpireDate;
+    }
+
+    public void setSessionTokenExpireDate(Date sessionTokenExpireDate) {
+      this.sessionTokenExpireDate = sessionTokenExpireDate;
     }
 }
