@@ -1,22 +1,35 @@
 package users;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.when;
 
 import base.BaseTest;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.EntityTransaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.*;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class UserTests extends BaseTest {
 
+  @Mock
   private EntityManagerFactory entityManagerFactory;
+
+  @Mock
+  private EntityManager entityManager;
+
+  @Mock
+  private EntityTransaction entityTransaction;
 
   @Before
   public void init() {
-    entityManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
+    when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
+    when(entityManager.getTransaction()).thenReturn(entityTransaction);
   }
 
   @After
@@ -27,22 +40,29 @@ public class UserTests extends BaseTest {
   @Test
   public void testCreateUser() throws Exception {
 
-    UserManager um = UserManager.getInstance();
-    um.create(100,"username", "email@email.com", "aduhaophao", "afoiahfoh");
-    um.close();
+    User user = new User(entityManagerFactory);
+    user.setId(100);
+    user.setUsername("username");
+    user.setEmail("email@email.com");
+    user.setHashword("aduhaophao");
+    user.setSalt("afoiahfoh");
 
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    entityManager.getTransaction().begin();
+    user.create();
 
-    User user = entityManager.find(User.class, 100);
     assertEquals("username",        user.getUsername());
     assertEquals("email@email.com", user.getEmail());
     assertEquals("aduhaophao",      user.getHashword());
     assertEquals("afoiahfoh",       user.getSalt());
 
-    entityManager.remove(user);
+    user.close();
 
-    entityManager.getTransaction().commit();
-    entityManager.close();
+    InOrder inOrder = Mockito.inOrder(entityManagerFactory, entityManager, entityTransaction);
+
+    inOrder.verify(entityManagerFactory).createEntityManager();
+    inOrder.verify(entityManager).getTransaction();
+    inOrder.verify(entityTransaction).begin();
+    inOrder.verify(entityManager).persist(user);
+    inOrder.verify(entityTransaction).commit();
+    inOrder.verify(entityManager).close();
   }
 }
