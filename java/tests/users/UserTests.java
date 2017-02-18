@@ -1,13 +1,14 @@
+package users;
+
 import static junit.framework.TestCase.assertEquals;
 
+import base.BaseTest;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import users.User;
-import users.UserManager;
 
 public class UserTests extends BaseTest {
 
