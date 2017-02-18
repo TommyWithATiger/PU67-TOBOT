@@ -1,7 +1,13 @@
 package users;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import javax.persistence.*;
+import org.eclipse.persistence.exceptions.DatabaseException;
+import org.eclipse.persistence.exceptions.PersistenceUnitLoadingException;
 
 @Entity
 @Table
@@ -115,4 +121,43 @@ public class User {
     public void setSessionTokenExpireDate(Date sessionTokenExpireDate) {
       this.sessionTokenExpireDate = sessionTokenExpireDate;
     }
+
+  public static void main(String[] args) {
+    // run this to create a user
+    System.setProperty("javax.xml.accessExternalDTD", "all");
+
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
+
+    try{
+      EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
+      User user = new User(entityManagerFactory);
+
+      for(int i=0; i<20; i++){
+        // try to clear screen
+        System.out.println();
+      }
+
+      System.out.print("Enter username: ");
+      user.setUsername(bufferedReader.readLine());
+      System.out.print("Enter email: ");
+      user.setEmail(bufferedReader.readLine());
+      System.out.print("Enter hash: ");
+      user.setHashword(bufferedReader.readLine());
+      System.out.print("Enter salt: ");
+      user.setSalt(bufferedReader.readLine());
+
+      user.create();
+      System.out.println("User creation successful!");
+    }
+    catch (PersistenceUnitLoadingException e){
+      System.out.println("Could not load persistence unit");
+    }
+    catch (DatabaseException e){
+      System.out.println("Database connection failed");
+    }
+    catch (IOException e){
+      System.out.println("Unable to create user");
+    }
+  }
 }
