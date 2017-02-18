@@ -1,6 +1,6 @@
 # TOBOT - Frontend
 
-The client currently uses Vue.js to render manipulate the DOM. To develop you need node.js with npm right installed. Then follow the instructions:
+The client currently uses Vue.js to manipulate the DOM. To develop you need node.js with npm. You can then follow the instructions below.
 
 ## Development Setup
 
