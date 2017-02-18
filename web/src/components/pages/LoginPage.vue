@@ -1,16 +1,16 @@
 <template>
   <div class="page-content">
     <h1>{{ title }}</h1>
-    <router-link to="/login">Go to login</router-link>
+    <router-link to="/">Go back to front page</router-link>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'frontpage',
+  name: 'loginpage',
   data () {
     return {
-      title: 'This is TOBOT'
+      title: 'Login'
     }
   }
 }
