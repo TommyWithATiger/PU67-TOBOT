@@ -53,8 +53,6 @@ public class UserTests extends BaseTest {
     assertEquals(100, user.getId());
     assertEquals("username", user.getUsername());
     assertEquals("email@email.com", user.getEmail());
-    assertTrue(user.checkPassword("hunter2"));
-    assertFalse(user.checkPassword("password123"));
 
     user.close();
 
@@ -120,5 +118,13 @@ public class UserTests extends BaseTest {
     User user = new User();
     user.setEmail("this_is_valid@this_is_valid");
     assertEquals(user.getEmail(), "this_is_valid@this_is_valid");
+  }
+
+  @Test
+  public void testPassword() throws Exception {
+    User user = new User();
+    user.setPassword("hunter2");
+    assertTrue(user.checkPassword("hunter2"));
+    assertFalse(user.checkPassword("password123"));
   }
 }
