@@ -35,7 +35,7 @@ public class UserTests extends BaseTest {
     User.initializeClass(entityManagerFactory);
   }
 
-  private User makeUser(){
+  private User makeUser() {
     User user = new User();
     user.setId(100);
     user.setUsername("username");
@@ -50,8 +50,8 @@ public class UserTests extends BaseTest {
 
     User user = makeUser();
 
-    assertEquals(100,               user.getId());
-    assertEquals("username",        user.getUsername());
+    assertEquals(100, user.getId());
+    assertEquals("username", user.getUsername());
     assertEquals("email@email.com", user.getEmail());
     assertTrue(user.checkPassword("hunter2"));
     assertFalse(user.checkPassword("password123"));

@@ -13,155 +13,154 @@ import org.mindrot.jbcrypt.BCrypt;
 @Table
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private int id;
 
-    private String username;
-    private String email;
-    private String hashword;
-    private String sessionToken;
+  private String username;
+  private String email;
+  private String hashword;
+  private String sessionToken;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date sessionTokenExpireDate;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date sessionTokenExpireDate;
 
-    @Transient
-    private static EntityManagerFactory entityManagerFactory;
+  @Transient
+  private static EntityManagerFactory entityManagerFactory;
 
-    @Transient
-    private EntityManager entityManager;
+  @Transient
+  private EntityManager entityManager;
 
-    public static void initializeClass(EntityManagerFactory entityManagerFactory) {
-        User.entityManagerFactory = entityManagerFactory;
-        EntityManager em = entityManagerFactory.createEntityManager();
+  public static void initializeClass(EntityManagerFactory entityManagerFactory) {
+    User.entityManagerFactory = entityManagerFactory;
+    EntityManager em = entityManagerFactory.createEntityManager();
 
-        Query findUserByUsername = em.createQuery("SELECT u FROM User u WHERE u.username = :username");
-        entityManagerFactory.addNamedQuery("findUserByUsername", findUserByUsername);
+    Query findUserByUsername = em.createQuery("SELECT u FROM User u WHERE u.username = :username");
+    entityManagerFactory.addNamedQuery("findUserByUsername", findUserByUsername);
 
-        Query findUserByEmail = em.createQuery("SELECT u FROM User u WHERE u.email = :email");
-        entityManagerFactory.addNamedQuery("findUserByEmail", findUserByEmail);
+    Query findUserByEmail = em.createQuery("SELECT u FROM User u WHERE u.email = :email");
+    entityManagerFactory.addNamedQuery("findUserByEmail", findUserByEmail);
 
-        em.close();
+    em.close();
+  }
+
+  public User() {
+    updateEntityManager();
+  }
+
+  private void updateEntityManager() {
+    if (entityManager != null) {
+      close();
     }
+    entityManager = entityManagerFactory.createEntityManager();
+  }
 
-    public User(){
-      updateEntityManager();
+  public void create() {
+    EntityTransaction et = entityManager.getTransaction();
+    et.begin();
+    entityManager.persist(this);
+    et.commit();
+  }
+
+  public void update() {
+    EntityTransaction et = entityManager.getTransaction();
+    et.begin();
+    entityManager.merge(this);
+    et.commit();
+  }
+
+  public void delete() {
+    User.delete(id);
+  }
+
+  public static void delete(int id) {
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
+    EntityTransaction et = entityManager.getTransaction();
+    et.begin();
+    // User object must be deleted by same manager that finds it
+    User user = entityManager.find(User.class, id);
+    entityManager.remove(user);
+    et.commit();
+    entityManager.close();
+  }
+
+  private static User find(String namedQueryString, String fieldName, String fieldValue) {
+    EntityManager em = entityManagerFactory.createEntityManager();
+    TypedQuery<User> nq = em.createNamedQuery(namedQueryString, User.class);
+    nq.setParameter(fieldName, fieldValue);
+    User user;
+    try {
+      user = nq.getSingleResult();
+      user.updateEntityManager();
+    } catch (NoResultException e) {
+      user = null;
     }
+    em.close();
+    return user;
+  }
 
-    private void updateEntityManager(){
-      if (entityManager != null){
-        close();
-      }
-      entityManager = entityManagerFactory.createEntityManager();
-    }
+  public static User findByUsername(String username) {
+    return find("findUserByUsername", "username", username);
+  }
 
-    public void create(){
-        EntityTransaction et = entityManager.getTransaction();
-        et.begin();
-        entityManager.persist(this);
-        et.commit();
-    }
-
-    public void update(){
-        EntityTransaction et = entityManager.getTransaction();
-        et.begin();
-        entityManager.merge(this);
-        et.commit();
-    }
-
-    public void delete(){
-      User.delete(id);
-    }
-
-    public static void delete(int id){
-      EntityManager entityManager = entityManagerFactory.createEntityManager();
-      EntityTransaction et = entityManager.getTransaction();
-      et.begin();
-      // User object must be deleted by same manager that finds it
-      User user = entityManager.find(User.class, id);
-      entityManager.remove(user);
-      et.commit();
-      entityManager.close();
-    }
-
-    private static User find(String namedQueryString, String fieldName, String fieldValue){
-      EntityManager em = entityManagerFactory.createEntityManager();
-      TypedQuery<User> nq = em.createNamedQuery(namedQueryString, User.class);
-      nq.setParameter(fieldName, fieldValue);
-      User user;
-      try{
-        user = nq.getSingleResult();
-        user.updateEntityManager();
-      }
-      catch (NoResultException e){
-        user = null;
-      }
-      em.close();
-      return user;
-    }
-
-    public static User findByUsername(String username){
-      return find("findUserByUsername", "username", username);
-    }
-
-    public static User findByEmail(String email){
-      return find("findUserByEmail", "email", email);
-    }
+  public static User findByEmail(String email) {
+    return find("findUserByEmail", "email", email);
+  }
 
 
-    public void setPassword(String password) {
-      // copied from http://www.mindrot.org/projects/jBCrypt/
-      hashword = BCrypt.hashpw(password, BCrypt.gensalt());
-    }
+  public void setPassword(String password) {
+    // copied from http://www.mindrot.org/projects/jBCrypt/
+    hashword = BCrypt.hashpw(password, BCrypt.gensalt());
+  }
 
-    public boolean checkPassword(String candidate){
-      // copied from http://www.mindrot.org/projects/jBCrypt/
-      return BCrypt.checkpw(candidate, hashword);
-    }
+  public boolean checkPassword(String candidate) {
+    // copied from http://www.mindrot.org/projects/jBCrypt/
+    return BCrypt.checkpw(candidate, hashword);
+  }
 
-    public void close(){
-        entityManager.close();
-    }
+  public void close() {
+    entityManager.close();
+  }
 
-    public int getId() {
-        return id;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getSessionToken() {
-      return sessionToken;
-    }
+  public String getSessionToken() {
+    return sessionToken;
+  }
 
-    public void setSessionToken(String sessionToken) {
-      this.sessionToken = sessionToken;
-    }
+  public void setSessionToken(String sessionToken) {
+    this.sessionToken = sessionToken;
+  }
 
-    public Date getSessionTokenExpireDate() {
-      return sessionTokenExpireDate;
-    }
+  public Date getSessionTokenExpireDate() {
+    return sessionTokenExpireDate;
+  }
 
-    public void setSessionTokenExpireDate(Date sessionTokenExpireDate) {
-      this.sessionTokenExpireDate = sessionTokenExpireDate;
-    }
+  public void setSessionTokenExpireDate(Date sessionTokenExpireDate) {
+    this.sessionTokenExpireDate = sessionTokenExpireDate;
+  }
 
   public static void main(String[] args) {
     // run this to create a user
@@ -169,23 +168,23 @@ public class User {
 
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-    try{
-      EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
+    try {
+      EntityManagerFactory entityManagerFactory = Persistence
+          .createEntityManagerFactory("Eclipselink_JPA");
       User.initializeClass(entityManagerFactory);
 
-      for(int i=0; i<20; i++){
+      for (int i = 0; i < 20; i++) {
         // try to clear screen
         System.out.println();
       }
 
       System.out.print("Enter R to remove, anything else to create: ");
-      if (bufferedReader.readLine().equals("R")){
+      if (bufferedReader.readLine().equals("R")) {
         System.out.print("Enter username: ");
         User user = User.findByUsername(bufferedReader.readLine());
         user.delete();
         System.out.println("User removed successfully!");
-      }
-      else {
+      } else {
         User user = new User();
         System.out.print("Enter username: ");
         user.setUsername(bufferedReader.readLine());
@@ -197,14 +196,11 @@ public class User {
         user.create();
         System.out.println("User creation successful!");
       }
-    }
-    catch (PersistenceUnitLoadingException e){
+    } catch (PersistenceUnitLoadingException e) {
       System.out.println("Could not load persistence unit");
-    }
-    catch (DatabaseException e){
+    } catch (DatabaseException e) {
       System.out.println("Database connection failed");
-    }
-    catch (IOException e){
+    } catch (IOException e) {
       System.out.println("Unable to create user");
     }
   }
