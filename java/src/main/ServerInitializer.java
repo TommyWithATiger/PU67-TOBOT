@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import server.connection.SocketHandler;
+import users.User;
 
 public class ServerInitializer {
 
@@ -28,10 +29,14 @@ public class ServerInitializer {
   public static void setup(){
     System.setProperty("javax.xml.accessExternalDTD", "all");
 
+    // Should only make one EntityManagerFactory, and this is the one
+    // see: http://stackoverflow.com/a/4544053
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
 
     TopicDAO topicDAO = TopicDAO.getInstance(entityManagerFactory);
     SubjectDAO subjectDAO = SubjectDAO.getInstance(entityManagerFactory);
+    User.initializeClass(entityManagerFactory);
 
+    entityManagerFactory.close();
   }
 }
