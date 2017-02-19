@@ -187,12 +187,26 @@ public class User {
         System.out.println();
       }
 
-      System.out.print("Enter R to remove, anything else to create: ");
-      if (bufferedReader.readLine().equals("R")) {
-        System.out.print("Enter username: ");
+      System.out.print("Enter R to remove, U to update, anything else to create: ");
+      String choice = bufferedReader.readLine();
+      if (choice.equals("R")) {
+        System.out.print("Enter username to delete: ");
         User user = User.findByUsername(bufferedReader.readLine());
+
         user.delete();
         System.out.println("User removed successfully!");
+      } else if(choice.equals("U")) {
+        System.out.print("Enter username to update: ");
+        User user = User.findByUsername(bufferedReader.readLine());
+        System.out.print("Enter new username: ");
+        user.setUsername(bufferedReader.readLine());
+        System.out.print("Enter new email: ");
+        user.setEmail(bufferedReader.readLine());
+        System.out.print("Enter new password: ");
+        user.setPassword(bufferedReader.readLine());
+
+        user.update();
+        System.out.println("User updated successfully!");
       } else {
         User user = new User();
         System.out.print("Enter username: ");
