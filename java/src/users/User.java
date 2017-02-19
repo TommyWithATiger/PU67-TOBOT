@@ -172,22 +172,31 @@ public class User {
     try{
       EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
       User.initializeClass(entityManagerFactory);
-      User user = new User();
 
       for(int i=0; i<20; i++){
         // try to clear screen
         System.out.println();
       }
 
-      System.out.print("Enter username: ");
-      user.setUsername(bufferedReader.readLine());
-      System.out.print("Enter email: ");
-      user.setEmail(bufferedReader.readLine());
-      System.out.print("Enter password: ");
-      user.setPassword(bufferedReader.readLine());
+      System.out.print("Enter R to remove, anything else to create: ");
+      if (bufferedReader.readLine().equals("R")){
+        System.out.print("Enter username: ");
+        User user = User.findByUsername(bufferedReader.readLine());
+        user.delete();
+        System.out.println("User removed successfully!");
+      }
+      else {
+        User user = new User();
+        System.out.print("Enter username: ");
+        user.setUsername(bufferedReader.readLine());
+        System.out.print("Enter email: ");
+        user.setEmail(bufferedReader.readLine());
+        System.out.print("Enter password: ");
+        user.setPassword(bufferedReader.readLine());
 
-      user.create();
-      System.out.println("User creation successful!");
+        user.create();
+        System.out.println("User creation successful!");
+      }
     }
     catch (PersistenceUnitLoadingException e){
       System.out.println("Could not load persistence unit");
