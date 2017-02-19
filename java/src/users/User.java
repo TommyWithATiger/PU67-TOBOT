@@ -54,10 +54,18 @@ public class User {
     }
 
     public void delete(){
-        EntityTransaction et = entityManager.getTransaction();
-        et.begin();
-        entityManager.remove(this);
-        et.commit();
+      User.delete(id);
+    }
+
+    public static void delete(int id){
+      EntityManager entityManager = entityManagerFactory.createEntityManager();
+      EntityTransaction et = entityManager.getTransaction();
+      et.begin();
+      // User object must be deleted by same manager that finds it
+      User user = entityManager.find(User.class, id);
+      entityManager.remove(user);
+      et.commit();
+      entityManager.close();
     }
 
     public void setPassword(String password) {

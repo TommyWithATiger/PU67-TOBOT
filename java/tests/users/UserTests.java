@@ -73,9 +73,9 @@ public class UserTests extends BaseTest {
 
     User user = makeUser();
 
-    user.delete();
+    when(entityManager.find(User.class, 100)).thenReturn(user);
 
-    user.close();
+    user.delete();
 
     InOrder inOrder = Mockito.inOrder(entityManagerFactory, entityManager, entityTransaction);
 
