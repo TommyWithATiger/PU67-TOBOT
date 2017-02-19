@@ -30,10 +30,11 @@ public class UserTests extends BaseTest {
   public void init() {
     when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
     when(entityManager.getTransaction()).thenReturn(entityTransaction);
+    User.initializeClass(entityManagerFactory);
   }
 
   private User makeUser(){
-    User user = new User(entityManagerFactory);
+    User user = new User();
     user.setId(100);
     user.setUsername("username");
     user.setEmail("email@email.com");

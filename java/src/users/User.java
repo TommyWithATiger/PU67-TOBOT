@@ -1,7 +1,6 @@
 package users;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
@@ -27,17 +26,16 @@ public class User {
     private Date sessionTokenExpireDate;
 
     @Transient
+    private static EntityManagerFactory entityManagerFactory;
+
+    @Transient
     private EntityManager entityManager;
 
-    protected User() {
-    // needed to satisfy JPA
+    public static void initializeClass(EntityManagerFactory entityManagerFactory) {
+        User.entityManagerFactory = entityManagerFactory;
     }
 
-    public User(EntityManagerFactory entityManagerFactory) {
-        assignEntityManager(entityManagerFactory);
-    }
-
-    public void assignEntityManager(EntityManagerFactory entityManagerFactory){
+    public User(){
       entityManager = entityManagerFactory.createEntityManager();
     }
 
@@ -128,10 +126,10 @@ public class User {
 
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-
     try{
       EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
-      User user = new User(entityManagerFactory);
+      User.initializeClass(entityManagerFactory);
+      User user = new User();
 
       for(int i=0; i<20; i++){
         // try to clear screen
