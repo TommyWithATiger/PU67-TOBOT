@@ -182,11 +182,6 @@ public class User {
           .createEntityManagerFactory("Eclipselink_JPA");
       User.initializeClass(entityManagerFactory);
 
-      for (int i = 0; i < 20; i++) {
-        // try to clear screen
-        System.out.println();
-      }
-
       System.out.print("Enter R to remove, U to update, anything else to create: ");
       String choice = bufferedReader.readLine();
       if (choice.equals("R")) {
@@ -226,5 +221,7 @@ public class User {
     } catch (IOException e) {
       System.out.println("Unable to create user");
     }
+
+    entityManagerFactory.close();
   }
 }
