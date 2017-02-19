@@ -1,6 +1,8 @@
 package users;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.when;
 
 import base.BaseTest;
@@ -38,8 +40,7 @@ public class UserTests extends BaseTest {
     user.setId(100);
     user.setUsername("username");
     user.setEmail("email@email.com");
-    user.setHashword("aduhaophao");
-    user.setSalt("afoiahfoh");
+    user.setPassword("hunter2");
     user.create();
     return user;
   }
@@ -49,10 +50,11 @@ public class UserTests extends BaseTest {
 
     User user = makeUser();
 
+    assertEquals(100,               user.getId());
     assertEquals("username",        user.getUsername());
     assertEquals("email@email.com", user.getEmail());
-    assertEquals("aduhaophao",      user.getHashword());
-    assertEquals("afoiahfoh",       user.getSalt());
+    assertTrue(user.checkPassword("hunter2"));
+    assertFalse(user.checkPassword("password123"));
 
     user.close();
 

@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.persistence.*;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.PersistenceUnitLoadingException;
+import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @Table
@@ -19,7 +20,6 @@ public class User {
     private String username;
     private String email;
     private String hashword;
-    private String salt;
     private String sessionToken;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -60,6 +60,16 @@ public class User {
         et.commit();
     }
 
+    public void setPassword(String password) {
+      // copied from http://www.mindrot.org/projects/jBCrypt/
+      hashword = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    public boolean checkPassword(String candidate){
+      // copied from http://www.mindrot.org/projects/jBCrypt/
+      return BCrypt.checkpw(candidate, hashword);
+    }
+
     public void close(){
         entityManager.close();
     }
@@ -86,22 +96,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getHashword() {
-        return hashword;
-    }
-
-    public void setHashword(String hash) {
-        this.hashword = hash;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getSessionToken() {
@@ -140,10 +134,8 @@ public class User {
       user.setUsername(bufferedReader.readLine());
       System.out.print("Enter email: ");
       user.setEmail(bufferedReader.readLine());
-      System.out.print("Enter hash: ");
-      user.setHashword(bufferedReader.readLine());
-      System.out.print("Enter salt: ");
-      user.setSalt(bufferedReader.readLine());
+      System.out.print("Enter password: ");
+      user.setPassword(bufferedReader.readLine());
 
       user.create();
       System.out.println("User creation successful!");
