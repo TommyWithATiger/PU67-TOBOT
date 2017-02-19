@@ -30,7 +30,7 @@ export class Format {
    * @param {string} date The date to format in string format. YYYY-MM-DD hh:mm:ss
    * @param {string} format Optional format for the date input. Use: day, mnd, DD, MM, YYYY, HH, mm or SS
    */
-  static date (date, format = 'dag. D. mnd. YYYY (HH:mm)') {
+  static date (date, format = 'DD/MM YYYY (HH:mm)') {
     if (!date.length) return ''
 
     if (typeof date === 'string') {
@@ -39,7 +39,7 @@ export class Format {
         .replace(new RegExp('da[gy]', 'ig'), days[d.getDay()])
         .replace(new RegExp('mnd', 'ig'), months[d.getMonth()])
 
-      for (let i = 5; i > 0; i--) {
+      for (let i = 4; i > 0; i--) {
         formatted = formatted
           .replace(new RegExp(`(^|\\W)Y{${i},}($|\\W)`, 'g'), `$1${this.digits(d.getFullYear(), i)}$2`)
           .replace(new RegExp(`(^|\\W)M{${i},}($|\\W)`, 'g'), `$1${this.digits(d.getMonth() + 1, i)}$2`)
