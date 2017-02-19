@@ -33,9 +33,25 @@ public class User {
 
     public static void initializeClass(EntityManagerFactory entityManagerFactory) {
         User.entityManagerFactory = entityManagerFactory;
+        EntityManager em = entityManagerFactory.createEntityManager();
+
+        Query findUserByUsername = em.createQuery("SELECT u FROM User u WHERE u.username = :username");
+        entityManagerFactory.addNamedQuery("findUserByUsername", findUserByUsername);
+
+        Query findUserByEmail = em.createQuery("SELECT u FROM User u WHERE u.email = :email");
+        entityManagerFactory.addNamedQuery("findUserByEmail", findUserByEmail);
+
+        em.close();
     }
 
     public User(){
+      updateEntityManager();
+    }
+
+    private void updateEntityManager(){
+      if (entityManager != null){
+        close();
+      }
       entityManager = entityManagerFactory.createEntityManager();
     }
 
@@ -67,6 +83,31 @@ public class User {
       et.commit();
       entityManager.close();
     }
+
+    private static User find(String namedQueryString, String fieldName, String fieldValue){
+      EntityManager em = entityManagerFactory.createEntityManager();
+      TypedQuery<User> nq = em.createNamedQuery(namedQueryString, User.class);
+      nq.setParameter(fieldName, fieldValue);
+      User user;
+      try{
+        user = nq.getSingleResult();
+        user.updateEntityManager();
+      }
+      catch (NoResultException e){
+        user = null;
+      }
+      em.close();
+      return user;
+    }
+
+    public static User findByUsername(String username){
+      return find("findUserByUsername", "username", username);
+    }
+
+    public static User findByEmail(String email){
+      return find("findUserByEmail", "email", email);
+    }
+
 
     public void setPassword(String password) {
       // copied from http://www.mindrot.org/projects/jBCrypt/
