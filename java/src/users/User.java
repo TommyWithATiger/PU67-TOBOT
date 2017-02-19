@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.regex.Pattern;
 import javax.persistence.*;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.PersistenceUnitLoadingException;
@@ -30,6 +31,9 @@ public class User {
 
   @Transient
   private EntityManager entityManager;
+
+  @Transient
+  private static Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
 
   public static void initializeClass(EntityManagerFactory entityManagerFactory) {
     User.entityManagerFactory = entityManagerFactory;
@@ -143,7 +147,12 @@ public class User {
   }
 
   public void setEmail(String email) {
-    this.email = email;
+    if(User.emailPattern.matcher(email).matches()){
+      this.email = email;
+    }
+    else {
+      throw new IllegalArgumentException("Does not match email pattern");
+    }
   }
 
   public String getSessionToken() {

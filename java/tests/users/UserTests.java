@@ -92,10 +92,10 @@ public class UserTests extends BaseTest {
 
     User user = makeUser();
 
-    user.setEmail("email");
+    user.setEmail("email2@email.com");
     user.update();
 
-    assertEquals(user.getEmail(), "email");
+    assertEquals(user.getEmail(), "email2@email.com");
 
     user.close();
 
@@ -107,5 +107,18 @@ public class UserTests extends BaseTest {
     inOrder.verify(entityManager).merge(user);
     inOrder.verify(entityTransaction).commit();
     inOrder.verify(entityManager).close();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testWrongEmail() throws Exception {
+    User user = new User();
+    user.setEmail("this_is_not_valid");
+  }
+
+  @Test
+  public void testCorrectEmail() throws Exception {
+    User user = new User();
+    user.setEmail("this_is_valid@this_is_valid");
+    assertEquals(user.getEmail(), "this_is_valid@this_is_valid");
   }
 }
