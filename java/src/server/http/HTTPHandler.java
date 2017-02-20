@@ -8,6 +8,7 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpCoreContext;
+import server.http.handlers.IndexPageHTTPHandler;
 
 public class HTTPHandler {
 
@@ -29,7 +30,7 @@ public class HTTPHandler {
 
   }
 
-  public static boolean reqister(String regex, Function<HttpRequest, HttpResponse> requestHandler){
+  public static boolean register(String regex, Function<HttpRequest, HttpResponse> requestHandler){
     if (handlerRegistry.containsKey(regex)) return false;
     handlerRegistry.put(regex, requestHandler);
     return true;
@@ -37,6 +38,7 @@ public class HTTPHandler {
 
   public static void populateRegistry(){
     // Register method calls for handler
+    register("/index.html", IndexPageHTTPHandler::handleRequest);
   }
 
 }
