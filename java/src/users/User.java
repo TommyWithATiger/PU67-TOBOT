@@ -35,6 +35,11 @@ public class User {
   @Transient
   private static Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
 
+  /**
+   * Initializes the User class, by giving it a reference to an EntityManagerFactory.
+   *
+   * @param  entityManagerFactory  an EntityManagerFactory for the current database server
+   */
   public static void initializeClass(EntityManagerFactory entityManagerFactory) {
     User.entityManagerFactory = entityManagerFactory;
     EntityManager em = entityManagerFactory.createEntityManager();
@@ -48,10 +53,17 @@ public class User {
     em.close();
   }
 
+  /**
+   * Creates a new User.
+   * The User object will create its own EntityManager.
+   */
   public User() {
     updateEntityManager();
   }
 
+  /**
+   * Updates the current entityManager.
+   */
   private void updateEntityManager() {
     if (entityManager != null) {
       close();
@@ -59,6 +71,10 @@ public class User {
     entityManager = entityManagerFactory.createEntityManager();
   }
 
+  /**
+   * Tries to create a database entry, using the current values of the fields.
+   * Does not catch exceptions thrown by the database.
+   */
   public void create() {
     EntityTransaction et = entityManager.getTransaction();
     et.begin();
@@ -66,6 +82,10 @@ public class User {
     et.commit();
   }
 
+  /**
+   * Tries to update a database entry, using the current values of the fields.
+   * Does not catch exceptions thrown by the database.
+   */
   public void update() {
     EntityTransaction et = entityManager.getTransaction();
     et.begin();
@@ -73,10 +93,20 @@ public class User {
     et.commit();
   }
 
+  /**
+   * Tries to delete a database entry.
+   * Does not catch exceptions thrown by the database.
+   */
   public void delete() {
     User.delete(id);
   }
 
+  /**
+   * Tries to delete a database entry.
+   * Does not catch exceptions thrown by the database.
+   *
+   * @param id The id of the user to be deleted
+   */
   public static void delete(int id) {
     EntityManager entityManager = entityManagerFactory.createEntityManager();
     EntityTransaction et = entityManager.getTransaction();
@@ -88,6 +118,15 @@ public class User {
     entityManager.close();
   }
 
+  /**
+   * Tries to find a database entry by looking up a field in the database.
+   * Returns the first found result. Should only be used on columns that are unique.
+   *
+   * @param namedQueryString  The name of a query that is saved in the entityManagerFactory
+   * @param fieldName         A parameter field that is specified in the corresponding query
+   * @param fieldValue        The value of that parameter field. This is value we search for
+   * @return                  The User with fieldName == fieldValue, null if not found
+   */
   private static User find(String namedQueryString, String fieldName, String fieldValue) {
     EntityManager em = entityManagerFactory.createEntityManager();
     TypedQuery<User> nq = em.createNamedQuery(namedQueryString, User.class);
@@ -103,49 +142,105 @@ public class User {
     return user;
   }
 
+  /**
+   * Tries to find a database entry by looking up username in the database.
+   *
+   * @param username The username of the user to be found
+   * @return         The User with the specified username, null if not found
+   */
   public static User findByUsername(String username) {
     return find("findUserByUsername", "username", username);
   }
 
+  /**
+   * Tries to find a database entry by looking up email in the database.
+   *
+   * @param email The email of the user to be found
+   * @return      The User with the specified email, null if not found
+   */
   public static User findByEmail(String email) {
     return find("findUserByEmail", "email", email);
   }
 
 
+  /**
+   * Generates a hash from the given password, and saves it.
+   * The password is hashed and salted by bcrypt.
+   * The password not stored.
+   *
+   * @param password The new password of the user
+   */
   public void setPassword(String password) {
     // copied from http://www.mindrot.org/projects/jBCrypt/
     hashword = BCrypt.hashpw(password, BCrypt.gensalt());
   }
 
+  /**
+   * Checks if a given password matches the stored hash.
+   *
+   * @param candidate A candidate password
+   * @return          True if candidate matches hash, false otherwise
+   */
   public boolean checkPassword(String candidate) {
     // copied from http://www.mindrot.org/projects/jBCrypt/
     return BCrypt.checkpw(candidate, hashword);
   }
 
+  /**
+   * Closes the private entityManager, freeing resources.
+   * After this is called, you will not be able to use the create/update/delete/find methods.
+   */
   public void close() {
     entityManager.close();
   }
 
+  /** Return the id of the User.
+   *
+   *  @return The id of the User
+   */
   public int getId() {
     return id;
   }
 
+  /** Set the id of the User.
+   *
+   *  @param id New id of the User, to be set
+   */
   public void setId(int id) {
     this.id = id;
   }
 
+  /** Get the username of the User.
+   *
+   *  @return the username of the User
+   */
   public String getUsername() {
     return username;
   }
 
+  /** Set the username of the User.
+   *
+   *  @param username New username of the user
+   */
   public void setUsername(String username) {
     this.username = username;
   }
 
+  /** Get the email of the User.
+   *
+   *  @return the email of the User
+   */
   public String getEmail() {
     return email;
   }
 
+  /**
+   * Set the email of the User.
+   *
+   * @param email New email of the User, to be set.
+   * @throws IllegalArgumentException If the argument is not a valid email (text followed by @
+   * followed by text).
+   */
   public void setEmail(String email) {
     if(User.emailPattern.matcher(email).matches()){
       this.email = email;
@@ -155,24 +250,40 @@ public class User {
     }
   }
 
+  /** Get the sessionToken of the User.
+   *
+   *  @return The sessionToken of the User
+   */
   public String getSessionToken() {
     return sessionToken;
   }
 
+  /** Set The sessionToken of the User.
+   *
+   *  @param sessionToken New sessionToken of the User, to be set
+   */
   public void setSessionToken(String sessionToken) {
     this.sessionToken = sessionToken;
   }
 
+  /** Get the sessionTokenExpireDate of the User.
+   *
+   *  @return The sessionTokenExpireDate of the User
+   */
   public Date getSessionTokenExpireDate() {
     return sessionTokenExpireDate;
   }
 
+  /** Set the sessionTokenExpireDate of the User.
+   *
+   *  @param sessionTokenExpireDate New sessionTokenExpireDate of the User, to be set
+   */
   public void setSessionTokenExpireDate(Date sessionTokenExpireDate) {
     this.sessionTokenExpireDate = sessionTokenExpireDate;
   }
 
+  /** Interactively create/update/delete Users from the database. */
   public static void main(String[] args) {
-    // run this to create a user
     System.setProperty("javax.xml.accessExternalDTD", "all");
 
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
