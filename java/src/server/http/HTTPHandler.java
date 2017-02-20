@@ -9,6 +9,7 @@ import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpCoreContext;
 import server.http.handlers.IndexPageHTTPHandler;
+import server.http.handlers.StaticContentHttpHandler;
 
 public class HTTPHandler {
 
@@ -39,6 +40,7 @@ public class HTTPHandler {
   public static void populateRegistry(){
     // Register method calls for handler
     register("/index.html", IndexPageHTTPHandler::handleRequest);
+    register("/static/.*", StaticContentHttpHandler::handleRequest);
   }
 
 }
