@@ -1,6 +1,6 @@
-package api.connection;
+package server.connection;
 
-import api.http.HTTPHandler;
+import server.http.HTTPHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
