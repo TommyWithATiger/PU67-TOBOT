@@ -96,11 +96,11 @@ export const auth = {
   getAuthHeader () {
     try {
       return {
-        'Authorization': 'Token ' + localStorage.getItem('app_token')
+        'Authorization': 'Bearer ' + localStorage.getItem('app_token')
       }
     } catch (exception) {
       return {
-        'Authorization': exception
+        'Authorization': 'Failed'
       }
     }
   }
