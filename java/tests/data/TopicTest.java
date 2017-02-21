@@ -2,9 +2,12 @@ package data;
 
 import static junit.framework.Assert.assertNotSame;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
+import data.DataAccessObjects.TopicDAO;
 import javax.persistence.EntityManagerFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +20,8 @@ public class TopicTest extends BaseTest {
   @Mock
   private EntityManagerFactory entityManagerFactory;
 
+  @Mock
+  private TopicDAO topicDAO;
 
   @Test
   public void testMakeTopic() {
@@ -42,30 +47,53 @@ public class TopicTest extends BaseTest {
   }
 
   @Test
-  public void testGetters() {
+  public void testGetSetTitle() {
     Topic topic = new Topic("Math", "From algebra to calculus.", 1);
 
-    assertEquals(0, topic.getId());
+
     assertEquals("Math", topic.getTitle());
     assertNotSame("English", topic.getTitle());
-    assertEquals("From algebra to calculus.", topic.getDescription());
-    assertNotSame("Piano lessons.", topic.getDescription());
-    assertEquals(1, topic.getParentId());
-    assertNotSame(3, topic.getParentId());
-  }
-
-  @Test
-  public void testSetters() {
-    Topic topic = new Topic("Math", "From algebra to calculus.", 1);
 
     topic.setTitle("English");
-    topic.setDescription("blah, blah");
-    topic.setParentId(3);
 
     assertNotSame("Math", topic.getTitle());
     assertEquals("English", topic.getTitle());
+  }
+
+  @Test
+  public void testGetSetDescription() {
+    Topic topic = new Topic("Math", "From algebra to calculus.", 1);
+
+    assertEquals("From algebra to calculus.", topic.getDescription());
+    assertNotSame("Piano lessons.", topic.getDescription());
+
+    topic.setDescription("blah, blah");
+
     assertNotSame("From algebra to calculus.", topic.getDescription());
     assertEquals("blah, blah", topic.getDescription());
+  }
+
+  @Test
+  public void testGetSetParentID(){
+    Topic topic = new Topic("Math", "From algebra to calculus.", 1);
+
+    assertEquals(1, topic.getParentId());
+    assertNotSame(3, topic.getParentId());
+
+    assertTrue(topic.setParentId(3));
+    //assertFalse(topic.setParentId(231)); //TODO check not existing parent id
+    assertFalse(topic.setParentId(topic.getId()));
+
+  }
+
+  @Test
+  public void testGetID() {
+    Topic topic = new Topic("Math", "From algebra to calculus.", 1);
+
+    assertEquals(0, topic.getId());
+
+    topic.setParentId(3);
+
     assertEquals(3, topic.getParentId());
     assertNotSame(1, topic.getParentId());
   }

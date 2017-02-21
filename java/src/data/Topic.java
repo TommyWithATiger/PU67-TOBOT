@@ -1,10 +1,13 @@
 package data;
 
+import data.DataAccessObjects.TopicDAO;
 import javax.persistence.Entity;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 
 
@@ -13,12 +16,19 @@ import javax.persistence.Table;
 @Table
 public class Topic {
 
+  @PersistenceContext
+  public static TopicDAO topicDAO;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String title;
   private String description;
   private int parentId;
+
+  public static void initialize(EntityManagerFactory emFactory){
+    topicDAO = new TopicDAO(emFactory);
+  }
 
   public Topic() {
     super();
@@ -61,10 +71,14 @@ public class Topic {
    * Set the parent of the topic.
    *
    * @param parentId Id of the new parent topic
+   * @return true if valid parentId, else false
    */
-  public void setParentId(int parentId) {
-    //TODO validate parent ID
-    this.parentId = parentId;
+  public boolean setParentId(int parentId) {
+    if (topicDAO != null && topicDAO.findById(parentId) != null || parentId != id) {
+      this.parentId = parentId;
+      return true;
+    }
+    return false;
   }
 
   /**
