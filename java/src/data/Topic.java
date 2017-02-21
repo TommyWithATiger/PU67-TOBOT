@@ -26,8 +26,9 @@ public class Topic {
   private String description;
   private int parentId;
 
-  public static void initialize(EntityManagerFactory emFactory){
+  public static TopicDAO initialize(EntityManagerFactory emFactory){
     topicDAO = new TopicDAO(emFactory);
+    return topicDAO;
   }
 
   public Topic() {
