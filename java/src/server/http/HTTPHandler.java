@@ -12,10 +12,21 @@ import server.http.handlers.APIHttpHandler;
 import server.http.handlers.IndexPageHTTPHandler;
 import server.http.handlers.StaticContentHttpHandler;
 
+/**
+ * A class handling all incoming HTTP requests and turning them into Http responses by giving the to
+ * the appropriate handlers based on the uri
+ */
 public class HTTPHandler {
 
   private static HashMap<String, Function<HttpRequest, HttpResponse>> handlerRegistry = populateRegistry();
 
+  /**
+   * Lets the Http handlers create responses or if non match create a redirect to the index.html
+   * page
+   *
+   * @param httpRequest The given Http request to handle
+   * @return A Http response to the given request
+   */
   public static HttpResponse handleRequest(HttpRequest httpRequest) {
     String uri = httpRequest.getRequestLine().getUri();
     for (String uriRegex : handlerRegistry.keySet()) {
@@ -32,7 +43,11 @@ public class HTTPHandler {
 
   }
 
-  private static HashMap<String, Function<HttpRequest, HttpResponse>> populateRegistry(){
+  /**
+   * @return A HashMap containing regex strings and handlers for uris matching the given regex
+   * string
+   */
+  private static HashMap<String, Function<HttpRequest, HttpResponse>> populateRegistry() {
     HashMap<String, Function<HttpRequest, HttpResponse>> handlerRegistry = new HashMap<>();
 
     // Register method calls for handler

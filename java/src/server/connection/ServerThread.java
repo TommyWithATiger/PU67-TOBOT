@@ -14,6 +14,9 @@ import org.apache.http.impl.io.SessionOutputBufferImpl;
 import org.apache.http.message.BasicHeader;
 import server.http.HTTPHandler;
 
+/**
+ * A server thread handling a single request from a client
+ */
 public class ServerThread extends Thread {
 
   private Socket clientSocket;
@@ -39,12 +42,18 @@ public class ServerThread extends Thread {
     responseWriter = new DefaultHttpResponseWriter(sessionOutputBuffer);
   }
 
+  /**
+   * The thread run method parsing a HttpRequest from the client and handling it using the
+   * HTTPHandler. Sends a response to the client
+   */
   @Override
   public void run() {
     try {
+      // Get and handle the request
       HttpRequest request = requestParser.parse();
       HttpResponse response = HTTPHandler.handleRequest(request);
 
+      // Set content headers if there is content
       if (response.getEntity() != null) {
         response.setHeader(response.getEntity().getContentType());
         response.setHeader(response.getEntity().getContentEncoding());
@@ -52,17 +61,21 @@ public class ServerThread extends Thread {
             String.valueOf(response.getEntity().getContentLength())));
       }
 
+      // Write the headers to the client
       responseWriter.write(response);
       sessionOutputBuffer.flush();
 
+      // Write content to the client if it exists
       if (response.getEntity() != null) {
         response.getEntity().writeTo(outputStream);
       }
       outputStream.close();
 
     } catch (IOException | HttpException ignored) {
+      // Ignore exceptions. They come from a malformed Http request or the client closing its socket.
     }
 
+    // The socket opened for the client should be closed when the communication is finished
     if (!clientSocket.isClosed()) {
       try {
         clientSocket.close();
