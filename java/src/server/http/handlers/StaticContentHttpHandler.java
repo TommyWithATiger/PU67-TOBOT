@@ -16,10 +16,13 @@ public class StaticContentHttpHandler {
         .newHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, new HttpCoreContext());
 
 
-    InputStream fileContent = new HttpFileHandler().getFile(httpRequest.getRequestLine().getUri());
+    String uri = httpRequest.getRequestLine().getUri();
+    InputStream fileContent = new HttpFileHandler().getFile(uri);
     if (fileContent != null){
       BasicHttpEntity httpEntity = new BasicHttpEntity();
       httpEntity.setContent(fileContent);
+      httpEntity.setContentLength(new HttpFileHandler().length(uri));
+      httpEntity.setContentType(HttpFileHandler.translateContentType(uri));
       response.setEntity(httpEntity);
     } else {
       response.setStatusCode(404);

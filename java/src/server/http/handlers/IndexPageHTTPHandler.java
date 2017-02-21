@@ -16,7 +16,13 @@ public class IndexPageHTTPHandler {
 
     BasicHttpEntity httpEntity = new BasicHttpEntity();
     httpEntity.setContent(new HttpFileHandler().getFile("index.html"));
-    response.setEntity(httpEntity);
+    if (httpEntity.getContent() != null){
+      response.setEntity(httpEntity);
+      httpEntity.setContentType(HttpFileHandler.translateContentType("index.html"));
+      httpEntity.setContentLength(new HttpFileHandler().length("index.html"));
+    } else {
+      response.setStatusCode(404);
+    }
 
     return response;
   }
