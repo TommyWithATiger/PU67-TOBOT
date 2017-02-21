@@ -1,5 +1,10 @@
 package main;
 
+import data.DataAccessObjects.TopicDAO;
+import data.Topic;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import server.connection.SocketHandler;
 
 public class ServerInitializer {
@@ -8,6 +13,7 @@ public class ServerInitializer {
     System.setProperty("javax.xml.accessExternalDTD", "all");
 
     // Setup calls
+    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
 
 
     // Place all setup before this call, this will run forever
@@ -17,5 +23,6 @@ public class ServerInitializer {
     Thread.sleep(Long.MAX_VALUE);
 
     server.stopServer();
+
   }
 }
