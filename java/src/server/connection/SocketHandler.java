@@ -3,6 +3,7 @@ package server.connection;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class SocketHandler extends Thread {
 
@@ -27,6 +28,8 @@ public class SocketHandler extends Thread {
         Socket client = serverSocket.accept();
         ServerThread clientThread = new ServerThread(client);
         clientThread.start();
+      } catch (SocketException se){
+        System.out.println("Server closed");
       } catch (IOException e) {
         System.out.println("Connection error");
         e.printStackTrace();
