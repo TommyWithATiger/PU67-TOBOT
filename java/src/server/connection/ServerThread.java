@@ -60,8 +60,7 @@ public class ServerThread extends Thread {
       }
       outputStream.close();
 
-    } catch (IOException | HttpException e) {
-      e.printStackTrace();
+    } catch (IOException | HttpException ignored) {
     }
 
     if (!clientSocket.isClosed()) {
