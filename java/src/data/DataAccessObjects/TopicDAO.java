@@ -2,7 +2,9 @@ package data.DataAccessObjects;
 
 import data.Topic;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 public class TopicDAO extends DAOBase<Topic, Integer> {
@@ -12,14 +14,27 @@ public class TopicDAO extends DAOBase<Topic, Integer> {
   }
 
   public List<Topic> findtopicByTitle(String title) {
-    TypedQuery<Topic> query = entityManager.createNamedQuery("findTopicByTitle", Topic.class);
-    return query.getResultList();
+    EntityManager em = emFactory.createEntityManager();
+    EntityTransaction et = em.getTransaction();
+    et.begin();
+    TypedQuery<Topic> query = em.createNamedQuery("findTopicByTitle", Topic.class);
+    query.setParameter("title", title);
+    List<Topic> result = query.getResultList();
+    et.commit();
+    em.close();
+    return result;
   }
 
   public Topic findSingleTopicByTitle(String title) {
-    TypedQuery<Topic> query = entityManager.createNamedQuery("findTopicByTitle", Topic.class);
+    EntityManager em = emFactory.createEntityManager();
+    EntityTransaction et = em.getTransaction();
+    et.begin();
+    TypedQuery<Topic> query = em.createNamedQuery("findTopicByTitle", Topic.class);
     query.setParameter("title", title);
-    return query.getSingleResult();
+    Topic result = query.getResultList().get(0);
+    et.commit();
+    em.close();
+    return result;
   }
 
 }
