@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class HttpFileHandler {
 
-  private static String basePath = System.getProperty("user.dir") + "/../web/";
+  private static String basePath = System.getProperty("user.dir") + "/../web/dist/";
   private static HashMap<String, String> contentTranslations = populateTranslations();
 
   /**
