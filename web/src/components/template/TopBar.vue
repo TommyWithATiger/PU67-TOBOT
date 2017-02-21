@@ -17,9 +17,14 @@
 
 <script>
 import LogoutBtn from 'components/auth/LogoutBtn'
+import { auth } from 'auth'
 
 export default {
   name: 'header',
+  created () {
+    this.$store.state.user.authenticated = auth.isAuth()
+    this.$store.state.user.username = auth.getUsername()
+  },
   computed: {
     authenticated () {
       return this.$store.state.user.authenticated

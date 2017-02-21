@@ -5,6 +5,7 @@ export const auth = {
   login (creds, ctx, redirect) {
     if (creds.username.length) {
       localStorage.setItem('app_token', 'anId')
+      localStorage.setItem('username', creds.username)
       if (ctx) ctx.$store.state.user.authenticated = true
       if (ctx) ctx.$store.state.user.username = creds.username
       if (ctx) ctx.$router.push(redirect || '/')
@@ -35,6 +36,7 @@ export const auth = {
   signup (creds, ctx) {
     if (creds.username.length) {
       localStorage.setItem('app_token', 'anId')
+      localStorage.setItem('username', creds.username)
       if (ctx) ctx.$store.state.user.authenticated = true
       if (ctx) ctx.$store.state.user.username = creds.username
       if (ctx) ctx.$router.push(ctx.redirect || '/')
@@ -63,6 +65,7 @@ export const auth = {
   logout (ctx) {
     try {
       localStorage.removeItem('app_token')
+      localStorage.removeItem('username')
     } catch (exception) {}
     if (ctx) ctx.$store.state.user.authenticated = false
   },
@@ -85,6 +88,17 @@ export const auth = {
   isAuth () {
     try {
       return !!localStorage.getItem('app_token')
+    } catch (exception) {
+      return false
+    }
+  },
+
+  /**
+   * Returning the username if the user is authenticated.
+   */
+  getUsername () {
+    try {
+      return !!localStorage.getItem('app_token') && localStorage.getItem('username')
     } catch (exception) {
       return false
     }
