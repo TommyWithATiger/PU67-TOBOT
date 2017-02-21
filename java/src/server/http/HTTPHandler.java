@@ -40,9 +40,9 @@ public class HTTPHandler {
 
   public static void populateRegistry(){
     // Register method calls for handler
-    register("index.html", IndexPageHTTPHandler::handleRequest);
-    register("static\\/.*", StaticContentHttpHandler::handleRequest);
-    register("api\\/.*", APIHttpHandler::handleRequest);
+    register("\\/index.html", IndexPageHTTPHandler::handleRequest);
+    register("\\/static\\/.*", StaticContentHttpHandler::handleRequest);
+    register("\\/api\\/.*", APIHttpHandler::handleRequest);
   }
 
 }
