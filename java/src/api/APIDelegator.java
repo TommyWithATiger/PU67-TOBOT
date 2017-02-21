@@ -7,7 +7,7 @@ import org.apache.http.HttpRequest;
 
 public class APIDelegator {
 
-  private static HashMap<String, Function<HttpRequest, String>> handlerRegistry = new HashMap<>();
+  private static HashMap<String, Function<HttpRequest, String>> handlerRegistry = populateRegistry();
 
   public static String delegate(HttpRequest APIRequest) throws APIHandlerNotFoundException{
     String uri = APIRequest.getRequestLine().getUri().substring(4);
@@ -20,14 +20,12 @@ public class APIDelegator {
     throw new APIHandlerNotFoundException("Could not find a handler that matches the API call");
   }
 
-  private static boolean register(String regex, Function<HttpRequest, String> APIHandler){
-    if (handlerRegistry.containsKey(regex)) return false;
-    handlerRegistry.put(regex, APIHandler);
-    return true;
-  }
+  private static HashMap<String, Function<HttpRequest, String>> populateRegistry(){
+    HashMap<String, Function<HttpRequest, String>> handlerRegistry = new HashMap<>();
 
-  public static void populateRegistry(){
+    // Api handlers should be registered here
 
+    return handlerRegistry;
   }
 
 }

@@ -10,7 +10,6 @@ import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.junit.After;
 import org.junit.Before;
 import server.connection.SocketHandler;
-import server.http.HTTPHandler;
 
 public class ServerBaseTest extends BaseTest{
 
@@ -36,8 +35,6 @@ public class ServerBaseTest extends BaseTest{
     sessionInputBuffer = new SessionInputBufferImpl(new HttpTransportMetricsImpl(), 8192);
     sessionInputBuffer.bind(socket.getInputStream());
     responseParser = new DefaultHttpResponseParser(sessionInputBuffer);
-
-    HTTPHandler.populateRegistry();
   }
 
   private void setupSocketHandler(){

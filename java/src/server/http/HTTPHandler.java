@@ -14,7 +14,7 @@ import server.http.handlers.StaticContentHttpHandler;
 
 public class HTTPHandler {
 
-  private static HashMap<String, Function<HttpRequest, HttpResponse>> handlerRegistry = new HashMap<>();
+  private static HashMap<String, Function<HttpRequest, HttpResponse>> handlerRegistry = populateRegistry();
 
   public static HttpResponse handleRequest(HttpRequest httpRequest) {
     String uri = httpRequest.getRequestLine().getUri();
@@ -32,17 +32,15 @@ public class HTTPHandler {
 
   }
 
-  private static boolean register(String regex, Function<HttpRequest, HttpResponse> requestHandler){
-    if (handlerRegistry.containsKey(regex)) return false;
-    handlerRegistry.put(regex, requestHandler);
-    return true;
-  }
+  private static HashMap<String, Function<HttpRequest, HttpResponse>> populateRegistry(){
+    HashMap<String, Function<HttpRequest, HttpResponse>> handlerRegistry = new HashMap<>();
 
-  public static void populateRegistry(){
     // Register method calls for handler
-    register("\\/index.html", IndexPageHTTPHandler::handleRequest);
-    register("\\/static\\/.*", StaticContentHttpHandler::handleRequest);
-    register("\\/api\\/.*", APIHttpHandler::handleRequest);
+    handlerRegistry.put("\\/index.html", IndexPageHTTPHandler::handleRequest);
+    handlerRegistry.put("\\/static\\/.*", StaticContentHttpHandler::handleRequest);
+    handlerRegistry.put("\\/api\\/.*", APIHttpHandler::handleRequest);
+
+    return handlerRegistry;
   }
 
 }
