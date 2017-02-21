@@ -21,14 +21,20 @@ import { auth } from 'auth'
 
 export default {
   name: 'header',
+
+  // Recieving authentication from server on create.
   created () {
     this.$store.state.user.authenticated = auth.isAuth()
     this.$store.state.user.username = auth.getUsername()
   },
   computed: {
+
+    // Making store user auth available through authenticated.
     authenticated () {
       return this.$store.state.user.authenticated
     },
+
+    // Making store state available through state.
     state () {
       return this.$store.state
     }

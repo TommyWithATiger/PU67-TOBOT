@@ -1,6 +1,9 @@
 export const auth = {
   /**
    * Fetch token by using credentials.
+   * @param {object} creds Object which contains user credentials.
+   * @param {object} ctx Context making it possible to access store and router.
+   * @param {string} redirect Optional path to redirect. Default root.
    */
   login (creds, ctx, redirect = '/') {
     if (creds.username.length) {
@@ -32,6 +35,9 @@ export const auth = {
    * Signing in.
    * If success - make user authenticated.
    * If redirect spesified - redirect.
+   * @param {object} creds Object which contains user credentials.
+   * @param {object} ctx Context making it possible to access store and router.
+   * @param {string} redirect Optional path to redirect. Default root.
    */
   signup (creds, ctx, redirect = '/') {
     if (creds.username.length) {
@@ -61,6 +67,7 @@ export const auth = {
 
   /**
    * To log out, we just need to remove the token.
+   * @param {object} ctx Context making it possible to access store and router.
    */
   logout (ctx) {
     try {
@@ -72,6 +79,7 @@ export const auth = {
 
   /**
    * Testing if the user is authenticated.
+   * @param {object} ctx Context making it possible to access store and router.
    */
   checkAuth (ctx) {
     try {
