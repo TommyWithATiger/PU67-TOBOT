@@ -15,7 +15,7 @@ public class IndexPageHTTPHandler {
         .newHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, new HttpCoreContext());
 
     BasicHttpEntity httpEntity = new BasicHttpEntity();
-    httpEntity.setContent(HttpFileHandler.getFile("index.html"));
+    httpEntity.setContent(new HttpFileHandler().getFile("index.html"));
     response.setEntity(httpEntity);
 
     return response;

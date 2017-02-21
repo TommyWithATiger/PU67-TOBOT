@@ -8,7 +8,7 @@ public class HttpFileHandler {
 
   private static String basePath = System.getProperty("user.dir") + "/../web/";
 
-  public static InputStream getFile(String serverPath) {
+  public InputStream getFile(String serverPath) {
     String path = clean(serverPath);
     try {
       return new FileInputStream(basePath + path);

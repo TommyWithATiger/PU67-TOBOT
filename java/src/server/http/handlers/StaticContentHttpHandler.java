@@ -16,7 +16,7 @@ public class StaticContentHttpHandler {
         .newHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, new HttpCoreContext());
 
 
-    InputStream fileContent = HttpFileHandler.getFile(httpRequest.getRequestLine().getUri());
+    InputStream fileContent = new HttpFileHandler().getFile(httpRequest.getRequestLine().getUri());
     if (fileContent != null){
       BasicHttpEntity httpEntity = new BasicHttpEntity();
       httpEntity.setContent(fileContent);
