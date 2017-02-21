@@ -11,7 +11,9 @@ You will need:
 
 ### SetUp for dev environment
 
-#### Backend
+You can use make for all steps.
+
+#### Backend (`make backend`)
 
 ```bash
 $ cd java # Go into the server section.
@@ -19,7 +21,7 @@ $ mvn clean install # Compile code.
 $ mvn exec:java -D exec.mainClass=main.ServerInitializer # Run server.
 ```
 
-#### Frontend
+#### Frontend (`make frontend`)
 
 ```bash
 $ cd web # Go into the web section.
@@ -27,7 +29,7 @@ $ npm install # Install frontend dependecies.
 $ npm run dev # This will automatically run a dev server with hot-reload.
 ```
 
-## Production environment
+## Production environment (`make`)
 
 These commands will run the whole application on port 5032.
 
@@ -42,4 +44,10 @@ $ cd .. # Go back to root folder.
 $ cd java # Go into the server section.
 $ mvn clean install # Compile code.
 $ mvn exec:java -D exec.mainClass=main.ServerInitializer # Run server.
+```
+
+You can also just use make
+
+```bash
+$ make # Building frontend and backend and running server.
 ```
