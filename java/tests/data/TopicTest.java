@@ -24,7 +24,7 @@ public class TopicTest extends BaseTest {
     topic1.setTitle("Math");
     topic1.setDescription("From algebra to calculus.");
     Topic topic2 = new Topic("English", "blah, blah");
-    Topic topic3 = new Topic( "Music", "Piano lessons", 1);
+    Topic topic3 = new Topic("Music", "Piano lessons", 1);
 
     assertNotNull(topic1);
     assertEquals("Math", topic1.getTitle());
@@ -42,7 +42,7 @@ public class TopicTest extends BaseTest {
   }
 
   @Test
-  public void testGetters(){
+  public void testGetters() {
     Topic topic = new Topic("Math", "From algebra to calculus.", 1);
 
     assertEquals(0, topic.getId());
@@ -55,7 +55,7 @@ public class TopicTest extends BaseTest {
   }
 
   @Test
-  public void testSetters(){
+  public void testSetters() {
     Topic topic = new Topic("Math", "From algebra to calculus.", 1);
 
     topic.setTitle("English");
@@ -69,8 +69,6 @@ public class TopicTest extends BaseTest {
     assertEquals(3, topic.getParentId());
     assertNotSame(1, topic.getParentId());
   }
-
-
 
 
 }
