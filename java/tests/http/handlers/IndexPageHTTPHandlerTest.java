@@ -3,45 +3,16 @@ package http.handlers;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
+import base.ServerBaseTest;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.Arrays;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
-import org.apache.http.impl.io.DefaultHttpResponseParser;
-import org.apache.http.impl.io.HttpTransportMetricsImpl;
-import org.apache.http.impl.io.SessionInputBufferImpl;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import base.ServerBaseTest;
-import server.connection.SocketHandler;
-import server.http.HTTPHandler;
 import server.http.HttpFileHandler;
 
 public class IndexPageHTTPHandlerTest extends ServerBaseTest {
-
-  private Socket socket;
-  private PrintWriter printWriter;
-  private DefaultHttpResponseParser responseParser;
-  private SessionInputBufferImpl sessionInputBuffer;
-
-  @Before
-  public void setupSocket() throws IOException {
-    socket = new Socket();
-    socket.connect(new InetSocketAddress("localhost", SocketHandler.PORT));
-
-    printWriter = new PrintWriter(socket.getOutputStream());
-
-    sessionInputBuffer = new SessionInputBufferImpl(new HttpTransportMetricsImpl(), 8192);
-    sessionInputBuffer.bind(socket.getInputStream());
-    responseParser = new DefaultHttpResponseParser(sessionInputBuffer);
-
-    HTTPHandler.populateRegistry();
-  }
 
   @Test
   public void testIndexRequest() throws IOException, HttpException, InterruptedException {
@@ -63,11 +34,6 @@ public class IndexPageHTTPHandlerTest extends ServerBaseTest {
 
     assertTrue(Arrays.equals(responseContent, htmlContent));
 
-  }
-
-  @After
-  public void tearDown() throws IOException {
-    socket.close();
   }
 
 }
