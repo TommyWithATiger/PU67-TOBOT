@@ -1,6 +1,7 @@
 package server.http.handlers;
 
 import api.APIDelegator;
+import api.exceptions.APIHandlerNotFoundException;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import org.apache.http.HttpRequest;
@@ -17,10 +18,14 @@ public class APIHttpHandler {
     HttpResponse httpResponse = new DefaultHttpResponseFactory()
         .newHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, new HttpCoreContext());
 
-    BasicHttpEntity httpEntity = new BasicHttpEntity();
-    httpEntity.setContent(new ByteArrayInputStream(APIDelegator.delegate(httpRequest).getBytes(
-        StandardCharsets.UTF_8)));
-    httpResponse.setEntity(httpEntity);
+    try {
+      BasicHttpEntity httpEntity = new BasicHttpEntity();
+      httpEntity.setContent(new ByteArrayInputStream(APIDelegator.delegate(httpRequest).getBytes(
+          StandardCharsets.UTF_8)));
+      httpResponse.setEntity(httpEntity);
+    } catch (APIHandlerNotFoundException e) {
+      httpResponse.setStatusCode(404);
+    }
 
     return httpResponse;
   }
