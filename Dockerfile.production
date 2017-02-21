@@ -12,8 +12,10 @@ COPY . ./
 WORKDIR /tobot/web
 RUN make frontend-build-prod
 
+# Build backend
 WORKDIR /tobot/java
 RUN make backend-build
 EXPOSE 5032
 
+# Run the backend server while in /tobot/java
 CMD [ "make", "backend-run" ]
