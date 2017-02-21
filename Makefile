@@ -29,6 +29,10 @@ frontend-run-dev:
 	@echo Process killed.
 
 
+# Build and run frontend in dev
+frontend: frontend-build frontend-run-dev
+
+
 # Building backend
 backend-build:
 	@echo Building java application ...
