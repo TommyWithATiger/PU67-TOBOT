@@ -8,6 +8,7 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpCoreContext;
+import server.http.handlers.APIHttpHandler;
 import server.http.handlers.IndexPageHTTPHandler;
 import server.http.handlers.StaticContentHttpHandler;
 
@@ -31,7 +32,7 @@ public class HTTPHandler {
 
   }
 
-  public static boolean register(String regex, Function<HttpRequest, HttpResponse> requestHandler){
+  private static boolean register(String regex, Function<HttpRequest, HttpResponse> requestHandler){
     if (handlerRegistry.containsKey(regex)) return false;
     handlerRegistry.put(regex, requestHandler);
     return true;
@@ -41,6 +42,7 @@ public class HTTPHandler {
     // Register method calls for handler
     register("/index.html", IndexPageHTTPHandler::handleRequest);
     register("/static/.*", StaticContentHttpHandler::handleRequest);
+    register("/api/.*", APIHttpHandler::handleRequest);
   }
 
 }
