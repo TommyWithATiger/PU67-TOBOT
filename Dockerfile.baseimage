@@ -2,7 +2,7 @@ FROM richardkdrew/node-java
 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get install -y vim wget curl maven make
+RUN apt-get install -y vim wget curl maven build-essential
 
 # Adding project
 RUN mkdir -p /tobot
