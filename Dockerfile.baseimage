@@ -1,0 +1,18 @@
+FROM richardkdrew/node-java
+
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get install -y vim wget curl maven make
+
+# Adding project
+RUN mkdir -p /tobot
+WORKDIR /tobot
+COPY . ./
+
+# Building frontend
+WORKDIR /tobot/web
+RUN make frontend-build-prod
+
+# Building backend
+WORKDIR /tobot/java
+RUN make backend-build
