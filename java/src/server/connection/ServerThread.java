@@ -1,6 +1,5 @@
 package server.connection;
 
-import server.http.HTTPHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -12,6 +11,8 @@ import org.apache.http.impl.io.DefaultHttpResponseWriter;
 import org.apache.http.impl.io.HttpTransportMetricsImpl;
 import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.apache.http.impl.io.SessionOutputBufferImpl;
+import org.apache.http.message.BasicHeader;
+import server.http.HTTPHandler;
 
 public class ServerThread extends Thread {
 
@@ -43,9 +44,18 @@ public class ServerThread extends Thread {
     try {
       HttpRequest request = requestParser.parse();
       HttpResponse response = HTTPHandler.handleRequest(request);
+
+      if (response.getEntity() != null) {
+        response.setHeader(response.getEntity().getContentType());
+        response.setHeader(response.getEntity().getContentEncoding());
+        response.setHeader(new BasicHeader("Content-Length",
+            String.valueOf(response.getEntity().getContentLength())));
+      }
+
       responseWriter.write(response);
       sessionOutputBuffer.flush();
-      if (response.getEntity() != null){
+
+      if (response.getEntity() != null) {
         response.getEntity().writeTo(outputStream);
       }
       outputStream.close();
