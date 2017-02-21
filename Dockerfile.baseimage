@@ -10,9 +10,7 @@ WORKDIR /tobot
 COPY . ./
 
 # Building frontend
-WORKDIR /tobot/web
 RUN make frontend-build-prod
 
 # Building backend
-WORKDIR /tobot/java
 RUN make backend-build

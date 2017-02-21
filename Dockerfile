@@ -4,15 +4,13 @@ FROM tobot/tobot-baseimage
 
 RUN apt-get update
 
-# Move all changes to image
-WORKDIR /tobot
-COPY . ./
+# Mount to host
+VOLUME /tobot
 
 # Install dependencies and build frontend
-WORKDIR /tobot/web
 RUN make frontend-build-prod
 
-WORKDIR /tobot/java
+# Build backend
 RUN make backend-build
 EXPOSE 5032
 
