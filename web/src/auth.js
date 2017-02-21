@@ -2,13 +2,13 @@ export const auth = {
   /**
    * Fetch token by using credentials.
    */
-  login (creds, ctx, redirect) {
+  login (creds, ctx, redirect = '/') {
     if (creds.username.length) {
       localStorage.setItem('app_token', 'anId')
       localStorage.setItem('username', creds.username)
       if (ctx) ctx.$store.state.user.authenticated = true
       if (ctx) ctx.$store.state.user.username = creds.username
-      if (ctx) ctx.$router.push(redirect || '/')
+      if (ctx) ctx.$router.push(redirect)
     }
     /*
     ctx.$http.post(LOGIN_URL, creds, (data) => {
@@ -33,13 +33,13 @@ export const auth = {
    * If success - make user authenticated.
    * If redirect spesified - redirect.
    */
-  signup (creds, ctx) {
+  signup (creds, ctx, redirect = '/') {
     if (creds.username.length) {
       localStorage.setItem('app_token', 'anId')
       localStorage.setItem('username', creds.username)
       if (ctx) ctx.$store.state.user.authenticated = true
       if (ctx) ctx.$store.state.user.username = creds.username
-      if (ctx) ctx.$router.push(ctx.redirect || '/')
+      if (ctx) ctx.$router.push(redirect)
     }
     /*
     ctx.$http.post(SIGNUP_URL, creds, (data) => {
