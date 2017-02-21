@@ -1,9 +1,21 @@
 package main;
 
-public class ServerInitializer {
-    public static void main(String[] args) {
-        System.setProperty("javax.xml.accessExternalDTD", "all");
+import server.connection.SocketHandler;
 
-        // TODO: do actual stuff here
-    }
+public class ServerInitializer {
+
+  public static void main(String[] args) throws InterruptedException {
+    System.setProperty("javax.xml.accessExternalDTD", "all");
+
+    // Setup calls
+
+
+    // Place all setup before this call, this will run forever
+    SocketHandler server = new SocketHandler();
+    server.start();
+
+    Thread.sleep(Long.MAX_VALUE);
+
+    server.stopServer();
+  }
 }
