@@ -5,13 +5,18 @@ import server.http.HTTPHandler;
 
 public class ServerInitializer {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
     System.setProperty("javax.xml.accessExternalDTD", "all");
 
     // Setup calls
     HTTPHandler.populateRegistry();
-
+    
     // Place all setup before this call, this will run forever
-    new SocketHandler();
+    SocketHandler server = new SocketHandler();
+    server.start();
+
+    Thread.sleep(Long.MAX_VALUE);
+
+    server.stopServer();
   }
 }
