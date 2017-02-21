@@ -8,44 +8,38 @@ all: frontend-build-prod backend
 
 # Building frontend
 frontend-build:
-	@echo Changing directory ...
-	@cd web
 	@echo Installing node dependencies ...
-	@npm install --silent
+	@cd web && npm install --silent
 	@echo Done!
 
 
 # Building frontend for production
 frontend-build-prod:
-	@echo Changing directory ...
-	@cd web
 	@echo Installing node dependencies ...
-	@npm install --silent
+	@cd web && npm install --silent
 	@echo Compiling frontend ...
-	@npm run build
+	@cd web && npm run build
 	@echo Done!
 
 
 # Running frontend
 frontend-run-dev:
-	@echo Changing directory ...
-	@cd web
-	@echo Running dev environment on port http://localhost:8080 ...
-	@npm run dev
+	@echo Changing directory and running dev environment on port http://localhost:8080 ...
+	@cd web && npm run dev
 	@echo Process killed.
 
 
 # Building backend
 backend-build:
 	@echo Building java application ...
-	@mvn clean install
+	@cd java && mvn clean install
 	@echo Done!
 
 
 # Running backend
 backend-run:
 	@echo Running server on http://localhost:5032
-	@mvn exec:java -D exec.mainClass=main.ServerInitializer
+	@cd java && mvn exec:java -D exec.mainClass=main.ServerInitializer
 	@echo Process killed.
 
 
