@@ -84,3 +84,20 @@ $ make docker-container-prod
 
 These make commands will handle all the work with recreation of containers.
 But feel free to use plain docker or docker-compose.
+
+### Entering the production container
+
+Sometimes you need to debug a container. You can enter it with:
+
+```bash
+$ make docker-enter-container-prod
+```
+
+### Just do the whole setup and creation in production
+
+This command builds the base image, then the production image
+and then creates a production container.
+
+```bash
+$ make docker-prod
+```
