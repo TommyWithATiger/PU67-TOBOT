@@ -16,13 +16,13 @@ public class APIAddTopicHandler {
   public static String handleAddTopicRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
-    }
-
     String requestContent = checkAndGetEntityContent(httpRequest);
 
     JSONObject jsonObject = checkAndGetJSON(requestContent);
+
+    if (!isLoggedIn(httpRequest, jsonObject)) {
+      throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
+    }
 
     if (!jsonObject.has("title") || !jsonObject.has("description")) {
       throw new APIBadRequestException("Topic information is not complete");

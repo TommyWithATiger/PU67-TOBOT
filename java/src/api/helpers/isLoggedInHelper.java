@@ -1,8 +1,5 @@
 package api.helpers;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
-
 import data.DataAccessObjects.UserDAO;
 import data.User;
 import org.apache.http.HttpRequest;
@@ -10,10 +7,7 @@ import org.json.JSONObject;
 
 public class isLoggedInHelper {
 
-  public static boolean isLoggedIn(HttpRequest httpRequest) {
-    String requestContent = checkAndGetEntityContent(httpRequest);
-
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
+  public static boolean isLoggedIn(HttpRequest httpRequest, JSONObject jsonObject) {
 
     if (!jsonObject.has("username") || !httpRequest.containsHeader("Authentication")) {
       return false;
