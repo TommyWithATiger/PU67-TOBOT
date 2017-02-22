@@ -36,10 +36,11 @@ public class APILoginHandler {
 
     if (user.getSessionToken() == null) {
       user.createSessionToken();
+    } else{
+      user.generateSessionTokenExpireDate();
     }
 
     String token = user.getSessionToken();
-    user.generateSessionTokenExpireDate();
 
     user.update();
 
