@@ -6,8 +6,10 @@ export const auth = {
    * @param {object} creds Object which contains user credentials.
    * @param {object} ctx Context making it possible to access store and router.
    * @param {string} redirect Optional path to redirect. Default root.
+   * @param {function} callback Optional callback if spescified.
+   * @param {function} error Optional error handler if spescified.
    */
-  login (creds, ctx, redirect = '/') {
+  login (creds, ctx, redirect = '/', callback, error) {
     if (creds.username.length) {
       api.postUserLogin(ctx, {
         username: creds.username,
@@ -18,7 +20,8 @@ export const auth = {
         if (ctx) ctx.$store.state.user.authenticated = true
         if (ctx) ctx.$store.state.user.username = creds.username
         if (ctx) ctx.$router.push(redirect)
-      })
+        callback(data)
+      }, error)
     }
   },
 
@@ -29,8 +32,10 @@ export const auth = {
    * @param {object} creds Object which contains user credentials.
    * @param {object} ctx Context making it possible to access store and router.
    * @param {string} redirect Optional path to redirect. Default root.
+   * @param {function} callback Optional callback if spescified.
+   * @param {function} error Optional error handler if spescified.
    */
-  signup (creds, ctx, redirect = '/') {
+  signup (creds, ctx, redirect = '/', callback, error) {
     if (creds.username.length) {
       api.postUserLogin(ctx, {
         username: creds.username,
@@ -41,7 +46,8 @@ export const auth = {
         if (ctx) ctx.$store.state.user.authenticated = true
         if (ctx) ctx.$store.state.user.username = creds.username
         if (ctx) ctx.$router.push(redirect)
-      })
+        callback(data)
+      }, error)
     }
   },
 
