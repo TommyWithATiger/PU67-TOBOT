@@ -1,9 +1,9 @@
 package api;
 
 import api.exceptions.APIHandlerNotFoundException;
-import api.handlers.APILoggedInCheckHandler;
-import api.handlers.APILoginHandler;
-import api.handlers.APILogoutHandler;
+import api.handlers.user.APILoggedInCheckHandler;
+import api.handlers.user.APILoginHandler;
+import api.handlers.user.APILogoutHandler;
 import java.util.HashMap;
 import java.util.function.Function;
 import org.apache.http.HttpRequest;

@@ -1,4 +1,4 @@
-package api.handlers;
+package api.handlers.user;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
@@ -7,26 +7,29 @@ import api.exceptions.APIBadRequestException;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
-public class APILoggedInCheckHandler {
+public class APILoginHandler {
 
-  public static String handleLoggedInCheckRequest(HttpRequest httpRequest) {
+  public static String handleLoginRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
     String requestContent = checkAndGetEntityContent(httpRequest);
 
     JSONObject jsonObject = new JSONObject(requestContent);
 
-    if (!jsonObject.has("username") || !jsonObject.has("token")) {
-      throw new APIBadRequestException("Login check data not complete");
+    if (!jsonObject.has("username") || !jsonObject.has("password")) {
+      throw new APIBadRequestException("Login data not complete");
     }
 
     String username = jsonObject.getString("username");
-    String token = jsonObject.getString("token");
+    String password = jsonObject.getString("password");
 
-    JSONObject loginCheckResponse = new JSONObject();
-    loginCheckResponse.put("logged_in", "true");
+    JSONObject loginResponse = new JSONObject();
+    loginResponse.put("username", username);
+    loginResponse.put("token", password);
 
-    return loginCheckResponse.toString();
+    return loginResponse.toString();
   }
+
+
 
 }
