@@ -1,5 +1,6 @@
 package api.handlers;
 
+import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIErrorException;
 import java.io.IOException;
@@ -12,6 +13,10 @@ import org.json.JSONObject;
 public class APILoginHandler {
 
   public static String handleLoginRequest(HttpRequest httpRequest) {
+    if (!httpRequest.getRequestLine().getMethod().equals("POST")) {
+      throw new APIBadMethodException("Wrong method");
+    }
+
     if (!(httpRequest instanceof HttpEntityEnclosingRequest)) {
       throw new APIBadRequestException("No login data");
     }

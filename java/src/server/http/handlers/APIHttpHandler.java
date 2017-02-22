@@ -1,6 +1,7 @@
 package server.http.handlers;
 
 import api.APIDelegator;
+import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIErrorException;
 import api.exceptions.APIHandlerNotFoundException;
@@ -40,10 +41,12 @@ public class APIHttpHandler {
     } catch (APIHandlerNotFoundException e) {
       // Cannot find a API handler to handle the request, the requested resource must not exist
       httpResponse.setStatusCode(404);
-    } catch (APIErrorException e){
+    } catch (APIErrorException e) {
       httpResponse.setStatusCode(500);
-    } catch (APIBadRequestException e){
+    } catch (APIBadRequestException e) {
       httpResponse.setStatusCode(400);
+    } catch (APIBadMethodException e) {
+      httpResponse.setStatusCode(405);
     }
 
     return httpResponse;
