@@ -15,5 +15,5 @@ RUN make frontend-build-prod
 RUN make backend-build
 EXPOSE 5032
 
-# Run the backend server while in /tobot/java
+# Run the backend server
 CMD [ "make", "backend-run" ]
