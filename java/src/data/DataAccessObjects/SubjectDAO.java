@@ -39,7 +39,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    */
   public Subject findSingleSubjectByTitle(String title) {
     List<Subject> results = findSubjectByTitle(title);
-    if (results != null) {
+    if (!results.isEmpty()) {
       return results.get(0);
     }
     return null;
