@@ -1,7 +1,6 @@
 <template>
   <div class="page-content">
     <h1>{{ title }}</h1>
-    <router-link to="/login">Go to login</router-link>
   </div>
 </template>
 

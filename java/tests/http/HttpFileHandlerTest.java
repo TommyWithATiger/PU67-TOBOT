@@ -27,7 +27,7 @@ public class HttpFileHandlerTest {
   public void setup() throws IOException {
     fileContent = new byte[]{1, 1, 1, 1, 1, 1, 1, 2, 3, 4, 1, 1, 1, 2, 2, 3, 3, 4, 5};
     fileHandler = new HttpFileHandler();
-    baseServerPath = System.getProperty("user.dir") + "/../web/";
+    baseServerPath = System.getProperty("user.dir") + "/../web/dist/";
     filePath = "abcdefghijklmnopqrstuvwxyz.txt";
     Files.createFile(Paths.get(baseServerPath + filePath));
     Files.write(Paths.get(baseServerPath + filePath), fileContent);

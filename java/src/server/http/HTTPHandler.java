@@ -51,9 +51,11 @@ public class HTTPHandler {
     HashMap<String, Function<HttpRequest, HttpResponse>> handlerRegistry = new HashMap<>();
 
     // Register method calls for handler
-    handlerRegistry.put("\\/index.html", IndexPageHTTPHandler::handleRequest);
     handlerRegistry.put("\\/static\\/.*", StaticContentHttpHandler::handleRequest);
     handlerRegistry.put("\\/api\\/.*", APIHttpHandler::handleRequest);
+
+    // All handlers must be registered above here, this catches all remaining cases
+    handlerRegistry.put(".*", IndexPageHTTPHandler::handleRequest);
 
     return handlerRegistry;
   }

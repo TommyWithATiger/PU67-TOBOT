@@ -1,10 +1,19 @@
 import Vue from 'vue'
+import Rx from 'rxjs/Rx'
+import VueRx from 'vue-rx'
+import { router } from './router'
+import { store } from './store'
+import { auth } from './auth'
+
 import App from './App'
-import router from './router'
+
+Vue.use(VueRx, Rx)
 
 /* eslint-disable no-new */
-new Vue({
+export const app = new Vue({
   el: '#app',
+  data: { auth },
+  store,
   router,
   template: '<App/>',
   components: { App }

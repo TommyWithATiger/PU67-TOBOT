@@ -1,17 +1,17 @@
 <template>
   <div id="app" class="app">
-    <Header></Header>
+    <TopBar></TopBar>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Header from 'components/template/Header'
+import TopBar from 'components/template/TopBar'
 
 export default {
   name: 'app',
   components: {
-    Header
+    TopBar
   }
 }
 </script>
