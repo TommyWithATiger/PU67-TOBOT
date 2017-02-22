@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import { auth } from 'auth'
+import { api } from 'api'
+// import { auth } from 'auth'
 
 export default {
   name: 'loginbutton',
@@ -14,7 +15,13 @@ export default {
      */
     login () {
       if (this.creds.username.length) {
-        auth.login(this.creds, this, this.redirect || '/')
+        api.postUser(this, {
+          username: this.creds.username,
+          password: this.creds.password
+        }, (data) => {
+          console.log(data)
+          // auth.login(this.creds, this, this.redirect || '/')
+        })
       }
     }
   }
