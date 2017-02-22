@@ -1,10 +1,13 @@
 package data;
 
 import data.DataAccessObjects.TopicDAO;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
@@ -15,12 +18,13 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "findTopicByTitle", query = "SELECT t FROM Topic t WHERE t.title = :title"),
     @NamedQuery(name = "findTopicByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId")
+    //TODO Find by subject
 })
 @Table
 public class Topic {
 
   @PersistenceContext
-  public static TopicDAO topicDAO;
+  private static TopicDAO topicDAO;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +33,12 @@ public class Topic {
   private String description;
   private int parentId;
 
+  @ManyToMany
+  private Collection<Subject> subjects;
+
   public Topic() {
     super();
+    topicDAO = TopicDAO.getInstance();
   }
 
   /**
@@ -123,6 +131,34 @@ public class Topic {
    */
   public int getId() {
     return id;
+  }
+
+
+  /**
+   * Get the subject this topic is in
+   *
+   * @return Collection of Subject Objects
+   */
+  public Collection<Subject> getSubjects() {
+    return new ArrayList<Subject>(subjects);
+  }
+
+  /**
+   *  Adds this topic to a subject
+   *
+   * @param subject, the Subject you want to add this Topic to
+   */
+  public void addToSubject(Subject subject) {
+    subject.addTopic(this);
+  }
+
+  /**
+   * Removes this topic from the subject
+   *
+   * @param subject, the Subject this Topic will be removed from
+   */
+  public void removeFromSubject(Subject subject) {
+    subject.removeTopic(this);
   }
 
 }
