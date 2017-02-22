@@ -1,6 +1,7 @@
 <template>
   <div class="page-content">
-    <h1>{{ fullName }}</h1>
+    <h1 v-if="fullName.length">{{ fullName }}</h1>
+    <h1 v-else>User has no name</h1>
     <p>Username: {{ user.username }}</p>
   </div>
 </template>
@@ -17,9 +18,12 @@ export default {
       }
     }
   },
+  created () {
+    this.user.username = this.$store.state.user.username
+  },
   computed: {
     fullName () {
-      return `${this.firstName} ${this.lastName}`
+      return `${this.user.firstName || ''} ${this.user.lastName || ''}`.trim()
     }
   }
 }
