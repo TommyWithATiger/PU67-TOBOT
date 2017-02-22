@@ -41,6 +41,14 @@ export const router = new Router({
       path: '/login',
       name: 'Login',
       component: LoginPage
+    },
+    {
+      path: '/*',
+      name: 'Default',
+      component: FrontPage,
+      beforeEnter: (to, from, next) => {
+        next('/')
+      }
     }
   ]
 })
