@@ -44,7 +44,7 @@ public abstract class AbstractBaseDAO<E, K> {
    *
    * @param entity, the entity to be merged
    **/
-  E merge(E entity) {
+  public E merge(E entity) {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();
@@ -59,7 +59,7 @@ public abstract class AbstractBaseDAO<E, K> {
    *
    * @param entity, the entity to be removed
    **/
-  void remove(E entity) {
+  public void remove(E entity) {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();

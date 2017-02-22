@@ -2,18 +2,18 @@ package main;
 
 import data.DataAccessObjects.SubjectDAO;
 import data.DataAccessObjects.TopicDAO;
+import data.DataAccessObjects.UserDAO;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import server.connection.SocketHandler;
-import users.User;
 
 public class ServerInitializer {
 
   public static void main(String[] args) throws InterruptedException {
 
-    setup();
-
+    EntityManagerFactory entityManagerFactory = setup();
 
     // Place all setup before this call, this will run forever
     SocketHandler server = new SocketHandler();
@@ -22,11 +22,11 @@ public class ServerInitializer {
     Thread.sleep(Long.MAX_VALUE);
 
     server.stopServer();
-    // Setup calls
+    entityManagerFactory.close();
 
   }
 
-  public static void setup(){
+  public static EntityManagerFactory setup(){
     System.setProperty("javax.xml.accessExternalDTD", "all");
 
     // Should only make one EntityManagerFactory, and this is the one
@@ -35,8 +35,9 @@ public class ServerInitializer {
 
     TopicDAO topicDAO = TopicDAO.getInstance(entityManagerFactory);
     SubjectDAO subjectDAO = SubjectDAO.getInstance(entityManagerFactory);
-    User.initializeClass(entityManagerFactory);
+    UserDAO userDAO = UserDAO.getInstance(entityManagerFactory);
 
-    entityManagerFactory.close();
+    // need to return in order to close after server is shut down
+    return entityManagerFactory;
   }
 }
