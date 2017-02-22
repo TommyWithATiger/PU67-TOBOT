@@ -8,6 +8,11 @@ export const api = {
    */
   getUser (ctx, username) {
     // Return the user from GET request.
+    return {
+      username: 'ole',
+      firstName: 'Ola',
+      lastName: 'Nordmann'
+    }
   },
 
   /**
@@ -17,9 +22,16 @@ export const api = {
    */
   postUser (ctx, data, callback) {
     // Here we can inject token.
-    ctx.$http.post(`${API_URL}/user/login`, data, (data) => {
-      console.log(data)
-      callback(data)
-    })
+
+    let req = {
+      body: JSON.stringify(data),
+      method: 'POST',
+      mode: 'no-cors'
+    }
+
+    fetch(`${API_URL}/user/login`, req)
+    .then(res => res.json())
+    .then(callback)
+    .catch(console.log)
   }
 }
