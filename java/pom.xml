@@ -98,5 +98,14 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/META-INF</directory>
+                <targetPath>META-INF</targetPath>
+                <includes>
+                    <include>persistence.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>

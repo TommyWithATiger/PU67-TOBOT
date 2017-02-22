@@ -6,14 +6,16 @@ import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.when;
 
 import base.BaseTest;
+import data.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,7 +34,6 @@ public class UserTests extends BaseTest {
   public void init() {
     when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
     when(entityManager.getTransaction()).thenReturn(entityTransaction);
-    User.initializeClass(entityManagerFactory);
   }
 
   private User makeUser() {
@@ -53,8 +54,6 @@ public class UserTests extends BaseTest {
     assertEquals(100, user.getId());
     assertEquals("username", user.getUsername());
     assertEquals("email@email.com", user.getEmail());
-
-    user.close();
 
     InOrder inOrder = Mockito.inOrder(entityManagerFactory, entityManager, entityTransaction);
 
@@ -94,8 +93,6 @@ public class UserTests extends BaseTest {
     user.update();
 
     assertEquals(user.getEmail(), "email2@email.com");
-
-    user.close();
 
     InOrder inOrder = Mockito.inOrder(entityManagerFactory, entityManager, entityTransaction);
 

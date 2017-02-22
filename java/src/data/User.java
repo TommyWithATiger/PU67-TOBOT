@@ -1,16 +1,26 @@
 package data;
 
-import java.util.Date;
-import java.util.regex.Pattern;
-import javax.persistence.*;
-
 import data.DataAccessObjects.UserDAO;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+import java.util.regex.Pattern;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "findUserByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
-        @NamedQuery(name = "findUserByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
+    @NamedQuery(name = "findUserByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
+    @NamedQuery(name = "findUserByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
 })
 public class User {
 
@@ -46,15 +56,15 @@ public class User {
     this.email = email;
   }
 
-  public void create(){
+  public void create() {
     userDAO.persist(this);
   }
 
-  public void delete(){
+  public void delete() {
     userDAO.remove(this);
   }
 
-  public void update(){
+  public void update() {
     userDAO.merge(this);
   }
 
@@ -133,7 +143,7 @@ public class User {
    *
    * @param email New email of the User, to be set.
    * @throws IllegalArgumentException If the argument is not a valid email (text followed by @
-   *                                  followed by text).
+   * followed by text).
    */
   public void setEmail(String email) {
     if (User.emailPattern.matcher(email).matches()) {
@@ -177,6 +187,52 @@ public class User {
    */
   public void setSessionTokenExpireDate(Date sessionTokenExpireDate) {
     this.sessionTokenExpireDate = sessionTokenExpireDate;
+  }
+
+  public void generateSessionTokenExpireDate() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date());
+    calendar.add(Calendar.DATE, 1);
+    setSessionTokenExpireDate(calendar.getTime());
+  }
+
+  public void createSessionToken() {
+    while (getSessionToken() == null) {
+      String sessionToken = generateSessionToken();
+      try {
+        setSessionToken(sessionToken);
+      } catch (javax.persistence.RollbackException e) {
+        // Ignore, try again
+      }
+    }
+  }
+
+  private String generateSessionToken() {
+    String token = "";
+    Random random = new Random();
+    String validSymbols = "abcdefghijklmnopqrstuvwxyz0123456789";
+    for (int token_symbol = 0; token_symbol < 64; token_symbol++) {
+      token += validSymbols.charAt(random.nextInt(64));
+    }
+    return token;
+  }
+
+  public boolean checkUserSessionToken(String token) {
+    String actualToken = getSessionToken();
+    if (!token.equals(actualToken)) {
+      return false;
+    }
+
+    if (getSessionTokenExpireDate().before(new Date())){
+      logout();
+      return false;
+    }
+    return true;
+  }
+
+  public void logout(){
+    setSessionToken(null);
+    setSessionTokenExpireDate(null);
   }
 
 }
