@@ -1,13 +1,10 @@
 package data;
 
 import data.DataAccessObjects.TopicDAO;
-import java.util.ArrayList;
-import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
@@ -31,9 +28,6 @@ public class Topic {
   private String title;
   private String description;
   private int parentId;
-
-  @ManyToMany
-  private Collection<Subject> subjects;
 
   public Topic() {
     super();
@@ -130,16 +124,6 @@ public class Topic {
    */
   public int getId() {
     return id;
-  }
-
-
-  /**
-   * Get the subject this topic is in
-   *
-   * @return Collection of Subject Objects
-   */
-  public Collection<Subject> getSubjects() {
-    return new ArrayList<Subject>(subjects);
   }
 
   /**
