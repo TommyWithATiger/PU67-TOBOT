@@ -2,7 +2,6 @@ package data;
 
 import data.DataAccessObjects.TopicDAO;
 import javax.persistence.Entity;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,11 +28,6 @@ public class Topic {
   private String title;
   private String description;
   private int parentId;
-
-  public static TopicDAO initialize(EntityManagerFactory emFactory){
-    topicDAO = new TopicDAO(emFactory);
-    return topicDAO;
-  }
 
   public Topic() {
     super();

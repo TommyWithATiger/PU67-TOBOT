@@ -2,39 +2,33 @@ package data.DataAccessObjects;
 
 import data.Topic;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
 
-public class TopicDAO extends DAOBase<Topic, Integer> {
+public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
 
   public TopicDAO(EntityManagerFactory emFactory) {
     super(Topic.class, emFactory);
   }
 
+  protected static TopicDAO instance;
+
   public List<Topic> findTopicByTitle(String title) {
-    EntityManager em = emFactory.createEntityManager();
-    EntityTransaction et = em.getTransaction();
-    et.begin();
-    TypedQuery<Topic> query = em.createNamedQuery("findTopicByTitle", Topic.class);
-    query.setParameter("title", title);
-    List<Topic> result = query.getResultList();
-    et.commit();
-    em.close();
-    return result;
+    return super.find("findTopicByTitle","title", title);
   }
 
   public Topic findSingleTopicByTitle(String title) {
-    EntityManager em = emFactory.createEntityManager();
-    EntityTransaction et = em.getTransaction();
-    et.begin();
-    TypedQuery<Topic> query = em.createNamedQuery("findTopicByTitle", Topic.class);
-    query.setParameter("title", title);
-    Topic result = query.getResultList().get(0);
-    et.commit();
-    em.close();
-    return result;
+    List<Topic> results = findTopicByTitle(title);
+    if (results != null) {
+      return results.get(0);
+    }
+    return null;
+    //Fixme handle no result exception here
   }
 
+  public static TopicDAO getInstance(EntityManagerFactory emFactory) {
+    if (instance == null) {
+      instance = new TopicDAO(emFactory);
+    }
+    return instance;
+  }
 }

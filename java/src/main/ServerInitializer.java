@@ -1,5 +1,6 @@
 package main;
 
+import data.DataAccessObjects.SubjectDAO;
 import data.DataAccessObjects.TopicDAO;
 import data.Topic;
 import javax.persistence.EntityManagerFactory;
@@ -15,6 +16,11 @@ public class ServerInitializer {
     // Setup calls
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
 
+    TopicDAO topicDAO = TopicDAO.getInstance(entityManagerFactory);
+    SubjectDAO subjectDAO = SubjectDAO.getInstance(entityManagerFactory);
+
+    Topic topic = new Topic("Test2", "do more things");
+    topicDAO.persist(topic);
 
     // Place all setup before this call, this will run forever
     SocketHandler server = new SocketHandler();
