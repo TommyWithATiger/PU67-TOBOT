@@ -13,7 +13,7 @@ public class TopicDAO extends DAOBase<Topic, Integer> {
     super(Topic.class, emFactory);
   }
 
-  public List<Topic> findtopicByTitle(String title) {
+  public List<Topic> findTopicByTitle(String title) {
     EntityManager em = emFactory.createEntityManager();
     EntityTransaction et = em.getTransaction();
     et.begin();

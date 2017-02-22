@@ -77,7 +77,7 @@ public class TopicDAOTest extends BaseTest {
   public void findTopicsByTitle() {
     Topic topic = new Topic("Math", "From algebra to calculus.");
     topicDAO.merge(topic);
-    List<Topic> result = topicDAO.findtopicByTitle("Math");
+    List<Topic> result = topicDAO.findTopicByTitle("Math");
     assertTrue(result.contains(topic));
   }
 
