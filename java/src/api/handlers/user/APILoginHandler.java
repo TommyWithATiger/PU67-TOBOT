@@ -1,6 +1,7 @@
 package api.handlers.user;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
+import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
@@ -16,7 +17,7 @@ public class APILoginHandler {
 
     String requestContent = checkAndGetEntityContent(httpRequest);
 
-    JSONObject jsonObject = new JSONObject(requestContent);
+    JSONObject jsonObject = checkAndGetJSON(requestContent);
 
     if (!jsonObject.has("username") || !jsonObject.has("password")) {
       throw new APIBadRequestException("Login data not complete");
