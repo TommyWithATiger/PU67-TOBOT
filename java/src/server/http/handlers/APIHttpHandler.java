@@ -5,6 +5,7 @@ import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIErrorException;
 import api.exceptions.APIHandlerNotFoundException;
+import api.exceptions.APIRequestForbiddenException;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import org.apache.http.HttpRequest;
@@ -47,6 +48,8 @@ public class APIHttpHandler {
       httpResponse.setStatusCode(400);
     } catch (APIBadMethodException e) {
       httpResponse.setStatusCode(405);
+    } catch (APIRequestForbiddenException e) {
+      httpResponse.setStatusCode(403);
     }
 
     return httpResponse;
