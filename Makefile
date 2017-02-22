@@ -29,6 +29,11 @@ frontend-run-dev:
 # Build and run frontend in dev
 frontend: frontend-build frontend-run-dev
 
+# Building frontend
+frontend-api:
+	@echo Compiling frontend ...
+	@cd web && npm run build
+	@echo Done!
 
 # Building backend
 backend-build:
