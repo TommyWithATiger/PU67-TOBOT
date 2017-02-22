@@ -51,3 +51,36 @@ You can also just use make
 ```bash
 $ make # Building frontend and backend and running server.
 ```
+
+## Production
+
+We recommend using docker as production environment as it has low overhead
+and ensures security and portability.
+
+We have 3 parts og the production environment:
+ 1. Build a base image.
+ 2. Build a production image based on the base image.
+ 3. Create a production container based on the production image.
+
+This makes the second image faster as it already has all the masjor dependencies.
+
+### 1. Build base image
+
+```bash
+$ make docker-baseimage
+```
+
+### 2. Build production image from the base image
+
+```bash
+$ make docker-image-prod
+```
+
+### 3. Create production container running on port 8081
+
+```bash
+$ make docker-container-prod
+```
+
+These make commands will handle all the work with recreation of containers.
+But feel free to use plain docker or docker-compose.
