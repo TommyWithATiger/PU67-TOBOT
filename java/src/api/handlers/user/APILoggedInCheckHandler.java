@@ -12,6 +12,15 @@ import org.json.JSONObject;
 
 public class APILoggedInCheckHandler {
 
+  /**
+   * A handler for handling request checking if the current login data is valid. Requires the data:
+   *        username (String): the username
+   *        token (String): the session token
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON string with the following variables:
+   *        logged_in (boolean): indicates if the user logged in
+   */
   public static String handleLoggedInCheckRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
@@ -19,6 +28,7 @@ public class APILoggedInCheckHandler {
 
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
+    // Require username and token
     if (!jsonObject.has("username") || !jsonObject.has("token")) {
       throw new APIBadRequestException("Login check data not complete");
     }

@@ -12,6 +12,15 @@ import org.json.JSONObject;
 
 public class APILogoutHandler {
 
+  /**
+   * An API handler for handling logout requests. Require the following data:
+   *        username (String): The username
+   *        token (String): The session token
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON string with the following variable
+   *        logged_out (boolean): A variable indicating if the user has been logged out
+   */
   public static String handleLogoutRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 

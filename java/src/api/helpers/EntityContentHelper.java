@@ -10,10 +10,18 @@ import org.apache.http.util.EntityUtils;
 
 public class EntityContentHelper {
 
+  /**
+   * A helper for getting the content out of a http request
+   *
+   * @param httpRequest The http request to get the content from
+   * @return A string of the content in the http request
+   * @throws APIBadRequestException Thrown if there is no data
+   * @throws APIErrorException Thrown if there is a IOException while reading the content
+   */
   public static String checkAndGetEntityContent(HttpRequest httpRequest)
       throws APIBadRequestException, APIErrorException {
     if (!(httpRequest instanceof HttpEntityEnclosingRequest)) {
-      throw new APIBadRequestException("No login data");
+      throw new APIBadRequestException("No data");
     }
 
     HttpEntity httpEntity = ((HttpEntityEnclosingRequest) httpRequest).getEntity();

@@ -12,6 +12,16 @@ import org.json.JSONObject;
 
 public class APILoginHandler {
 
+  /**
+   * An API handler method for handling login of a user. Requires the following data:
+   *        username (String): the username
+   *        password (String): the password
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON string containing the following data
+   *        username (String): the username
+   *        token (String): the session token
+   */
   public static String handleLoginRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
@@ -19,6 +29,7 @@ public class APILoginHandler {
 
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
+    // Require username and password
     if (!jsonObject.has("username") || !jsonObject.has("password")) {
       throw new APIBadRequestException("Login data not complete");
     }

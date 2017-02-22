@@ -13,6 +13,17 @@ import org.json.JSONObject;
 
 public class APIAddTopicHandler {
 
+  /**
+   * An API handler for adding topics. Requires the user to be logged in and the following data:
+   *        title (String): the topic title
+   *        description (String): the topic description
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON string with the following data:
+   *        title (String): the topic title
+   *        description (String): the topic description
+   *        id (int): the topic id
+   */
   public static String handleAddTopicRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
@@ -20,10 +31,12 @@ public class APIAddTopicHandler {
 
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
+    // The user must be logged in
     if (!isLoggedIn(httpRequest, jsonObject)) {
       throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
     }
 
+    // Require title and description
     if (!jsonObject.has("title") || !jsonObject.has("description")) {
       throw new APIBadRequestException("Topic information is not complete");
     }
