@@ -24,11 +24,15 @@ export default {
     }
   },
   computed: {
-
     // Adding redirect URL after login is verified
     // if it exists. Else go to root folder.
     redirectUrl () {
       return this.$route.query.redirect || '/'
+    }
+  },
+  methods: {
+    errorHandler (feedback) {
+      console.log(feedback)
     }
   },
   components: {
