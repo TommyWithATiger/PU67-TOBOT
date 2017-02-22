@@ -82,8 +82,8 @@ $ make docker-image-prod
 $ make docker-container-prod
 ```
 
-These make commands will handle all the work with recreation of containers.
-But feel free to use plain docker or docker-compose.
+These make commands will handle all the work with recreation of containers,
+but feel free to use plain docker or docker-compose.
 
 ### Entering the production container
 
