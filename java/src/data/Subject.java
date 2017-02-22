@@ -2,7 +2,6 @@ package data;
 
 import data.DataAccessObjects.SubjectDAO;
 import javax.persistence.Entity;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,11 +30,6 @@ public class Subject {
   private String institution;
   private String subjectCode;
   private String description;
-
-  public static SubjectDAO initialize(EntityManagerFactory entityManagerFactory) {
-    subjectDAO = new SubjectDAO(entityManagerFactory);
-    return subjectDAO;
-  }
 
   public Subject() {
     super();
