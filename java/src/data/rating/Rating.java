@@ -26,7 +26,7 @@ public class Rating {
 
   @Enumerated(value = EnumType.STRING)
   @Convert(converter = RatingConverter.class)
-  private RatingEnum rating;
+  private RatingEnum ratingEnum;
 
   public Rating() {
     super();
@@ -34,54 +34,91 @@ public class Rating {
     ratingKeyPK = new RatingKey();
   }
 
-  public Rating(Integer userID, Integer topicID, RatingEnum rating) {
+  /**
+   * Instantiates a Rating object
+   *
+   * @param userID, the id of the User that made the rating
+   * @param topicID, the id of the topic that is being rated
+   * @param ratingEnum, a rating
+   */
+  public Rating(Integer userID, Integer topicID, RatingEnum ratingEnum) {
     this();
     ratingKeyPK = new RatingKey(userID, topicID);
-    this.rating = rating;
+    this.ratingEnum = ratingEnum;
   }
 
+  /**
+   * Get the Id of the user that made the rating
+   *
+   * @return the Id of the user
+   */
   public Integer getUserID() {
     return ratingKeyPK.getUserID();
   }
 
+  /**
+   * Set the Id of the user that made the rating
+   *
+   * @param userID the id of the user
+   */
   public void setUserID(Integer userID) {
     ratingKeyPK.setUserID(userID);
   }
 
+  /**
+   * Get the Id of the topic that was rated
+   *
+   * @return the Id of the topic
+   */
   public Integer getTopicID() {
     return ratingKeyPK.getTopicID();
   }
 
+  /**
+   * Set the Id of the topic that was rated
+   *
+   * @param topicID the id of the topic
+   */
   public void setTopicID(Integer topicID) {
     ratingKeyPK.setTopicID(topicID);
   }
 
-  public RatingEnum getRating() {
-    return rating;
-  }
-
-  public void setRating(RatingEnum rating) {
-    this.rating = rating;
+  /**
+   * Get the rating
+   *
+   * @return the rating
+   */
+  public RatingEnum getRatingEnum() {
+    return ratingEnum;
   }
 
   /**
-   * Adds the rating to the database
+   * Set the rating
+   *
+   * @param ratingEnum the rating
    */
-  public void create(){
+  public void setRatingEnum(RatingEnum ratingEnum) {
+    this.ratingEnum = ratingEnum;
+  }
+
+  /**
+   * Adds the Rating to the database
+   */
+  public void create() {
     ratingDAO.persist(this);
   }
 
   /**
-   * Removes the rating from the database
+   * Removes the Rating from the database
    */
-  public void delete(){
+  public void delete() {
     ratingDAO.remove(this);
   }
 
   /**
-   * Updates the rating's database entry
+   * Updates the Rating's database entry
    */
-  public void update(){
+  public void update() {
     ratingDAO.merge(this);
   }
 }

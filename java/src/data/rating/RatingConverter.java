@@ -5,6 +5,9 @@ import static data.rating.RatingEnum.*;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+/**
+ * This class converts between RatingEnum and the corresponding chars in the database
+ */
 @Converter
 public class RatingConverter implements AttributeConverter<RatingEnum, String> {
 

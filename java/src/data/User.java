@@ -41,29 +41,40 @@ public class User {
   @Transient
   private static Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
 
-  /**
-   * Creates a new User.
-   * The User object will create its own EntityManager.
-   */
   public User() {
     super();
     userDAO = UserDAO.getInstance();
   }
 
+  /**
+   * Instantiates a User object
+   *
+   * @param username, the username of the user
+   * @param email, the email of the user
+   */
   public User(String username, String email) {
     this();
     this.username = username;
     this.email = email;
   }
 
+  /**
+   * Adds the User to the database
+   */
   public void create() {
     userDAO.persist(this);
   }
 
+  /**
+   * Removes the User from the database
+   */
   public void delete() {
     userDAO.remove(this);
   }
 
+  /**
+   * Updates the User's database entry
+   */
   public void update() {
     userDAO.merge(this);
   }
@@ -105,7 +116,7 @@ public class User {
   /**
    * Set the id of the User.
    *
-   * @param id New id of the User, to be set
+   * @param id New id of the User
    */
   public void setId(int id) {
     this.id = id;
@@ -165,7 +176,7 @@ public class User {
   /**
    * Set The sessionToken of the User.
    *
-   * @param sessionToken New sessionToken of the User, to be set
+   * @param sessionToken New sessionToken of the User
    */
   public void setSessionToken(String sessionToken) {
     this.sessionToken = sessionToken;
@@ -183,12 +194,15 @@ public class User {
   /**
    * Set the sessionTokenExpireDate of the User.
    *
-   * @param sessionTokenExpireDate New sessionTokenExpireDate of the User, to be set
+   * @param sessionTokenExpireDate New sessionTokenExpireDate of the User
    */
   public void setSessionTokenExpireDate(Date sessionTokenExpireDate) {
     this.sessionTokenExpireDate = sessionTokenExpireDate;
   }
 
+  /**
+   * Generates a new sessionTokenExpireDate
+   */
   public void generateSessionTokenExpireDate() {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(new Date());
@@ -196,6 +210,9 @@ public class User {
     setSessionTokenExpireDate(calendar.getTime());
   }
 
+  /**
+   * Creates a new sessionToken
+   */
   public void createSessionToken() {
     generateSessionTokenExpireDate();
     while (getSessionToken() == null) {
@@ -208,6 +225,11 @@ public class User {
     }
   }
 
+  /**
+   * Creates a new sessionToken
+   *
+   * @return a sessionToken
+   */
   private String generateSessionToken() {
     String token = "";
     Random random = new Random();
@@ -218,20 +240,29 @@ public class User {
     return token;
   }
 
+  /**
+   * Checks a if a session is valid
+   *
+   * @param token a token for a session to be checked
+   * @return true if the session is valid, else false
+   */
   public boolean checkUserSessionToken(String token) {
     String actualToken = getSessionToken();
     if (!token.equals(actualToken)) {
       return false;
     }
 
-    if (getSessionTokenExpireDate().before(new Date())){
+    if (getSessionTokenExpireDate().before(new Date())) {
       logout();
       return false;
     }
     return true;
   }
 
-  public void logout(){
+  /**
+   * Resets the session information
+   */
+  public void logout() {
     setSessionToken(null);
     setSessionTokenExpireDate(null);
   }
