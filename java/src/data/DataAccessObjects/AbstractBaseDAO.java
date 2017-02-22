@@ -1,19 +1,21 @@
 package data.DataAccessObjects;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
-public abstract class DAOBase<E, K> {
+public abstract class AbstractBaseDAO<E, K> {
 
-  protected Class<E> entityClass;
+  private Class<E> entityClass;
 
   @PersistenceContext
-  protected static EntityManagerFactory emFactory;
+  private static EntityManagerFactory emFactory;
 
-  public DAOBase(Class<E> entityClass, EntityManagerFactory entityManagerFactory) {
-    this.emFactory = entityManagerFactory;
+  AbstractBaseDAO(Class<E> entityClass, EntityManagerFactory entityManagerFactory) {
+    emFactory = entityManagerFactory;
     this.entityClass = entityClass;
   }
 
@@ -26,7 +28,7 @@ public abstract class DAOBase<E, K> {
     entityManager.close();
   }
 
-  public E merge(E entity) {
+  E merge(E entity) {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();
@@ -36,7 +38,7 @@ public abstract class DAOBase<E, K> {
     return entity;
   }
 
-  public void remove(E entity) {
+  void remove(E entity) {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();
@@ -53,6 +55,21 @@ public abstract class DAOBase<E, K> {
     entityTransaction.commit();
     entityManager.close();
     return entity;
+  }
+
+  List<E> find(String namedQueryString, String fieldName, String fieldValue) {
+    List<E> entityList;
+    try {
+      EntityManager entityManager = emFactory.createEntityManager();
+      TypedQuery<E> query = entityManager.createNamedQuery(namedQueryString, entityClass);
+      query.setParameter(fieldName, fieldValue);
+      entityList = query.getResultList();
+      entityManager.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+      entityList = null;
+    }
+    return entityList;
   }
 
 }
