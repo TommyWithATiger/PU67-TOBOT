@@ -16,8 +16,7 @@ public class HTTPHandlerTest extends ServerBaseTest {
     printWriter.flush();
 
     HttpResponse httpResponse = responseParser.parse();
-    assertEquals("HTTP/1.1 301 Moved Permanently", httpResponse.getStatusLine().toString());
-    assertEquals("/index.html", httpResponse.getFirstHeader("Location").getValue());
+    assertEquals("HTTP/1.1 200 OK", httpResponse.getStatusLine().toString());
   }
 
 }
