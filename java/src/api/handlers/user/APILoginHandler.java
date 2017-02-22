@@ -41,6 +41,8 @@ public class APILoginHandler {
     String token = user.getSessionToken();
     user.generateSessionTokenExpireDate();
 
+    user.update();
+
     JSONObject loginResponse = new JSONObject();
     loginResponse.put("username", username);
     loginResponse.put("token", token);
