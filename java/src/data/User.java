@@ -189,7 +189,7 @@ public class User {
     this.sessionTokenExpireDate = sessionTokenExpireDate;
   }
 
-  public void generateSessionTokenExpireDate(){
+  public void generateSessionTokenExpireDate() {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(new Date());
     calendar.add(Calendar.DATE, 1);
@@ -207,14 +207,28 @@ public class User {
     }
   }
 
-  private String generateSessionToken(){
+  private String generateSessionToken() {
     String token = "";
     Random random = new Random();
     String validSymbols = "abcdefghijklmnopqrstuvwxyz0123456789";
-    for (int token_symbol = 0; token_symbol < 64; token_symbol++){
+    for (int token_symbol = 0; token_symbol < 64; token_symbol++) {
       token += validSymbols.charAt(random.nextInt(64));
     }
     return token;
+  }
+
+  public boolean checkUserSessionToken(String token) {
+    String actualToken = getSessionToken();
+    if (!token.equals(actualToken)) {
+      return false;
+    }
+
+    if (getSessionTokenExpireDate().before(new Date())){
+      setSessionToken(null);
+      setSessionTokenExpireDate(null);
+      return false;
+    }
+    return true;
   }
 
 }
