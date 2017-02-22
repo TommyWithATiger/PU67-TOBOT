@@ -1,34 +1,18 @@
 package api.handlers;
 
-import api.exceptions.APIBadMethodException;
+import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
+import static api.helpers.RequestMethodHelper.checkRequestMethod;
+
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIErrorException;
-import java.io.IOException;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 public class APILoginHandler {
 
   public static String handleLoginRequest(HttpRequest httpRequest) {
-    if (!httpRequest.getRequestLine().getMethod().equals("POST")) {
-      throw new APIBadMethodException("Wrong method");
-    }
+    checkRequestMethod("POST", httpRequest);
 
-    if (!(httpRequest instanceof HttpEntityEnclosingRequest)) {
-      throw new APIBadRequestException("No login data");
-    }
-
-    HttpEntity httpEntity = ((HttpEntityEnclosingRequest) httpRequest).getEntity();
-    String requestContent;
-
-    try {
-      requestContent = EntityUtils.toString(httpEntity);
-    } catch (IOException e) {
-      throw new APIErrorException("Could not read entity");
-    }
+    String requestContent = checkAndGetEntityContent(httpRequest);
 
     JSONObject jsonObject = new JSONObject(requestContent);
 
@@ -42,7 +26,10 @@ public class APILoginHandler {
     JSONObject loginResponse = new JSONObject();
     loginResponse.put("username", username);
     loginResponse.put("token", password);
+
     return loginResponse.toString();
   }
+
+
 
 }
