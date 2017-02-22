@@ -159,6 +159,15 @@ public class Subject {
   }
 
   /**
+   * Returns true if the subject contains the topic
+   * @param topic, the topic to check for
+   * @return boolean, true if contains
+   */
+  public boolean hasTopic(Topic topic) {
+    return topics.contains(topic);
+  }
+
+  /**
    * Adds a topic to the subject
    *
    * @param topic, the Topic to be added

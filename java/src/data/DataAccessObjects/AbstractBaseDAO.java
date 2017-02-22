@@ -63,7 +63,7 @@ public abstract class AbstractBaseDAO<E, K> {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();
-    entityManager.remove(entity);
+    entityManager.remove(entityManager.merge(entity));
     entityTransaction.commit();
     entityManager.close();
   }

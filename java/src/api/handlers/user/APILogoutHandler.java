@@ -35,6 +35,8 @@ public class APILogoutHandler {
       user.logout();
     }
 
+    user.update();
+
     JSONObject logoutResponse = new JSONObject();
     logoutResponse.put("logged_out", String.valueOf(user.getSessionToken() == null));
 
