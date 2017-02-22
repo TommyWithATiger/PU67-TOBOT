@@ -4,6 +4,8 @@ import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
+import data.DataAccessObjects.UserDAO;
+import data.User;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -23,9 +25,25 @@ public class APILoginHandler {
     String username = jsonObject.getString("username");
     String password = jsonObject.getString("password");
 
+    User user = UserDAO.getInstance().findUserByUsername(username);
+    if (user == null) {
+      throw new APIBadRequestException("User not found");
+    }
+
+    if (!user.checkPassword(password)) {
+      throw new APIBadRequestException("Password incorrect");
+    }
+
+    if (user.getSessionToken() == null) {
+      user.createSessionToken();
+    }
+
+    String token = user.getSessionToken();
+    user.generateSessionTokenExpireDate();
+
     JSONObject loginResponse = new JSONObject();
     loginResponse.put("username", username);
-    loginResponse.put("token", password);
+    loginResponse.put("token", token);
 
     return loginResponse.toString();
   }
