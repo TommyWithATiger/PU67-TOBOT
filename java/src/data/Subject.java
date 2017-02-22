@@ -6,10 +6,18 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "findSubjectByTitle", query = "SELECT s FROM Subject s WHERE s.title = :title"),
+    @NamedQuery(name = "findSubjectByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode = :subjectCode"),
+    @NamedQuery(name = "findSubjectByInstitution", query = "SELECT s FROM Subject s WHERE s.institution = :institution"),
+    @NamedQuery(name = "findSubjectByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution = :institution AND s.subjectCode = :subjectCode")
+})
 @Table
 public class Subject {
 

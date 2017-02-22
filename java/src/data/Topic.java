@@ -6,13 +6,17 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 
 
 @Entity
-@NamedQuery(name = "findTopicByTitle", query = "SELECT t FROM Topic t WHERE t.title = :title")
+@NamedQueries({
+    @NamedQuery(name = "findTopicByTitle", query = "SELECT t FROM Topic t WHERE t.title = :title"),
+    @NamedQuery(name = "findTopicByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId")
+})
 @Table
 public class Topic {
 
