@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import FrontPage from 'components/pages/FrontPage'
 import LoginPage from 'components/pages/LoginPage'
+import UserPage from 'components/pages/UserPage'
 import { auth } from 'auth'
 
 Vue.use(Router)
@@ -28,6 +29,12 @@ export const router = new Router({
       path: '/',
       name: 'Home',
       component: FrontPage,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/user/:user',
+      name: 'User',
+      component: UserPage,
       beforeEnter: requireAuth
     },
     {
