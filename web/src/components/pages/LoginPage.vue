@@ -4,7 +4,8 @@
     <div>
       <input v-model="creds.username" placeholder="Brukernavn ..." type="text" />
       <input v-model="creds.password" placeholder="Passord ..." type="text" />
-      <LoginBtn :creds="creds" :redirect="redirectUrl" />
+      <LoginBtn :creds="creds" :redirect="redirectUrl" :error="errorHandler" :success="successHandler" />
+      <span>{{ feedback }}</span>
     </div>
   </div>
 </template>
@@ -20,7 +21,8 @@ export default {
       creds: {
         username: '',
         password: ''
-      }
+      },
+      feedback: ''
     }
   },
   computed: {
@@ -31,8 +33,11 @@ export default {
     }
   },
   methods: {
+    successHandler (feedback) {
+      this.feedback = feedback
+    },
     errorHandler (feedback) {
-      console.log(feedback)
+      this.feedback = feedback
     }
   },
   components: {
