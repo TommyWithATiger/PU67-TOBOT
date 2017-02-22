@@ -30,7 +30,7 @@ public abstract class AbstractBaseDAO<E, K> {
    *
    * @param entity, the entity to be persisted
    **/
-  void persist(E entity) {
+  public void persist(E entity) {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();
