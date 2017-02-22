@@ -46,14 +46,33 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
     //Fixme handle no result exception here
   }
 
+  /**
+   * Finds subjects that matches the given subject code
+   *
+   * @param code, the subject code
+   * @return List of Subject objects that match the query
+   */
   public List<Subject> findSubjectsByCode(String code) {
     return super.find("findSubjectByCode", "subjectCode", code);
   }
 
+  /**
+   * Finds subjects that matches the given institution
+   *
+   * @param institution, the institution to query for
+   * @return List of Subject objects that match the query
+   */
   public List<Subject> findSubjectByInstituton(String institution) {
     return super.find("findSubjectByInstitution", "institution", institution);
   }
 
+  /**
+   * Finds subjects that matches the given institution and subject code
+   *
+   * @param institution, the institution to query for
+   * @param code, the subject code to query for
+   * @return List of Subject objects that match the query
+   */
   public List<Subject> findSubjectByInstitutionAndCode(String institution, String code) {
     List<Subject> entityList;
     try {
@@ -71,6 +90,12 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
     return entityList;
   }
 
+  /**
+   * Finds subjects contains the given topic
+   *
+   * @param topic, the topic to query for
+   * @return List of Subject objects that match the query
+   */
   public List<Subject> findByTopic(Topic topic) {
     List<Subject> entityList;
     try {
