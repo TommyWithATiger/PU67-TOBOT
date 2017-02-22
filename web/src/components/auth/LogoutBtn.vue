@@ -10,9 +10,11 @@ export default {
   methods: {
     /**
      * To log out, we just need to remove the token.
+     * After logout it redirects to /login.
      */
     logout () {
       auth.logout(this)
+      this.$router.push('/login')
     }
   }
 }

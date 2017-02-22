@@ -16,8 +16,4 @@ export default {
 </script>
 
 <style scoped>
-.page-content {
-  padding: 16px;
-  flex: 1;
-}
 </style>
