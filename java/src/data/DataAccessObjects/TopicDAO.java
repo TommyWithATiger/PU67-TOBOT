@@ -25,6 +25,10 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
     //Fixme handle no result exception here
   }
 
+  public static TopicDAO getInstance() {
+    return instance;
+  }
+
   public static TopicDAO getInstance(EntityManagerFactory emFactory) {
     if (instance == null) {
       instance = new TopicDAO(emFactory);
