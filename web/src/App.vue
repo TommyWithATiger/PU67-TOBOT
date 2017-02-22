@@ -24,4 +24,9 @@ export default {
   flex-direction: column;
   min-height: 100vh;
 }
+
+.page-content {
+  padding: 16px;
+  flex: 1;
+}
 </style>
