@@ -42,6 +42,8 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
     //Fixme handle no result exception here
   }
 
+  //TODO find by topic
+
   /**
    * Returns the static TopicDAO instance
    *

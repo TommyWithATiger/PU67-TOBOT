@@ -19,7 +19,6 @@ import javax.persistence.Table;
     @NamedQuery(name = "findSubjectByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode = :subjectCode"),
     @NamedQuery(name = "findSubjectByInstitution", query = "SELECT s FROM Subject s WHERE s.institution = :institution"),
     @NamedQuery(name = "findSubjectByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution = :institution AND s.subjectCode = :subjectCode")
-    //TODO find by topic
 })
 @Table
 public class Subject {

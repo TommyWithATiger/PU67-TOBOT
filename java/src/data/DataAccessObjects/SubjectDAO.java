@@ -1,8 +1,12 @@
 package data.DataAccessObjects;
 
 import data.Subject;
+import data.Topic;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
 
@@ -42,8 +46,46 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
     //Fixme handle no result exception here
   }
 
-  public static SubjectDAO getInstance() {
-    return instance;
+  public List<Subject> findSubjectsByCode(String code) {
+    return super.find("findSubjectByCode", "subjectCode", code);
+  }
+
+  public List<Subject> findSubjectByInstituton(String institution) {
+    return super.find("findSubjectByInstitution", "institution", institution);
+  }
+
+  public List<Subject> findSubjectByInstitutionAndCode(String institution, String code) {
+    List<Subject> entityList;
+    try {
+      EntityManager entityManager = emFactory.createEntityManager();
+      TypedQuery<Subject> query = entityManager
+          .createNamedQuery("findSubjectByInstitutionAndCode", Subject.class);
+      query.setParameter("institution", institution);
+      query.setParameter("subjectCode", code);
+      entityList = query.getResultList();
+      entityManager.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+      entityList = null;
+    }
+    return entityList;
+  }
+
+  public List<Subject> findByTopic(Topic topic) {
+    List<Subject> entityList;
+    try {
+      EntityManager entityManager = emFactory.createEntityManager();
+      Query query = entityManager.createNativeQuery(
+          "SELECT * FROM TOBOT.SUBJECT s WHERE s.id IN (SELECT * FROM TOBOT.SUBJECT_TOPIC st WHERE st.topicID = :topicId)",
+          Subject.class);
+      query.setParameter("topicId", topic.getId());
+      entityList = (List<Subject>) query.getResultList(); //FIXME find a better fix
+      entityManager.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+      entityList = null;
+    }
+    return entityList;
   }
 
   /**
