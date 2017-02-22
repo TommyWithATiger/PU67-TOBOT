@@ -42,6 +42,10 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
     //Fixme handle no result exception here
   }
 
+  public static SubjectDAO getInstance() {
+    return instance;
+  }
+
   /**
    * Returns the static SubjectDAO instance
    *
