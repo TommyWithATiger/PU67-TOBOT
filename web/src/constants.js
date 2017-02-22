@@ -1,1 +1,2 @@
-export API_URL = 'https://localhost:5032/api/'
+export const DOMAIN_URL = 'http://localhost:5032'
+export const API_URL = `${DOMAIN_URL}/api/v1`

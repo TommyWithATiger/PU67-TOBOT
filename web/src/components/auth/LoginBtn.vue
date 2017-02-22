@@ -14,7 +14,7 @@ export default {
      */
     login () {
       if (this.creds.username.length) {
-        auth.login(this.creds, this, this.redirect || '/')
+        auth.login(this.creds, this, this.redirect)
       }
     }
   }
