@@ -57,12 +57,12 @@ $ make # Building frontend and backend and running server.
 We recommend using docker as production environment as it has low overhead
 and ensures security and portability.
 
-We have 3 parts og the production environment:
- 1. Build a base image.
- 2. Build a production image based on the base image.
- 3. Create a production container based on the production image.
+We have 3 parts of the production environment:
+ 1. Build a **base image**.
+ 2. Build a **production image** based on the **base image**.
+ 3. Create a **production container** based on the **production image**.
 
-This makes the second image faster as it already has all the masjor dependencies.
+This makes the second image faster to create as it already has all the masjor dependencies.
 
 ### 1. Build base image
 
