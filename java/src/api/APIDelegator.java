@@ -1,6 +1,9 @@
 package api;
 
 import api.exceptions.APIHandlerNotFoundException;
+import api.handlers.APILoggedInCheckHandler;
+import api.handlers.APILoginHandler;
+import api.handlers.APILogoutHandler;
 import java.util.HashMap;
 import java.util.function.Function;
 import org.apache.http.HttpRequest;
@@ -21,7 +24,7 @@ public class APIDelegator {
    * given request
    */
   public static String delegate(HttpRequest APIRequest) throws APIHandlerNotFoundException {
-    String uri = APIRequest.getRequestLine().getUri().substring(4);
+    String uri = APIRequest.getRequestLine().getUri().substring(8);
     for (String uriRegex : handlerRegistry.keySet()) {
       if (uri.matches(uriRegex)) {
         return handlerRegistry.get(uriRegex).apply(APIRequest);
@@ -38,6 +41,11 @@ public class APIDelegator {
     HashMap<String, Function<HttpRequest, String>> handlerRegistry = new HashMap<>();
 
     // Api handlers should be registered here
+
+    // User login logic
+    handlerRegistry.put("user\\/login", APILoginHandler::handleLoginRequest);
+    handlerRegistry.put("user\\/logout", APILogoutHandler::handleLogoutRequest);
+    handlerRegistry.put("user\\/check", APILoggedInCheckHandler::handleLoggedInCheckRequest);
 
     return handlerRegistry;
   }
