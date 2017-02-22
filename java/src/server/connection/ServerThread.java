@@ -1,11 +1,14 @@
 package server.connection;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.io.DefaultHttpRequestParser;
 import org.apache.http.impl.io.DefaultHttpResponseWriter;
 import org.apache.http.impl.io.HttpTransportMetricsImpl;
@@ -23,13 +26,14 @@ public class ServerThread extends Thread {
   private DefaultHttpRequestParser requestParser;
   private DefaultHttpResponseWriter responseWriter;
   private SessionOutputBufferImpl sessionOutputBuffer;
+  private SessionInputBufferImpl sessionInputBuffer;
   private OutputStream outputStream;
 
   public ServerThread(Socket clientSocket) throws IOException {
     this.clientSocket = clientSocket;
 
     // Initiate input buffers
-    SessionInputBufferImpl sessionInputBuffer = new SessionInputBufferImpl(
+     sessionInputBuffer = new SessionInputBufferImpl(
         new HttpTransportMetricsImpl(), 8192);
     sessionInputBuffer.bind(clientSocket.getInputStream());
     requestParser = new DefaultHttpRequestParser(sessionInputBuffer);
@@ -51,7 +55,25 @@ public class ServerThread extends Thread {
     try {
       // Get and handle the request
       HttpRequest request = requestParser.parse();
-      HttpResponse response = HTTPHandler.handleRequest(request);
+
+      HttpResponse response;
+
+      // Check if request has content, in that case read content
+      if (request.containsHeader("Content-Length")){
+        HttpEntityEnclosingRequest entityRequest = (HttpEntityEnclosingRequest) request;
+        BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+
+        byte[] responseContent = new byte[sessionInputBuffer.length()];
+        sessionInputBuffer.read(responseContent);
+
+        basicHttpEntity.setContent(new ByteArrayInputStream(responseContent));
+        entityRequest.setEntity(basicHttpEntity);
+
+        response = HTTPHandler.handleRequest(entityRequest);
+      } else {
+        response = HTTPHandler.handleRequest(request);
+      }
+
 
       // Set content headers if there is content
       if (response.getEntity() != null) {
