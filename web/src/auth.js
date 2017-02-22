@@ -1,3 +1,5 @@
+import { api } from 'api'
+
 export const auth = {
   /**
    * Fetch token by using credentials.
@@ -7,28 +9,17 @@ export const auth = {
    */
   login (creds, ctx, redirect = '/') {
     if (creds.username.length) {
-      localStorage.setItem('app_token', 'anId')
-      localStorage.setItem('username', creds.username)
-      if (ctx) ctx.$store.state.user.authenticated = true
-      if (ctx) ctx.$store.state.user.username = creds.username
-      if (ctx) ctx.$router.push(redirect)
+      api.postUser(ctx, {
+        username: creds.username,
+        password: creds.password
+      }, (data) => {
+        localStorage.setItem('app_token', data.token)
+        localStorage.setItem('username', data.username)
+        if (ctx) ctx.$store.state.user.authenticated = true
+        if (ctx) ctx.$store.state.user.username = creds.username
+        if (ctx) ctx.$router.push(redirect)
+      })
     }
-    /*
-    ctx.$http.post(LOGIN_URL, creds, (data) => {
-      try {
-        localStorage.setItem('app_token', data.id_token)
-      } catch (exception) {}
-
-      ctx.$store.state.user.authenticated = true
-
-      if (redirect) {
-        Router.go(redirect)
-      }
-
-    }).error((err) => {
-      this.error = err
-    })
-    */
   },
 
   /**
@@ -41,28 +32,17 @@ export const auth = {
    */
   signup (creds, ctx, redirect = '/') {
     if (creds.username.length) {
-      localStorage.setItem('app_token', 'anId')
-      localStorage.setItem('username', creds.username)
-      if (ctx) ctx.$store.state.user.authenticated = true
-      if (ctx) ctx.$store.state.user.username = creds.username
-      if (ctx) ctx.$router.push(redirect)
+      api.postUser(ctx, {
+        username: creds.username,
+        password: creds.password
+      }, (data) => {
+        localStorage.setItem('app_token', data.token)
+        localStorage.setItem('username', data.username)
+        if (ctx) ctx.$store.state.user.authenticated = true
+        if (ctx) ctx.$store.state.user.username = creds.username
+        if (ctx) ctx.$router.push(redirect)
+      })
     }
-    /*
-    ctx.$http.post(SIGNUP_URL, creds, (data) => {
-      try {
-        localStorage.setItem('app_token', data.id_token)
-      } catch (exception) {}
-
-      if (ctx) ctx.$store.state.user.authenticated = true
-
-      if(redirect) {
-        Router.go(redirect)
-      }
-
-    }).error((err) => {
-      this.error = err
-    })
-    */
   },
 
   /**
