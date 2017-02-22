@@ -74,7 +74,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @return List of Subject objects that match the query
    */
   public List<Subject> findSubjectByInstitutionAndCode(String institution, String code) {
-    List<Subject> entityList;SUBJECT_TOPIC
+    List<Subject> entityList;
     try {
       EntityManager entityManager = emFactory.createEntityManager();
       TypedQuery<Subject> query = entityManager
