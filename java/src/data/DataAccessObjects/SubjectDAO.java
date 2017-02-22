@@ -1,5 +1,6 @@
 package data.DataAccessObjects;
 
+import data.DataAccessObjects.util.FieldTuple;
 import data.Subject;
 import data.Topic;
 import java.util.List;
@@ -28,7 +29,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @return List of Subject objects that match the title
    */
   public List<Subject> findSubjectByTitle(String title) {
-    return super.find("findSubjectByTitle", "title", title);
+    return super.find("findSubjectByTitle", new FieldTuple("title", title));
   }
 
   /**
@@ -53,7 +54,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @return List of Subject objects that match the query
    */
   public List<Subject> findSubjectsByCode(String code) {
-    return super.find("findSubjectByCode", "subjectCode", code);
+    return super.find("findSubjectByCode", new FieldTuple("subjectCode", code));
   }
 
   /**
@@ -63,7 +64,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @return List of Subject objects that match the query
    */
   public List<Subject> findSubjectByInstituton(String institution) {
-    return super.find("findSubjectByInstitution", "institution", institution);
+    return super.find("findSubjectByInstitution", new FieldTuple("institution", institution));
   }
 
   /**
@@ -74,20 +75,9 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @return List of Subject objects that match the query
    */
   public List<Subject> findSubjectByInstitutionAndCode(String institution, String code) {
-    List<Subject> entityList;
-    try {
-      EntityManager entityManager = emFactory.createEntityManager();
-      TypedQuery<Subject> query = entityManager
-          .createNamedQuery("findSubjectByInstitutionAndCode", Subject.class);
-      query.setParameter("institution", institution);
-      query.setParameter("subjectCode", code);
-      entityList = query.getResultList();
-      entityManager.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      entityList = null;
-    }
-    return entityList;
+    return super.find("findSubjectByInstitutionAndCode",
+        new FieldTuple("institution", institution),
+        new FieldTuple("subjectCode", code));
   }
 
   /**

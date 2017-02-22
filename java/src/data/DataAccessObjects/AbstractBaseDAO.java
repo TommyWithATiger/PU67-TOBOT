@@ -1,5 +1,6 @@
 package data.DataAccessObjects;
 
+import data.DataAccessObjects.util.FieldTuple;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -88,15 +89,17 @@ public abstract class AbstractBaseDAO<E, K> {
    * This method is extended into specialized ones
    *
    * @param namedQueryString, the query to be performed
-   * @param fieldName, the name of the field the query is executed on
-   * @param fieldValue, the value that is looked for in the given field
+   * @param fieldTuples, varargs of tuples consisting of the name of the field the query is executed on, and
+   * the value that is looked for in the given field
    **/
-  public List<E> find(String namedQueryString, String fieldName, String fieldValue) {
+  public List<E> find(String namedQueryString, FieldTuple... fieldTuples) {
     List<E> entityList;
     try {
       EntityManager entityManager = emFactory.createEntityManager();
       TypedQuery<E> query = entityManager.createNamedQuery(namedQueryString, entityClass);
-      query.setParameter(fieldName, fieldValue);
+      for(FieldTuple fieldTuple : fieldTuples){
+        query.setParameter(fieldTuple.fieldName, fieldTuple.fieldValue);
+      }
       entityList = query.getResultList();
       entityManager.close();
     } catch (Exception e) {
