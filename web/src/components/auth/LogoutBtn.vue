@@ -13,6 +13,7 @@ export default {
      */
     logout () {
       auth.logout(this)
+      this.$router.push('/login')
     }
   }
 }
