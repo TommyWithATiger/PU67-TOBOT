@@ -25,7 +25,7 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
    */
   public User findUserByUsername(String username) {
     List<User> results = super.find("findUserByUsername","username", username);
-    if (results != null) {
+    if (!results.isEmpty()) {
       return results.get(0);
     }
     return null;
