@@ -31,7 +31,7 @@ export const api = {
       mode: 'no-cors'
     }
 
-    fetch(LOGIN_URL, req)
+    ctx.$http.post(LOGIN_URL, req)
     .then(res => res.json())
     .then(callback)
     .catch(error)
