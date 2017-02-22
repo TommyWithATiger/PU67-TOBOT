@@ -179,4 +179,25 @@ public class Subject {
       topics.remove(topic);
     }
   }
+
+  /**
+   * Adds the subject to the database
+   */
+  public void create(){
+    subjectDAO.persist(this);
+  }
+
+  /**
+   * Removes the subject from the database
+   */
+  public void delete(){
+    subjectDAO.remove(this);
+  }
+
+  /**
+   * Updates the subjects database entry
+   */
+  public void update(){
+    subjectDAO.merge(this);
+  }
 }

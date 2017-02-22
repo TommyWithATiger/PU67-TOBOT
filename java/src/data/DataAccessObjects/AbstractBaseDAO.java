@@ -30,7 +30,7 @@ public abstract class AbstractBaseDAO<E, K> {
    *
    * @param entity, the entity to be persisted
    **/
-  void persist(E entity) {
+  public void persist(E entity) {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();
@@ -44,7 +44,7 @@ public abstract class AbstractBaseDAO<E, K> {
    *
    * @param entity, the entity to be merged
    **/
-  E merge(E entity) {
+  public E merge(E entity) {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();
@@ -59,7 +59,7 @@ public abstract class AbstractBaseDAO<E, K> {
    *
    * @param entity, the entity to be removed
    **/
-  void remove(E entity) {
+  public void remove(E entity) {
     EntityManager entityManager = emFactory.createEntityManager();
     EntityTransaction entityTransaction = entityManager.getTransaction();
     entityTransaction.begin();
@@ -91,7 +91,7 @@ public abstract class AbstractBaseDAO<E, K> {
    * @param fieldName, the name of the field the query is executed on
    * @param fieldValue, the value that is looked for in the given field
    **/
-  List<E> find(String namedQueryString, String fieldName, String fieldValue) {
+  public List<E> find(String namedQueryString, String fieldName, String fieldValue) {
     List<E> entityList;
     try {
       EntityManager entityManager = emFactory.createEntityManager();

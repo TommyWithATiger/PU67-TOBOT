@@ -160,4 +160,24 @@ public class Topic {
     subject.removeTopic(this);
   }
 
+  /**
+   * Adds the topic to the database
+   */
+  public void create(){
+    topicDAO.persist(this);
+  }
+
+  /**
+   * Removes the topic from the database
+   */
+  public void delete(){
+    topicDAO.remove(this);
+  }
+
+  /**
+   * Updates the topics database entry
+   */
+  public void update(){
+    topicDAO.merge(this);
+  }
 }
