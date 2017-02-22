@@ -25,6 +25,10 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
     //Fixme handle no result exception here
   }
 
+  public static SubjectDAO getInstance() {
+    return instance;
+  }
+
   public static SubjectDAO getInstance(EntityManagerFactory emFactory) {
     if (instance == null) {
       instance = new SubjectDAO(emFactory);
