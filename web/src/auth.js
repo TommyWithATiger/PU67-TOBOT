@@ -9,7 +9,7 @@ export const auth = {
    */
   login (creds, ctx, redirect = '/') {
     if (creds.username.length) {
-      api.postUser(ctx, {
+      api.postUserLogin(ctx, {
         username: creds.username,
         password: creds.password
       }, (data) => {
@@ -32,7 +32,7 @@ export const auth = {
    */
   signup (creds, ctx, redirect = '/') {
     if (creds.username.length) {
-      api.postUser(ctx, {
+      api.postUserLogin(ctx, {
         username: creds.username,
         password: creds.password
       }, (data) => {

@@ -1,4 +1,6 @@
 import { API_URL } from './constants'
+// const USER_URL = `${API_URL}/user/`
+const LOGIN_URL = `${API_URL}/user/login`
 
 export const api = {
   /**
@@ -20,7 +22,7 @@ export const api = {
    * @param {object} ctx Context.
    * @param {object} data The data to post in request.
    */
-  postUser (ctx, data, callback) {
+  postUserLogin (ctx, data, callback, error) {
     // Here we can inject token.
 
     let req = {
@@ -29,9 +31,9 @@ export const api = {
       mode: 'no-cors'
     }
 
-    fetch(`${API_URL}/user/login`, req)
+    fetch(LOGIN_URL, req)
     .then(res => res.json())
     .then(callback)
-    .catch(console.log)
+    .catch(error)
   }
 }
