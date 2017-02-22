@@ -17,8 +17,7 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findTopicByTitle", query = "SELECT t FROM Topic t WHERE t.title = :title"),
-    @NamedQuery(name = "findTopicByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId")
-    //TODO Find by subject
+    @NamedQuery(name = "findTopicByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId"),
 })
 @Table
 public class Topic {
@@ -161,4 +160,24 @@ public class Topic {
     subject.removeTopic(this);
   }
 
+  /**
+   * Adds the topic to the database
+   */
+  public void create(){
+    topicDAO.persist(this);
+  }
+
+  /**
+   * Removes the topic from the database
+   */
+  public void delete(){
+    topicDAO.remove(this);
+  }
+
+  /**
+   * Updates the topics database entry
+   */
+  public void update(){
+    topicDAO.merge(this);
+  }
 }

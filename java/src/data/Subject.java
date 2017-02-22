@@ -19,7 +19,6 @@ import javax.persistence.Table;
     @NamedQuery(name = "findSubjectByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode = :subjectCode"),
     @NamedQuery(name = "findSubjectByInstitution", query = "SELECT s FROM Subject s WHERE s.institution = :institution"),
     @NamedQuery(name = "findSubjectByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution = :institution AND s.subjectCode = :subjectCode")
-    //TODO find by topic
 })
 @Table
 public class Subject {
@@ -179,5 +178,26 @@ public class Subject {
     if (topics.contains(topic)) {
       topics.remove(topic);
     }
+  }
+
+  /**
+   * Adds the subject to the database
+   */
+  public void create(){
+    subjectDAO.persist(this);
+  }
+
+  /**
+   * Removes the subject from the database
+   */
+  public void delete(){
+    subjectDAO.remove(this);
+  }
+
+  /**
+   * Updates the subjects database entry
+   */
+  public void update(){
+    subjectDAO.merge(this);
   }
 }

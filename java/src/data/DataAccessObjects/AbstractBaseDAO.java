@@ -12,7 +12,7 @@ public abstract class AbstractBaseDAO<E, K> {
   private Class<E> entityClass;
 
   @PersistenceContext
-  private static EntityManagerFactory emFactory;
+  protected static EntityManagerFactory emFactory;
 
   /**
    * Instantiates a DAO, Only called through sub-classes
@@ -91,7 +91,7 @@ public abstract class AbstractBaseDAO<E, K> {
    * @param fieldName, the name of the field the query is executed on
    * @param fieldValue, the value that is looked for in the given field
    **/
-  List<E> find(String namedQueryString, String fieldName, String fieldValue) {
+  public List<E> find(String namedQueryString, String fieldName, String fieldValue) {
     List<E> entityList;
     try {
       EntityManager entityManager = emFactory.createEntityManager();
