@@ -3,7 +3,7 @@
     <h1><router-link to="/">Home</router-link></h1>
     <div>
       <div v-if="authenticated">
-        <span>{{ state.user.username }}</span>
+        <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
         <LogoutBtn />
       </div>
       <div v-else>
@@ -37,6 +37,11 @@ export default {
     // Making store state available through state.
     state () {
       return this.$store.state
+    },
+
+    // Return user url
+    getUserUrl () {
+      return `/user/${this.$store.state.user.username}`
     }
   },
   components: {
