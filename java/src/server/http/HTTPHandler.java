@@ -52,7 +52,7 @@ public class HTTPHandler {
 
     // Register method calls for handler
     handlerRegistry.put("\\/static\\/.*", StaticContentHttpHandler::handleRequest);
-    handlerRegistry.put("\\/api\\/.*", APIHttpHandler::handleRequest);
+    handlerRegistry.put("\\/api\\/v1\\/.*", APIHttpHandler::handleRequest);
 
     // All handlers must be registered above here, this catches all remaining cases
     handlerRegistry.put(".*", IndexPageHTTPHandler::handleRequest);
