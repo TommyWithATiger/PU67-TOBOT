@@ -224,11 +224,15 @@ public class User {
     }
 
     if (getSessionTokenExpireDate().before(new Date())){
-      setSessionToken(null);
-      setSessionTokenExpireDate(null);
+      logout();
       return false;
     }
     return true;
+  }
+
+  public void logout(){
+    setSessionToken(null);
+    setSessionTokenExpireDate(null);
   }
 
 }
