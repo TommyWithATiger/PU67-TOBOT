@@ -160,6 +160,7 @@ public class Subject {
 
   /**
    * Returns true if the subject contains the topic
+   *
    * @param topic, the topic to check for
    * @return boolean, true if contains
    */
@@ -192,21 +193,45 @@ public class Subject {
   /**
    * Adds the subject to the database
    */
-  public void create(){
+  public void create() {
     subjectDAO.persist(this);
   }
 
   /**
    * Removes the subject from the database
    */
-  public void delete(){
+  public void delete() {
     subjectDAO.remove(this);
   }
 
   /**
    * Updates the subjects database entry
    */
-  public void update(){
+  public void update() {
     subjectDAO.merge(this);
+  }
+
+  /**
+   * Overrides the default equals method
+   *
+   * @param other The object to check against
+   * @return A boolean indicating if the other object is equal to this, that is has the same id
+   */
+  @Override
+  public boolean equals(Object other) {
+    if (other == null || !(other instanceof Subject)) {
+      return false;
+    }
+    Subject otherSubject = (Subject) other;
+    return otherSubject.id == this.id;
+  }
+
+  /**
+   * Overrides the hashcode of the object to be equal to its id
+   * @return the id of the object
+   */
+  @Override
+  public int hashCode(){
+    return id;
   }
 }

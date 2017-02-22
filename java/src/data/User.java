@@ -236,4 +236,28 @@ public class User {
     setSessionTokenExpireDate(null);
   }
 
+  /**
+   * Overrides the default equals method
+   *
+   * @param other The object to check against
+   * @return A boolean indicating if the other object is equal to this, that is has the same id
+   */
+  @Override
+  public boolean equals(Object other) {
+    if (other == null || !(other instanceof User)) {
+      return false;
+    }
+    User otherUser = (User) other;
+    return otherUser.id == this.id;
+  }
+
+  /**
+   * Overrides the hashcode of the object to be equal to its id
+   * @return the id of the object
+   */
+  @Override
+  public int hashCode(){
+    return id;
+  }
+
 }
