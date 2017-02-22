@@ -12,7 +12,7 @@ public abstract class AbstractBaseDAO<E, K> {
   private Class<E> entityClass;
 
   @PersistenceContext
-  protected static EntityManagerFactory emFactory;
+  private static EntityManagerFactory emFactory;
 
   AbstractBaseDAO(Class<E> entityClass, EntityManagerFactory entityManagerFactory) {
     emFactory = entityManagerFactory;
