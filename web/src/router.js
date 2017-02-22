@@ -8,6 +8,12 @@ import { auth } from 'auth'
 
 Vue.use(Router)
 
+/**
+ * Function to check auth on spesific paths. Handling redirection.
+ * @param {object} to The path to go to.
+ * @param {object} from The path to go from.
+ * @param {object} next The function which completes the redirection.
+ */
 function requireAuth (to, from, next) {
   // Remember to check token with server!
   if (auth.isAuth()) {
