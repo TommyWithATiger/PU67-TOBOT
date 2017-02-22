@@ -32,6 +32,8 @@ public class APILoggedInCheckHandler {
 
     boolean userLoggedIn = user.checkUserSessionToken(token);
 
+    user.update();
+
     JSONObject loginCheckResponse = new JSONObject();
     loginCheckResponse.put("logged_in", String.valueOf(userLoggedIn));
 
