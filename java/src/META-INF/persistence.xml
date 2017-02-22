@@ -13,6 +13,7 @@
         <!-- <class>EntityClassname</class>  -->
         <class>data.Topic</class>
         <class>data.User</class>
+        <class>data.Subject</class>
 
         <properties>
             &login;
