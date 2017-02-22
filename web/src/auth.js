@@ -15,12 +15,12 @@ export const auth = {
         username: creds.username,
         password: creds.password
       }, (data) => {
+        if (callback) callback(data)
         localStorage.setItem('app_token', data.token)
         localStorage.setItem('username', data.username)
         if (ctx) ctx.$store.state.user.authenticated = true
         if (ctx) ctx.$store.state.user.username = creds.username
         if (ctx) ctx.$router.push(redirect)
-        callback(data)
       }, error)
     }
   },
