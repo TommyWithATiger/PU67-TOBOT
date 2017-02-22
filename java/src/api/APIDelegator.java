@@ -1,6 +1,7 @@
 package api;
 
 import api.exceptions.APIHandlerNotFoundException;
+import api.handlers.topic.APIAddTopicHandler;
 import api.handlers.user.APILoggedInCheckHandler;
 import api.handlers.user.APILoginHandler;
 import api.handlers.user.APILogoutHandler;
@@ -46,6 +47,9 @@ public class APIDelegator {
     handlerRegistry.put("user\\/login", APILoginHandler::handleLoginRequest);
     handlerRegistry.put("user\\/logout", APILogoutHandler::handleLogoutRequest);
     handlerRegistry.put("user\\/check", APILoggedInCheckHandler::handleLoggedInCheckRequest);
+
+    // Subject and topics
+    handlerRegistry.put("topic\\/create", APIAddTopicHandler::handleAddTopicRequest);
 
     return handlerRegistry;
   }
