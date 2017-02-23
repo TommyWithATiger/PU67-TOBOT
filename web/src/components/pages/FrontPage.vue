@@ -9,7 +9,7 @@ export default {
   name: 'frontpage',
   data () {
     return {
-      title: 'This is TOBOT'
+      title: 'Velkommen til TOBOT'
     }
   }
 }
