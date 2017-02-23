@@ -7,19 +7,23 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 
 
 @Entity
 @NamedQueries({
+    @NamedQuery(name = "findAllRatings", query = "SELECT r FROM Rating r"),
+    @NamedQuery(name = "findRatingByUser", query = "SELECT r FROM Rating r WHERE r.ratingKeyPK.userID = :userID"),
+    @NamedQuery(name = "findRatingByTopic", query = "SELECT r FROM Rating r WHERE r.ratingKeyPK.topicID = :topicID"),
+    @NamedQuery(name = "findRatingByRatingKey", query = "SELECT r FROM Rating r WHERE r.ratingKeyPK.topicID = :topicID AND r.ratingKeyPK.userID = :userID")
 })
 @Table
 public class Rating {
 
   @PersistenceContext
   public static RatingDAO ratingDAO;
-
 
   @EmbeddedId
   private RatingKey ratingKeyPK;
