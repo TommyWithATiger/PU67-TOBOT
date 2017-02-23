@@ -76,7 +76,7 @@ public class APIRateTopicHandler {
       throw new APIBadRequestException("No topic with the given id");
     }
 
-    String username = jsonObject.getString("username");
+    String username = httpRequest.getFirstHeader("X-Username").getValue();
     // Will never be null due to login check above
     User user = UserDAO.getInstance().findUserByUsername(username);
 

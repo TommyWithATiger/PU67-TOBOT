@@ -1,6 +1,7 @@
 package api;
 
 import api.exceptions.APIHandlerNotFoundException;
+import api.handlers.rating.APIGetTopicRatingHandler;
 import api.handlers.rating.APIRateTopicHandler;
 import api.handlers.relators.APIRelateSubjectTopicHandler;
 import api.handlers.subject.APIAddSubjectHandler;
@@ -69,6 +70,7 @@ public class APIDelegator {
 
     // Ratings
     handlerRegistry.put("rating\\/rate", APIRateTopicHandler::rateTopic);
+    handlerRegistry.put("rating\\/?id=.*", APIGetTopicRatingHandler::getTopicRatingByTopicID);
 
     return handlerRegistry;
   }
