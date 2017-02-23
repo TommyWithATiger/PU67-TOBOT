@@ -11,6 +11,11 @@
       <button @click="addTopic">Legg til</button>
       <span>{{ addFeedback }}</span>
     </p>
+    <h2>Alle temaer</h2>
+    <div v-if="topics.length">
+      <div v-for="t in topics">{{ t.title }}</div>
+    </div>
+    <div v-else>Ingen temaer.</div>
   </div>
 </template>
 
@@ -25,10 +30,17 @@ export default {
         title: '',
         description: ''
       },
-      addFeedback: ''
+      addFeedback: '',
+      topics: []
     }
   },
   created () {
+    api.getTopics(this, (data) => {
+      console.log(data)
+      this.topics = data.topics
+    }, () => {
+      this.topics = []
+    })
   },
   computed: {
   },
