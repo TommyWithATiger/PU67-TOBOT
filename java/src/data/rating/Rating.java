@@ -30,7 +30,7 @@ public class Rating {
 
   @Enumerated(value = EnumType.STRING)
   @Convert(converter = RatingConverter.class)
-  private RatingEnum ratingEnum;
+  private RatingEnum rating;
 
   public Rating() {
     super();
@@ -43,12 +43,12 @@ public class Rating {
    *
    * @param userID, the id of the User that made the rating
    * @param topicID, the id of the topic that is being rated
-   * @param ratingEnum, a rating
+   * @param rating, a rating
    */
-  public Rating(Integer userID, Integer topicID, RatingEnum ratingEnum) {
+  public Rating(Integer userID, Integer topicID, RatingEnum rating) {
     this();
     ratingKeyPK = new RatingKey(userID, topicID);
-    this.ratingEnum = ratingEnum;
+    this.rating = rating;
   }
 
   /**
@@ -92,8 +92,8 @@ public class Rating {
    *
    * @return the rating
    */
-  public RatingEnum getRatingEnum() {
-    return ratingEnum;
+  public RatingEnum getRating() {
+    return rating;
   }
 
   /**
@@ -101,8 +101,8 @@ public class Rating {
    *
    * @param ratingEnum the rating
    */
-  public void setRatingEnum(RatingEnum ratingEnum) {
-    this.ratingEnum = ratingEnum;
+  public void setRating(RatingEnum ratingEnum) {
+    this.rating = ratingEnum;
   }
 
   /**
