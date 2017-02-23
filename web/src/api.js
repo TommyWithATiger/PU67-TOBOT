@@ -34,7 +34,7 @@ export const api = {
     }
 
     this.postRequest(LOGIN_URL, req, callback, error)
-  }
+  },
 
   /**
    * Add topic.
@@ -45,7 +45,7 @@ export const api = {
     // Here we can inject token.
 
     let data = {
-      title: topic.title
+      title: topic.title,
       description: topic.description
     }
 
@@ -55,8 +55,8 @@ export const api = {
       mode: 'no-cors'
     }
 
-    postRequest (TOPIC_ADD_URL, req, callback, error) {
-  }
+    this.postRequest(TOPIC_ADD_URL, req, callback, error)
+  },
 
   /**
    * General function for posting requests to the API.

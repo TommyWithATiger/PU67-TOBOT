@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     addTopic () {
-      api.addTopic(this, topic, () => {
+      api.addTopic(this, this.topic, () => {
         this.addFeedback = 'Lagt til i database.'
       }, () => {
         this.addFeedback = 'Feilet med å legge til.'
