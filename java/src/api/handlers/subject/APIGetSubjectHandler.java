@@ -29,7 +29,7 @@ public class APIGetSubjectHandler {
    *        subjectCode (String): the subject code
    */
   public static String getSubjectByID(HttpRequest httpRequest) {
-    checkRequestMethod("POST", httpRequest);
+    checkRequestMethod("GET", httpRequest);
 
     String requestContent = checkAndGetEntityContent(httpRequest);
 
@@ -68,7 +68,7 @@ public class APIGetSubjectHandler {
    * form of the createAboutSubject method below for each subject
    */
   public static String getSubjectsByTitle(HttpRequest httpRequest) {
-    checkRequestMethod("POST", httpRequest);
+    checkRequestMethod("GET", httpRequest);
 
     String requestContent = checkAndGetEntityContent(httpRequest);
 

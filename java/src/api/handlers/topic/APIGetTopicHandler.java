@@ -23,7 +23,7 @@ public class APIGetTopicHandler {
    * @return A JSON object on the form of the createAboutTopic method.
    */
   public static String getTopicByID(HttpRequest httpRequest){
-    checkRequestMethod("POST", httpRequest);
+    checkRequestMethod("GET", httpRequest);
 
     String requestContent = checkAndGetEntityContent(httpRequest);
 
@@ -60,7 +60,7 @@ public class APIGetTopicHandler {
    * the createAboutTopic method for each of the topics.
    */
   public static String getTopicsByTitle(HttpRequest httpRequest){
-    checkRequestMethod("POST", httpRequest);
+    checkRequestMethod("GET", httpRequest);
 
     String requestContent = checkAndGetEntityContent(httpRequest);
 
