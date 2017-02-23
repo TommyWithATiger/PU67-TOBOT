@@ -19,13 +19,22 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
   }
 
   /**
+   * Get all database occurrences of Subject
+   *
+   * @return List of all Subjects
+   */
+  public List<Topic> findAll() {
+    return super.find("findAllTopics");
+  }
+
+  /**
    * Finds topics that matches the given title
    *
    * @param title, the title to query for
    * @return List of Topic objects that match the title
    */
-  public List<Topic> findTopicByTitle(String title) {
-    return super.find("findTopicByTitle", new FieldTuple("title", title));
+  public List<Topic> findTopicsByTitle(String title) {
+    return super.find("findTopicsByTitle", new FieldTuple("title", title));
   }
 
   /**
@@ -34,16 +43,14 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
    * @param title, the title to query for
    * @return A Topic object that matches the title
    */
-  public Topic findSingleTopicByTitle(String title) {
-    List<Topic> results = findTopicByTitle(title);
+  public Topic findSingleTopicsByTitle(String title) {
+    List<Topic> results = findTopicsByTitle(title);
     if (results != null) {
       return results.get(0);
     }
     return null;
     //Fixme handle no result exception here
   }
-
-  //TODO find by topic
 
   /**
    * Returns the static TopicDAO instance

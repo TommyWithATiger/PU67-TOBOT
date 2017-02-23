@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
 
@@ -22,14 +21,24 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
     super(Subject.class, emFactory);
   }
 
+
+  /**
+   * Get all database occurrences of Subject
+   *
+   * @return List of all Subjects
+   */
+  public List<Subject> findAll() {
+    return super.find("findAllSubjects");
+  }
+
   /**
    * Finds subjects that matches the given title
    *
    * @param title, the title to query for
    * @return List of Subject objects that match the title
    */
-  public List<Subject> findSubjectByTitle(String title) {
-    return super.find("findSubjectByTitle", new FieldTuple("title", title));
+  public List<Subject> findSubjectsByTitle(String title) {
+    return super.find("findSubjectsByTitle", new FieldTuple("title", title));
   }
 
   /**
@@ -39,7 +48,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @return A Subject object that matches the title
    */
   public Subject findSingleSubjectByTitle(String title) {
-    List<Subject> results = findSubjectByTitle(title);
+    List<Subject> results = findSubjectsByTitle(title);
     if (!results.isEmpty()) {
       return results.get(0);
     }
@@ -54,7 +63,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @return List of Subject objects that match the query
    */
   public List<Subject> findSubjectsByCode(String code) {
-    return super.find("findSubjectByCode", new FieldTuple("subjectCode", code));
+    return super.find("findSubjectsByCode", new FieldTuple("subjectCode", code));
   }
 
   /**
@@ -63,8 +72,8 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @param institution, the institution to query for
    * @return List of Subject objects that match the query
    */
-  public List<Subject> findSubjectByInstituton(String institution) {
-    return super.find("findSubjectByInstitution", new FieldTuple("institution", institution));
+  public List<Subject> findSubjectsByInstituton(String institution) {
+    return super.find("findSubjectsByInstitution", new FieldTuple("institution", institution));
   }
 
   /**
@@ -74,8 +83,8 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @param code, the subject code to query for
    * @return List of Subject objects that match the query
    */
-  public List<Subject> findSubjectByInstitutionAndCode(String institution, String code) {
-    return super.find("findSubjectByInstitutionAndCode",
+  public List<Subject> findSubjectsByInstitutionAndCode(String institution, String code) {
+    return super.find("findSubjectsByInstitutionAndCode",
         new FieldTuple("institution", institution),
         new FieldTuple("subjectCode", code));
   }
@@ -86,7 +95,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @param topic, the topic to query for
    * @return List of Subject objects that match the query
    */
-  public List<Subject> findByTopic(Topic topic) {
+  public List<Subject> findSubjectsByTopic(Topic topic) {
     List<Subject> entityList;
     try {
       EntityManager entityManager = emFactory.createEntityManager();

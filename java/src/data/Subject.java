@@ -15,10 +15,11 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findSubjectByTitle", query = "SELECT s FROM Subject s WHERE s.title = :title"),
-    @NamedQuery(name = "findSubjectByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode = :subjectCode"),
-    @NamedQuery(name = "findSubjectByInstitution", query = "SELECT s FROM Subject s WHERE s.institution = :institution"),
-    @NamedQuery(name = "findSubjectByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution = :institution AND s.subjectCode = :subjectCode")
+    @NamedQuery(name = "findAllSubjects", query = "SELECT s FROM Subject s"),
+    @NamedQuery(name = "findSubjectsByTitle", query = "SELECT s FROM Subject s WHERE s.title = :title"),
+    @NamedQuery(name = "findSubjectsByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode = :subjectCode"),
+    @NamedQuery(name = "findSubjectsByInstitution", query = "SELECT s FROM Subject s WHERE s.institution = :institution"),
+    @NamedQuery(name = "findSubjectsByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution = :institution AND s.subjectCode = :subjectCode")
 })
 @Table
 public class Subject {

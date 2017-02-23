@@ -13,8 +13,9 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findTopicByTitle", query = "SELECT t FROM Topic t WHERE t.title = :title"),
-    @NamedQuery(name = "findTopicByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId"),
+    @NamedQuery(name = "findAllTopics", query = "SELECT t FROM Topic t"),
+    @NamedQuery(name = "findTopicsByTitle", query = "SELECT t FROM Topic t WHERE t.title = :title"),
+    @NamedQuery(name = "findTopicsByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId"),
 })
 @Table
 public class Topic {

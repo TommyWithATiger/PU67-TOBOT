@@ -109,4 +109,6 @@ public abstract class AbstractBaseDAO<E, K> {
     return entityList;
   }
 
+  public abstract List<E> findAll();
+
 }
