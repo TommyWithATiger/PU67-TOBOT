@@ -3,8 +3,11 @@ import { auth } from './auth'
 import { API_URL } from './constants'
 // const USER_URL = `${API_URL}/user/`
 const LOGIN_URL = `${API_URL}/user/login`
+
 const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
+
+const SUBJECT_GET_URL = `${API_URL}/subject/get`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 
 export const api = {
@@ -23,7 +26,17 @@ export const api = {
   },
 
   /**
-   * Get the user from API
+   * Get all subjects from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  getSubjects (ctx, callback, error) {
+    this.getRequest(SUBJECT_GET_URL, callback, error)
+  },
+
+  /**
+   * Get all topics from API.
    * @param {object} ctx Context.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
