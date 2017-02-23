@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findAllTopics", query = "SELECT t FROM Topic t"),
-    @NamedQuery(name = "findTopicsByTitle", query = "SELECT t FROM Topic t WHERE t.title = :title"),
+    @NamedQuery(name = "findTopicsByTitle", query = "SELECT t FROM Topic t WHERE t.title LIKE CONCAT('%', :title, '%')"),
     @NamedQuery(name = "findTopicsByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId"),
 })
 @Table
