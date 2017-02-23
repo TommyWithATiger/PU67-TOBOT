@@ -5,6 +5,7 @@ import { API_URL } from './constants'
 const LOGIN_URL = `${API_URL}/user/login`
 // const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
+const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 
 export const api = {
   /**
@@ -35,6 +36,30 @@ export const api = {
     }
 
     this.postRequest(LOGIN_URL, req, callback, error)
+  },
+
+  /**
+   * Add subject.
+   * @param {object} ctx Context.
+   * @param {object} subject The subject to post in request.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  addSubject (ctx, subject, callback, error) {
+    let data = {
+      title: subject.title,
+      institution: subject.institution,
+      subjectCode: subject.subjectCode,
+      description: subject.description,
+      username: auth.getUsername()
+    }
+
+    let req = {
+      body: JSON.stringify(data),
+      method: 'POST'
+    }
+
+    this.postRequest(SUBJECT_ADD_URL, req, callback, error)
   },
 
   /**
