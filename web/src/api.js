@@ -40,11 +40,11 @@ export const api = {
   /**
    * Add topic.
    * @param {object} ctx Context.
-   * @param {object} data The data to post in request.
+   * @param {object} topic The topic to post in request.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
    */
   addTopic (ctx, topic, callback, error) {
-    // Here we can inject token.
-
     let data = {
       title: topic.title,
       description: topic.description,
