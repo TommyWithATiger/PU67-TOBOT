@@ -4,16 +4,16 @@
     <h2>Legg til emne</h2>
     <p>
       <label>Tittel</label>
-      <input v-model="subject.title" type="text" />
+      <input @keydown.enter="addSubject" v-model="subject.title" type="text" />
       <br>
       <label>Institusjon</label>
-      <input v-model="subject.institution" type="text" />
+      <input @keydown.enter="addSubject" v-model="subject.institution" type="text" />
       <br>
       <label>Fagkode</label>
-      <input v-model="subject.subjectCode" type="text" />
+      <input @keydown.enter="addSubject" v-model="subject.subjectCode" type="text" />
       <br>
       <label>Beskrivelse</label>
-      <input v-model="subject.description" type="text" />
+      <input @keydown.enter="addSubject" v-model="subject.description" type="text" />
       <button @click="addSubject">Legg til</button>
       <span>{{ addFeedback }}</span>
     </p>

@@ -4,10 +4,10 @@
     <h2>Legg til tema</h2>
     <p>
       <label>Tittel</label>
-      <input v-model="topic.title" type="text" />
+      <input @keydown.enter="addTopic" v-model="topic.title" type="text" />
       <br>
       <label>Beskrivelse</label>
-      <input v-model="topic.description" type="text" />
+      <input @keydown.enter="addTopic" v-model="topic.description" type="text" />
       <button @click="addTopic">Legg til</button>
       <span>{{ addFeedback }}</span>
     </p>
