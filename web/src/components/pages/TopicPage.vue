@@ -1,7 +1,7 @@
 <template>
   <div class="page-content">
-    <h1>Topics</h1>
-    <h2>Add topic</h2>
+    <h1>Temaer</h1>
+    <h2>Legg til tema</h2>
     <p>
       <label>Tittel</label>
       <input v-model="topic.title" type="text" />
