@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class APIRelateSubjectTopicHandler {
 
   /**
-   * A API handler method for relating two subjects together. This require the user to be logged in
+   * A API handler method for relating a subject and a topic together. This require the user to be logged in
    * and the following data:
    *        subjectID (int): the id of the subject
    *        topicID (int): the id of the topic
