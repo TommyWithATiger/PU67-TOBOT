@@ -31,7 +31,8 @@ export const api = {
       mode: 'no-cors'
     }
 
-    fetch(LOGIN_URL, req)
+    // ctx.$http.post(LOGIN_URL, req)
+    fetch(LOGIN_URL, req) // Does not work in IE, needs polyfill.
     .then(res => res.json())
     .then(callback)
     .catch(error)
