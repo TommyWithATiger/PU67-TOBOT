@@ -6,21 +6,16 @@
       <label>Tittel</label>
       <input v-model="topic.title" type="text" />
       <br>
-      <label>Institusjon</label>
-      <input v-model="topic.institution" type="text" />
-      <br>
-      <label>Fagkode</label>
-      <input v-model="topic.subjectCode" type="text" />
-      <br>
       <label>Beskrivelse</label>
       <input v-model="topic.description" type="text" />
       <button @click="addTopic">Legg til</button>
+      <span>{{ addFeedback }}</span>
     </p>
   </div>
 </template>
 
 <script>
-// import { api } from 'api'
+import { api } from 'api'
 
 export default {
   name: 'topicpage',
@@ -28,10 +23,9 @@ export default {
     return {
       topic: {
         title: '',
-        institution: '',
-        subjectCode: '',
         description: ''
-      }
+      },
+      addFeedback: ''
     }
   },
   created () {
@@ -40,6 +34,11 @@ export default {
   },
   methods: {
     addTopic () {
+      api.addTopic(this, topic, () => {
+        this.addFeedback = 'Lagt til i database.'
+      }, () => {
+        this.addFeedback = 'Feilet med å legge til.'
+      })
     }
   }
 }
