@@ -16,10 +16,10 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findAllSubjects", query = "SELECT s FROM Subject s"),
-    @NamedQuery(name = "findSubjectsByTitle", query = "SELECT s FROM Subject s WHERE s.title = :title"),
-    @NamedQuery(name = "findSubjectsByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode = :subjectCode"),
-    @NamedQuery(name = "findSubjectsByInstitution", query = "SELECT s FROM Subject s WHERE s.institution = :institution"),
-    @NamedQuery(name = "findSubjectsByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution = :institution AND s.subjectCode = :subjectCode")
+    @NamedQuery(name = "findSubjectsByTitle", query = "SELECT s FROM Subject s WHERE s.title LIKE CONCAT('%', :title, '%')"),
+    @NamedQuery(name = "findSubjectsByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode LIKE CONCAT('%', :subjectCode, '%')"),
+    @NamedQuery(name = "findSubjectsByInstitution", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%')"),
+    @NamedQuery(name = "findSubjectsByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%') AND s.subjectCode LIKE CONCAT('%', :subjectCode, '%')")
 })
 @Table
 public class Subject {
