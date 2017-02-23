@@ -1,5 +1,6 @@
 package main;
 
+import data.DataAccessObjects.RatingDAO;
 import data.DataAccessObjects.SubjectDAO;
 import data.DataAccessObjects.TopicDAO;
 import data.DataAccessObjects.UserDAO;
@@ -37,6 +38,7 @@ public class ServerInitializer {
     TopicDAO topicDAO = TopicDAO.getInstance(entityManagerFactory);
     SubjectDAO subjectDAO = SubjectDAO.getInstance(entityManagerFactory);
     UserDAO userDAO = UserDAO.getInstance(entityManagerFactory);
+    RatingDAO ratingDAO = RatingDAO.getInstance(entityManagerFactory);
 
     // need to return in order to close after server is shut down
     return entityManagerFactory;
