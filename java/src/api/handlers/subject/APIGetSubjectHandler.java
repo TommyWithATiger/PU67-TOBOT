@@ -1,16 +1,15 @@
 package api.handlers.subject;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
+import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 
 import api.exceptions.APIBadRequestException;
 import data.DataAccessObjects.SubjectDAO;
 import data.Subject;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class APIGetSubjectHandler {
@@ -31,12 +30,10 @@ public class APIGetSubjectHandler {
   public static String getSubjectByID(HttpRequest httpRequest) {
     checkRequestMethod("GET", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
-
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
+    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
     // Require id
-    if (!jsonObject.has("id")) {
+    if (!uriArguments.containsKey("id")) {
       throw new APIBadRequestException("id must be given");
     }
 
@@ -44,9 +41,9 @@ public class APIGetSubjectHandler {
 
     // Subject id must be integer
     try {
-      subjectID = jsonObject.getInt("id");
-    } catch (JSONException je) {
-      throw new APIBadRequestException("JSON must have an integer id");
+      subjectID = Integer.parseInt(uriArguments.get("id"));
+    } catch (NumberFormatException nfe) {
+      throw new APIBadRequestException("id must be integer");
     }
 
     Subject subject = SubjectDAO.getInstance().findById(subjectID);
@@ -70,16 +67,14 @@ public class APIGetSubjectHandler {
   public static String getSubjectsByTitle(HttpRequest httpRequest) {
     checkRequestMethod("GET", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
-
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
+    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
     // Require title
-    if (!jsonObject.has("title")) {
+    if (!uriArguments.containsKey("title")) {
       throw new APIBadRequestException("title must be given");
     }
 
-    String subjectTitle = jsonObject.getString("title");
+    String subjectTitle = uriArguments.get("title");
 
     List<Subject> subjects = SubjectDAO.getInstance().findSubjectByTitle(subjectTitle);
 
