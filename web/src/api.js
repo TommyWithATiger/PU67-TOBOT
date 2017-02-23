@@ -1,3 +1,5 @@
+import { auth } from './auth'
+
 import { API_URL } from './constants'
 // const USER_URL = `${API_URL}/user/`
 const LOGIN_URL = `${API_URL}/user/login`
@@ -29,8 +31,7 @@ export const api = {
 
     let req = {
       body: JSON.stringify(data),
-      method: 'POST',
-      mode: 'no-cors'
+      method: 'POST'
     }
 
     this.postRequest(LOGIN_URL, req, callback, error)
@@ -46,13 +47,13 @@ export const api = {
 
     let data = {
       title: topic.title,
-      description: topic.description
+      description: topic.description,
+      username: auth.getUsername()
     }
 
     let req = {
       body: JSON.stringify(data),
-      method: 'POST',
-      mode: 'no-cors'
+      method: 'POST'
     }
 
     this.postRequest(TOPIC_ADD_URL, req, callback, error)
@@ -61,13 +62,20 @@ export const api = {
   /**
    * General function for posting requests to the API.
    * @param {string} url URL address to send to.
-   * @param {object} req Data to send with the post request.
+   * @param {object} req Data to send with the POST-request.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
    */
   postRequest (url, req, callback, error) {
+    req.headers = Object.assign({}, req.headers || {}, {
+      'Authorization': auth.getAuthHeader()['Authorization'],
+      'X-Username': auth.getUsername()
+    })
+    let headers = new Headers(req.headers)
+    req.headers = headers
+
     // ctx.$http.post(LOGIN_URL, req)
-    fetch(url, req) // Does not work in IE, needs polyfill.
+    fetch(new Request(url, req)) // Does not work in IE, needs polyfill.
     .then(res => res.json())
     .then(callback)
     .catch(error)
