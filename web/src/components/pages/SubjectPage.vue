@@ -15,12 +15,13 @@
       <label>Beskrivelse</label>
       <input v-model="subject.description" type="text" />
       <button @click="addSubject">Legg til</button>
+      <span>{{ addFeedback }}</span>
     </p>
   </div>
 </template>
 
 <script>
-// import { api } from 'api'
+import { api } from 'api'
 
 export default {
   name: 'subjectpage',
@@ -31,7 +32,8 @@ export default {
         institution: '',
         subjectCode: '',
         description: ''
-      }
+      },
+      addFeedback: ''
     }
   },
   created () {
@@ -40,7 +42,11 @@ export default {
   },
   methods: {
     addSubject () {
-      // api.addSubject()
+      api.addSubject(this, this.subject, () => {
+        this.addFeedback = 'Lagt til i database.'
+      }, () => {
+        this.addFeedback = 'Feilet med å legge til.'
+      })
     }
   }
 }
