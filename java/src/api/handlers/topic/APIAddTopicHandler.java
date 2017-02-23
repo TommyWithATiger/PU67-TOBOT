@@ -32,7 +32,7 @@ public class APIAddTopicHandler {
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
     // The user must be logged in
-    if (!isLoggedIn(httpRequest, jsonObject)) {
+    if (!isLoggedIn(httpRequest)) {
       throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
     }
 

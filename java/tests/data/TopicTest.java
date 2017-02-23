@@ -7,21 +7,12 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
-import data.DataAccessObjects.TopicDAO;
-import javax.persistence.EntityManagerFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TopicTest extends BaseTest {
-
-  @Mock
-  private EntityManagerFactory entityManagerFactory;
-
-  @Mock
-  private TopicDAO topicDAO;
 
   @Test
   public void testMakeTopic() {
@@ -81,22 +72,27 @@ public class TopicTest extends BaseTest {
     assertNotSame(3, topic.getParentId());
 
     assertTrue(topic.setParentId(3));
-    //assertFalse(topic.setParentId(231)); //TODO check not existing parent id
     assertFalse(topic.setParentId(topic.getId()));
 
   }
 
   @Test
   public void testGetID() {
-    Topic topic = new Topic("Math", "From algebra to calculus.", 1);
+    Topic topic = new Topic("Math", "From algebra to calculus.");
 
     assertEquals(0, topic.getId());
-
-    topic.setParentId(3);
-
-    assertEquals(3, topic.getParentId());
-    assertNotSame(1, topic.getParentId());
   }
 
+  @Test
+  public void addToRemoveFromSubject() {
+    Topic topic = new Topic("Math", "From algebra to calculus.");
+    Subject subject = new Subject("Math 101", "intro course to basic math.");
+
+    topic.addToSubject(subject);
+    assertTrue(subject.hasTopic(topic));
+
+    topic.removeFromSubject(subject);
+    assertFalse(subject.hasTopic(topic));
+  }
 
 }
