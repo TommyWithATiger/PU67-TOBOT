@@ -15,7 +15,9 @@ import data.rating.Rating;
 import data.rating.RatingConverter;
 import data.rating.RatingKey;
 import java.util.HashMap;
+import java.util.List;
 import org.apache.http.HttpRequest;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class APIGetTopicRatingHandler {
@@ -69,7 +71,43 @@ public class APIGetTopicRatingHandler {
     }
 
     JSONObject response = new JSONObject();
-    response.put("rating", RatingConverter.convertEnumToFullRatingName(rating.getRatingEnum()));
+    response.put("rating", RatingConverter.convertEnumToFullRatingName(rating.getRating()));
+    return response.toString();
+  }
+
+  /**
+   * An API handler for getting all topic ratings for a user
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON object consisting of a variable "ratings" which is an array of JSON objects,
+   * where each JSON object represents a single rating. These JSON objects have the following variables:
+   *        rating (String): the rating of the topic, has 5 valid values
+   *                            None, Poor, Ok, Good, Superb
+   *        topicID (int): the topic id
+   */
+  public static String getTopicRatings(HttpRequest httpRequest) {
+    checkRequestMethod("GET", httpRequest);
+
+    if (!isLoggedIn(httpRequest)) {
+      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
+    }
+
+    String username = httpRequest.getFirstHeader("X-Username").getValue();
+    // Will never be null due to login check above
+    User user = UserDAO.getInstance().findUserByUsername(username);
+
+    List<Rating> ratings = RatingDAO.getInstance().findRatingByUser(user);
+
+    JSONObject response = new JSONObject();
+    JSONArray ratingArray = new JSONArray();
+    ratings.forEach(rating -> {
+      JSONObject ratingJSON = new JSONObject();
+      ratingJSON.put("rating", RatingConverter.convertEnumToFullRatingName(rating.getRating()));
+      ratingJSON.put("topicID", rating.getTopicID());
+      ratingArray.put(ratingJSON);
+    });
+    response.put("ratings", ratingArray);
+
     return response.toString();
   }
 

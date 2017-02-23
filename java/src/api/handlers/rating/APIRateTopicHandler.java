@@ -63,7 +63,7 @@ public class APIRateTopicHandler {
     }
 
     // Check topicID is integer
-    Integer topicID;
+    int topicID;
     try {
       topicID = jsonObject.getInt("topicID");
     } catch (JSONException je){
@@ -86,7 +86,7 @@ public class APIRateTopicHandler {
       rating = new Rating(user.getId(), topicID, ratingEnum);
       rating.create();
     } else {
-      rating.setRatingEnum(ratingEnum);
+      rating.setRating(ratingEnum);
       rating.update();
     }
 

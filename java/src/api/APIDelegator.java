@@ -70,7 +70,8 @@ public class APIDelegator {
 
     // Ratings
     handlerRegistry.put("rating\\/rate", APIRateTopicHandler::rateTopic);
-    handlerRegistry.put("rating\\/?id=.*", APIGetTopicRatingHandler::getTopicRatingByTopicID);
+    handlerRegistry.put("rating\\/get\\/\\?id=.*", APIGetTopicRatingHandler::getTopicRatingByTopicID);
+    handlerRegistry.put("rating\\/get", APIGetTopicRatingHandler::getTopicRatings);
 
     return handlerRegistry;
   }

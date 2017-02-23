@@ -20,7 +20,7 @@ public class isLoggedInHelper {
 
     String userName = httpRequest.getFirstHeader("X-Username").getValue();
     // The header is on the form "Bearer <token>"
-    String token = httpRequest.getFirstHeader("Authorization").getValue().substring(7);
+    String token = httpRequest.getFirstHeader("Authentication").getValue().substring(7);
 
     // User must exist
     User user = UserDAO.getInstance().findUserByUsername(userName);
