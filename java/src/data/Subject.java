@@ -40,6 +40,7 @@ public class Subject {
 
   public Subject() {
     super();
+    topics = new ArrayList<>();
     subjectDAO = SubjectDAO.getInstance();
   }
 
