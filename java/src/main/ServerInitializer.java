@@ -21,6 +21,7 @@ public class ServerInitializer {
 
     Thread.sleep(Long.MAX_VALUE);
 
+    // All shutdown calls should go here
     server.stopServer();
     entityManagerFactory.close();
 

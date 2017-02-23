@@ -189,6 +189,10 @@ public class User {
     this.sessionTokenExpireDate = sessionTokenExpireDate;
   }
 
+  /**
+   * A method for generation and setting a session token expiration date. It is set to be one day in
+   * the future.
+   */
   public void generateSessionTokenExpireDate() {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(new Date());
@@ -196,6 +200,9 @@ public class User {
     setSessionTokenExpireDate(calendar.getTime());
   }
 
+  /**
+   * A method for creating a session token. Also creates a the expiration date.
+   */
   public void createSessionToken() {
     generateSessionTokenExpireDate();
     while (getSessionToken() == null) {
@@ -208,6 +215,11 @@ public class User {
     }
   }
 
+  /**
+   * Generates the session token of length 64 with small letters and numbers.
+   *
+   * @return The session token
+   */
   private String generateSessionToken() {
     String token = "";
     Random random = new Random();
@@ -218,22 +230,58 @@ public class User {
     return token;
   }
 
+  /**
+   * Checks if the user token is valid. If it is not valid but there is one set in the database, the
+   * database is updated
+   *
+   * @param token The token to check against
+   * @return A boolean indicating if the session token is valid.
+   */
   public boolean checkUserSessionToken(String token) {
     String actualToken = getSessionToken();
     if (!token.equals(actualToken)) {
       return false;
     }
 
-    if (getSessionTokenExpireDate().before(new Date())){
+    if (getSessionTokenExpireDate().before(new Date())) {
       logout();
       return false;
     }
+    generateSessionTokenExpireDate();
     return true;
   }
 
-  public void logout(){
+  /**
+   * Logs the user out, that is reset the session token and its expire date.
+   */
+  public void logout() {
     setSessionToken(null);
     setSessionTokenExpireDate(null);
+  }
+
+  /**
+   * Overrides the default equals method
+   *
+   * @param other The object to check against
+   * @return A boolean indicating if the other object is equal to this, that is has the same id
+   */
+  @Override
+  public boolean equals(Object other) {
+    if (other == null || !(other instanceof User)) {
+      return false;
+    }
+    User otherUser = (User) other;
+    return otherUser.id == this.id;
+  }
+
+  /**
+   * Overrides the hashcode of the object to be equal to its id
+   *
+   * @return the id of the object
+   */
+  @Override
+  public int hashCode() {
+    return id;
   }
 
 }
