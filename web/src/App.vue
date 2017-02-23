@@ -29,4 +29,8 @@ export default {
   padding: 16px;
   flex: 1;
 }
+
+.error {
+  color: #a00;
+}
 </style>
