@@ -78,6 +78,25 @@ public class APIGetTopicHandler {
   }
 
   /**
+   * An API handler for finding all topics
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON object with the variable topics which is an array of JSON objects on the form of
+   * the createAboutTopic method for each of the topics.
+   */
+  public static String getAllTopics(HttpRequest httpRequest){
+    checkRequestMethod("GET", httpRequest);
+
+    List<Topic> topics = TopicDAO.getInstance().findAll();
+
+    JSONObject response = new JSONObject();
+    JSONArray topicArray = new JSONArray();
+    topics.forEach(topic -> topicArray.put(createAboutTopic(topic)));
+    response.put("topics", topicArray);
+    return response.toString();
+  }
+
+  /**
    * Creates a JSON object with information about a topic
    *
    * @param topic The topic to create a JSON object about
