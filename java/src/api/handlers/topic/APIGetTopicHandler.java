@@ -68,7 +68,7 @@ public class APIGetTopicHandler {
 
     String title = uriArguments.get("title");
 
-    List<Topic> topics = TopicDAO.getInstance().findTopicByTitle(title);
+    List<Topic> topics = TopicDAO.getInstance().findTopicsByTitle(title);
 
     JSONObject response = new JSONObject();
     JSONArray topicArray = new JSONArray();

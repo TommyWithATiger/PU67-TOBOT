@@ -19,13 +19,22 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
   protected static UserDAO instance;
 
   /**
+   * Get all database occurrences of Subject
+   *
+   * @return List of all Subjects
+   */
+  public List<User> findAll() {
+    return super.find("findAllUsers");
+  }
+
+  /**
    * Finds a User by doing a query for the username
    *
    * @param username, the username to query for
    * @return User with matching username, or null if it is not in the database
    */
   public User findUserByUsername(String username) {
-    List<User> results = super.find("findUserByUsername", new FieldTuple("username", username));
+    List<User> results = super.find("findUsersByUsername", new FieldTuple("username", username));
     if (!results.isEmpty()) {
       return results.get(0);
     }

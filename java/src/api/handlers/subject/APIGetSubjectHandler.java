@@ -76,7 +76,7 @@ public class APIGetSubjectHandler {
 
     String subjectTitle = uriArguments.get("title");
 
-    List<Subject> subjects = SubjectDAO.getInstance().findSubjectByTitle(subjectTitle);
+    List<Subject> subjects = SubjectDAO.getInstance().findSubjectsByTitle(subjectTitle);
 
     JSONObject response = new JSONObject();
     JSONArray subjectArray = new JSONArray();
