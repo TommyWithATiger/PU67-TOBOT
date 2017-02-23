@@ -1,5 +1,6 @@
 package data.DataAccessObjects;
 
+import data.DataAccessObjects.util.FieldTuple;
 import data.User;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -24,7 +25,7 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
    * @return User with matching username, or null if it is not in the database
    */
   public User findUserByUsername(String username) {
-    List<User> results = super.find("findUserByUsername","username", username);
+    List<User> results = super.find("findUserByUsername", new FieldTuple("username", username));
     if (!results.isEmpty()) {
       return results.get(0);
     }

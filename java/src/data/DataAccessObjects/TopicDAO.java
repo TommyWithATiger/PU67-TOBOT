@@ -1,5 +1,6 @@
 package data.DataAccessObjects;
 
+import data.DataAccessObjects.util.FieldTuple;
 import data.Topic;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
@@ -24,7 +25,7 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
    * @return List of Topic objects that match the title
    */
   public List<Topic> findTopicByTitle(String title) {
-    return super.find("findTopicByTitle", "title", title);
+    return super.find("findTopicByTitle", new FieldTuple("title", title));
   }
 
   /**
