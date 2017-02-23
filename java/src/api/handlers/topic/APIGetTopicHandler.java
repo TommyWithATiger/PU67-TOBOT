@@ -1,16 +1,15 @@
 package api.handlers.topic;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
+import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 
 import api.exceptions.APIBadRequestException;
 import data.DataAccessObjects.TopicDAO;
 import data.Topic;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class APIGetTopicHandler {
@@ -25,11 +24,9 @@ public class APIGetTopicHandler {
   public static String getTopicByID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
+    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
-    if (!jsonObject.has("id")) {
+    if (!uriArguments.containsKey("id")) {
       throw new APIBadRequestException("id must be given");
     }
 
@@ -37,9 +34,9 @@ public class APIGetTopicHandler {
 
     // Subject id must be integer
     try {
-      topicID = jsonObject.getInt("id");
-    } catch (JSONException je) {
-      throw new APIBadRequestException("JSON must have an integer id");
+      topicID = Integer.parseInt(uriArguments.get("id"));
+    } catch (NumberFormatException nfe) {
+      throw new APIBadRequestException("id must be integer");
     }
 
     Topic topic = TopicDAO.getInstance().findById(topicID);
@@ -62,16 +59,14 @@ public class APIGetTopicHandler {
   public static String getTopicsByTitle(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
-
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
+    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
     // Require title
-    if (!jsonObject.has("title")) {
+    if (!uriArguments.containsKey("title")) {
       throw new APIBadRequestException("title must be given");
     }
 
-    String title = jsonObject.getString("title");
+    String title = uriArguments.get("title");
 
     List<Topic> topics = TopicDAO.getInstance().findTopicByTitle(title);
 
