@@ -38,7 +38,7 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
    */
   public List<Rating> findRatingByUser(User user) {
     return super.find("findRatingByUser",
-        new FieldTuple("userID", String.valueOf(user.getId())));
+        new FieldTuple("userID", user.getId()));
   }
 
   /**
@@ -49,7 +49,7 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
    */
   public List<Rating> findRatingByTopic(Topic topic) {
     return super.find("findRatingByTopic",
-        new FieldTuple("topicID", String.valueOf(topic.getId())));
+        new FieldTuple("topicID", topic.getId()));
   }
   /**
    * Finds a Rating related to the ratingKey (tuple of userId and topicId)
@@ -59,8 +59,8 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
    */
   public Rating findRatingByRatingKey(RatingKey ratingKey) {
     List<Rating> result = super.find("findRatingByRatingKey",
-        new FieldTuple("userID", String.valueOf(ratingKey.getUserID())),
-        new FieldTuple("topicID", String.valueOf(ratingKey.getTopicID())));
+        new FieldTuple("userID", ratingKey.getUserID()),
+        new FieldTuple("topicID", ratingKey.getTopicID()));
     if (!result.isEmpty()) {
       return result.get(0);
     }
