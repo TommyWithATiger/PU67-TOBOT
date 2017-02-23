@@ -62,7 +62,7 @@ public class APIGetSubjectHandler {
    *        title (String): the subject title to search for
    * @param httpRequest The request to handle
    * @return A JSON object containing a variable "subjects" which is an array of JSON objects on the
-   * form of the createAboutSubject method below for each subject
+   * from of the createAboutSubject method below for each subject
    */
   public static String getSubjectsByTitle(HttpRequest httpRequest) {
     checkRequestMethod("GET", httpRequest);
@@ -77,6 +77,26 @@ public class APIGetSubjectHandler {
     String subjectTitle = uriArguments.get("title");
 
     List<Subject> subjects = SubjectDAO.getInstance().findSubjectsByTitle(subjectTitle);
+
+    JSONObject response = new JSONObject();
+    JSONArray subjectArray = new JSONArray();
+    subjects.forEach(subject -> subjectArray.put(createAboutSubject(subject)));
+    response.put("subjects", subjectArray);
+
+    return response.toString();
+  }
+
+  /**
+   * An API handler for finding all subjects
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON object containing a variable "subjects" which is an array of JSON objects on the
+   * from of the createAboutSubject method below for each subject
+   */
+  public static String getAllSubjects(HttpRequest httpRequest){
+    checkRequestMethod("GET", httpRequest);
+
+    List<Subject> subjects = SubjectDAO.getInstance().findAll();
 
     JSONObject response = new JSONObject();
     JSONArray subjectArray = new JSONArray();

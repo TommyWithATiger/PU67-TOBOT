@@ -60,9 +60,11 @@ public class APIDelegator {
 
     handlerRegistry.put("subject\\/get\\/\\?id=.*", APIGetSubjectHandler::getSubjectByID);
     handlerRegistry.put("subject\\/get\\/\\?title=.*", APIGetSubjectHandler::getSubjectsByTitle);
+    handlerRegistry.put("subject\\/get", APIGetSubjectHandler::getAllSubjects);
 
     handlerRegistry.put("topic\\/get\\/\\?id=.*", APIGetTopicHandler::getTopicByID);
     handlerRegistry.put("topic\\/get\\/\\?title=.*", APIGetTopicHandler::getTopicsByTitle);
+    handlerRegistry.put("topic\\/get", APIGetTopicHandler::getAllTopics);
 
     return handlerRegistry;
   }
