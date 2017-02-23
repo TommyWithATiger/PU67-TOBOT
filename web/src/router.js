@@ -4,6 +4,8 @@ import Router from 'vue-router'
 import FrontPage from 'components/pages/FrontPage'
 import LoginPage from 'components/pages/LoginPage'
 import UserPage from 'components/pages/UserPage'
+import TopicPage from 'components/pages/TopicPage'
+import SubjectPage from 'components/pages/SubjectPage'
 import { auth } from 'auth'
 
 Vue.use(Router)
@@ -35,6 +37,18 @@ export const router = new Router({
       path: '/',
       name: 'Home',
       component: FrontPage,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/subject',
+      name: 'Subject',
+      component: SubjectPage,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/topic',
+      name: 'Topics',
+      component: TopicPage,
       beforeEnter: requireAuth
     },
     {

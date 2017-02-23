@@ -1,6 +1,11 @@
+import { auth } from './auth'
+
 import { API_URL } from './constants'
 // const USER_URL = `${API_URL}/user/`
 const LOGIN_URL = `${API_URL}/user/login`
+// const TOPIC_GET_URL = `${API_URL}/topic/get`
+const TOPIC_ADD_URL = `${API_URL}/topic/create`
+const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 
 export const api = {
   /**
@@ -27,12 +32,75 @@ export const api = {
 
     let req = {
       body: JSON.stringify(data),
-      method: 'POST',
-      mode: 'no-cors'
+      method: 'POST'
     }
 
+    this.postRequest(LOGIN_URL, req, callback, error)
+  },
+
+  /**
+   * Add subject.
+   * @param {object} ctx Context.
+   * @param {object} subject The subject to post in request.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  addSubject (ctx, subject, callback, error) {
+    let data = {
+      title: subject.title,
+      institution: subject.institution,
+      subjectCode: subject.subjectCode,
+      description: subject.description,
+      username: auth.getUsername()
+    }
+
+    let req = {
+      body: JSON.stringify(data),
+      method: 'POST'
+    }
+
+    this.postRequest(SUBJECT_ADD_URL, req, callback, error)
+  },
+
+  /**
+   * Add topic.
+   * @param {object} ctx Context.
+   * @param {object} topic The topic to post in request.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  addTopic (ctx, topic, callback, error) {
+    let data = {
+      title: topic.title,
+      description: topic.description,
+      username: auth.getUsername()
+    }
+
+    let req = {
+      body: JSON.stringify(data),
+      method: 'POST'
+    }
+
+    this.postRequest(TOPIC_ADD_URL, req, callback, error)
+  },
+
+  /**
+   * General function for posting requests to the API.
+   * @param {string} url URL address to send to.
+   * @param {object} req Data to send with the POST-request.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  postRequest (url, req, callback, error) {
+    req.headers = Object.assign({}, req.headers || {}, {
+      'Authorization': auth.getAuthHeader()['Authorization'],
+      'X-Username': auth.getUsername()
+    })
+    let headers = new Headers(req.headers)
+    req.headers = headers
+
     // ctx.$http.post(LOGIN_URL, req)
-    fetch(LOGIN_URL, req) // Does not work in IE, needs polyfill.
+    fetch(new Request(url, req)) // Does not work in IE, needs polyfill.
     .then(res => res.json())
     .then(callback)
     .catch(error)

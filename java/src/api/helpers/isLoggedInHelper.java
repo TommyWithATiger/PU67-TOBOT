@@ -15,14 +15,14 @@ public class isLoggedInHelper {
    */
   public static boolean isLoggedIn(HttpRequest httpRequest, JSONObject jsonObject) {
 
-    // Must have username in the data and the Authentication header set
-    if (!jsonObject.has("username") || !httpRequest.containsHeader("Authentication")) {
+    // Must have username in the data and the Authorization header set
+    if (!jsonObject.has("username") || !httpRequest.containsHeader("Authorization")) {
       return false;
     }
 
     String userName = jsonObject.getString("username");
     // The header is on the form "Bearer <token>"
-    String token = httpRequest.getFirstHeader("Authentication").getValue().substring(7);
+    String token = httpRequest.getFirstHeader("Authorization").getValue().substring(7);
 
     // User must exist
     User user = UserDAO.getInstance().findUserByUsername(userName);
