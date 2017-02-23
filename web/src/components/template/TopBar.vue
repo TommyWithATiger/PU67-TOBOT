@@ -3,6 +3,7 @@
     <h1><router-link to="/">Home</router-link></h1>
     <div>
       <div v-if="authenticated">
+        <h2><router-link to="/topic">Temaer</router-link></h2>
         <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
         <LogoutBtn />
       </div>
