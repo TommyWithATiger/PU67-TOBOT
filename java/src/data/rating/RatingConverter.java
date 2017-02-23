@@ -63,4 +63,21 @@ public class RatingConverter implements AttributeConverter<RatingEnum, String> {
         throw new IllegalArgumentException("Unknown " + fullRatingName);
     }
   }
+
+  public static String convertEnumToFullRatingName(RatingEnum ratingEnum){
+    switch (ratingEnum) {
+      case NONE:
+        return "None";
+      case POOR:
+        return "Poor";
+      case OK:
+        return "Ok";
+      case GOOD:
+        return "Good";
+      case SUPERB:
+        return "Superb";
+      default:
+        throw new IllegalArgumentException("Unknown " + ratingEnum);
+    }
+  }
 }
