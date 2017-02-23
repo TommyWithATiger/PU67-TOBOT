@@ -3,7 +3,7 @@ import { auth } from './auth'
 import { API_URL } from './constants'
 // const USER_URL = `${API_URL}/user/`
 const LOGIN_URL = `${API_URL}/user/login`
-// const TOPIC_GET_URL = `${API_URL}/topic/get`
+const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 
@@ -23,6 +23,16 @@ export const api = {
   },
 
   /**
+   * Get the user from API
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  getTopics (ctx, callback, error) {
+    this.getRequest(TOPIC_GET_URL, callback, error)
+  },
+
+  /**
    * Post a user to the API.
    * @param {object} ctx Context.
    * @param {object} data The data to post in request.
@@ -31,11 +41,10 @@ export const api = {
     // Here we can inject token.
 
     let req = {
-      body: JSON.stringify(data),
-      method: 'POST'
+      body: JSON.stringify(data)
     }
 
-    this.postRequest(LOGIN_URL, req, callback, error)
+    this.getRequest(LOGIN_URL, req, callback, error)
   },
 
   /**
@@ -101,6 +110,20 @@ export const api = {
 
     // ctx.$http.post(LOGIN_URL, req)
     fetch(new Request(url, req)) // Does not work in IE, needs polyfill.
+    .then(res => res.json())
+    .then(callback)
+    .catch(error)
+  },
+
+  /**
+   * General function for getting requests from the API.
+   * @param {string} url URL address to send to.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  getRequest (url, callback, error) {
+    // ctx.$http.post(LOGIN_URL, req)
+    fetch(url) // Does not work in IE, needs polyfill.
     .then(res => res.json())
     .then(callback)
     .catch(error)
