@@ -3,6 +3,7 @@ package api;
 import api.exceptions.APIHandlerNotFoundException;
 import api.handlers.rating.APIGetTopicRatingHandler;
 import api.handlers.rating.APIRateTopicHandler;
+import api.handlers.relators.APIGetRelatedTopicsSubjectHandler;
 import api.handlers.relators.APIRelateSubjectTopicHandler;
 import api.handlers.subject.APIAddSubjectHandler;
 import api.handlers.subject.APIGetSubjectHandler;
@@ -60,6 +61,9 @@ public class APIDelegator {
     handlerRegistry
         .put("subject\\/topic\\/relate", APIRelateSubjectTopicHandler::relateSubjectTopicHandler);
 
+    handlerRegistry.put("subject\\/related\\/\\?id=.*",
+        APIGetRelatedTopicsSubjectHandler::getRelatedTopicsSubjectID);
+
     handlerRegistry.put("subject\\/get\\/\\?id=.*", APIGetSubjectHandler::getSubjectByID);
     handlerRegistry.put("subject\\/get\\/\\?title=.*", APIGetSubjectHandler::getSubjectsByTitle);
     handlerRegistry.put("subject\\/get", APIGetSubjectHandler::getAllSubjects);
@@ -70,7 +74,8 @@ public class APIDelegator {
 
     // Ratings
     handlerRegistry.put("rating\\/rate", APIRateTopicHandler::rateTopic);
-    handlerRegistry.put("rating\\/get\\/\\?id=.*", APIGetTopicRatingHandler::getTopicRatingByTopicID);
+    handlerRegistry
+        .put("rating\\/get\\/\\?id=.*", APIGetTopicRatingHandler::getTopicRatingByTopicID);
     handlerRegistry.put("rating\\/get", APIGetTopicRatingHandler::getTopicRatings);
 
     return handlerRegistry;
