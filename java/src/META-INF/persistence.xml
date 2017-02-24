@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE doc [
-        <!ENTITY login SYSTEM "java/src/META-INF/db_login.xml" >
+        <!ENTITY login SYSTEM "src/META-INF/db_login.xml" >
         ] >
 
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
@@ -11,11 +11,16 @@
     <persistence-unit name="Eclipselink_JPA" transaction-type="RESOURCE_LOCAL">
 
         <!-- <class>EntityClassname</class>  -->
+        <class>data.Topic</class>
+        <class>data.User</class>
+        <class>data.Subject</class>
+        <class>data.rating.Rating</class>
+        <class>data.rating.RatingConverter</class>
 
         <properties>
             &login;
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.logging.level" value="WARNING"/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
         </properties>
 

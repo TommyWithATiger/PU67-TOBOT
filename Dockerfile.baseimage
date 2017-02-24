@@ -1,0 +1,25 @@
+FROM richardkdrew/node-java
+
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get install -y vim wget curl maven build-essential
+
+# Upgrade node
+RUN npm cache clean
+RUN npm install -g n
+RUN n stable
+RUN curl -L https://npmjs.org/install.sh | sh
+
+# Adding project
+RUN mkdir -p /tobot
+WORKDIR /tobot
+COPY . ./
+
+# Install dependencies and build frontend
+WORKDIR /tobot/web
+RUN npm install --silent
+RUN npm run build
+
+# Build backend
+WORKDIR /tobot
+RUN make backend-build
