@@ -3,7 +3,7 @@
     <h1>{{ title }}</h1>
     <div>
       <input @keydown.enter="login" v-model="creds.username" placeholder="Brukernavn ..." type="text" />
-      <input @keydown.enter="login" v-model="creds.password" placeholder="Passord ..." type="text" />
+      <input @keydown.enter="login" v-model="creds.password" placeholder="Passord ..." type="password" />
       <button @click="login">Logg inn</button>
       <span>{{ feedback }}</span>
     </div>
