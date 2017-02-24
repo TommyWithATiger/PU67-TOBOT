@@ -32,7 +32,7 @@
         <div class="subject-relate"> <router-link :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">Temaer</router-link> </div>
       </div>
     </div>
-    <div v-else>Ingen emner.</div>
+    <div v-else><span v-if="!getFeedback.length">Ingen emner.</span></div>
     <p class="error">{{ getFeedback }}</p>
   </div>
 </template>
@@ -52,7 +52,7 @@ export default {
       },
       addFeedback: '',
       subjects: [],
-      getFeedback: ''
+      getFeedback: 'Laster inn ...'
     }
   },
   created () {
@@ -61,7 +61,7 @@ export default {
       this.getFeedback = ''
     }, () => {
       this.subjects = []
-      this.getFeedback = 'Klart ikke å koble til server.'
+      this.getFeedback = 'Klarte ikke å hente emner.'
     })
   },
   computed: {
