@@ -57,7 +57,6 @@ export default {
   },
   created () {
     api.getSubjects(this, (data) => {
-      console.log(data)
       this.subjects = data.subjects
       this.getFeedback = ''
     }, () => {

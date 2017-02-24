@@ -45,7 +45,6 @@ export default {
   },
   created () {
     api.getTopics(this, (data) => {
-      console.log(data)
       this.topics = data.topics
     }, () => {
       this.topics = []
