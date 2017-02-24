@@ -22,7 +22,7 @@
         <div class="topic-description"> {{ t.description }} </div>
       </div>
     </div>
-    <div v-else>Ingen temaer.</div>
+    <div v-else><span v-if="!getFeedback.length">Ingen emner.</span></div>
     <p class="error">{{ getFeedback }}</p>
   </div>
 </template>
@@ -40,15 +40,16 @@ export default {
       },
       addFeedback: '',
       topics: [],
-      getFeedback: ''
+      getFeedback: 'Laster inn ...'
     }
   },
   created () {
     api.getTopics(this, (data) => {
-      console.log(data)
       this.topics = data.topics
+      this.getFeedback = ''
     }, () => {
       this.topics = []
+      this.getFeedback = 'Klarte ikke å hente temaer.'
     })
   },
   computed: {
