@@ -3,10 +3,8 @@ package api.handlers.relators;
 import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.DataAccessObjects.SubjectDAO;
 import data.Subject;
 import data.Topic;
@@ -27,11 +25,6 @@ public class APIGetRelatedTopicsSubjectHandler {
    */
   public static String getRelatedTopicsSubjectID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
-
-    // Must be logged in
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
-    }
 
     HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
@@ -60,7 +53,7 @@ public class APIGetRelatedTopicsSubjectHandler {
     JSONObject response = new JSONObject();
     JSONArray topics = new JSONArray();
     relatedTopics.forEach(topic -> topics.put(createAboutTopic(topic)));
-    response.put("related-topics", topics);
+    response.put("related_topics", topics);
 
     return response.toString();
   }
