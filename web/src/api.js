@@ -57,7 +57,7 @@ export const api = {
       body: JSON.stringify(data)
     }
 
-    this.getRequest(LOGIN_URL, req, callback, error)
+    this.postRequest(LOGIN_URL, req, callback, error)
   },
 
   /**
@@ -118,6 +118,7 @@ export const api = {
       'Authorization': auth.getAuthHeader()['Authorization'],
       'X-Username': auth.getUsername()
     })
+    req.method = 'POST'
     let headers = new Headers(req.headers)
     req.headers = headers
 
