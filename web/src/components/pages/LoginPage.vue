@@ -41,7 +41,7 @@ export default {
         auth.login(this.creds, this, this.$route.query.redirect || '/', () => {
           this.successHandler('Valid login.')
         }, (err) => {
-          this.errorHandler(err || 'Feil brukernavn eller passord.')
+          if (typeof err === 'string') this.errorHandler(err)
         })
       }
     }

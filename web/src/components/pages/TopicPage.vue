@@ -29,7 +29,7 @@
           <span @click="rateTopic(t, 1)" v-bind:class="{selected: t[1]}">☆</span></div>
       </div>
     </div>
-    <div v-else>Ingen temaer.</div>
+    <div v-else><span v-if="!getFeedback.length">Ingen emner.</span></div>
     <p class="error">{{ getFeedback }}</p>
   </div>
 </template>
@@ -63,17 +63,19 @@ export default {
         4: 'Good',
         5: 'Superb'
       }
+      getFeedback: 'Laster inn ...'
     }
   },
   created () {
     api.getTopics(this, (data) => {
-      console.log(data)
       this.topics = data.topics
       for (var index = 0; index < this.topics.length; index++) {
         this.resetTopicRating(this.topics[index])
       }
+      this.getFeedback = ''
     }, () => {
       this.topics = []
+      this.getFeedback = 'Klarte ikke å hente temaer.'
     })
     api.getRatedTopics(this, (data) => {
       this.ratings = data.ratings

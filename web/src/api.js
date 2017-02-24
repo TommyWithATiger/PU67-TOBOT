@@ -80,8 +80,6 @@ export const api = {
    * @param {object} data The data to post in request.
    */
   postUserLogin (ctx, data, callback, error) {
-    // Here we can inject token.
-
     let req = {
       body: JSON.stringify(data)
     }
