@@ -48,7 +48,6 @@ export default {
       addFeedback: '',
       topics: [],
       ratings: [],
-      getFeedback: '',
       rating_to_number: {
         None: 1,
         Poor: 2,
@@ -62,7 +61,7 @@ export default {
         3: 'Ok',
         4: 'Good',
         5: 'Superb'
-      }
+      },
       getFeedback: 'Laster inn ...'
     }
   },
@@ -104,6 +103,7 @@ export default {
       this.addFeedback = ''
       api.addTopic(this, this.topic, () => {
         this.addFeedback = 'Lagt til i database.'
+        location.reload()
       }, () => {
         this.addFeedback = 'Feilet med å legge til.'
       })
@@ -112,7 +112,6 @@ export default {
       api.rateTopic(this, topic, this.number_to_rating[rating], () => {
         this.resetTopicRating(topic)
         this.$set(topic, rating, true)
-        console.log(this.ratings)
       }, () => {
 
       })
