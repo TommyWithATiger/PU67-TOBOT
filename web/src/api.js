@@ -8,7 +8,11 @@ const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
 
 const SUBJECT_GET_URL = `${API_URL}/subject/get`
+const SUBJECT_GET_ID_URL = `${API_URL}/subject/get/?id=`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
+const SUBJECT_GET_RELATED_URL = `${API_URL}/subject/related/?id=`
+
+const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
 export const api = {
   /**
@@ -33,6 +37,27 @@ export const api = {
    */
   getSubjects (ctx, callback, error) {
     this.getRequest(SUBJECT_GET_URL, callback, error)
+  },
+
+  /**
+   * Get topics related to a subject from the API
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {integer} id The subject id
+   */
+  getRelatedTopics (ctx, callback, error, id) {
+    this.getRequest(SUBJECT_GET_RELATED_URL + id, callback, error)
+  },
+
+  /**
+   * Get the subject with the given id form API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @param {integer} id The subject id.
+   */
+  getSubjectID (ctx, callback, error, id) {
+    this.getRequest(SUBJECT_GET_ID_URL + id, callback, error)
   },
 
   /**
@@ -104,6 +129,28 @@ export const api = {
     }
 
     this.postRequest(TOPIC_ADD_URL, req, callback, error)
+  },
+
+  /**
+   * Relate subject and topic
+   * @param {object} ctx Context.
+   * @param {object} topic The topic to relate
+   * @param {object} subject The subject to relate
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  relateSubjectTopic (ctx, topic, subject, callback, error) {
+    let data = {
+      subjectID: subject.id,
+      topicID: topic.id
+    }
+
+    let req = {
+      body: JSON.stringify(data),
+      method: 'POST'
+    }
+
+    this.postRequest(SUBJECT_TOPIC_RELATE_URL, req, callback, error)
   },
 
   /**

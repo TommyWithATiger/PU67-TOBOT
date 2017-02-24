@@ -105,7 +105,7 @@ public class APIGetTopicHandler {
    *        title (String): the topic title
    *        description (String): the topic description
    */
-  private static JSONObject createAboutTopic(Topic topic){
+  public static JSONObject createAboutTopic(Topic topic){
     JSONObject aboutTopic = new JSONObject();
     aboutTopic.put("id", topic.getId());
     aboutTopic.put("title", topic.getTitle());

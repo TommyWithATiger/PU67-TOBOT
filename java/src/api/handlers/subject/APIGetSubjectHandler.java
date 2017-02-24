@@ -6,6 +6,7 @@ import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 import api.exceptions.APIBadRequestException;
 import data.DataAccessObjects.SubjectDAO;
 import data.Subject;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.http.HttpRequest;
@@ -77,6 +78,7 @@ public class APIGetSubjectHandler {
     String subjectTitle = uriArguments.get("title");
 
     List<Subject> subjects = SubjectDAO.getInstance().findSubjectsByTitle(subjectTitle);
+    subjects.sort(Comparator.comparing(Subject::getTitle));
 
     JSONObject response = new JSONObject();
     JSONArray subjectArray = new JSONArray();
@@ -97,6 +99,7 @@ public class APIGetSubjectHandler {
     checkRequestMethod("GET", httpRequest);
 
     List<Subject> subjects = SubjectDAO.getInstance().findAll();
+    subjects.sort(Comparator.comparing(Subject::getTitle));
 
     JSONObject response = new JSONObject();
     JSONArray subjectArray = new JSONArray();

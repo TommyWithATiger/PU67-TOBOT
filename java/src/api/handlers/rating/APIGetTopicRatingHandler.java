@@ -41,7 +41,7 @@ public class APIGetTopicRatingHandler {
 
     HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
-    // Require title
+    // Require id
     if (!uriArguments.containsKey("id")) {
       throw new APIBadRequestException("id must be given");
     }
