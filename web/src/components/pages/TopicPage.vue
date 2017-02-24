@@ -9,8 +9,14 @@
       <label>Beskrivelse</label>
       <input @keydown.enter="addTopic" v-model="topic.description" type="text" />
       <button @click="addTopic">Legg til</button>
-      <span>{{ addFeedback }}</span>
+      <span class="error">{{ addFeedback }}</span>
     </p>
+    <h2>Alle temaer</h2>
+    <div v-if="topics.length">
+      <div v-for="t in topics">{{ t.title }}</div>
+    </div>
+    <div v-else>Ingen temaer.</div>
+    <p class="error">{{ getFeedback }}</p>
   </div>
 </template>
 
@@ -25,15 +31,24 @@ export default {
         title: '',
         description: ''
       },
-      addFeedback: ''
+      addFeedback: '',
+      topics: [],
+      getFeedback: ''
     }
   },
   created () {
+    api.getTopics(this, (data) => {
+      console.log(data)
+      this.topics = data.topics
+    }, () => {
+      this.topics = []
+    })
   },
   computed: {
   },
   methods: {
     addTopic () {
+      this.addFeedback = ''
       api.addTopic(this, this.topic, () => {
         this.addFeedback = 'Lagt til i database.'
       }, () => {

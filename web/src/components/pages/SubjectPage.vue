@@ -15,8 +15,14 @@
       <label>Beskrivelse</label>
       <input @keydown.enter="addSubject" v-model="subject.description" type="text" />
       <button @click="addSubject">Legg til</button>
-      <span>{{ addFeedback }}</span>
+      <span class="error">{{ addFeedback }}</span>
     </p>
+    <h2>Alle emner</h2>
+    <div v-if="subjects.length">
+      <div v-for="s in subjects">{{ s.subjectCode }} - {{ s.title }}</div>
+    </div>
+    <div v-else>Ingen emner.</div>
+    <p class="error">{{ getFeedback }}</p>
   </div>
 </template>
 
@@ -33,15 +39,26 @@ export default {
         subjectCode: '',
         description: ''
       },
-      addFeedback: ''
+      addFeedback: '',
+      subjects: [],
+      getFeedback: ''
     }
   },
   created () {
+    api.getSubjects(this, (data) => {
+      console.log(data)
+      this.subjects = data.subjects
+      this.getFeedback = ''
+    }, () => {
+      this.subjects = []
+      this.getFeedback = 'Klart ikke å koble til server.'
+    })
   },
   computed: {
   },
   methods: {
     addSubject () {
+      this.addFeedback = ''
       api.addSubject(this, this.subject, () => {
         this.addFeedback = 'Lagt til i database.'
       }, () => {

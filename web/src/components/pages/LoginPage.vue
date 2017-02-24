@@ -3,7 +3,7 @@
     <h1>{{ title }}</h1>
     <div>
       <input @keydown.enter="login" v-model="creds.username" placeholder="Brukernavn ..." type="text" />
-      <input @keydown.enter="login" v-model="creds.password" placeholder="Passord ..." type="text" />
+      <input @keydown.enter="login" v-model="creds.password" placeholder="Passord ..." type="password" />
       <button @click="login">Logg inn</button>
       <span>{{ feedback }}</span>
     </div>
@@ -40,8 +40,8 @@ export default {
         this.feedback = 'Sjekker validering ...'
         auth.login(this.creds, this, this.$route.query.redirect || '/', () => {
           this.successHandler('Valid login.')
-        }, () => {
-          this.errorHandler('Feil brukernavn eller passord.')
+        }, (err) => {
+          this.errorHandler(err || 'Feil brukernavn eller passord.')
         })
       }
     }
