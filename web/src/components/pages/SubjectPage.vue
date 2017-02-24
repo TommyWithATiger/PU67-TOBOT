@@ -106,6 +106,14 @@ export default {
   width: 120px;
 }
 
+.subject-title {
+  flex-grow: 2;
+}
+
+.subject-description {
+  flex-grow: 4;
+}
+
 .subject-info {
   display: flex;
   display: -webkit-flex;
@@ -130,7 +138,4 @@ export default {
   background-color: #eeeeee;
 }
 
-.subject-title {
-  width: 
-}
 </style>
