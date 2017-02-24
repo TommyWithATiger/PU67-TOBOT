@@ -19,7 +19,7 @@
     </p>
     <h2>Alle emner</h2>
     <div v-if="subjects.length">
-      <div v-for="s in subjects">{{ s.schoolCode }} - {{ s.title }}</div>
+      <div v-for="s in subjects">{{ s.subjectCode }} - {{ s.title }}</div>
     </div>
     <div v-else>Ingen emner.</div>
     <p class="error">{{ getFeedback }}</p>
