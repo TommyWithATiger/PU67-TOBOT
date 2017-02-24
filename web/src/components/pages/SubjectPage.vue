@@ -70,6 +70,7 @@ export default {
     addSubject () {
       this.addFeedback = ''
       api.addSubject(this, this.subject, () => {
+        location.reload()
         this.addFeedback = 'Lagt til i database.'
       }, () => {
         this.addFeedback = 'Feilet med å legge til.'
