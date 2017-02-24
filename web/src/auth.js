@@ -14,9 +14,9 @@ export const auth = {
       api.postUserLogin(ctx, {
         username: creds.username,
         password: creds.password
-      }, (data) => {
-        if (data.message && data.message === 'Failed to fetch') {
-          error('Kunne ikke koble til serveren.')
+      }, data => {
+        if (data.message) {
+          this.errorHandler(data, error)
         } else {
           if (callback) callback(data)
           localStorage.setItem('app_token', data.token)
@@ -25,7 +25,9 @@ export const auth = {
           if (ctx) ctx.$store.state.user.username = creds.username
           if (ctx) ctx.$router.push(redirect)
         }
-      }, error)
+      }, err => {
+        this.errorHandler(err, error)
+      })
     }
   },
 
@@ -44,9 +46,9 @@ export const auth = {
       api.postUserLogin(ctx, {
         username: creds.username,
         password: creds.password
-      }, (data) => {
-        if (data.message && data.message === 'Failed to fetch') {
-          error('Kunne ikke koble til serveren.')
+      }, data => {
+        if (data.message) {
+          this.errorHandler(data, error)
         } else {
           if (callback) callback(data)
           localStorage.setItem('app_token', data.token)
@@ -55,8 +57,36 @@ export const auth = {
           if (ctx) ctx.$store.state.user.username = creds.username
           if (ctx) ctx.$router.push(redirect)
         }
-      }, error)
+      }, err => {
+        this.errorHandler(err, error)
+      })
     }
+  },
+
+  /**
+   * Fetch error handler.
+   * @param {object} error Error from feedback.
+   * @param {function} callback The function to return to.
+   * @return {string} The message to tell user what happened.
+   */
+  errorHandler (error, callback = null) {
+    let msg = ''
+    if (error && error.message) {
+      switch (error.message) {
+        case 'Failed to fetch':
+          msg = 'Kunne ikke koble til serveren.'
+          break
+        case 'Unexpected end of JSON input':
+          msg = 'Feil brukernavn eller passord.'
+          break
+        default:
+          msg = 'Klarte ikke å logge inn.'
+          break
+      }
+    }
+
+    if (callback) callback(msg)
+    return msg
   },
 
   /**
