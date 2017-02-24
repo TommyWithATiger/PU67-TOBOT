@@ -7,6 +7,10 @@ const LOGIN_URL = `${API_URL}/user/login`
 const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
 
+const TOPIC_RATE_URL = `${API_URL}/rating/rate`
+
+const TOPIC_GET_RATED_URL = `${API_URL}/rating/get`
+
 const SUBJECT_GET_URL = `${API_URL}/subject/get`
 const SUBJECT_GET_ID_URL = `${API_URL}/subject/get/?id=`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
@@ -129,6 +133,42 @@ export const api = {
     }
 
     this.postRequest(TOPIC_ADD_URL, req, callback, error)
+  },
+
+  /**
+   * Rate a topic
+   * @param {object} ctx Context.
+   * @param {object} topic The topic to rate
+   * @param {string} rating The rating to give the topic
+   * @param {function} callback Handle the request output
+   * @param {function} error Feedback error
+   */
+  rateTopic (ctx, topic, rating, callback, error) {
+    let data = {
+      topicID: topic.id,
+      rating: rating
+    }
+
+    let req = {
+      body: JSON.stringify(data),
+      method: 'POST'
+    }
+
+    this.postRequest(TOPIC_RATE_URL, req, callback, error)
+  },
+
+  /**
+   * Get all topics rated by the user
+   * @param {object} ctx Context.
+   * @param {function} callback Hande the request output.
+   * @param {function} error Feedback error.
+   */
+  getRatedTopics (ctx, callback, error) {
+    let req = {
+      method: 'POST'
+    }
+
+    this.postRequest(TOPIC_GET_RATED_URL, req, callback, error)
   },
 
   /**

@@ -32,7 +32,7 @@ public class APIGetTopicRatingHandler {
    *                            None, Poor, Ok, Good, Superb
    */
   public static String getTopicRatingByTopicID(HttpRequest httpRequest) {
-    checkRequestMethod("GET", httpRequest);
+    checkRequestMethod("POST", httpRequest);
 
     // Must be logged in
     if (!isLoggedIn(httpRequest)) {
@@ -86,7 +86,7 @@ public class APIGetTopicRatingHandler {
    *        topicID (int): the topic id
    */
   public static String getTopicRatings(HttpRequest httpRequest) {
-    checkRequestMethod("GET", httpRequest);
+    checkRequestMethod("POST", httpRequest);
 
     if (!isLoggedIn(httpRequest)) {
       throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
