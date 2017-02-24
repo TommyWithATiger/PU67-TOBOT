@@ -40,8 +40,8 @@ export default {
         this.feedback = 'Sjekker validering ...'
         auth.login(this.creds, this, this.$route.query.redirect || '/', () => {
           this.successHandler('Valid login.')
-        }, () => {
-          this.errorHandler('Feil brukernavn eller passord.')
+        }, (err) => {
+          this.errorHandler(err || 'Feil brukernavn eller passord.')
         })
       }
     }
