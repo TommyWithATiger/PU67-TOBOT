@@ -8,6 +8,7 @@ const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
 
 const SUBJECT_GET_URL = `${API_URL}/subject/get`
+const SUBJECT_GET_ID_URL = `${API_URL}/subject/get/?id=`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 
 export const api = {
@@ -33,6 +34,17 @@ export const api = {
    */
   getSubjects (ctx, callback, error) {
     this.getRequest(SUBJECT_GET_URL, callback, error)
+  },
+
+  /**
+   * Get the subject with the given id form API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handler the request output.
+   * @param {function} error Feedback error.
+   * @param {integer} id The subject id.
+   */
+  getSubjectID (ctx, callback, error, id) {
+    this.getRequest(SUBJECT_GET_ID_URL + id, callback, error)
   },
 
   /**

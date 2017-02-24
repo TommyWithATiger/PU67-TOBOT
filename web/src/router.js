@@ -6,6 +6,7 @@ import LoginPage from 'components/pages/LoginPage'
 import UserPage from 'components/pages/UserPage'
 import TopicPage from 'components/pages/TopicPage'
 import SubjectPage from 'components/pages/SubjectPage'
+import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import { auth } from 'auth'
 
 Vue.use(Router)
@@ -49,6 +50,12 @@ export const router = new Router({
       path: '/topic',
       name: 'Topics',
       component: TopicPage,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/subject/:id',
+      name: 'RelateSubjectTopic',
+      component: RelateSubjectTopicPage,
       beforeEnter: requireAuth
     },
     {
