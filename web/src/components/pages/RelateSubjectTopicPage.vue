@@ -1,15 +1,33 @@
 <template>
 	<div class="page-content">
 		<h1> {{subject.subjectCode}} - {{subject.title}} </h1>
-		<h1>Temaer</h1>
-		<div v-if="topics.length">
+		<h1>Tilknyttede temaer</h1>
+		<div v-if="related_topics.length">
 			<div class="topic-info topic-info-header">
         		<div class="topic-title"> Tittel </div>
        		 	<div class="topic-description"> Beskrivelse </div>
       		</div>
-      		<div v-for="t in topics" class="topic-info">
+      		<div v-for="t in related_topics" class="topic-info">
         		<div class="topic-title"> {{ t.title }} </div>
         		<div class="topic-description"> {{ t.description }} </div>
+      		</div>
+		</div>
+		<div v-else>
+			Dette emnet er ikke knyttet til noen temaer
+		</div>
+		<h1>Legge til temaer</h1>
+		<div v-if="topics.length">
+			<div class="topic-info topic-info-header">
+        		<div class="topic-title"> Tittel </div>
+       		 	<div class="topic-description"> Beskrivelse </div>
+       		 	<div class="topic-relate"> </div>
+      		</div>
+      		<div v-for="t in topics">
+      			<div v-if="!isRelated(t)" class="topic-info">
+        			<div class="topic-title"> {{ t.title }} </div>
+        			<div class="topic-description"> {{ t.description }} </div>
+        			<div @click="relateTopic(t)" class="topic-relate"> Knytt til </div>
+        		</div>
       		</div>
 		</div>
 		<div v-else>
@@ -26,6 +44,7 @@ export default {
   name: 'relatetopicsubjectpage',
   data () {
     return {
+      related_topics: [],
       topic: {
         title: '',
         description: ''
@@ -54,17 +73,27 @@ export default {
     }, () => {
       window.location.href = '/subject'
     }, this.$route.params.id)
+    api.getRelatedTopics(this, (data) => {
+      this.related_topics = data.related_topics
+    }, () => {
+
+    }, this.$route.params.id)
   },
   computed: {
   },
   methods: {
-    relateTopic () {
-      this.addFeedback = ''
-      api.addTopic(this, this.topic, () => {
-        this.addFeedback = 'Lagt til i database.'
-      }, () => {
-        this.addFeedback = 'Feilet med å legge til.'
-      })
+    relateTopic (topic) {
+      api.relateSubjectTopic(this, topic, this.subject, () => {
+        location.reload()
+      }, () => {})
+    },
+    isRelated (topic) {
+      for (var index = 0; index < this.related_topics.length; index++) {
+        if (this.related_topics[index].id === topic.id) {
+          return true
+        }
+      }
+      return false
     }
   }
 }
@@ -72,10 +101,17 @@ export default {
 
 <style scoped>
 
-.topic-title, .topic-description {
+.topic-title, .topic-description, .topic-relate {
   padding-right: 20px;
   flex-grow: 1;
   width: 120px;
+}
+
+.topic-relate {
+	flex-grow: 0.3;
+	text-decoration: underline;
+	color: #0645AD;
+	cursor: pointer;
 }
 
 .topic-description {

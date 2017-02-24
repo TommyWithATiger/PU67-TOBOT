@@ -23,11 +23,13 @@
         <div class="subject-code"> Emnekode </div>
         <div class="subject-title"> Tittel </div>
         <div class="subject-description"> Beskrivelse </div>
+        <div class="subject-relate"> Temaer </div>
       </div>
       <div v-for="s in subjects" class="subject-info">
         <div class="subject-code"> {{ s.subjectCode }} </div>
         <div class="subject-title"> {{ s.title }} </div>
         <div class="subject-description"> {{ s.description }} </div>
+        <div class="subject-relate"> <router-link :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">Temaer</router-link> </div>
       </div>
     </div>
     <div v-else>Ingen emner.</div>
@@ -100,10 +102,14 @@ export default {
   background-color: #e1e1e1;
 }
 
-.subject-title, .subject-description, .subject-code {
+.subject-title, .subject-description, .subject-code, .subject-relate {
   padding-right: 20px;
   flex-grow: 1;
   width: 120px;
+}
+
+.subject-relate {
+  flex-grow: 0.3;
 }
 
 .subject-title {
