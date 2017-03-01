@@ -5,7 +5,6 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
-import data.user.User;
 import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.EntityManager;

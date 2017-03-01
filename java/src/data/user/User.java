@@ -70,18 +70,6 @@ public class User {
    * @param username, the username of the user
    * @param email, the email of the user
    * @param password, the password of the user
-   */
-  public User(String username, String email, String password) {
-    this(username, email);
-    setPassword(password);
-  }
-
-  /**
-   * Instantiates a User object
-   *
-   * @param username, the username of the user
-   * @param email, the email of the user
-   * @param password, the password of the user
    * @param userType, the type of user
    */
   public User(String username, String email, String password, UserType userType) {
@@ -353,9 +341,4 @@ public class User {
     return id;
   }
 
-  public boolean isAdmin() {
-
-    //TODO
-    return false;
-  }
 }
