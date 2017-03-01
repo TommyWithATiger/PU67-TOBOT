@@ -62,16 +62,13 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
   }
 
   /**
-   * Returns the static TopicDAO instance,
-   * Creates one if null
+   * Creates the static TopicDAO instance,
    *
    * @param emFactory, the static EntityManagerFactory of this server instance
-   * @return the Static TopicDAO instance for this server instance
    */
-  public static TopicDAO getInstance(EntityManagerFactory emFactory) {
+  public static void initialize(EntityManagerFactory emFactory) {
     if (instance == null) {
       instance = new TopicDAO(emFactory);
     }
-    return instance;
   }
 }

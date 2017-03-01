@@ -1,5 +1,8 @@
 package base;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import main.ServerInitializer;
 import org.junit.Before;
 
 public class BaseTest {
@@ -12,6 +15,7 @@ public class BaseTest {
 
   @Before
   public void setUpBaseTest() {
+    EntityManagerFactory emf = ServerInitializer.setup("h2-eclipselink");
     System.setProperty("javax.xml.accessExternalDTD", "all");
   }
 

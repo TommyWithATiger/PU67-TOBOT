@@ -122,17 +122,14 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
   }
 
   /**
-   * Returns the static SubjectDAO instance,
-   * Creates one if null
+   * Creates the static SubjectDAO instance,
    *
    * @param emFactory, the static EntityManagerFactory of this server instance
-   * @return the Static SubjectDAO instance for this server instance
    */
-  public static SubjectDAO getInstance(EntityManagerFactory emFactory) {
+  public static void initialize(EntityManagerFactory emFactory) {
     if (instance == null) {
       instance = new SubjectDAO(emFactory);
     }
-    return instance;
   }
 
 }
