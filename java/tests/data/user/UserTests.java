@@ -13,9 +13,21 @@ import org.junit.Test;
 public class UserTests extends BaseTest {
 
   @Test(expected = IllegalArgumentException.class)
-  public void testWrongEmail() throws Exception {
+  public void testWrongEmail1() throws Exception {
     User user = new User();
     user.setEmail("this_is_not_valid");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testWrongEmail2() throws Exception {
+    User user = new User();
+    user.setEmail("this_is_not_valid@email");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testWrongEmail3() throws Exception {
+    User user = new User();
+    user.setEmail("#@%^%#$@#$@#.com");
   }
 
   @Test
