@@ -57,7 +57,7 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
    * @param emFactory, the static EntityManagerFactory of this server instance
    */
   public static void initialize(EntityManagerFactory emFactory) {
-    if (instance == null) {
+    if (instance == null || !UserDAO.emFactory.isOpen()) {
       instance = new UserDAO(emFactory);
     }
   }

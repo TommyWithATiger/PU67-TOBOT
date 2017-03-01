@@ -82,7 +82,7 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
    * @param emFactory, the static EntityManagerFactory of this server instance
    */
   public static void initialize(EntityManagerFactory emFactory) {
-    if (instance == null) {
+    if (instance == null || !RatingDAO.emFactory.isOpen()) {
       instance = new RatingDAO(emFactory);
     }
   }

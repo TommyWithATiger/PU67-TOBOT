@@ -52,11 +52,13 @@ public class User {
    *
    * @param username, the username of the user
    * @param email, the email of the user
+   * @param password, the password of the user
    */
-  public User(String username, String email) {
+  public User(String username, String email, String password) {
     this();
-    this.username = username;
-    this.email = email;
+    setUsername(username);
+    setEmail(email);
+    setPassword(password);
   }
 
   /**
