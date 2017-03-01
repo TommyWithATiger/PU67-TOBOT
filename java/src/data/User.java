@@ -31,6 +31,7 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
+  private UserType userType = UserType.STUDENT;
   private String username;
   private String email;
   private String hashword;
@@ -59,6 +60,31 @@ public class User {
     setUsername(username);
     setEmail(email);
     setPassword(password);
+  }
+
+  /**
+   * Instantiates a User object
+   *
+   * @param username, the username of the user
+   * @param email, the email of the user
+   * @param password, the password of the user
+   */
+  public User(String username, String email, String password) {
+    this(username, email);
+    setPassword(password);
+  }
+
+  /**
+   * Instantiates a User object
+   *
+   * @param username, the username of the user
+   * @param email, the email of the user
+   * @param password, the password of the user
+   * @param userType, the type of user
+   */
+  public User(String username, String email, String password, UserType userType) {
+    this(username, email, password);
+    this.userType = userType;
   }
 
   /**
@@ -274,6 +300,33 @@ public class User {
   }
 
   /**
+   * Get the userType of the User.
+   *
+   * @return enum, The userType of the User
+   */
+  public UserType getUserType() {
+    return userType;
+  }
+
+  /**
+   * Set The userType of the User.
+   *
+   * @param userType New userType of the User
+   */
+  public void setUserType(UserType userType) {
+    this.userType = userType;
+  }
+
+  /**
+   * Check if user is of ADMIN type
+   *
+   * @return true if ADMIN, else false
+   */
+  public boolean isAdmin() {
+    return userType == UserType.ADMIN;
+  }
+
+  /**
    * Overrides the default equals method
    *
    * @param other The object to check against
@@ -298,9 +351,4 @@ public class User {
     return id;
   }
 
-  public boolean isAdmin() {
-
-    //TODO
-    return false;
-  }
 }
