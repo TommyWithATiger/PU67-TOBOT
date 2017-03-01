@@ -38,9 +38,13 @@ public class Subject {
   @ManyToMany
   private Collection<Topic> topics;
 
+  @ManyToMany
+  private Collection<User> editors;
+
   public Subject() {
     super();
     topics = new ArrayList<>();
+    editors = new ArrayList<>();
     subjectDAO = SubjectDAO.getInstance();
   }
 
@@ -189,6 +193,38 @@ public class Subject {
   public void removeTopic(Topic topic) {
     if (topics.contains(topic)) {
       topics.remove(topic);
+    }
+  }
+
+  /**
+   * Returns true if the user as an editor of this subject or is an admin
+   *
+   * @param user, the user to check for
+   * @return boolean, true if editor or admin
+   */
+  public boolean isEditor(User user) {
+    return user.isAdmin() || editors.contains(user);
+  }
+
+  /**
+   * Adds a user to the subjects editor list
+   *
+   * @param user, the User to be added
+   */
+  public void addEditor(User user) {
+    if (!editors.contains(user)) {
+      editors.add(user);
+    }
+  }
+
+  /**
+   * Removes a user from the subject editor list
+   *
+   * @param user, the User to be removed
+   */
+  public void removeEditor(User user) {
+    if (editors.contains(user)) {
+      editors.remove(user);
     }
   }
 
