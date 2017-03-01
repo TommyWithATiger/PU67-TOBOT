@@ -125,4 +125,17 @@ public class Rating {
   public void update() {
     ratingDAO.merge(this);
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof Rating) {
+      return ratingKeyPK.equals(((Rating) other).ratingKeyPK);
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode(){
+    return ratingKeyPK.hashCode();
+  }
 }
