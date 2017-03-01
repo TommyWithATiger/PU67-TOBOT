@@ -14,7 +14,7 @@
 
         <properties>
             <!-- Configuring JDBC properties -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:./target/h2-2'"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:h2-2'"/>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
 
             <property name="eclipselink.logging.level" value="WARNING"/>
