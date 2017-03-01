@@ -8,6 +8,7 @@
         <!-- add classes -->
         <class>data.Topic</class>
         <class>data.user.User</class>
+        <class>data.user.UserTypeConverter</class>
         <class>data.Subject</class>
         <class>data.rating.Rating</class>
         <class>data.rating.RatingConverter</class>
