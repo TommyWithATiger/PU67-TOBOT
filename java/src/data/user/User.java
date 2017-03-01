@@ -353,4 +353,9 @@ public class User {
     return id;
   }
 
+  public boolean isAdmin() {
+
+    //TODO
+    return false;
+  }
 }
