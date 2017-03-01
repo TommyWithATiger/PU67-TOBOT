@@ -4,7 +4,6 @@ import data.DataAccessObjects.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-import java.util.regex.Pattern;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
@@ -39,9 +38,6 @@ public class User {
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date sessionTokenExpireDate;
-
-  @Transient
-  private static Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
 
   public User() {
     super();
@@ -186,7 +182,7 @@ public class User {
    * followed by text).
    */
   public void setEmail(String email) {
-    if (User.emailPattern.matcher(email).matches()) {
+    if (EmailValidator.getInstance().isValid(email)) {
       this.email = email;
     } else {
       throw new IllegalArgumentException("Does not match email pattern");

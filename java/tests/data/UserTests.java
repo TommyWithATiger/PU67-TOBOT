@@ -21,8 +21,8 @@ public class UserTests extends BaseTest {
   @Test
   public void testCorrectEmail() throws Exception {
     User user = new User();
-    user.setEmail("this_is_valid@this_is_valid");
-    assertEquals(user.getEmail(), "this_is_valid@this_is_valid");
+    user.setEmail("user@mail.com");
+    assertEquals(user.getEmail(), "user@mail.com");
   }
 
   @Test
