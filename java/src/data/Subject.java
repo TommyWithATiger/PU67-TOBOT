@@ -1,6 +1,7 @@
 package data;
 
 import data.DataAccessObjects.SubjectDAO;
+import data.user.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Entity;

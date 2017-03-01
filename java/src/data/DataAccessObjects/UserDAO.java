@@ -1,7 +1,7 @@
 package data.DataAccessObjects;
 
 import data.DataAccessObjects.util.FieldTuple;
-import data.User;
+import data.user.User;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 

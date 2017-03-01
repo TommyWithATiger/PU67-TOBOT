@@ -1,10 +1,13 @@
-package data;
+package data.user;
 
 import data.DataAccessObjects.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,11 +33,14 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
-  private UserType userType = UserType.STUDENT;
   private String username;
   private String email;
   private String hashword;
   private String sessionToken;
+
+  @Enumerated(value = EnumType.STRING)
+  @Convert(converter = UserTypeConverter.class)
+  private UserType userType;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date sessionTokenExpireDate;

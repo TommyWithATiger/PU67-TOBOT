@@ -11,7 +11,7 @@ import data.DataAccessObjects.RatingDAO;
 import data.DataAccessObjects.TopicDAO;
 import data.DataAccessObjects.UserDAO;
 import data.Topic;
-import data.User;
+import data.user.User;
 import data.rating.Rating;
 import data.rating.RatingConverter;
 import data.rating.RatingEnum;
