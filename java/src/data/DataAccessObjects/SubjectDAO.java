@@ -3,6 +3,7 @@ package data.DataAccessObjects;
 import data.DataAccessObjects.util.FieldTuple;
 import data.Subject;
 import data.Topic;
+import data.User;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -100,9 +101,32 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
     try {
       EntityManager entityManager = emFactory.createEntityManager();
       Query query = entityManager.createNativeQuery(
-          "SELECT * FROM TOBOT.SUBJECT s WHERE s.id IN (SELECT * FROM TOBOT.SUBJECT_TOPIC st WHERE st.topicID = :topicId)",
+          "SELECT * FROM TOBOT.SUBJECT WHERE id IN (SELECT Subject_ID FROM TOBOT.SUBJECT_TOPIC WHERE topics_ID = ?)",
           Subject.class);
-      query.setParameter("topicId", topic.getId());
+      query.setParameter(1, topic.getId());
+      entityList = (List<Subject>) query.getResultList(); //FIXME find a better fix
+      entityManager.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+      entityList = null;
+    }
+    return entityList;
+  }
+
+  /**
+   * Finds subjects with user as an editor
+   *
+   * @param user, the user to query for
+   * @return List of Subject objects that has user as an editor
+   */
+  public List<Subject> findSubjectsByEditor(User user) {
+    List<Subject> entityList;
+    try {
+      EntityManager entityManager = emFactory.createEntityManager();
+      Query query = entityManager.createNativeQuery(
+          "SELECT * FROM TOBOT.SUBJECT WHERE id IN (SELECT Subject_ID FROM TOBOT.SUBJECT_USER WHERE editors_ID = ?)",
+          Subject.class);
+      query.setParameter(1, user.getId());
       entityList = (List<Subject>) query.getResultList(); //FIXME find a better fix
       entityManager.close();
     } catch (Exception e) {
