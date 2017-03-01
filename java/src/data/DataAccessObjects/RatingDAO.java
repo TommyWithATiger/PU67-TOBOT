@@ -70,24 +70,21 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
   /**
    * Returns the static SubjectDAO instance
    *
-   * @return SubjectDAO, null if not instantiated
+   * @return RatingDAO, null if not instantiated
    */
   public static RatingDAO getInstance() {
     return instance;
   }
 
   /**
-   * Returns the static SubjectDAO instance,
-   * Creates one if null
+   * Creates the static RatingDAO instance
    *
    * @param emFactory, the static EntityManagerFactory of this server instance
-   * @return the Static SubjectDAO instance for this server instance
    */
-  public static RatingDAO getInstance(EntityManagerFactory emFactory) {
+  public static void initialize(EntityManagerFactory emFactory) {
     if (instance == null) {
       instance = new RatingDAO(emFactory);
     }
-    return instance;
   }
 
 }

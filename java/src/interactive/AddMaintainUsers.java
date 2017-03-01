@@ -25,7 +25,8 @@ public class AddMaintainUsers {
     try {
       EntityManagerFactory entityManagerFactory = Persistence
           .createEntityManagerFactory("Eclipselink_JPA");
-      UserDAO userDAO = UserDAO.getInstance(entityManagerFactory);
+      UserDAO.initialize(entityManagerFactory);
+      UserDAO userDAO = UserDAO.getInstance();
 
       System.out.print("Enter R to remove, U to update, anything else to create: ");
       String choice = bufferedReader.readLine();

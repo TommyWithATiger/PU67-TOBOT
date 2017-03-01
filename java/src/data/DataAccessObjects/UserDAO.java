@@ -52,17 +52,14 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
   }
 
   /**
-   * Returns the static UserDao instance,
-   * Creates one if null
+   * Creates the static UserDao instance,
    *
    * @param emFactory, the static EntityManagerFactory of this server instance
-   * @return the Static UserDao instance for this server instance
    */
-  public static UserDAO getInstance(EntityManagerFactory emFactory) {
+  public static void initialize(EntityManagerFactory emFactory) {
     if (instance == null) {
       instance = new UserDAO(emFactory);
     }
-    return instance;
   }
 
 }
