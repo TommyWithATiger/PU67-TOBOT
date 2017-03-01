@@ -127,7 +127,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @param emFactory, the static EntityManagerFactory of this server instance
    */
   public static void initialize(EntityManagerFactory emFactory) {
-    if (instance == null) {
+      if (instance == null || !SubjectDAO.emFactory.isOpen()) {
       instance = new SubjectDAO(emFactory);
     }
   }

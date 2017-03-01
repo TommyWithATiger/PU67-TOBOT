@@ -67,7 +67,7 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
    * @param emFactory, the static EntityManagerFactory of this server instance
    */
   public static void initialize(EntityManagerFactory emFactory) {
-    if (instance == null) {
+    if (instance == null || !TopicDAO.emFactory.isOpen()) {
       instance = new TopicDAO(emFactory);
     }
   }
