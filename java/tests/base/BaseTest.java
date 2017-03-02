@@ -2,7 +2,7 @@ package base;
 
 import data.Subject;
 import data.Topic;
-import data.User;
+import data.user.User;
 import data.rating.Rating;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
