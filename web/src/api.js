@@ -163,7 +163,8 @@ export const api = {
    */
   getRatedTopics (ctx, callback, error) {
     let req = {
-      method: 'POST'
+      method: 'POST',
+      body: JSON.stringify('')
     }
 
     this.postRequest(TOPIC_GET_RATED_URL, req, callback, error)
