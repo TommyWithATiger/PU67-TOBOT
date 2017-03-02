@@ -1,78 +1,67 @@
 package data.DataAccessObjects;
 
+import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import base.BaseTest;
+import data.Topic;
+import java.util.List;
+import javax.persistence.EntityManager;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class TopicDAOTest extends BaseTest {
+public class TopicDAOTest extends BaseTest{
 
+  private static Topic topic1;
+  private static Topic topic2;
+  private static Topic topic3;
 
-  @Test
-  public void placeholder(){
+  @BeforeClass
+  public static void populate(){
+    EntityManager em = entityManagerFactory.createEntityManager();
 
-  }
-  /*Non functional at the moment
+    topic1 = new Topic("Programming", "Make the computer do stuff");
+    topic2 = new Topic("Philosophy 101", "Think and argue");
+    topic3 = new Topic("Philosophy 102", "Think and argue some more");
 
-  @Mock
-  private TopicDAO topicDAO;
-  @Mock
-  private EntityManagerFactory entityManagerFactory;
-  @Mock
-  private EntityManager entityManager;
-  @Mock
-  private EntityTransaction entityTransaction;
+    em.getTransaction().begin();
+    em.persist(topic1);
+    em.persist(topic2);
+    em.persist(topic3);
+    em.getTransaction().commit();
 
-  @Before
-  public void init() {
-    when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
-    when(entityManager.getTransaction()).thenReturn(entityTransaction);
-    //this.topicDAO = new TopicDAO(entityManagerFactory);
+    em.close();
   }
 
-  @Test
-  public void persist() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-
-    topicDAO.persist(topic);
-
-    assertNotNull(topicDAO.findById(topic.getId()));
+  @Override
+  public void cleanDB(){
+    // Do not clean.
+    // This allows populate to be @BeforeClass only, which speeds the tests up by a lot.
   }
 
   @Test
-  public void remove() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-
-    topic = topicDAO.merge(topic);
-    assertNotNull(topicDAO.findById(topic.getId()));
-    topic.delete();
-    assertNull(topicDAO.findById(topic.getId()));
+  public void testFindAll() throws Exception {
+    List result = TopicDAO.getInstance().findAll();
+    assertTrue(result.contains(topic1));
+    assertTrue(result.contains(topic2));
+    assertTrue(result.contains(topic3));
+    assertEquals(3, result.size());
   }
 
   @Test
-  public void findById() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-
-    topicDAO.persist(topic);
-
-    assertNotNull(topicDAO.findById(topic.getId()));
+  public void testFindTopicsByTitle1() throws Exception {
+    List progTopics = TopicDAO.getInstance().findTopicsByTitle("Programming");
+    assertTrue(progTopics.contains(topic1));
+    assertEquals(1, progTopics.size());
   }
 
   @Test
-  public void findSingleTopicByTitle() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-    topicDAO.persist(topic);
-    Topic result = topicDAO.findSingleTopicsByTitle("Math");
-    assertEquals(result, topic);
+  public void testFindTopicsByTitle2() throws Exception {
+    List philTopics = TopicDAO.getInstance().findTopicsByTitle("Philosophy");
+    assertTrue(philTopics.contains(topic2));
+    assertTrue(philTopics.contains(topic3));
+    assertEquals(2, philTopics.size());
   }
 
-  @Test
-  public void findTopicsByTitle() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-    topicDAO.merge(topic);
-    List<Topic> result = topicDAO.findTopicsByTitle("Math");
-    assertTrue(result.contains(topic));
-  }
-  */
 }
+
