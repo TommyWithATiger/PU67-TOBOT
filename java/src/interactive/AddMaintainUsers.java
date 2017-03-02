@@ -1,7 +1,7 @@
 package interactive;
 
 import data.DataAccessObjects.UserDAO;
-import data.User;
+import data.user.User;
 
 import java.io.IOException;
 import javax.persistence.EntityManagerFactory;

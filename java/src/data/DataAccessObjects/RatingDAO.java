@@ -2,7 +2,7 @@ package data.DataAccessObjects;
 
 import data.DataAccessObjects.util.FieldTuple;
 import data.Topic;
-import data.User;
+import data.user.User;
 import data.rating.Rating;
 import data.rating.RatingKey;
 import java.util.List;

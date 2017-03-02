@@ -1,7 +1,7 @@
 package api.helpers;
 
 import data.DataAccessObjects.UserDAO;
-import data.User;
+import data.user.User;
 import org.apache.http.HttpRequest;
 
 public class isLoggedInHelper {

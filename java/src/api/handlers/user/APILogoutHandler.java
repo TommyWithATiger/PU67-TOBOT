@@ -6,7 +6,7 @@ import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
 import data.DataAccessObjects.UserDAO;
-import data.User;
+import data.user.User;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
