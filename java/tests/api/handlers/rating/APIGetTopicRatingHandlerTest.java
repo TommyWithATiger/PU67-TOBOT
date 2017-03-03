@@ -59,6 +59,12 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
   }
 
   @Test(expected = APIBadRequestException.class)
+  public void testGetTopicRatingByIDIDNotValid() {
+    HttpRequest httpRequest = buildRequest("topic/url?id=-21", "POST", true);
+    getTopicRatingByTopicID(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
   public void testGetTopicRatingByIDIDNotNumber() {
     HttpRequest httpRequest = buildRequest("topic/url?id=hei", "POST", true);
     getTopicRatingByTopicID(httpRequest);

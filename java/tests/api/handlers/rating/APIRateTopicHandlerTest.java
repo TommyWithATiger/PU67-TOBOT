@@ -60,7 +60,7 @@ public class APIRateTopicHandlerTest extends BaseTest {
   @Test(expected = APIBadRequestException.class)
   public void testRateTopicTopicIDNotInteger() {
     HttpRequest httpRequest = buildRequestContent("rate/url", "POST", true,
-        "{\"topicID\":10,\"rating\":\"Good\"}");
+        "{\"topicID\":test,\"rating\":\"Good\"}");
     rateTopic(httpRequest);
   }
 
