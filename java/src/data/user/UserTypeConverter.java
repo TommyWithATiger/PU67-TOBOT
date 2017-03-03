@@ -37,7 +37,7 @@ public class UserTypeConverter implements AttributeConverter<UserType, String> {
     }
   }
 
-  public static UserType convertFullRatingNameToEnum(String fullRatingName) {
+  public static UserType stringToUserType(String fullRatingName) {
     switch (fullRatingName) {
       case "Student":
         return UserType.STUDENT;
@@ -50,7 +50,7 @@ public class UserTypeConverter implements AttributeConverter<UserType, String> {
     }
   }
 
-  public static String convertEnumToFullRatingName(UserType userEnum){
+  public static String userTypeToString(UserType userEnum){
     switch (userEnum) {
       case STUDENT:
         return "Student";
