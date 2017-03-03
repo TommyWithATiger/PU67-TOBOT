@@ -21,7 +21,8 @@ public class SubjectTest extends BaseTest {
     subject1.setTitle("Math");
     subject1.setDescription("From algebra to calculus.");
     Subject subject2 = new Subject("English for beginners", "blah, blah");
-    Subject subject3 = new Subject("Piano", "Musical Academy", "MUS1001", "Classical piano lessons");
+    Subject subject3 = new Subject("Piano", "Musical Academy", "MUS1001",
+        "Classical piano lessons");
 
     assertNotNull(subject1);
     assertEquals("Math", subject1.getTitle());
@@ -150,7 +151,7 @@ public class SubjectTest extends BaseTest {
   }
 
   @Test
-  public void testComparison() {
+  public void testEquals() {
     Subject subject = new Subject("subject", "The best subject");
     subject.create();
     Subject subject2 = new Subject("subject2", "The second best subject");
@@ -160,6 +161,14 @@ public class SubjectTest extends BaseTest {
     assertEquals(subject, SubjectDAO.getInstance().findById(subject.getId()));
     assertFalse(subject.equals(5));
     assertFalse(subject.equals(null));
+  }
+
+  @Test
+  public void testHasCode() {
+    Subject subject = new Subject("subject", "The best subject");
+    subject.create();
+
+    assertEquals(subject.hashCode(), subject.getId());
   }
 
   @Test
@@ -181,10 +190,11 @@ public class SubjectTest extends BaseTest {
     assertFalse(subject.isEditor(editor2));
 
     subject.removeEditor(editor1);
+    subject.update();
     assertFalse(subject.isEditor(editor1));
 
     assertTrue(subject.isEditor(admin));
 
   }
-  
+
 }

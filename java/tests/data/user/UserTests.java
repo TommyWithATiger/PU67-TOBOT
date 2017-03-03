@@ -136,7 +136,7 @@ public class UserTests extends BaseTest {
   }
 
   @Test
-  public void testComparison() {
+  public void testEquals() {
     User user = new User("user", "dad@dad.com", "adad");
     User user2 = new User("user2", "dad2@dad.com", "adad");
     user.create();
@@ -146,6 +146,14 @@ public class UserTests extends BaseTest {
     assertEquals(user, UserDAO.getInstance().findById(user.getId()));
     assertFalse(user.equals(5));
     assertFalse(user.equals(null));
+  }
+
+  @Test
+  public void testHasCode() {
+    User user = new User("user", "dad@dad.com", "adad");
+    user.create();
+
+    assertEquals(user.hashCode(), user.getId());
   }
 
   @Test

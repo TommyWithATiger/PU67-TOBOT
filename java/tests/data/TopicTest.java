@@ -134,7 +134,7 @@ public class TopicTest extends BaseTest {
   }
 
   @Test
-  public void testComparison() {
+  public void testEquals() {
     Topic topic = new Topic("topic", "The best topic");
     topic.create();
     Topic topic2 = new Topic("topic2", "The second best topic");
@@ -144,6 +144,14 @@ public class TopicTest extends BaseTest {
     assertEquals(topic, TopicDAO.getInstance().findById(topic.getId()));
     assertFalse(topic.equals(5));
     assertFalse(topic.equals(null));
+  }
+
+  @Test
+  public void testHasCode() {
+    Topic topic = new Topic("topic", "The best topic");
+    topic.create();
+
+    assertEquals(topic.hashCode(), topic.getId());
   }
 
 }
