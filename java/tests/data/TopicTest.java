@@ -129,6 +129,18 @@ public class TopicTest extends BaseTest {
     List<Topic> results = TopicDAO.getInstance().findTopicsByTitle("other topic");
 
     assertTrue(results.contains(topic));
+
+    assertEquals(topic.hashCode(), topic.getId());
+  }
+
+  @Test
+  public void testComparison() {
+    Topic topic = new Topic("topic", "The best topic");
+    Topic topic2 = new Topic("topic2", "The second best topic");
+
+    assertEquals(topic, topic2);
+    assertFalse(topic.equals(5));
+    assertFalse(topic.equals(null));
   }
 
 }

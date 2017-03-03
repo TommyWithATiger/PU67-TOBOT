@@ -8,6 +8,8 @@ import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
 import data.DataAccessObjects.SubjectDAO;
+import data.user.User;
+import data.user.UserType;
 import java.util.List;
 import org.junit.Test;
 
@@ -104,6 +106,7 @@ public class SubjectTest extends BaseTest {
 
     subject.addTopic(topic);
     assertTrue(subject.hasTopic(topic));
+    assertTrue(subject.getTopics().contains(topic));
 
     subject.removeTopic(topic);
     assertFalse(subject.hasTopic(topic));
@@ -146,4 +149,36 @@ public class SubjectTest extends BaseTest {
     assertTrue(results.contains(subject));
   }
 
+  @Test
+  public void testComparison() {
+    Subject subject = new Subject("subject", "The best subject");
+    Subject subject2 = new Subject("subject2", "The second best subject");
+
+    assertEquals(subject, subject2);
+    assertFalse(subject.equals(5));
+    assertFalse(subject.equals(null));
+
+    assertEquals(subject.hashCode(), subject.getId());
+  }
+
+  @Test
+  public void testGetSetEditor() {
+    Subject subject = new Subject("subject", "The best subject");
+
+    User admin = new User("admin", "admin@mail.com", "root", UserType.ADMIN);
+    User editor1 = new User("editor1", "editor1@mail.com", "1234");
+    User editor2 = new User("editor2", "editor2@mail.com", "IHateMondays");
+
+    subject.addEditor(editor1);
+
+    assertTrue(subject.isEditor(editor1));
+    System.out.println(subject.isEditor(editor2));
+
+    subject.removeEditor(editor1);
+    assertFalse(subject.isEditor(editor1));
+
+    assertTrue(subject.isEditor(admin));
+
+  }
+  
 }
