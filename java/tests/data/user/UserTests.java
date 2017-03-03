@@ -2,9 +2,11 @@ package data.user;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNotSame;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
+import data.DataAccessObjects.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.EntityManager;
@@ -60,20 +62,16 @@ public class UserTests extends BaseTest {
   }
 
   @Test
-  public void testCheckUserSessionToken1() throws Exception {
+  public void testCheckUserSessionToken() throws Exception {
     User user = new User();
     assertFalse(user.checkUserSessionToken("garbage"));
-  }
 
-  @Test
-  public void testCheckUserSessionToken2() throws Exception {
-    User user = new User();
     user.createSessionToken();
     assertTrue(user.checkUserSessionToken(user.getSessionToken()));
   }
 
   @Test
-  public void testCheckUserSessionToken3() throws Exception {
+  public void testCheckUserSessionTokenExpired() throws Exception {
     User user = new User();
     user.createSessionToken();
 
@@ -135,6 +133,35 @@ public class UserTests extends BaseTest {
     em.close();
 
     assertEquals("other user", user1.getUsername());
+  }
+
+  @Test
+  public void testComparison() {
+    User user = new User("user", "dad@dad.com", "adad");
+    User user2 = new User("user2", "dad2@dad.com", "adad");
+    user.create();
+    user2.create();
+
+    assertNotSame(user, user2);
+    assertEquals(user, UserDAO.getInstance().findById(user.getId()));
+    assertFalse(user.equals(5));
+    assertFalse(user.equals(null));
+  }
+
+  @Test
+  public void getSetUserType() {
+    User user = new User("user", "dad@dad.com", "adad");
+
+    assertEquals(user.getUserType(), UserType.STUDENT);
+
+    user.setUserType(UserType.TEACHER);
+
+    assertNotSame(user.getUserType(), UserType.STUDENT);
+    assertEquals(user.getUserType(), UserType.TEACHER);
+
+    user.setUserType(UserType.ADMIN);
+    assertTrue(user.isAdmin());
+
   }
 
 }

@@ -136,9 +136,12 @@ public class TopicTest extends BaseTest {
   @Test
   public void testComparison() {
     Topic topic = new Topic("topic", "The best topic");
+    topic.create();
     Topic topic2 = new Topic("topic2", "The second best topic");
+    topic2.create();
 
-    assertEquals(topic, topic2);
+    assertNotSame(topic, topic2);
+    assertEquals(topic, TopicDAO.getInstance().findById(topic.getId()));
     assertFalse(topic.equals(5));
     assertFalse(topic.equals(null));
   }
