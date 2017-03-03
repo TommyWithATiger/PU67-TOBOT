@@ -7,11 +7,10 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
+import data.DataAccessObjects.SubjectDAO;
+import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class SubjectTest extends BaseTest {
 
   @Test
@@ -108,6 +107,43 @@ public class SubjectTest extends BaseTest {
 
     subject.removeTopic(topic);
     assertFalse(subject.hasTopic(topic));
+  }
+
+  @Test
+  public void testCreate() throws Exception {
+    Subject subject = new Subject("subject", "The best subject");
+
+    subject.create();
+
+    Subject test = SubjectDAO.getInstance().findById(subject.getId());
+
+    assertEquals(subject, test);
+  }
+
+  @Test
+  public void testDelete() throws Exception {
+    Subject subject = new Subject("subject", "The best subject");
+    subject.create();
+    Subject test = SubjectDAO.getInstance().findById(subject.getId());
+    assertEquals(subject, test);
+
+    subject.delete();
+    test = SubjectDAO.getInstance().findById(subject.getId());
+    assertEquals(null, test);
+  }
+
+  @Test
+  public void testUpdate() throws Exception {
+    Subject subject = new Subject("something", "we do stuff");
+
+    subject.create();
+
+    subject.setTitle("other subject");
+    subject.update();
+
+    List<Subject> results = SubjectDAO.getInstance().findSubjectsByTitle("other subject");
+
+    assertTrue(results.contains(subject));
   }
 
 }
