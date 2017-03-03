@@ -40,7 +40,7 @@ public class User {
 
   @Enumerated(value = EnumType.STRING)
   @Convert(converter = UserTypeConverter.class)
-  private UserType userType;
+  private UserType userType = UserType.STUDENT;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date sessionTokenExpireDate;

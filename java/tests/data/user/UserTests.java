@@ -89,7 +89,7 @@ public class UserTests extends BaseTest {
 
   @Test
   public void testCreate() throws Exception {
-    User user = new User("user", "dad@dad", "adad");
+    User user = new User("user", "dad@dad.com", "adad");
 
     user.create();
 
@@ -102,7 +102,7 @@ public class UserTests extends BaseTest {
 
   @Test
   public void testDelete() throws Exception {
-    User user = new User("user", "dad@dad", "adad");
+    User user = new User("user", "dad@dad.com", "adad");
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     em.persist(user);
@@ -120,7 +120,7 @@ public class UserTests extends BaseTest {
 
   @Test
   public void testUpdate() throws Exception {
-    User user = new User("user", "dad@dad", "adad");
+    User user = new User("user", "dad@dad.com", "adad");
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     em.persist(user);
