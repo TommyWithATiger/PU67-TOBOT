@@ -1,6 +1,7 @@
 package data.DataAccessObjects;
 
 import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import base.BaseTest;
@@ -66,18 +67,16 @@ public class RatingDAOTest extends BaseTest{
     assertTrue(result.contains(rating11));
     assertTrue(result.contains(rating12));
     assertTrue(result.contains(rating21));
+    assertEquals(3, result.size());
   }
 
   @Test
-  public void testFindRatingByUser1() throws Exception {
+  public void testFindRatingByUser() throws Exception {
     List result1 = RatingDAO.getInstance().findRatingByUser(user1);
     assertTrue(result1.contains(rating11));
     assertTrue(result1.contains(rating12));
     assertFalse(result1.contains(rating21));
-  }
 
-  @Test
-  public void testFindRatingByUser2() throws Exception {
     List result2 = RatingDAO.getInstance().findRatingByUser(user2);
     assertFalse(result2.contains(rating11));
     assertFalse(result2.contains(rating12));
@@ -85,15 +84,12 @@ public class RatingDAOTest extends BaseTest{
   }
 
   @Test
-  public void testFindRatingByTopic1() throws Exception {
+  public void testFindRatingByTopic() throws Exception {
     List result1 = RatingDAO.getInstance().findRatingByTopic(topic1);
     assertTrue(result1.contains(rating11));
     assertFalse(result1.contains(rating12));
     assertTrue(result1.contains(rating21));
-  }
 
-  @Test
-  public void testFindRatingByTopic2() throws Exception {
     List result2 = RatingDAO.getInstance().findRatingByTopic(topic2);
     assertFalse(result2.contains(rating11));
     assertTrue(result2.contains(rating12));
@@ -101,19 +97,13 @@ public class RatingDAOTest extends BaseTest{
   }
 
   @Test
-  public void testFindRatingByRatingKey1() throws Exception {
+  public void testFindRatingByRatingKey() throws Exception {
     Rating r11 = RatingDAO.getInstance().findById(rk11);
     TestCase.assertEquals(rating11, r11);
-  }
 
-  @Test
-  public void testFindRatingByRatingKey2() throws Exception {
     Rating r12 = RatingDAO.getInstance().findById(rk12);
     TestCase.assertEquals(rating12, r12);
-  }
 
-  @Test
-  public void testFindRatingByRatingKey3() throws Exception {
     Rating r21 = RatingDAO.getInstance().findById(rk21);
     TestCase.assertEquals(rating21, r21);
   }

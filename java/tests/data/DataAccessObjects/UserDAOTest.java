@@ -37,40 +37,29 @@ public class UserDAOTest extends BaseTest{
     assertTrue(result.contains(user1));
     assertTrue(result.contains(user2));
     assertTrue(result.contains(user3));
+    assertEquals(3, result.size());
   }
 
   @Test
-  public void testFindRatingByUser1() throws Exception {
+  public void testFindRatingByUser() throws Exception {
     User u1 = UserDAO.getInstance().findUserByUsername(user1.getUsername());
     assertEquals(user1, u1);
-  }
 
-  @Test
-  public void testFindRatingByUser2() throws Exception {
     User u2 = UserDAO.getInstance().findUserByUsername(user2.getUsername());
     assertEquals(user2, u2);
-  }
 
-  @Test
-  public void testFindRatingByUser3() throws Exception {
     User u3 = UserDAO.getInstance().findUserByUsername(user3.getUsername());
     assertEquals(user3, u3);
   }
 
   @Test
-  public void testFindRatingById1() throws Exception {
+  public void testFindRatingById() throws Exception {
     User u1 = UserDAO.getInstance().findById(user1.getId());
     assertEquals(user1, u1);
-  }
 
-  @Test
-  public void testFindRatingById2() throws Exception {
     User u2 = UserDAO.getInstance().findById(user2.getId());
     assertEquals(user2, u2);
-  }
 
-  @Test
-  public void testFindRatingById3() throws Exception {
     User u3 = UserDAO.getInstance().findById(user3.getId());
     assertEquals(user3, u3);
   }

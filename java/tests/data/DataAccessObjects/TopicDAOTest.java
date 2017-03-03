@@ -41,14 +41,11 @@ public class TopicDAOTest extends BaseTest{
   }
 
   @Test
-  public void testFindTopicsByTitle1() throws Exception {
+  public void testFindTopicsByTitle() throws Exception {
     List progTopics = TopicDAO.getInstance().findTopicsByTitle("Programming");
     assertTrue(progTopics.contains(topic1));
     assertEquals(1, progTopics.size());
-  }
 
-  @Test
-  public void testFindTopicsByTitle2() throws Exception {
     List philTopics = TopicDAO.getInstance().findTopicsByTitle("Philosophy");
     assertTrue(philTopics.contains(topic2));
     assertTrue(philTopics.contains(topic3));
