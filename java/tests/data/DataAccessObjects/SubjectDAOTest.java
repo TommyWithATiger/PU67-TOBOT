@@ -8,7 +8,6 @@ import data.Subject;
 import data.Topic;
 import data.user.User;
 import java.util.List;
-import javax.persistence.EntityManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -30,49 +29,40 @@ public class SubjectDAOTest extends BaseTest {
 
   @BeforeClass
   public static void populate() {
-    EntityManager em = entityManagerFactory.createEntityManager();
-
     topic1 = new Topic("Programming", "Make the computer do stuff");
+    topic1.create();
     topic2 = new Topic("Philosophy", "Think and argue");
+    topic2.create();
     topic3 = new Topic("Odontology", "Fix teeth");
+    topic3.create();
 
     user1 = new User("John", "john@email.com", "hunter2");
+    user1.create();
     user2 = new User("Jane", "jane@email.com", "hunter2");
+    user2.create();
     user3 = new User("Mary", "mary@email.com", "hunter2");
-
-    em.getTransaction().begin();
-    em.persist(topic1);
-    em.persist(topic2);
-    em.persist(topic3);
-    em.persist(user1);
-    em.persist(user2);
-    em.persist(user3);
-    em.getTransaction().commit();
+    user3.create();
 
     subject1 = new Subject("Ex.Phil", "NTNU", "EXP0004", "examen philosophicum");
     subject1.addTopic(topic2);
     subject1.addEditor(user1);
+    subject1.create();
     subject2 = new Subject("Menneske maskin interaksjon", "NTNU", "TDT4180", "man machine interaction");
     subject2.addTopic(topic1);
     subject2.addEditor(user2);
+    subject2.create();
     subject3 = new Subject("Menneske maskin interaksjon", "UIO", "INF4260", "man machine interaction");
     subject3.addTopic(topic1);
     subject3.addEditor(user3);
+    subject3.create();
     subject4 = new Subject("Tannpleie 1", "UIO", "TP1100", "Innledende tannpleie I");
     subject4.addTopic(topic3);
     subject4.addEditor(user1);
+    subject4.create();
     subject5 = new Subject("Databaser", "NTNU", "TDT4145", "Databasesystemer og modellering");
     subject5.addTopic(topic1);
     subject5.addEditor(user2);
-
-    em.getTransaction().begin();
-    em.persist(subject1);
-    em.persist(subject2);
-    em.persist(subject3);
-    em.persist(subject4);
-    em.persist(subject5);
-    em.getTransaction().commit();
-    em.close();
+    subject5.create();
   }
 
   @Override

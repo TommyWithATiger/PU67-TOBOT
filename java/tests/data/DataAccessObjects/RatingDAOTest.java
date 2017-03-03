@@ -10,7 +10,6 @@ import data.rating.Rating;
 import data.rating.RatingEnum;
 import data.rating.RatingKey;
 import java.util.List;
-import javax.persistence.EntityManager;
 import junit.framework.TestCase;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,35 +32,26 @@ public class RatingDAOTest extends BaseTest{
 
   @BeforeClass
   public static void populate(){
-    EntityManager em = entityManagerFactory.createEntityManager();
-
     user1 = new User("John", "john@email.com", "hunter2");
+    user1.create();
     user2 = new User("Jane", "jane@email.com", "hunter2");
+    user2.create();
 
     topic1 = new Topic("Programming", "Make the computer do stuff");
+    topic1.create();
     topic2 = new Topic("Philosophy", "Think and argue");
-
-    em.getTransaction().begin();
-    em.persist(user1);
-    em.persist(user2);
-    em.persist(topic1);
-    em.persist(topic2);
-    em.getTransaction().commit();
+    topic2.create();
 
     rk11 = new RatingKey(user1.getId(), topic1.getId());
     rk12 = new RatingKey(user1.getId(), topic2.getId());
     rk21 = new RatingKey(user2.getId(), topic1.getId());
 
     rating11 = new Rating(rk11.getUserID(), rk11.getTopicID(), RatingEnum.GOOD);
+    rating11.create();
     rating12 = new Rating(rk12.getUserID(), rk12.getTopicID(), RatingEnum.POOR);
+    rating12.create();
     rating21 = new Rating(rk21.getUserID(), rk21.getTopicID(), RatingEnum.SUPERB);
-
-    em.getTransaction().begin();
-    em.persist(rating11);
-    em.persist(rating12);
-    em.persist(rating21);
-    em.getTransaction().commit();
-    em.close();
+    rating21.create();
   }
 
   @Override

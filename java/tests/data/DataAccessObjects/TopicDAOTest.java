@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import base.BaseTest;
 import data.Topic;
 import java.util.List;
-import javax.persistence.EntityManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,19 +17,12 @@ public class TopicDAOTest extends BaseTest{
 
   @BeforeClass
   public static void populate(){
-    EntityManager em = entityManagerFactory.createEntityManager();
-
     topic1 = new Topic("Programming", "Make the computer do stuff");
+    topic1.create();
     topic2 = new Topic("Philosophy 101", "Think and argue");
+    topic2.create();
     topic3 = new Topic("Philosophy 102", "Think and argue some more");
-
-    em.getTransaction().begin();
-    em.persist(topic1);
-    em.persist(topic2);
-    em.persist(topic3);
-    em.getTransaction().commit();
-
-    em.close();
+    topic3.create();
   }
 
   @Override
