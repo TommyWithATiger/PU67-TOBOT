@@ -172,7 +172,7 @@ public class SubjectTest extends BaseTest {
     subject.addEditor(editor1);
 
     assertTrue(subject.isEditor(editor1));
-    System.out.println(subject.isEditor(editor2));
+    assertTrue(subject.isEditor(editor2));
 
     subject.removeEditor(editor1);
     assertFalse(subject.isEditor(editor1));
