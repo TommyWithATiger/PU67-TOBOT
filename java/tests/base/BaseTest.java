@@ -33,9 +33,13 @@ public class BaseTest {
 
   @After
   public void cleanDB(){
+
+    deleteAllEntities(Subject.class);
+    // This has to be before the calls to delete all topics and users
+    // Or else h2 will complain about referential constraints
+
     deleteAllEntities(User.class);
     deleteAllEntities(Topic.class);
-    deleteAllEntities(Subject.class);
     deleteAllEntities(Rating.class);
   }
 
