@@ -12,7 +12,7 @@ import data.rating.RatingEnum;
 import data.rating.RatingKey;
 import java.util.List;
 import junit.framework.TestCase;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 public class RatingDAOTest extends BaseTest{
@@ -31,8 +31,8 @@ public class RatingDAOTest extends BaseTest{
   private static Rating rating12;
   private static Rating rating21;
 
-  @BeforeClass
-  public static void populate(){
+  @Before
+  public void populate(){
     user1 = new User("John", "john@email.com", "hunter2");
     user1.create();
     user2 = new User("Jane", "jane@email.com", "hunter2");
@@ -53,12 +53,6 @@ public class RatingDAOTest extends BaseTest{
     rating12.create();
     rating21 = new Rating(rk21.getUserID(), rk21.getTopicID(), RatingEnum.SUPERB);
     rating21.create();
-  }
-
-  @Override
-  public void cleanDB(){
-    // Do not clean.
-    // This allows populate to be @BeforeClass only, which speeds the tests up by a lot.
   }
 
   @Test

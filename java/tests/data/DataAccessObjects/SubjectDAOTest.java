@@ -8,7 +8,7 @@ import data.Subject;
 import data.Topic;
 import data.user.User;
 import java.util.List;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SubjectDAOTest extends BaseTest {
@@ -27,8 +27,8 @@ public class SubjectDAOTest extends BaseTest {
   private static Subject subject4;
   private static Subject subject5;
 
-  @BeforeClass
-  public static void populate() {
+  @Before
+  public void populate() {
     topic1 = new Topic("Programming", "Make the computer do stuff");
     topic1.create();
     topic2 = new Topic("Philosophy", "Think and argue");
@@ -63,12 +63,6 @@ public class SubjectDAOTest extends BaseTest {
     subject5.addTopic(topic1);
     subject5.addEditor(user2);
     subject5.create();
-  }
-
-  @Override
-  public void cleanDB(){
-    // Do not clean.
-    // This allows populate to be @BeforeClass only, which speeds the tests up by a lot.
   }
 
   @Test

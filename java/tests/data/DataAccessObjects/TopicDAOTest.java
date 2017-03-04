@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import base.BaseTest;
 import data.Topic;
 import java.util.List;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TopicDAOTest extends BaseTest{
@@ -15,20 +15,14 @@ public class TopicDAOTest extends BaseTest{
   private static Topic topic2;
   private static Topic topic3;
 
-  @BeforeClass
-  public static void populate(){
+  @Before
+  public void populate(){
     topic1 = new Topic("Programming", "Make the computer do stuff");
     topic1.create();
     topic2 = new Topic("Philosophy 101", "Think and argue");
     topic2.create();
     topic3 = new Topic("Philosophy 102", "Think and argue some more");
     topic3.create();
-  }
-
-  @Override
-  public void cleanDB(){
-    // Do not clean.
-    // This allows populate to be @BeforeClass only, which speeds the tests up by a lot.
   }
 
   @Test
