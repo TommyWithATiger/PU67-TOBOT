@@ -46,7 +46,7 @@ public class APILoggedInCheckHandler {
     user.update();
 
     JSONObject loginCheckResponse = new JSONObject();
-    loginCheckResponse.put("logged_in", String.valueOf(userLoggedIn));
+    loginCheckResponse.put("logged_in", userLoggedIn);
 
     return loginCheckResponse.toString();
   }
