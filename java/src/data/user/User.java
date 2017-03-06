@@ -1,11 +1,13 @@
-package data;
+package data.user;
 
 import data.DataAccessObjects.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-import java.util.regex.Pattern;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
@@ -36,11 +38,12 @@ public class User {
   private String hashword;
   private String sessionToken;
 
+  @Enumerated(value = EnumType.STRING)
+  @Convert(converter = UserTypeConverter.class)
+  private UserType userType = UserType.STUDENT;
+
   @Temporal(TemporalType.TIMESTAMP)
   private Date sessionTokenExpireDate;
-
-  @Transient
-  private static Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
 
   public User() {
     super();
@@ -59,6 +62,19 @@ public class User {
     setUsername(username);
     setEmail(email);
     setPassword(password);
+  }
+
+  /**
+   * Instantiates a User object
+   *
+   * @param username, the username of the user
+   * @param email, the email of the user
+   * @param password, the password of the user
+   * @param userType, the type of user
+   */
+  public User(String username, String email, String password, UserType userType) {
+    this(username, email, password);
+    this.userType = userType;
   }
 
   /**
@@ -160,7 +176,7 @@ public class User {
    * followed by text).
    */
   public void setEmail(String email) {
-    if (User.emailPattern.matcher(email).matches()) {
+    if (EmailValidator.getInstance().isValid(email)) {
       this.email = email;
     } else {
       throw new IllegalArgumentException("Does not match email pattern");
@@ -274,6 +290,33 @@ public class User {
   }
 
   /**
+   * Get the userType of the User.
+   *
+   * @return enum, The userType of the User
+   */
+  public UserType getUserType() {
+    return userType;
+  }
+
+  /**
+   * Set The userType of the User.
+   *
+   * @param userType New userType of the User
+   */
+  public void setUserType(UserType userType) {
+    this.userType = userType;
+  }
+
+  /**
+   * Check if user is of ADMIN type
+   *
+   * @return true if ADMIN, else false
+   */
+  public boolean isAdmin() {
+    return userType == UserType.ADMIN;
+  }
+
+  /**
    * Overrides the default equals method
    *
    * @param other The object to check against
@@ -298,9 +341,4 @@ public class User {
     return id;
   }
 
-  public boolean isAdmin() {
-
-    //TODO
-    return false;
-  }
 }

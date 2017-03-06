@@ -3,7 +3,7 @@ package data.DataAccessObjects;
 import data.DataAccessObjects.util.FieldTuple;
 import data.Subject;
 import data.Topic;
-import data.User;
+import data.user.User;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

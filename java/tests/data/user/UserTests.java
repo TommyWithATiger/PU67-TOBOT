@@ -1,4 +1,4 @@
-package data;
+package data.user;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
@@ -13,16 +13,28 @@ import org.junit.Test;
 public class UserTests extends BaseTest {
 
   @Test(expected = IllegalArgumentException.class)
-  public void testWrongEmail() throws Exception {
+  public void testWrongEmail1() throws Exception {
     User user = new User();
     user.setEmail("this_is_not_valid");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testWrongEmail2() throws Exception {
+    User user = new User();
+    user.setEmail("this_is_not_valid@email");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testWrongEmail3() throws Exception {
+    User user = new User();
+    user.setEmail("#@%^%#$@#$@#.com");
   }
 
   @Test
   public void testCorrectEmail() throws Exception {
     User user = new User();
-    user.setEmail("this_is_valid@this_is_valid");
-    assertEquals(user.getEmail(), "this_is_valid@this_is_valid");
+    user.setEmail("user@mail.com");
+    assertEquals(user.getEmail(), "user@mail.com");
   }
 
   @Test
@@ -77,7 +89,7 @@ public class UserTests extends BaseTest {
 
   @Test
   public void testCreate() throws Exception {
-    User user = new User("user", "dad@dad", "adad");
+    User user = new User("user", "dad@dad.com", "adad");
 
     user.create();
 
@@ -90,7 +102,7 @@ public class UserTests extends BaseTest {
 
   @Test
   public void testDelete() throws Exception {
-    User user = new User("user", "dad@dad", "adad");
+    User user = new User("user", "dad@dad.com", "adad");
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     em.persist(user);
@@ -108,7 +120,7 @@ public class UserTests extends BaseTest {
 
   @Test
   public void testUpdate() throws Exception {
-    User user = new User("user", "dad@dad", "adad");
+    User user = new User("user", "dad@dad.com", "adad");
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     em.persist(user);

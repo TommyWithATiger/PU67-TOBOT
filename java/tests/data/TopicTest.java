@@ -7,11 +7,10 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
+import data.DataAccessObjects.TopicDAO;
+import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class TopicTest extends BaseTest {
 
   @Test
@@ -93,6 +92,55 @@ public class TopicTest extends BaseTest {
 
     topic.removeFromSubject(subject);
     assertFalse(subject.hasTopic(topic));
+  }
+
+  @Test
+  public void testCreate() throws Exception {
+    Topic topic = new Topic("topic", "The best topic");
+
+    topic.create();
+
+    Topic test = TopicDAO.getInstance().findById(topic.getId());
+
+    assertEquals(topic, test);
+  }
+
+  @Test
+  public void testDelete() throws Exception {
+    Topic topic = new Topic("topic", "The best topic");
+    topic.create();
+    Topic test = TopicDAO.getInstance().findById(topic.getId());
+    assertEquals(topic, test);
+
+    topic.delete();
+    test = TopicDAO.getInstance().findById(topic.getId());
+    assertEquals(null, test);
+  }
+
+  @Test
+  public void testUpdate() throws Exception {
+    Topic topic = new Topic("topic", "The best topic");
+
+    topic.create();
+
+    topic.setTitle("other topic");
+    topic.update();
+
+    List<Topic> results = TopicDAO.getInstance().findTopicsByTitle("other topic");
+
+    assertTrue(results.contains(topic));
+
+    assertEquals(topic.hashCode(), topic.getId());
+  }
+
+  @Test
+  public void testComparison() {
+    Topic topic = new Topic("topic", "The best topic");
+    Topic topic2 = new Topic("topic2", "The second best topic");
+
+    assertEquals(topic, topic2);
+    assertFalse(topic.equals(5));
+    assertFalse(topic.equals(null));
   }
 
 }

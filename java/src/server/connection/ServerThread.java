@@ -69,6 +69,10 @@ public class ServerThread extends Thread {
         basicHttpEntity.setContent(new ByteArrayInputStream(responseContent));
         entityRequest.setEntity(basicHttpEntity);
 
+        if (request.containsHeader("Content-Type")) {
+          basicHttpEntity.setContentType(request.getFirstHeader("Content-Type"));
+        }
+
         response = HTTPHandler.handleRequest(entityRequest);
       } else {
         response = HTTPHandler.handleRequest(request);
