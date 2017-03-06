@@ -55,6 +55,7 @@ public class APILogoutHandlerTest extends BaseTest {
     handleLogoutRequest(httpRequest);
   }
 
+  @Test
   public void testHandleLogoutRequestWrongToken() {
     HttpRequest httpRequest = buildRequestContent("logout/url", "POST",
         "{\"username\":\"username\",\"token\":\"test\"}");

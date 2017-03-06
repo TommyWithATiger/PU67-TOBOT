@@ -13,8 +13,8 @@ import org.junit.Test;
 public class isLoggedInHelperTest extends BaseTest {
 
   @Test
-  public void testValidLogin(){
-    User user = new User("user","valid@email.com","qwerty");
+  public void testValidLogin() {
+    User user = new User("user", "valid@email.com", "qwerty");
     user.create();
 
     user.createSessionToken();
@@ -28,13 +28,13 @@ public class isLoggedInHelperTest extends BaseTest {
   }
 
   @Test
-  public void testMissingHeaders(){
+  public void testMissingHeaders() {
     assertFalse(isLoggedIn(new BasicHttpRequest("GET", "URL")));
   }
 
   @Test
-  public void testMissingUsernameHeader(){
-    User user = new User("user","valid@email.com","qwerty");
+  public void testMissingUsernameHeader() {
+    User user = new User("user", "valid@email.com", "qwerty");
     user.create();
 
     user.createSessionToken();
@@ -47,8 +47,8 @@ public class isLoggedInHelperTest extends BaseTest {
   }
 
   @Test
-  public void testMissingAuthorizationHeader(){
-    User user = new User("user","valid@email.com","qwerty");
+  public void testMissingAuthorizationHeader() {
+    User user = new User("user", "valid@email.com", "qwerty");
     user.create();
 
     user.createSessionToken();
@@ -61,7 +61,7 @@ public class isLoggedInHelperTest extends BaseTest {
   }
 
   @Test
-  public void testInvalidLogin(){
+  public void testInvalidLogin() {
     HttpRequest httpRequest = new BasicHttpRequest("GET", "URL");
     httpRequest.addHeader("X-Username", "admin");
     httpRequest.addHeader("Authorization", "Bearer: adshjasdkhk");

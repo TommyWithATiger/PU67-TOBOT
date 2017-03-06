@@ -17,17 +17,17 @@ import org.apache.http.message.BasicHttpRequest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class EntityContentHelperTest extends BaseTest{
+public class EntityContentHelperTest extends BaseTest {
 
   @Test(expected = APIBadRequestException.class)
-  public void testNoContent(){
+  public void testNoContent() {
     HttpRequest httpRequest = new BasicHttpRequest("GET", "URL");
     checkAndGetEntityContent(httpRequest);
     fail();
   }
 
   @Test
-  public void testWithContent(){
+  public void testWithContent() {
     String content = "Test String, 123æøå#$%";
 
     HttpEntityEnclosingRequest httpRequest = new BasicHttpEntityEnclosingRequest("GET", "URL");

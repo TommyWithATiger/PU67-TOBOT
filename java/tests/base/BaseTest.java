@@ -1,19 +1,12 @@
 package base;
 
-import data.Subject;
-import data.Topic;
-import data.User;
-import data.rating.Rating;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaDelete;
 import main.ServerInitializer;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 
 public class BaseTest {
+
   protected static EntityManagerFactory entityManagerFactory;
 
   /*
@@ -28,7 +21,7 @@ public class BaseTest {
   }
 
   @After
-  public void tearDownBaseTest(){
+  public void tearDownBaseTest() {
     entityManagerFactory.close();
   }
 
