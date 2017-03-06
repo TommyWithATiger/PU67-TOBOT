@@ -10,7 +10,7 @@ import base.BaseTest;
 import data.DataAccessObjects.SubjectDAO;
 import data.Subject;
 import data.Topic;
-import data.User;
+import data.user.User;
 import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
 import org.apache.http.entity.BasicHttpEntity;

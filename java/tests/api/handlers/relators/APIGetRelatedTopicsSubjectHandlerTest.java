@@ -8,7 +8,7 @@ import api.exceptions.APIBadRequestException;
 import base.BaseTest;
 import data.Subject;
 import data.Topic;
-import data.User;
+import data.user.User;
 import org.apache.http.HttpRequest;
 import org.apache.http.message.BasicHttpRequest;
 import org.junit.Before;

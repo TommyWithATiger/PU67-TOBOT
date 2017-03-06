@@ -9,7 +9,7 @@ import api.exceptions.APIBadRequestException;
 import api.exceptions.APIRequestForbiddenException;
 import base.BaseTest;
 import data.Topic;
-import data.User;
+import data.user.User;
 import data.rating.Rating;
 import data.rating.RatingConverter;
 import data.rating.RatingEnum;

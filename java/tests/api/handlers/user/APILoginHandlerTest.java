@@ -7,7 +7,7 @@ import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
 import base.BaseTest;
 import data.DataAccessObjects.UserDAO;
-import data.User;
+import data.user.User;
 import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
 import org.apache.http.entity.BasicHttpEntity;
