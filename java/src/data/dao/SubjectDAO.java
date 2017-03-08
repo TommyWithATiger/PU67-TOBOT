@@ -11,7 +11,7 @@ import javax.persistence.Query;
 
 public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
 
-  protected static SubjectDAO instance;
+  private static SubjectDAO instance;
 
   /**
    * Instantiates the SubjectDataAccessObject

@@ -13,7 +13,7 @@ public abstract class AbstractBaseDAO<E, K> {
   private Class<E> entityClass;
 
   @PersistenceContext
-  protected static EntityManagerFactory emFactory;
+  static EntityManagerFactory emFactory;
 
   /**
    * Instantiates a DAO, Only called through sub-classes

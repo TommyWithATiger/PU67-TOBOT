@@ -7,7 +7,7 @@ import javax.persistence.EntityManagerFactory;
 
 public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
 
-  protected static TopicDAO instance;
+  private static TopicDAO instance;
 
   /**
    * Instantiates the TopicDataAccessObject

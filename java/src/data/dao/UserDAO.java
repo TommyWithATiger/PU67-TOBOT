@@ -16,7 +16,7 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
     super(User.class, emFactory);
   }
 
-  protected static UserDAO instance;
+  private static UserDAO instance;
 
   /**
    * Get all database occurrences of Subject

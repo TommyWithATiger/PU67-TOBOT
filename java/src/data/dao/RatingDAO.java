@@ -10,7 +10,7 @@ import javax.persistence.EntityManagerFactory;
 
 public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
 
-  protected static RatingDAO instance;
+  private static RatingDAO instance;
 
   /**
    * Instantiates the SubjectDataAccessObject
