@@ -1,6 +1,6 @@
-package data.DataAccessObjects;
+package data.dao;
 
-import data.DataAccessObjects.util.FieldTuple;
+import data.dao.util.FieldTuple;
 import data.Subject;
 import data.Topic;
 import data.user.User;
@@ -11,7 +11,7 @@ import javax.persistence.Query;
 
 public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
 
-  protected static SubjectDAO instance;
+  private static SubjectDAO instance;
 
   /**
    * Instantiates the SubjectDataAccessObject

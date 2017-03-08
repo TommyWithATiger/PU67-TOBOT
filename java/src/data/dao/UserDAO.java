@@ -1,6 +1,6 @@
-package data.DataAccessObjects;
+package data.dao;
 
-import data.DataAccessObjects.util.FieldTuple;
+import data.dao.util.FieldTuple;
 import data.user.User;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -16,7 +16,7 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
     super(User.class, emFactory);
   }
 
-  protected static UserDAO instance;
+  private static UserDAO instance;
 
   /**
    * Get all database occurrences of Subject

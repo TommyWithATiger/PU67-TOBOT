@@ -1,6 +1,6 @@
 package data.user;
 
-import data.DataAccessObjects.UserDAO;
+import data.dao.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -26,9 +25,6 @@ import org.mindrot.jbcrypt.BCrypt;
     @NamedQuery(name = "findUsersByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
 })
 public class User {
-
-  @PersistenceContext
-  private static UserDAO userDAO;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,7 +43,6 @@ public class User {
 
   public User() {
     super();
-    userDAO = UserDAO.getInstance();
   }
 
   /**
@@ -81,21 +76,21 @@ public class User {
    * Adds the User to the database
    */
   public void create() {
-    userDAO.persist(this);
+    UserDAO.getInstance().persist(this);
   }
 
   /**
    * Removes the User from the database
    */
   public void delete() {
-    userDAO.remove(this);
+    UserDAO.getInstance().remove(this);
   }
 
   /**
    * Updates the User's database entry
    */
   public void update() {
-    userDAO.merge(this);
+    UserDAO.getInstance().merge(this);
   }
 
 

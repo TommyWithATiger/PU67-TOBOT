@@ -7,9 +7,9 @@ import static api.helpers.isLoggedInHelper.isLoggedIn;
 
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIRequestForbiddenException;
-import data.DataAccessObjects.RatingDAO;
-import data.DataAccessObjects.TopicDAO;
-import data.DataAccessObjects.UserDAO;
+import data.dao.RatingDAO;
+import data.dao.TopicDAO;
+import data.dao.UserDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
@@ -81,7 +81,7 @@ public class APIRateTopicHandler {
     User user = UserDAO.getInstance().findUserByUsername(username);
 
     // Either update an old rating or create a new one
-    Rating rating = RatingDAO.getInstance().findRatingByRatingKey(new RatingKey(user.getId(), topic.getId()));
+    Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topic.getId()));
     if (rating == null) {
       rating = new Rating(user.getId(), topicID, ratingEnum);
       rating.create();

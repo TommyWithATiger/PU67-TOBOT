@@ -1,6 +1,6 @@
-package data.DataAccessObjects;
+package data.dao;
 
-import data.DataAccessObjects.util.FieldTuple;
+import data.dao.util.FieldTuple;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,7 +13,7 @@ public abstract class AbstractBaseDAO<E, K> {
   private Class<E> entityClass;
 
   @PersistenceContext
-  protected static EntityManagerFactory emFactory;
+  static EntityManagerFactory emFactory;
 
   /**
    * Instantiates a DAO, Only called through sub-classes

@@ -7,7 +7,7 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
-import data.DataAccessObjects.TopicDAO;
+import data.dao.TopicDAO;
 import java.util.List;
 import org.junit.Test;
 

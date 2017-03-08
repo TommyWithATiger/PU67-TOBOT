@@ -1,6 +1,6 @@
-package data.DataAccessObjects;
+package data.dao;
 
-import data.DataAccessObjects.util.FieldTuple;
+import data.dao.util.FieldTuple;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
@@ -10,7 +10,7 @@ import javax.persistence.EntityManagerFactory;
 
 public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
 
-  protected static RatingDAO instance;
+  private static RatingDAO instance;
 
   /**
    * Instantiates the SubjectDataAccessObject
@@ -50,21 +50,6 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
   public List<Rating> findRatingByTopic(Topic topic) {
     return super.find("findRatingByTopic",
         new FieldTuple("topicID", topic.getId()));
-  }
-  /**
-   * Finds a Rating related to the ratingKey (tuple of userId and topicId)
-   *
-   * @param ratingKey, a RatingKey object
-   * @return A Rating object, null if none is found
-   */
-  public Rating findRatingByRatingKey(RatingKey ratingKey) {
-    List<Rating> result = super.find("findRatingByRatingKey",
-        new FieldTuple("userID", ratingKey.getUserID()),
-        new FieldTuple("topicID", ratingKey.getTopicID()));
-    if (!result.isEmpty()) {
-      return result.get(0);
-    }
-    return null;
   }
 
   /**

@@ -6,9 +6,9 @@ import static api.helpers.isLoggedInHelper.isLoggedIn;
 
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIRequestForbiddenException;
-import data.DataAccessObjects.RatingDAO;
-import data.DataAccessObjects.TopicDAO;
-import data.DataAccessObjects.UserDAO;
+import data.dao.RatingDAO;
+import data.dao.TopicDAO;
+import data.dao.UserDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
@@ -63,8 +63,7 @@ public class APIGetTopicRatingHandler {
     // Will never be null due to login check above
     User user = UserDAO.getInstance().findUserByUsername(username);
 
-    Rating rating = RatingDAO.getInstance()
-        .findRatingByRatingKey(new RatingKey(user.getId(), topicID));
+    Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topicID));
 
     if (rating == null) {
       throw new APIBadRequestException("No rating for the given subject");

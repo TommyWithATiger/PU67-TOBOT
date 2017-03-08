@@ -7,7 +7,7 @@ import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIRequestForbiddenException;
 import base.BaseTest;
-import data.DataAccessObjects.SubjectDAO;
+import data.dao.SubjectDAO;
 import data.Subject;
 import data.Topic;
 import data.user.User;

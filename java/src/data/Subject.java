@@ -1,6 +1,6 @@
 package data;
 
-import data.DataAccessObjects.SubjectDAO;
+import data.dao.SubjectDAO;
 import data.user.User;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 
 @Entity
@@ -24,9 +23,6 @@ import javax.persistence.Table;
 })
 @Table
 public class Subject {
-
-  @PersistenceContext
-  public static SubjectDAO subjectDAO;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +42,6 @@ public class Subject {
     super();
     topics = new ArrayList<>();
     editors = new ArrayList<>();
-    subjectDAO = SubjectDAO.getInstance();
   }
 
   /**
@@ -233,21 +228,21 @@ public class Subject {
    * Adds the subject to the database
    */
   public void create() {
-    subjectDAO.persist(this);
+    SubjectDAO.getInstance().persist(this);
   }
 
   /**
    * Removes the subject from the database
    */
   public void delete() {
-    subjectDAO.remove(this);
+    SubjectDAO.getInstance().remove(this);
   }
 
   /**
    * Updates the subjects database entry
    */
   public void update() {
-    subjectDAO.merge(this);
+    SubjectDAO.getInstance().merge(this);
   }
 
   /**
