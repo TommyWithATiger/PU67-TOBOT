@@ -40,7 +40,7 @@ export const api = {
    * @param {function} error Feedback error.
    */
   getSubjects (ctx, callback, error) {
-    this.getRequest(SUBJECT_GET_URL, callback, error)
+    this.getRequest(ctx, SUBJECT_GET_URL, callback, error)
   },
 
   /**
@@ -50,7 +50,7 @@ export const api = {
    * @param {integer} id The subject id
    */
   getRelatedTopics (ctx, callback, error, id) {
-    this.getRequest(SUBJECT_GET_RELATED_URL + id, callback, error)
+    this.getRequest(ctx, SUBJECT_GET_RELATED_URL + id, callback, error)
   },
 
   /**
@@ -61,7 +61,7 @@ export const api = {
    * @param {integer} id The subject id.
    */
   getSubjectID (ctx, callback, error, id) {
-    this.getRequest(SUBJECT_GET_ID_URL + id, callback, error)
+    this.getRequest(ctx, SUBJECT_GET_ID_URL + id, callback, error)
   },
 
   /**
@@ -71,7 +71,7 @@ export const api = {
    * @param {function} error Feedback error.
    */
   getTopics (ctx, callback, error) {
-    this.getRequest(TOPIC_GET_URL, callback, error)
+    this.getRequest(ctx, TOPIC_GET_URL, callback, error)
   },
 
   /**
@@ -81,10 +81,10 @@ export const api = {
    */
   postUserLogin (ctx, data, callback, error) {
     let req = {
-      body: JSON.stringify(data)
+      body: data
     }
 
-    this.postRequest(LOGIN_URL, req, callback, error)
+    this.postRequest(ctx, LOGIN_URL, req, callback, error)
   },
 
   /**
@@ -104,11 +104,10 @@ export const api = {
     }
 
     let req = {
-      body: JSON.stringify(data),
-      method: 'POST'
+      body: data
     }
 
-    this.postRequest(SUBJECT_ADD_URL, req, callback, error)
+    this.postRequest(ctx, SUBJECT_ADD_URL, req, callback, error)
   },
 
   /**
@@ -126,33 +125,31 @@ export const api = {
     }
 
     let req = {
-      body: JSON.stringify(data),
-      method: 'POST'
+      body: data
     }
 
-    this.postRequest(TOPIC_ADD_URL, req, callback, error)
+    this.postRequest(ctx, TOPIC_ADD_URL, req, callback, error)
   },
 
   /**
    * Rate a topic
    * @param {object} ctx Context.
-   * @param {object} topic The topic to rate
+   * @param {number} id The topic id to rate
    * @param {string} rating The rating to give the topic
    * @param {function} callback Handle the request output
    * @param {function} error Feedback error
    */
-  rateTopic (ctx, topic, rating, callback, error) {
+  rateTopic (ctx, id, rating, callback, error) {
     let data = {
-      topicID: topic.id,
+      topicID: id,
       rating: rating
     }
 
     let req = {
-      body: JSON.stringify(data),
-      method: 'POST'
+      body: data
     }
 
-    this.postRequest(TOPIC_RATE_URL, req, callback, error)
+    this.postRequest(ctx, TOPIC_RATE_URL, req, callback, error)
   },
 
   /**
@@ -163,11 +160,10 @@ export const api = {
    */
   getRatedTopics (ctx, callback, error) {
     let req = {
-      method: 'POST',
-      body: JSON.stringify('')
+      body: ' '
     }
 
-    this.postRequest(TOPIC_GET_RATED_URL, req, callback, error)
+    this.postRequest(ctx, TOPIC_GET_RATED_URL, req, callback, error)
   },
 
   /**
@@ -185,11 +181,10 @@ export const api = {
     }
 
     let req = {
-      body: JSON.stringify(data),
-      method: 'POST'
+      body: data
     }
 
-    this.postRequest(SUBJECT_TOPIC_RELATE_URL, req, callback, error)
+    this.postRequest(ctx, SUBJECT_TOPIC_RELATE_URL, req, callback, error)
   },
 
   /**
@@ -199,17 +194,23 @@ export const api = {
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
    */
-  postRequest (url, req, callback, error) {
+  postRequest (ctx, url, req, callback, error) {
     req.headers = Object.assign({}, req.headers || {}, {
       'Authorization': auth.getAuthHeader()['Authorization'],
       'X-Username': auth.getUsername()
     })
-    req.method = 'POST'
-    let headers = new Headers(req.headers)
-    req.headers = headers
 
-    // ctx.$http.post(LOGIN_URL, req)
-    fetch(new Request(url, req)) // Does not work in IE, needs polyfill.
+    req.method = 'POST'
+    let h = req.headers
+    req.method = 'POST'
+    req.headers = new Headers(h)
+
+    req.body = typeof req.body === 'string'
+      ? req.body
+      : JSON.stringify(req.body)
+
+    // ctx.$http.post(url, req.body, req.headers)
+    fetch(new Request(url, req))
     .then(res => res.json())
     .then(callback)
     .catch(error)
@@ -221,9 +222,8 @@ export const api = {
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
    */
-  getRequest (url, callback, error) {
-    // ctx.$http.post(LOGIN_URL, req)
-    fetch(url) // Does not work in IE, needs polyfill.
+  getRequest (ctx, url, callback, error) {
+    ctx.$http.get(url)
     .then(res => res.json())
     .then(callback)
     .catch(error)
