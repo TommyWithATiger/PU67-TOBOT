@@ -5,9 +5,9 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
+import data.DataAccessObjects.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
-import javax.persistence.EntityManager;
 import org.junit.Test;
 
 public class UserTests extends BaseTest {
@@ -93,47 +93,30 @@ public class UserTests extends BaseTest {
 
     user.create();
 
-    EntityManager em = entityManagerFactory.createEntityManager();
-    User user1 = em.find(User.class, user.getId());
-    em.close();
-
+    User user1 = UserDAO.getInstance().findById(user.getId());
     assertEquals(user, user1);
   }
 
   @Test
   public void testDelete() throws Exception {
     User user = new User("user", "dad@dad.com", "adad");
-    EntityManager em = entityManagerFactory.createEntityManager();
-    em.getTransaction().begin();
-    em.persist(user);
-    em.getTransaction().commit();
-    em.close();
+    user.create();
 
     user.delete();
 
-    em = entityManagerFactory.createEntityManager();
-    User user1 = em.find(User.class, user.getId());
-    em.close();
-
+    User user1 = UserDAO.getInstance().findById(user.getId());
     assertEquals(null, user1);
   }
 
   @Test
   public void testUpdate() throws Exception {
     User user = new User("user", "dad@dad.com", "adad");
-    EntityManager em = entityManagerFactory.createEntityManager();
-    em.getTransaction().begin();
-    em.persist(user);
-    em.getTransaction().commit();
-    em.close();
+    user.create();
 
     user.setUsername("other user");
     user.update();
 
-    em = entityManagerFactory.createEntityManager();
-    User user1 = em.find(User.class, user.getId());
-    em.close();
-
+    User user1 = UserDAO.getInstance().findById(user.getId());
     assertEquals("other user", user1.getUsername());
   }
 
