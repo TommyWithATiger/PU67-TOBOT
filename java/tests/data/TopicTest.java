@@ -147,7 +147,7 @@ public class TopicTest extends BaseTest {
   }
 
   @Test
-  public void testHasCode() {
+  public void testHashCode() {
     Topic topic = new Topic("topic", "The best topic");
     topic.create();
 

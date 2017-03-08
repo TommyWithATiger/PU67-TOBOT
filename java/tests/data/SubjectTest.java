@@ -164,7 +164,7 @@ public class SubjectTest extends BaseTest {
   }
 
   @Test
-  public void testHasCode() {
+  public void testHashCode() {
     Subject subject = new Subject("subject", "The best subject");
     subject.create();
 

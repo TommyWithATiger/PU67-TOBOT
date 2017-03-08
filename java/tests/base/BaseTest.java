@@ -1,19 +1,12 @@
 package base;
 
-import data.Subject;
-import data.Topic;
-import data.user.User;
-import data.rating.Rating;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaDelete;
 import main.ServerInitializer;
 import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 
 public class BaseTest {
-  protected static EntityManagerFactory entityManagerFactory;
+  private EntityManagerFactory entityManagerFactory;
 
   /*
    All tests in the system should extend this tests class, which sets properties that are required
@@ -21,32 +14,14 @@ public class BaseTest {
   */
 
 
-  @BeforeClass
-  public static void setUpBaseTest() {
+  @Before
+  public void setUpBaseTest() {
     entityManagerFactory = ServerInitializer.setup("h2-eclipselink");
   }
 
-  @AfterClass
-  public static void tearDownBaseTest(){
-    entityManagerFactory.close();
-  }
-
   @After
-  public void cleanDB(){
-    deleteAllEntities(User.class);
-    deleteAllEntities(Topic.class);
-    deleteAllEntities(Subject.class);
-    deleteAllEntities(Rating.class);
-  }
-
-  private <T> void deleteAllEntities(Class<T> entityType) {
-    EntityManager em = entityManagerFactory.createEntityManager();
-    CriteriaDelete<T> query = em.getCriteriaBuilder().createCriteriaDelete(entityType);
-    query.from(entityType);
-    em.getTransaction().begin();
-    em.createQuery(query).executeUpdate();
-    em.getTransaction().commit();
-    em.close();
+  public void tearDownBaseTest(){
+    entityManagerFactory.close();
   }
 
 }
