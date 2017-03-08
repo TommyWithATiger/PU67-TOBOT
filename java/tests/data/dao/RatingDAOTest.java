@@ -1,4 +1,4 @@
-package data.DataAccessObjects;
+package data.dao;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;

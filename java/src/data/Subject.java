@@ -1,6 +1,6 @@
 package data;
 
-import data.DataAccessObjects.SubjectDAO;
+import data.dao.SubjectDAO;
 import data.user.User;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 
 @Entity

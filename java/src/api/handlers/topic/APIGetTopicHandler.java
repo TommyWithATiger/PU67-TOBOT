@@ -4,7 +4,7 @@ import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 
 import api.exceptions.APIBadRequestException;
-import data.DataAccessObjects.TopicDAO;
+import data.dao.TopicDAO;
 import data.Topic;
 import java.util.HashMap;
 import java.util.List;

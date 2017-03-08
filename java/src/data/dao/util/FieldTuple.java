@@ -1,4 +1,4 @@
-package data.DataAccessObjects.util;
+package data.dao.util;
 
 public class FieldTuple {
 

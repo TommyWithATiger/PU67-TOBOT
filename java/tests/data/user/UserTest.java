@@ -6,7 +6,7 @@ import static junit.framework.TestCase.assertNotSame;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
-import data.DataAccessObjects.UserDAO;
+import data.dao.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
 import org.junit.Test;

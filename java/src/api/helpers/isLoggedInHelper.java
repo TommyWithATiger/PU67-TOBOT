@@ -1,6 +1,6 @@
 package api.helpers;
 
-import data.DataAccessObjects.UserDAO;
+import data.dao.UserDAO;
 import data.user.User;
 import org.apache.http.HttpRequest;
 

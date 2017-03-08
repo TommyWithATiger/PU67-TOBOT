@@ -8,7 +8,7 @@ import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIRequestForbiddenException;
 import base.BaseTest;
-import data.DataAccessObjects.RatingDAO;
+import data.dao.RatingDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;

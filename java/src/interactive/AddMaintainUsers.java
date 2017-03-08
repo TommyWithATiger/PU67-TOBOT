@@ -1,6 +1,6 @@
 package interactive;
 
-import data.DataAccessObjects.UserDAO;
+import data.dao.UserDAO;
 import data.user.User;
 
 import java.io.IOException;

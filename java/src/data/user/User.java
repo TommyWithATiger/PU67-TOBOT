@@ -1,6 +1,6 @@
 package data.user;
 
-import data.DataAccessObjects.UserDAO;
+import data.dao.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.validator.routines.EmailValidator;

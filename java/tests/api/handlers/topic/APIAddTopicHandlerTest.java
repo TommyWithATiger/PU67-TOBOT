@@ -7,7 +7,7 @@ import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIRequestForbiddenException;
 import base.BaseTest;
-import data.DataAccessObjects.TopicDAO;
+import data.dao.TopicDAO;
 import data.Topic;
 import data.user.User;
 import java.io.ByteArrayInputStream;

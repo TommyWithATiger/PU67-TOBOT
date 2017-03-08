@@ -1,9 +1,9 @@
 package main;
 
-import data.DataAccessObjects.RatingDAO;
-import data.DataAccessObjects.SubjectDAO;
-import data.DataAccessObjects.TopicDAO;
-import data.DataAccessObjects.UserDAO;
+import data.dao.RatingDAO;
+import data.dao.SubjectDAO;
+import data.dao.TopicDAO;
+import data.dao.UserDAO;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

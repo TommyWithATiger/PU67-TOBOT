@@ -1,6 +1,6 @@
-package data.DataAccessObjects;
+package data.dao;
 
-import data.DataAccessObjects.util.FieldTuple;
+import data.dao.util.FieldTuple;
 import data.Topic;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;

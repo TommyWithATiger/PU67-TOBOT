@@ -7,9 +7,9 @@ import static api.helpers.isLoggedInHelper.isLoggedIn;
 
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIRequestForbiddenException;
-import data.DataAccessObjects.RatingDAO;
-import data.DataAccessObjects.TopicDAO;
-import data.DataAccessObjects.UserDAO;
+import data.dao.RatingDAO;
+import data.dao.TopicDAO;
+import data.dao.UserDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;

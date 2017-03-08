@@ -5,7 +5,7 @@ import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
-import data.DataAccessObjects.UserDAO;
+import data.dao.UserDAO;
 import data.user.User;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;

@@ -1,6 +1,6 @@
 package data.rating;
 
-import data.DataAccessObjects.RatingDAO;
+import data.dao.RatingDAO;
 import javax.persistence.Convert;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -8,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 
 

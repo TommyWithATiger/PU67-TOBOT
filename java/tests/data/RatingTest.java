@@ -3,11 +3,10 @@ package data;
 import static junit.framework.TestCase.assertEquals;
 
 import base.BaseTest;
-import data.DataAccessObjects.RatingDAO;
+import data.dao.RatingDAO;
 import data.rating.Rating;
 import data.rating.RatingEnum;
 import data.rating.RatingKey;
-import javax.persistence.EntityManager;
 import org.junit.Test;
 
 public class RatingTest extends BaseTest {

@@ -7,8 +7,8 @@ import static api.helpers.isLoggedInHelper.isLoggedIn;
 
 import api.exceptions.APIBadRequestException;
 import api.exceptions.APIRequestForbiddenException;
-import data.DataAccessObjects.SubjectDAO;
-import data.DataAccessObjects.TopicDAO;
+import data.dao.SubjectDAO;
+import data.dao.TopicDAO;
 import data.Subject;
 import data.Topic;
 import org.apache.http.HttpRequest;
