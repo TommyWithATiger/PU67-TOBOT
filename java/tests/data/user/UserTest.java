@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import org.junit.Test;
 
-public class UserTests extends BaseTest {
+public class UserTest extends BaseTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testWrongEmail1() throws Exception {
