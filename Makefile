@@ -76,7 +76,7 @@ docker-container:
 	make docker-container-removed; \
 	fi
 	@echo Creating a development container ...
-	@docker run --name tobot-container -d -p 8000:5032 -v ${v}:/tobot tobot/tobot
+	@docker run --name tobot-container-dev -d -p 8000:5032 -v ${v}:/tobot tobot/tobot
 	@echo tobot-container created!
 
 # Create a production container
