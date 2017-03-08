@@ -63,8 +63,7 @@ public class APIGetTopicRatingHandler {
     // Will never be null due to login check above
     User user = UserDAO.getInstance().findUserByUsername(username);
 
-    Rating rating = RatingDAO.getInstance()
-        .findRatingByRatingKey(new RatingKey(user.getId(), topicID));
+    Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topicID));
 
     if (rating == null) {
       throw new APIBadRequestException("No rating for the given subject");

@@ -81,7 +81,7 @@ public class APIRateTopicHandler {
     User user = UserDAO.getInstance().findUserByUsername(username);
 
     // Either update an old rating or create a new one
-    Rating rating = RatingDAO.getInstance().findRatingByRatingKey(new RatingKey(user.getId(), topic.getId()));
+    Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topic.getId()));
     if (rating == null) {
       rating = new Rating(user.getId(), topicID, ratingEnum);
       rating.create();

@@ -85,7 +85,7 @@ public class APIRateTopicHandlerTest extends BaseTest {
     assertEquals("{\"topicID\":" + String.valueOf(topic.getId()) + ",\"rating\":\"Good\"}",
         response);
     Rating rating = RatingDAO.getInstance()
-        .findRatingByRatingKey(new RatingKey(user.getId(), topic.getId()));
+        .findById(new RatingKey(user.getId(), topic.getId()));
     assertNotNull(rating);
     assertEquals(RatingEnum.GOOD, rating.getRating());
   }
@@ -101,7 +101,7 @@ public class APIRateTopicHandlerTest extends BaseTest {
     assertEquals("{\"topicID\":" + String.valueOf(topic.getId()) + ",\"rating\":\"Poor\"}",
         response);
     Rating ratingResult = RatingDAO.getInstance()
-        .findRatingByRatingKey(new RatingKey(user.getId(), topic.getId()));
+        .findById(new RatingKey(user.getId(), topic.getId()));
     assertNotNull(ratingResult);
     assertEquals(RatingEnum.POOR, ratingResult.getRating());
   }
