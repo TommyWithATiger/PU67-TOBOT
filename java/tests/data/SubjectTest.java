@@ -21,7 +21,8 @@ public class SubjectTest extends BaseTest {
     subject1.setTitle("Math");
     subject1.setDescription("From algebra to calculus.");
     Subject subject2 = new Subject("English for beginners", "blah, blah");
-    Subject subject3 = new Subject("Piano", "Musical Academy", "MUS1001", "Classical piano lessons");
+    Subject subject3 = new Subject("Piano", "Musical Academy", "MUS1001",
+        "Classical piano lessons");
 
     assertNotNull(subject1);
     assertEquals("Math", subject1.getTitle());
@@ -150,13 +151,22 @@ public class SubjectTest extends BaseTest {
   }
 
   @Test
-  public void testComparison() {
+  public void testEquals() {
     Subject subject = new Subject("subject", "The best subject");
+    subject.create();
     Subject subject2 = new Subject("subject2", "The second best subject");
+    subject2.create();
 
-    assertEquals(subject, subject2);
+    assertNotSame(subject, subject2);
+    assertEquals(subject, SubjectDAO.getInstance().findById(subject.getId()));
     assertFalse(subject.equals(5));
     assertFalse(subject.equals(null));
+  }
+
+  @Test
+  public void testHashCode() {
+    Subject subject = new Subject("subject", "The best subject");
+    subject.create();
 
     assertEquals(subject.hashCode(), subject.getId());
   }
@@ -164,21 +174,27 @@ public class SubjectTest extends BaseTest {
   @Test
   public void testGetSetEditor() {
     Subject subject = new Subject("subject", "The best subject");
+    subject.create();
 
     User admin = new User("admin", "admin@mail.com", "root", UserType.ADMIN);
     User editor1 = new User("editor1", "editor1@mail.com", "1234");
     User editor2 = new User("editor2", "editor2@mail.com", "IHateMondays");
+    admin.create();
+    editor1.create();
+    editor2.create();
 
     subject.addEditor(editor1);
+    subject.update();
 
     assertTrue(subject.isEditor(editor1));
-    assertTrue(subject.isEditor(editor2));
+    assertFalse(subject.isEditor(editor2));
 
     subject.removeEditor(editor1);
+    subject.update();
     assertFalse(subject.isEditor(editor1));
 
     assertTrue(subject.isEditor(admin));
 
   }
-  
+
 }

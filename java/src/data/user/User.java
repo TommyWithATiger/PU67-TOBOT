@@ -133,15 +133,6 @@ public class User {
   }
 
   /**
-   * Set the id of the User.
-   *
-   * @param id New id of the User
-   */
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  /**
    * Get the username of the User.
    *
    * @return the username of the User
