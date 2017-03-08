@@ -11,6 +11,7 @@
         <div class="header-navigation-button">
           <h2><router-link to="/topic">Temaer</router-link></h2>
         </div>
+        <SearchBar />
         <div class="header-user-info">
         <!--
           No information here at the moment, wait for next iteration
@@ -32,6 +33,7 @@
 
 <script>
 import LogoutBtn from 'components/auth/LogoutBtn'
+import SearchBar from 'components/search/SearchBar'
 import { auth } from 'auth'
 
 export default {
@@ -60,7 +62,8 @@ export default {
     }
   },
   components: {
-    LogoutBtn
+    LogoutBtn,
+    SearchBar
   }
 }
 </script>
