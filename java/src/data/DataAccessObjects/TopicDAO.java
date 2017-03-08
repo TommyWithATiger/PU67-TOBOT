@@ -38,21 +38,6 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
   }
 
   /**
-   * Finds one topic that matches the given title
-   *
-   * @param title, the title to query for
-   * @return A Topic object that matches the title
-   */
-  public Topic findSingleTopicsByTitle(String title) {
-    List<Topic> results = findTopicsByTitle(title);
-    if (results != null) {
-      return results.get(0);
-    }
-    return null;
-    //Fixme handle no result exception here
-  }
-
-  /**
    * Returns the static TopicDAO instance
    *
    * @return TopicDAO, null if not instantiated
