@@ -1,78 +1,50 @@
 package data.DataAccessObjects;
 
+import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import base.BaseTest;
+import data.Topic;
+import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class TopicDAOTest extends BaseTest {
+public class TopicDAOTest extends BaseTest{
 
-
-  @Test
-  public void placeholder(){
-
-  }
-  /*Non functional at the moment
-
-  @Mock
-  private TopicDAO topicDAO;
-  @Mock
-  private EntityManagerFactory entityManagerFactory;
-  @Mock
-  private EntityManager entityManager;
-  @Mock
-  private EntityTransaction entityTransaction;
+  private static Topic topic1;
+  private static Topic topic2;
+  private static Topic topic3;
 
   @Before
-  public void init() {
-    when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
-    when(entityManager.getTransaction()).thenReturn(entityTransaction);
-    //this.topicDAO = new TopicDAO(entityManagerFactory);
+  public void populate(){
+    topic1 = new Topic("Programming", "Make the computer do stuff");
+    topic1.create();
+    topic2 = new Topic("Philosophy 101", "Think and argue");
+    topic2.create();
+    topic3 = new Topic("Philosophy 102", "Think and argue some more");
+    topic3.create();
   }
 
   @Test
-  public void persist() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-
-    topicDAO.persist(topic);
-
-    assertNotNull(topicDAO.findById(topic.getId()));
+  public void testFindAll() throws Exception {
+    List result = TopicDAO.getInstance().findAll();
+    assertTrue(result.contains(topic1));
+    assertTrue(result.contains(topic2));
+    assertTrue(result.contains(topic3));
+    assertEquals(3, result.size());
   }
 
   @Test
-  public void remove() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
+  public void testFindTopicsByTitle() throws Exception {
+    List progTopics = TopicDAO.getInstance().findTopicsByTitle("Programming");
+    assertTrue(progTopics.contains(topic1));
+    assertEquals(1, progTopics.size());
 
-    topic = topicDAO.merge(topic);
-    assertNotNull(topicDAO.findById(topic.getId()));
-    topic.delete();
-    assertNull(topicDAO.findById(topic.getId()));
+    List philTopics = TopicDAO.getInstance().findTopicsByTitle("Philosophy");
+    assertTrue(philTopics.contains(topic2));
+    assertTrue(philTopics.contains(topic3));
+    assertEquals(2, philTopics.size());
   }
 
-  @Test
-  public void findById() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-
-    topicDAO.persist(topic);
-
-    assertNotNull(topicDAO.findById(topic.getId()));
-  }
-
-  @Test
-  public void findSingleTopicByTitle() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-    topicDAO.persist(topic);
-    Topic result = topicDAO.findSingleTopicsByTitle("Math");
-    assertEquals(result, topic);
-  }
-
-  @Test
-  public void findTopicsByTitle() {
-    Topic topic = new Topic("Math", "From algebra to calculus.");
-    topicDAO.merge(topic);
-    List<Topic> result = topicDAO.findTopicsByTitle("Math");
-    assertTrue(result.contains(topic));
-  }
-  */
 }
+

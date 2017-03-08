@@ -7,7 +7,7 @@ import org.junit.Before;
 
 public class BaseTest {
 
-  protected static EntityManagerFactory entityManagerFactory;
+  private EntityManagerFactory entityManagerFactory;
 
   /*
    All tests in the system should extend this tests class, which sets properties that are required
