@@ -27,9 +27,6 @@ import org.mindrot.jbcrypt.BCrypt;
 })
 public class User {
 
-  @PersistenceContext
-  private static UserDAO userDAO;
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
@@ -47,7 +44,6 @@ public class User {
 
   public User() {
     super();
-    userDAO = UserDAO.getInstance();
   }
 
   /**
@@ -81,21 +77,21 @@ public class User {
    * Adds the User to the database
    */
   public void create() {
-    userDAO.persist(this);
+    UserDAO.getInstance().persist(this);
   }
 
   /**
    * Removes the User from the database
    */
   public void delete() {
-    userDAO.remove(this);
+    UserDAO.getInstance().remove(this);
   }
 
   /**
    * Updates the User's database entry
    */
   public void update() {
-    userDAO.merge(this);
+    UserDAO.getInstance().merge(this);
   }
 
 

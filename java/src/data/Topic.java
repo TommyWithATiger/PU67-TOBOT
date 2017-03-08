@@ -20,9 +20,6 @@ import javax.persistence.Table;
 @Table
 public class Topic {
 
-  @PersistenceContext
-  private static TopicDAO topicDAO;
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
@@ -32,7 +29,6 @@ public class Topic {
 
   public Topic() {
     super();
-    topicDAO = TopicDAO.getInstance();
   }
 
   /**
@@ -75,7 +71,8 @@ public class Topic {
    * @return true if valid parentId, else false
    */
   public boolean setParentId(int parentId) {
-    if (topicDAO != null && topicDAO.findById(parentId) != null || parentId != id) {
+    if (TopicDAO.getInstance() != null && TopicDAO.getInstance().findById(parentId) != null
+        || parentId != id) {
       this.parentId = parentId;
       return true;
     }
@@ -128,7 +125,7 @@ public class Topic {
   }
 
   /**
-   *  Adds this topic to a subject
+   * Adds this topic to a subject
    *
    * @param subject, the Subject you want to add this Topic to
    */
@@ -148,22 +145,22 @@ public class Topic {
   /**
    * Adds the topic to the database
    */
-  public void create(){
-    topicDAO.persist(this);
+  public void create() {
+    TopicDAO.getInstance().persist(this);
   }
 
   /**
    * Removes the topic from the database
    */
-  public void delete(){
-    topicDAO.remove(this);
+  public void delete() {
+    TopicDAO.getInstance().remove(this);
   }
 
   /**
    * Updates the topics database entry
    */
-  public void update(){
-    topicDAO.merge(this);
+  public void update() {
+    TopicDAO.getInstance().merge(this);
   }
 
   /**
@@ -183,10 +180,11 @@ public class Topic {
 
   /**
    * Overrides the hashcode of the object to be equal to its id
+   *
    * @return the id of the object
    */
   @Override
-  public int hashCode(){
+  public int hashCode() {
     return id;
   }
 }

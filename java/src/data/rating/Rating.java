@@ -22,9 +22,6 @@ import javax.persistence.Table;
 @Table
 public class Rating {
 
-  @PersistenceContext
-  public static RatingDAO ratingDAO;
-
   @EmbeddedId
   private RatingKey ratingKeyPK;
 
@@ -34,7 +31,6 @@ public class Rating {
 
   public Rating() {
     super();
-    ratingDAO = RatingDAO.getInstance();
     ratingKeyPK = new RatingKey();
   }
 
@@ -109,21 +105,21 @@ public class Rating {
    * Adds the Rating to the database
    */
   public void create() {
-    ratingDAO.persist(this);
+    RatingDAO.getInstance().persist(this);
   }
 
   /**
    * Removes the Rating from the database
    */
   public void delete() {
-    ratingDAO.remove(this);
+    RatingDAO.getInstance().remove(this);
   }
 
   /**
    * Updates the Rating's database entry
    */
   public void update() {
-    ratingDAO.merge(this);
+    RatingDAO.getInstance().merge(this);
   }
 
   @Override
