@@ -43,21 +43,6 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
   }
 
   /**
-   * Finds one subject that matches the given title
-   *
-   * @param title, the title to query for
-   * @return A Subject object that matches the title
-   */
-  public Subject findSingleSubjectByTitle(String title) {
-    List<Subject> results = findSubjectsByTitle(title);
-    if (!results.isEmpty()) {
-      return results.get(0);
-    }
-    return null;
-    //Fixme handle no result exception here
-  }
-
-  /**
    * Finds subjects that matches the given subject code
    *
    * @param code, the subject code
