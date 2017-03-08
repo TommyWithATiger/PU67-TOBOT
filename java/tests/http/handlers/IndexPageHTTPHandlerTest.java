@@ -20,7 +20,7 @@ public class IndexPageHTTPHandlerTest extends ServerBaseTest {
     printWriter.flush();
 
     // If the test fail at the comparision of the two content byte arrays try increasing the sleep time to make sure all data is received from the server.
-    Thread.sleep(20);
+    Thread.sleep(200);
 
     HttpResponse httpResponse = responseParser.parse();
     assertEquals("HTTP/1.1 200 OK", httpResponse.getStatusLine().toString());
