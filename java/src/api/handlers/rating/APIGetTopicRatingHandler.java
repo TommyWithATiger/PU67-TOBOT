@@ -1,5 +1,6 @@
 package api.handlers.rating;
 
+import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 import static api.helpers.isLoggedInHelper.isLoggedIn;
@@ -16,6 +17,7 @@ import data.rating.RatingConverter;
 import data.rating.RatingKey;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -106,6 +108,48 @@ public class APIGetTopicRatingHandler {
       ratingArray.put(ratingJSON);
     });
     response.put("ratings", ratingArray);
+
+    return response.toString();
+  }
+
+  /**
+   * An API handler for getting all topics with rating if the rating exists
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON object consisting of a variable "ratings" which is an array of JSON objects,
+   * where each JSON object represents a single rating. These JSON objects have the following variables:
+   *        id (int): topicID of the topic
+   *        title (String): Title of the topic
+   *        description (String): Description of the topic
+   *        has-rating (Boolean): Indicates if there is a rating for the given topic
+   *        rating (String)[If 'has-rating' is 'true']: the rating of the topic, has 5 valid values
+   *                            None, Poor, Ok, Good, Superb
+   */
+  public static String getTopicsWithRatings(HttpRequest httpRequest) {
+    checkRequestMethod("POST", httpRequest);
+
+    if (!isLoggedIn(httpRequest)) {
+      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
+    }
+
+    String username = httpRequest.getFirstHeader("X-Username").getValue();
+    // Will never be null due to login check above
+    User user = UserDAO.getInstance().findUserByUsername(username);
+
+    List<Topic> topics = TopicDAO.getInstance().findAll();
+    List<Rating> ratingsUser = RatingDAO.getInstance().findRatingByUser(user);
+
+    JSONObject response = new JSONObject();
+    JSONArray topicArray = new JSONArray();
+    topics.forEach(topic -> {
+      JSONObject aboutTopic = createAboutTopic(topic);
+      Optional<Rating> ratingTopic = ratingsUser.stream()
+          .filter((rating) -> rating.getTopicID() == topic.getId()).findFirst();
+      aboutTopic.put("has-rating", ratingTopic.isPresent());
+      ratingTopic.ifPresent(rating -> aboutTopic.put("rating",
+          RatingConverter.convertEnumToFullRatingName(rating.getRating())));
+    });
+    response.put("topics", topicArray);
 
     return response.toString();
   }
