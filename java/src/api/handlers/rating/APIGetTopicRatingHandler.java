@@ -148,6 +148,7 @@ public class APIGetTopicRatingHandler {
       aboutTopic.put("has-rating", ratingTopic.isPresent());
       ratingTopic.ifPresent(rating -> aboutTopic.put("rating",
           RatingConverter.convertEnumToFullRatingName(rating.getRating())));
+      topicArray.put(aboutTopic);
     });
     response.put("topics", topicArray);
 

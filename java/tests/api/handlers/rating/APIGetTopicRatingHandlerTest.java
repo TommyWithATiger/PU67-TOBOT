@@ -2,6 +2,7 @@ package api.handlers.rating;
 
 import static api.handlers.rating.APIGetTopicRatingHandler.getTopicRatingByTopicID;
 import static api.handlers.rating.APIGetTopicRatingHandler.getTopicRatings;
+import static api.handlers.rating.APIGetTopicRatingHandler.getTopicsWithRatings;
 import static org.junit.Assert.assertEquals;
 
 import api.exceptions.APIBadMethodException;
@@ -131,6 +132,54 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
         + ",\"rating\":\"Good\"},{\"topicID\":" + String.valueOf(topic2.getId())
         + ",\"rating\":\"Poor\"}]}", response);
   }
+
+  @Test(expected = APIRequestForbiddenException.class)
+  public void testGetTopicsWithRatingsNoLogin() {
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", false);
+    getTopicsWithRatings(httpRequest);
+  }
+
+  @Test(expected = APIBadMethodException.class)
+  public void testGetTopicWithRatingsWrongMethod() {
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "GET", true);
+    getTopicsWithRatings(httpRequest);
+  }
+
+  @Test
+  public void testGetTopicsWithRatings() {
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", true);
+    String response = getTopicsWithRatings(httpRequest);
+    assertEquals(
+        "{\"topics\":[{\"rating\":\"Good\",\"description\":\"Description\",\"has-rating\":true,\"id\":"
+            + String.valueOf(topic.getId()) + ",\"title\":\"Test topic\"}]}", response);
+  }
+
+  @Test
+  public void testGetTopicsWithRatingsNoRating() {
+    rating.delete();
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", true);
+    String response = getTopicsWithRatings(httpRequest);
+    assertEquals(
+        "{\"topics\":[{\"description\":\"Description\",\"has-rating\":false,\"id\":"
+            + String.valueOf(topic.getId()) + ",\"title\":\"Test topic\"}]}", response);
+  }
+
+  @Test
+  public void testGetTopicWithRatingsSeveralTopics() {
+    Topic topic2 = new Topic("Test topic 2", "Description");
+    topic2.create();
+    Rating rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.POOR);
+    rating2.create();
+
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", true);
+    String response = getTopicsWithRatings(httpRequest);
+    assertEquals(
+        "{\"topics\":[{\"rating\":\"Good\",\"description\":\"Description\",\"has-rating\":true,\"id\":"
+            + String.valueOf(topic.getId())
+            + ",\"title\":\"Test topic\"},{\"rating\":\"Poor\",\"description\":\"Description\",\"has-rating\":true,\"id\":"
+            + String.valueOf(topic2.getId()) + ",\"title\":\"Test topic 2\"}]}", response);
+  }
+
 
   private HttpRequest buildRequest(String url, String method, boolean setLogin) {
     HttpRequest httpRequest = new BasicHttpRequest(method, url);
