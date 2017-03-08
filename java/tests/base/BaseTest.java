@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 
 public class BaseTest {
+
   private EntityManagerFactory entityManagerFactory;
 
   /*
@@ -20,7 +21,7 @@ public class BaseTest {
   }
 
   @After
-  public void tearDownBaseTest(){
+  public void tearDownBaseTest() {
     entityManagerFactory.close();
   }
 
