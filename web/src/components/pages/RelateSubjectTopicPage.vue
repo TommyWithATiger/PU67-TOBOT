@@ -92,15 +92,15 @@ export default {
         this.topics = []
       })
 
-      api.getSubjectID(this, (data) => {
+      api.getSubjectById(this, this.$route.params.id, (data) => {
         this.subject = data
       }, () => {
         window.location.href = '/subject'
-      }, this.$route.params.id)
+      })
 
-      api.getRelatedTopics(this, (data) => {
+      api.getRelatedTopics(this, this.$route.params.id, (data) => {
         this.relatedTopics = data.related_topics
-      }, () => {}, this.$route.params.id)
+      })
     }
   }
 }

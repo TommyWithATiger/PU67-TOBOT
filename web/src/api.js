@@ -62,23 +62,24 @@ export const api = {
   /**
    * Get topics related to a subject from the API
    * @param {object} ctx Context.
+   * @param {integer} id The subject id.
    * @param {function} callback Handle the request output.
-   * @param {integer} id The subject id
+   * @param {function} error Feedback error.
    * @returns {Promise} A promise from the request.
    */
-  getRelatedTopics (ctx, callback, error, id) {
+  getRelatedTopics (ctx, id, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_RELATED_URL + id, callback, error)
   },
 
   /**
    * Get the subject with the given id from API.
    * @param {object} ctx Context.
+   * @param {integer} id The subject id.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
-   * @param {integer} id The subject id.
    * @returns {Promise} A promise from the request.
    */
-  getSubjectID (ctx, callback, error, id) {
+  getSubjectById (ctx, id, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_ID_URL + id, callback, error)
   },
 
