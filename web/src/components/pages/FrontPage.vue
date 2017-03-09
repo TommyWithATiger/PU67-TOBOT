@@ -7,19 +7,15 @@
 </template>
 
 <script>
-import { auth } from 'auth'
-
 export default {
   name: 'frontpage',
-  data () {
-    return {
-      username: '',
-      usertype: ''
+  computed: {
+    username () {
+      return this.$store.state.user.username
+    },
+    usertype () {
+      return this.$store.state.user.usertype
     }
-  },
-  created () {
-    this.username = auth.getUsername()
-    this.usertype = auth.getUsertype()
   }
 }
 </script>
