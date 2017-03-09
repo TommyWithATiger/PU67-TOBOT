@@ -5,8 +5,11 @@ import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
+import data.user.User;
 import data.user.UserDataValidator;
 import data.user.UserDataValidator.IsValidToken;
+import data.user.UserType;
+import data.user.UserTypeConverter;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -62,6 +65,65 @@ public class APIRegistrationHandler {
     if (!emailValid.isValid()) {
       response.put("email-message", emailValid.getMessage());
     }
+
+    return response.toString();
+  }
+
+  /**
+   * An API handler for registering a user. Requires the following fields to be set:
+   *    username (String): The username to register
+   *    password (String): The password to register
+   *    email (String): The email to register
+   *    user-type (String): The user type
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON string containing the following variables
+   *    registered (Boolean): Indicating if the user is registered
+   */
+  public static String registerUser(HttpRequest httpRequest) {
+    checkRequestMethod("POST", httpRequest);
+
+    String requestContent = checkAndGetEntityContent(httpRequest);
+
+    JSONObject jsonObject = checkAndGetJSON(requestContent);
+
+    if (!jsonObject.has("username") || !jsonObject.has("password") || !jsonObject.has("email")
+        || !jsonObject.has("user-type")) {
+      throw new APIBadRequestException("Request must have the required fields set");
+    }
+
+    String username = jsonObject.getString("username");
+    if (!UserDataValidator.checkUsername(username).isValid()) {
+      throw new APIBadRequestException("Username not valid");
+    }
+
+    String password = jsonObject.getString("password");
+    if (!UserDataValidator.checkPassword(password).isValid()) {
+      throw new APIBadRequestException("Password is not valid");
+    }
+
+    String email = jsonObject.getString("email");
+    if (!UserDataValidator.checkPassword(email).isValid()) {
+      throw new APIBadRequestException("Email is not valid");
+    }
+
+    UserType userType;
+    String userTypeString = jsonObject.getString("user-type");
+    try {
+      userType = UserTypeConverter.stringToUserType(userTypeString);
+      if (userType == UserType.ADMIN) {
+        throw new APIBadRequestException("Cannot register admin");
+      }
+    } catch (IllegalArgumentException iae) {
+      throw new APIBadRequestException("User-type is not valid");
+    }
+
+    User user = new User(username, email, password, userType);
+    user.create();
+
+    JSONObject response = new JSONObject();
+
+    response.put("registered", true);
 
     return response.toString();
   }
