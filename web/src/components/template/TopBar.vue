@@ -6,7 +6,7 @@
     <div class="header-flat header-fill-calc">
       <div v-if="authenticated" class="header-flat header-fill">
         <div v-for="link in links" v-if="checkUsertype(link.users)" class="header-navigation-button">
-          <h2><router-link :to="link.path">{{ link.name }}</router-link></h2>
+          <h2><router-link exact :to="link.path">{{ link.name }}</router-link></h2>
         </div>
         <SearchBar />
         <div class="header-user-info">
@@ -104,7 +104,8 @@ export default {
   text-align: center;
 }
 
-.header-navigation-button > h2 > a:hover {
+.header-navigation-button > h2 > a:hover,
+.header-navigation-button > h2 > a.router-link-active {
   border-bottom: 4px solid #87CEEB;
 }
 
