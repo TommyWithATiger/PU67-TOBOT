@@ -97,6 +97,15 @@ public class Rating {
   }
 
   /**
+   * Get the rating as an integer from 1 to 5
+   *
+   * @return the integer representing rating
+   */
+  public int getIntRating() {
+    return rating.value();
+  }
+
+  /**
    * Set the rating
    *
    * @param ratingEnum the rating
