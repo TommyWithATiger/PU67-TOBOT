@@ -1,7 +1,7 @@
 <template>
-  <div class="search-container" v-on:blur="hideResult">
-    <input class="search-box" v-model="search" v-on:focus="showResult = true" placeholder="Søk..." />
-    <div class="search-result" v-if="showResult && search.length && result$">
+  <div class="search-container">
+    <input class="search-box" v-model="search" placeholder="Søk..." v-on:focus="showResult" v-on:blur="hideResult"/>
+    <div class="search-result" v-if="showBar && search.length && result$">
       <router-link v-for="s in result$.subjects" :to="'/subject/' + s.id">{{ s.title }}</router-link>
     </div>
   </div>
@@ -17,7 +17,8 @@ export default {
   data () {
     return {
       search: '',
-      showResult: false
+      showBar: false,
+      hidingResult: false
     }
   },
   watch: {
@@ -28,10 +29,15 @@ export default {
     }
   },
   methods: {
+    showResult () {
+      this.showBar = true
+      this.hidingResult = false
+    },
     hideResult () {
+      this.hidingResult = true
       setTimeout(() => {
-        this.showResult = false
-      }, 1000)
+        if (this.hidingResult) this.showBar = false
+      }, 100)
     }
   },
   subscriptions () {
