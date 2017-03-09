@@ -6,6 +6,9 @@
     <div class="header-flat header-fill-calc">
       <div v-if="authenticated" class="header-flat header-fill">
         <div class="header-navigation-button">
+          <h2><router-link to="/">Hjem</router-link></h2>
+        </div>
+        <div class="header-navigation-button">
           <h2><router-link to="/subject">Emner</router-link></h2>
         </div>
         <div class="header-navigation-button">
