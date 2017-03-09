@@ -1,24 +1,33 @@
 <template>
   <div class="search-container">
-    <input class="search-box" v-model="search" placeholder="Søk..." v-on:focus="showResult" v-on:blur="hideResult"/>
-    <div class="search-result" v-if="showBar && search.length && (subjectResult$ || topicResult$)">
-      <router-link v-for="s in subjectResult$" :to="'/subject/' + s.id">{{ s.title }}</router-link>
-      <router-link v-for="s in topicResult$" :to="'/topic/' + s.id">{{ s.title }}</router-link>
+    <Search
+      class="search-box"
+      v-on:topicResult="topicHandler"
+      v-on:subjectResult="subjectHandler"
+      v-on:search="termChange"
+      placeholder="Søk..."
+    />
+    <div class="search-result" v-if="(subjects && subjects.length) || (topics && topics.length)">
+      <router-link v-for="s in subjects" :to="'/subject/' + s.id">{{ s.title }}</router-link>
+      <router-link v-for="s in topics" :to="'/topic/' + s.id">{{ s.title }}</router-link>
       <router-link :to="'/search/' + search">Flere resultater...</router-link>
+    </div>
+    <div class="search-result" v-else-if="search.length > 1">
+      <p>Fant ingen resultater.</p>
     </div>
   </div>
 </template>
 
 <script>
-import Rx from 'rxjs/Rx'
-
-import { api } from 'api'
+import Search from 'components/search/Search'
 
 export default {
-  name: 'header',
+  name: 'searchbar',
   data () {
     return {
       search: '',
+      subjects: [],
+      topics: [],
       showBar: false,
       hidingResult: false
     }
@@ -35,6 +44,15 @@ export default {
     }
   },
   methods: {
+    topicHandler (topics) {
+      this.topics = topics
+    },
+    subjectHandler (subjects) {
+      this.subjects = subjects
+    },
+    termChange (term) {
+      this.search = term
+    },
     showResult () {
       this.showBar = true
       this.hidingResult = false
@@ -46,35 +64,8 @@ export default {
       }, 100)
     }
   },
-  subscriptions () {
-    return {
-      subjectResult$: this.$watchAsObservable('search')
-        .pluck('newValue')
-        .filter(term => term.length > 1)
-        .debounceTime(100)
-        .distinctUntilChanged()
-        .switchMap((term) => {
-          return Rx.Observable.fromPromise(
-            api.getSubjectsByTitle(this, term)
-          )
-        })
-        .map((res) => {
-          return res.subjects
-        }),
-      topicResult$: this.$watchAsObservable('search')
-        .pluck('newValue')
-        .filter(term => term.length > 1)
-        .debounceTime(100)
-        .distinctUntilChanged()
-        .switchMap((term) => {
-          return Rx.Observable.fromPromise(
-            api.getTopicsByTitle(this, term)
-          )
-        })
-        .map((res) => {
-          return res.topics
-        })
-    }
+  components: {
+    Search
   }
 }
 </script>
@@ -95,16 +86,17 @@ export default {
 .search-result {
   position: absolute;
   width: 100%;
-  background-color: rgba(0, 0, 0, .2);
+  background-color: #aaa;
   display: flex;
   flex-direction: column;
 }
 
-.search-result > a {
+.search-result > a,
+.search-result > p {
   padding: 4px 8px;
   box-sizing: border-box;
 }
 .search-result > a:hover {
-  background-color: rgba(0, 0, 0, .2);
+  background-color: #888;
 }
 </style>
