@@ -108,12 +108,12 @@ export const api = {
   /**
    * Get the topic with the given id from API.
    * @param {object} ctx Context.
+   * @param {integer} id The topic id.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
-   * @param {integer} id The topic id.
    * @returns {Promise} A promise from the request.
    */
-  getTopicById (ctx, callback, error, id) {
+  getTopicById (ctx, id, callback, error) {
     return this.getRequest(ctx, TOPIC_GET_ID_URL + id, callback, error)
   },
 
