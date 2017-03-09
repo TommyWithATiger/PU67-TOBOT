@@ -12,6 +12,7 @@ import api.handlers.topic.APIGetTopicHandler;
 import api.handlers.user.APILoggedInCheckHandler;
 import api.handlers.user.APILoginHandler;
 import api.handlers.user.APILogoutHandler;
+import api.handlers.user.APIRegistrationHandler;
 import java.util.HashMap;
 import java.util.function.Function;
 import org.apache.http.HttpRequest;
@@ -54,6 +55,9 @@ public class APIDelegator {
     handlerRegistry.put("user\\/login", APILoginHandler::handleLoginRequest);
     handlerRegistry.put("user\\/logout", APILogoutHandler::handleLogoutRequest);
     handlerRegistry.put("user\\/check", APILoggedInCheckHandler::handleLoggedInCheckRequest);
+
+    // User registration
+    handlerRegistry.put("user\\/registration\\/check", APIRegistrationHandler::checkRegistrationData);
 
     // Subject and topics
     handlerRegistry.put("topic\\/create", APIAddTopicHandler::handleAddTopicRequest);

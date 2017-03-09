@@ -29,7 +29,7 @@ public class APIRegistrationHandler {
    *    email-message (String) [if email-valid is 'false']: A message about why the email is not valid
    *
    */
-  public String checkRegistrationData(HttpRequest httpRequest) {
+  public static String stcheckRegistrationData(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
     String requestContent = checkAndGetEntityContent(httpRequest);
