@@ -59,6 +59,11 @@ export default {
     termChange (term) {
       this.showBar = !!term.length
       this.search = term
+      window.history.pushState(
+        'search',
+        'TOBOT',
+        '/search/' + this.search
+      )
     }
   },
   components: {

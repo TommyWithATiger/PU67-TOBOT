@@ -20,7 +20,6 @@ export default {
   },
   methods: {
     searchHandler () {
-      // this.$router.replace('/search/' + this.search)
       this.$emit('search', this.search)
       if (!this.search.length) {
         this.$emit('subjectResult', [])
