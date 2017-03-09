@@ -20,16 +20,16 @@
     <h2>Alle emner</h2>
     <div v-if="subjects.length">
       <div class="subject-info subject-info-header">
-        <div class="subject-code"> Emnekode </div>
-        <div class="subject-title"> Tittel </div>
-        <div class="subject-description"> Beskrivelse </div>
-        <div class="subject-relate"> Temaer </div>
+        <div class="subject-code">Emnekode</div>
+        <div class="subject-title">Tittel</div>
+        <div class="subject-description">Beskrivelse</div>
+        <div class="subject-relate">Temaer</div>
       </div>
       <div v-for="s in subjects" class="subject-info">
-        <div class="subject-code"> {{ s.subjectCode }} </div>
-        <div class="subject-title"> {{ s.title }} </div>
-        <div class="subject-description"> {{ s.description }} </div>
-        <div class="subject-relate"> <router-link :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">Temaer</router-link> </div>
+        <div class="subject-code">{{ s.subjectCode }}</div>
+        <div class="subject-title">{{ s.title }}</div>
+        <div class="subject-description">{{ s.description }}</div>
+        <div class="subject-relate"><router-link :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">Temaer</router-link></div>
       </div>
     </div>
     <div v-else><span v-if="!getFeedback.length">Ingen emner.</span></div>
@@ -64,13 +64,11 @@ export default {
       this.getFeedback = 'Klarte ikke å hente emner.'
     })
   },
-  computed: {
-  },
   methods: {
     addSubject () {
       this.addFeedback = ''
-      api.addSubject(this, this.subject, () => {
-        location.reload()
+      api.addSubject(this, this.subject, (data) => {
+        this.subjects.push(data)
         this.addFeedback = 'Lagt til i database.'
       }, () => {
         this.addFeedback = 'Feilet med å legge til.'
