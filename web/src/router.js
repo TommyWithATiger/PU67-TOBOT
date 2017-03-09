@@ -7,6 +7,7 @@ import UserPage from 'components/pages/UserPage'
 import TopicsPage from 'components/pages/TopicsPage'
 import SubjectsPage from 'components/pages/SubjectsPage'
 import TopicPage from 'components/pages/TopicPage'
+import SearchPage from 'components/pages/SearchPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import { auth } from 'auth'
 
@@ -63,6 +64,18 @@ export const router = new Router({
       path: '/topic/:id',
       name: 'Topic',
       component: TopicPage,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/search',
+      name: 'SearchPage',
+      component: SearchPage,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/search/:term',
+      name: 'Search',
+      component: SearchPage,
       beforeEnter: requireAuth
     },
     {
