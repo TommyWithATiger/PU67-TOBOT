@@ -37,6 +37,7 @@ public class Subject {
   private Collection<Topic> topics;
 
   @ManyToMany
+  @JoinTable(name="EDITORS")
   private Collection<User> editors;
 
   @ManyToMany
