@@ -45,8 +45,8 @@ export default {
           )
         })
         .map((res) => {
-          this.$emit('subjectResult', res.subjects.slice(0, 3))
-          return res.subjects.slice(0, 3)
+          this.$emit('subjectResult', res.subjects)
+          return res.subjects
         }),
       topicResult$: this.$watchAsObservable('search')
         .pluck('newValue')
@@ -59,8 +59,8 @@ export default {
           )
         })
         .map((res) => {
-          this.$emit('topicResult', res.topics.slice(0, 3))
-          return res.topics.slice(0, 3)
+          this.$emit('topicResult', res.topics)
+          return res.topics
         })
     }
   }
