@@ -118,9 +118,31 @@ export const auth = {
 
   /**
    * Returning if the user is authenticated.
+   * @param {function} success If the auth succeeded.
+   * @param {function} failed If the auth failed.
    * @returns {boolean} Token isset.
    */
-  isAuth () {
+  isAuth (success, failed) {
+    try {
+      if (localStorage.getItem('app_token')) {
+        api.checkUser(null, (data) => {
+          success()
+        }, () => {
+          failed()
+        })
+      }
+
+      failed()
+    } catch (exception) {
+      failed()
+    }
+  },
+
+  /**
+   * Returning if the user has a token.
+   * @returns {boolean} Token isset.
+   */
+  hasToken () {
     try {
       return !!localStorage.getItem('app_token')
     } catch (exception) {
