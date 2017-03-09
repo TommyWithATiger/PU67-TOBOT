@@ -2,9 +2,9 @@
   <div class="search-container">
     <Search
       class="search-box"
-      v-on:topicResult="topicHandler"
-      v-on:subjectResult="subjectHandler"
-      v-on:search="termChange"
+      @topicResult="topicHandler"
+      @subjectResult="subjectHandler"
+      @search="termChange"
       placeholder="Søk..."
     />
     <div class="search-result" v-if="showBar && ((subjects && subjects.length) || (topics && topics.length))">
