@@ -11,6 +11,7 @@
         <div class="header-navigation-button">
           <h2><router-link to="/topic">Temaer</router-link></h2>
         </div>
+        <SearchBar v-if="!isSearchRoute" />
         <div class="header-user-info">
         <!--
           No information here at the moment, wait for next iteration
@@ -32,6 +33,7 @@
 
 <script>
 import LogoutBtn from 'components/auth/LogoutBtn'
+import SearchBar from 'components/search/SearchBar'
 import { auth } from 'auth'
 
 export default {
@@ -54,13 +56,19 @@ export default {
       return this.$store.state
     },
 
+    // Checking if the route is on search page. Else hide searchbar.
+    isSearchRoute () {
+      return /^\/search/.test(this.$route.path)
+    },
+
     // Return user url
     getUserUrl () {
       return `/user/${this.$store.state.user.username}`
     }
   },
   components: {
-    LogoutBtn
+    LogoutBtn,
+    SearchBar
   }
 }
 </script>

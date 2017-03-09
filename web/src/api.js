@@ -5,6 +5,8 @@ import { API_URL } from './constants'
 const LOGIN_URL = `${API_URL}/user/login`
 
 const TOPIC_GET_URL = `${API_URL}/topic/get`
+const TOPIC_GET_TITLE_URL = `${API_URL}/topic/get/?title=`
+const TOPIC_GET_ID_URL = `${API_URL}/topic/get/?id=`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
 
 const TOPIC_RATE_URL = `${API_URL}/rating/rate`
@@ -12,6 +14,7 @@ const TOPIC_RATE_URL = `${API_URL}/rating/rate`
 const TOPIC_GET_RATED_URL = `${API_URL}/rating/get`
 
 const SUBJECT_GET_URL = `${API_URL}/subject/get`
+const SUBJECT_GET_TITLE_URL = `${API_URL}/subject/get/?title=`
 const SUBJECT_GET_ID_URL = `${API_URL}/subject/get/?id=`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 const SUBJECT_GET_RELATED_URL = `${API_URL}/subject/related/?id=`
@@ -38,9 +41,22 @@ export const api = {
    * @param {object} ctx Context.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   getSubjects (ctx, callback, error) {
-    this.getRequest(ctx, SUBJECT_GET_URL, callback, error)
+    return this.getRequest(ctx, SUBJECT_GET_URL, callback, error)
+  },
+
+  /**
+   * Get all subjects from API based on a search term.
+   * @param {object} ctx Context.
+   * @param {string} term The search term to search for.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getSubjectsByTitle (ctx, term, callback, error) {
+    return this.getRequest(ctx, SUBJECT_GET_TITLE_URL + term, callback, error)
   },
 
   /**
@@ -48,20 +64,22 @@ export const api = {
    * @param {object} ctx Context.
    * @param {function} callback Handle the request output.
    * @param {integer} id The subject id
+   * @returns {Promise} A promise from the request.
    */
   getRelatedTopics (ctx, callback, error, id) {
-    this.getRequest(ctx, SUBJECT_GET_RELATED_URL + id, callback, error)
+    return this.getRequest(ctx, SUBJECT_GET_RELATED_URL + id, callback, error)
   },
 
   /**
-   * Get the subject with the given id form API.
+   * Get the subject with the given id from API.
    * @param {object} ctx Context.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
    * @param {integer} id The subject id.
+   * @returns {Promise} A promise from the request.
    */
   getSubjectID (ctx, callback, error, id) {
-    this.getRequest(ctx, SUBJECT_GET_ID_URL + id, callback, error)
+    return this.getRequest(ctx, SUBJECT_GET_ID_URL + id, callback, error)
   },
 
   /**
@@ -69,22 +87,48 @@ export const api = {
    * @param {object} ctx Context.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   getTopics (ctx, callback, error) {
-    this.getRequest(ctx, TOPIC_GET_URL, callback, error)
+    return this.getRequest(ctx, TOPIC_GET_URL, callback, error)
+  },
+
+  /**
+   * Get all topics from API based on a search term.
+   * @param {object} ctx Context.
+   * @param {string} term The search term to search for.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getTopicsByTitle (ctx, term, callback, error) {
+    return this.getRequest(ctx, TOPIC_GET_TITLE_URL + term, callback, error)
+  },
+
+  /**
+   * Get the topic with the given id from API.
+   * @param {object} ctx Context.
+   * @param {integer} id The topic id.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getTopicById (ctx, id, callback, error) {
+    return this.getRequest(ctx, TOPIC_GET_ID_URL + id, callback, error)
   },
 
   /**
    * Post a user to the API.
    * @param {object} ctx Context.
    * @param {object} data The data to post in request.
+   * @returns {Promise} A promise from the request.
    */
   postUserLogin (ctx, data, callback, error) {
     let req = {
       body: data
     }
 
-    this.postRequest(ctx, LOGIN_URL, req, callback, error)
+    return this.postRequest(ctx, LOGIN_URL, req, callback, error)
   },
 
   /**
@@ -93,6 +137,7 @@ export const api = {
    * @param {object} subject The subject to post in request.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   addSubject (ctx, subject, callback, error) {
     let data = {
@@ -107,7 +152,7 @@ export const api = {
       body: data
     }
 
-    this.postRequest(ctx, SUBJECT_ADD_URL, req, callback, error)
+    return this.postRequest(ctx, SUBJECT_ADD_URL, req, callback, error)
   },
 
   /**
@@ -116,6 +161,7 @@ export const api = {
    * @param {object} topic The topic to post in request.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   addTopic (ctx, topic, callback, error) {
     let data = {
@@ -128,16 +174,17 @@ export const api = {
       body: data
     }
 
-    this.postRequest(ctx, TOPIC_ADD_URL, req, callback, error)
+    return this.postRequest(ctx, TOPIC_ADD_URL, req, callback, error)
   },
 
   /**
    * Rate a topic
    * @param {object} ctx Context.
-   * @param {number} id The topic id to rate
-   * @param {string} rating The rating to give the topic
-   * @param {function} callback Handle the request output
-   * @param {function} error Feedback error
+   * @param {number} id The topic id to rate.
+   * @param {string} rating The rating to give the topic.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   rateTopic (ctx, id, rating, callback, error) {
     let data = {
@@ -149,7 +196,7 @@ export const api = {
       body: data
     }
 
-    this.postRequest(ctx, TOPIC_RATE_URL, req, callback, error)
+    return this.postRequest(ctx, TOPIC_RATE_URL, req, callback, error)
   },
 
   /**
@@ -157,13 +204,14 @@ export const api = {
    * @param {object} ctx Context.
    * @param {function} callback Hande the request output.
    * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   getRatedTopics (ctx, callback, error) {
     let req = {
       body: ' '
     }
 
-    this.postRequest(ctx, TOPIC_GET_RATED_URL, req, callback, error)
+    return this.postRequest(ctx, TOPIC_GET_RATED_URL, req, callback, error)
   },
 
   /**
@@ -173,6 +221,7 @@ export const api = {
    * @param {object} subject The subject to relate
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   relateSubjectTopic (ctx, topic, subject, callback, error) {
     let data = {
@@ -184,7 +233,7 @@ export const api = {
       body: data
     }
 
-    this.postRequest(ctx, SUBJECT_TOPIC_RELATE_URL, req, callback, error)
+    return this.postRequest(ctx, SUBJECT_TOPIC_RELATE_URL, req, callback, error)
   },
 
   /**
@@ -193,6 +242,7 @@ export const api = {
    * @param {object} req Data to send with the POST-request.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   postRequest (ctx, url, req, callback, error) {
     req.headers = Object.assign({}, req.headers || {}, {
@@ -210,7 +260,7 @@ export const api = {
       : JSON.stringify(req.body)
 
     // ctx.$http.post(url, req.body, req.headers)
-    fetch(new Request(url, req))
+    return fetch(new Request(url, req))
     .then(res => res.json())
     .then(callback)
     .catch(error)
@@ -221,9 +271,10 @@ export const api = {
    * @param {string} url URL address to send to.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
    */
   getRequest (ctx, url, callback, error) {
-    ctx.$http.get(url)
+    return ctx.$http.get(url)
     .then(res => res.json())
     .then(callback)
     .catch(error)
