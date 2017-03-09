@@ -141,6 +141,42 @@ export const auth = {
   },
 
   /**
+   * Returning the usertype if the user is authenticated.
+   * @returns {string} Usertype.
+   */
+  getUsertype () {
+    try {
+      return !!localStorage.getItem('app_token') && localStorage.getItem('usertype')
+    } catch (exception) {
+      return false
+    }
+  },
+
+  /**
+   * Returning if the usertype is admin.
+   * @returns {string} Is admin.
+   */
+  isAdmin () {
+    return this.getUsertype() === 'admin'
+  },
+
+  /**
+   * Returning if the usertype is teacher.
+   * @returns {string} Is teacher.
+   */
+  isTeacher () {
+    return this.getUsertype() === 'teacher'
+  },
+
+  /**
+   * Returning if the usertype is student.
+   * @returns {string} Is student.
+   */
+  isStudent () {
+    return this.getUsertype() === 'student'
+  },
+
+  /**
    * The object to be passed as a header for authenticated requests.
    * @returns {object} Header object.
    */
