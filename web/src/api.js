@@ -34,6 +34,21 @@ export const api = {
   },
 
   /**
+   * Get the user from API.
+   * @param {object} ctx Context.
+   */
+  checkUser (ctx, callback, error) {
+    let req = {
+      body: {
+        username: auth.getUsername(),
+        token: auth.getToken()
+      }
+    }
+
+    return this.postRequest(ctx, USER_INFO_URL, req, callback, error)
+  },
+
+  /**
    * Get all subjects from API.
    * @param {object} ctx Context.
    * @param {function} callback Handle the request output.
