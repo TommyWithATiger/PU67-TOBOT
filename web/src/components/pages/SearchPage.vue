@@ -4,9 +4,10 @@
     <div class="search-container">
       <Search
         class="search-box"
-        v-on:topicResult="topicHandler"
-        v-on:subjectResult="subjectHandler"
-        v-on:search="termChange"
+        @topicResult="topicHandler"
+        @subjectResult="subjectHandler"
+        @search="termChange"
+        :initialValue="search"
         placeholder="Søk..."
       />
       <div class="search-results">
@@ -44,6 +45,9 @@ export default {
       subjects: [],
       topics: []
     }
+  },
+  created () {
+    this.search = this.$route.params.term
   },
   methods: {
     topicHandler (topics) {
