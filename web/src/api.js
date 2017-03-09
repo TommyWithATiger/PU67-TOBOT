@@ -26,7 +26,11 @@ export const api = {
    * @param {object} ctx Context.
    */
   getUser (ctx, callback, error) {
-    return this.postRequest(ctx, USER_INFO_URL, callback, error)
+    let req = {
+      body: ' '
+    }
+
+    return this.postRequest(ctx, USER_INFO_URL, req, callback, error)
   },
 
   /**
