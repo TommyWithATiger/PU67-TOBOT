@@ -9,6 +9,7 @@ import api.handlers.subject.APIAddSubjectHandler;
 import api.handlers.subject.APIGetSubjectHandler;
 import api.handlers.topic.APIAddTopicHandler;
 import api.handlers.topic.APIGetTopicHandler;
+import api.handlers.user.APIGetUserInfoHandler;
 import api.handlers.user.APILoggedInCheckHandler;
 import api.handlers.user.APILoginHandler;
 import api.handlers.user.APILogoutHandler;
@@ -54,6 +55,7 @@ public class APIDelegator {
     handlerRegistry.put("user\\/login", APILoginHandler::handleLoginRequest);
     handlerRegistry.put("user\\/logout", APILogoutHandler::handleLogoutRequest);
     handlerRegistry.put("user\\/check", APILoggedInCheckHandler::handleLoggedInCheckRequest);
+    handlerRegistry.put("user\\/info", APIGetUserInfoHandler::getUserInfo);
 
     // Subject and topics
     handlerRegistry.put("topic\\/create", APIAddTopicHandler::handleAddTopicRequest);
