@@ -1,8 +1,10 @@
 <template>
   <div class="search-container">
     <input class="search-box" v-model="search" placeholder="Søk..." v-on:focus="showResult" v-on:blur="hideResult"/>
-    <div class="search-result" v-if="showBar && search.length && result$">
-      <router-link v-for="s in result$.subjects" :to="'/subject/' + s.id">{{ s.title }}</router-link>
+    <div class="search-result" v-if="showBar && search.length && (subjectResult$ || topicResult$)">
+      <router-link v-for="s in subjectResult$" :to="'/subject/' + s.id">{{ s.title }}</router-link>
+      <router-link v-for="s in topicResult$" :to="'/topic/' + s.id">{{ s.title }}</router-link>
+      <router-link :to="'/search/' + search">Flere resultater...</router-link>
     </div>
   </div>
 </template>
@@ -46,7 +48,7 @@ export default {
   },
   subscriptions () {
     return {
-      result$: this.$watchAsObservable('search')
+      subjectResult$: this.$watchAsObservable('search')
         .pluck('newValue')
         .filter(term => term.length > 1)
         .debounceTime(100)
@@ -57,9 +59,20 @@ export default {
           )
         })
         .map((res) => {
-          return {
-            subjects: res.subjects
-          }
+          return res.subjects
+        }),
+      topicResult$: this.$watchAsObservable('search')
+        .pluck('newValue')
+        .filter(term => term.length > 1)
+        .debounceTime(100)
+        .distinctUntilChanged()
+        .switchMap((term) => {
+          return Rx.Observable.fromPromise(
+            api.getTopicsByTitle(this, term)
+          )
+        })
+        .map((res) => {
+          return res.topics
         })
     }
   }
