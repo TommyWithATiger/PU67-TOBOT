@@ -7,12 +7,12 @@
       v-on:search="termChange"
       placeholder="Søk..."
     />
-    <div class="search-result" v-if="(subjects && subjects.length) || (topics && topics.length)">
+    <div class="search-result" v-if="showBar && ((subjects && subjects.length) || (topics && topics.length))">
       <router-link v-for="s in subjects" :to="'/subject/' + s.id">{{ s.title }}</router-link>
       <router-link v-for="s in topics" :to="'/topic/' + s.id">{{ s.title }}</router-link>
       <router-link :to="'/search/' + search">Flere resultater...</router-link>
     </div>
-    <div class="search-result" v-else-if="search.length > 1">
+    <div class="search-result" v-else-if="search.length > 1 && showBar">
       <p>Fant ingen resultater.</p>
     </div>
   </div>
@@ -34,6 +34,7 @@ export default {
   },
   watch: {
     '$route' (to, from) {
+      this.hideResult()
       let sFrom = from.path.split('/')
       let sTo = to.path.split('/')
       if (sFrom[1] === sTo[1] && sTo.length > 2 && sFrom.length > 2) {
@@ -51,6 +52,7 @@ export default {
       this.subjects = subjects
     },
     termChange (term) {
+      this.showBar = !!term.length
       this.search = term
     },
     showResult () {

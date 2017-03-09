@@ -23,6 +23,11 @@ export default {
       }
     }
   },
+  watch: {
+    '$route' (to, from) {
+      this.search = ''
+    }
+  },
   subscriptions () {
     return {
       subjectResult$: this.$watchAsObservable('search')
