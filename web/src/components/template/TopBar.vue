@@ -11,7 +11,7 @@
         <div class="header-navigation-button">
           <h2><router-link to="/topic">Temaer</router-link></h2>
         </div>
-        <SearchBar />
+        <SearchBar v-if="!isSearchRoute" />
         <div class="header-user-info">
         <!--
           No information here at the moment, wait for next iteration
@@ -54,6 +54,11 @@ export default {
     // Making store state available through state.
     state () {
       return this.$store.state
+    },
+
+    // Checking if the route is on search page. Else hide searchbar.
+    isSearchRoute () {
+      return /^\/search/.test(this.$route.path)
     },
 
     // Return user url
