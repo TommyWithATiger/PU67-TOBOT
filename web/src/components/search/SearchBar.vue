@@ -41,7 +41,7 @@ export default {
       this.hidingResult = true
       setTimeout(() => {
         if (this.hidingResult) this.showBar = false
-      }, 100)
+      }, 300)
     }
   },
   subscriptions () {
