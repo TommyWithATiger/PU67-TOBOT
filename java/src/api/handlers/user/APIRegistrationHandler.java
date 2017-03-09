@@ -50,14 +50,14 @@ public class APIRegistrationHandler {
     }
 
     // Password check
-    IsValidToken passwordValid = UserDataValidator.checkUsername(jsonObject.getString("password"));
+    IsValidToken passwordValid = UserDataValidator.checkPassword(jsonObject.getString("password"));
     response.put("password-valid", passwordValid.isValid());
     if (!passwordValid.isValid()) {
       response.put("password-message", passwordValid.getMessage());
     }
 
     // Password check
-    IsValidToken emailValid = UserDataValidator.checkUsername(jsonObject.getString("email"));
+    IsValidToken emailValid = UserDataValidator.checkEmail(jsonObject.getString("email"));
     response.put("email-valid", emailValid.isValid());
     if (!emailValid.isValid()) {
       response.put("email-message", emailValid.getMessage());
