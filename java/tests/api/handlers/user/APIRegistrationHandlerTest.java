@@ -1,11 +1,15 @@
 package api.handlers.user;
 
 import static api.handlers.user.APIRegistrationHandler.checkRegistrationData;
+import static api.handlers.user.APIRegistrationHandler.registerUser;
 import static org.junit.Assert.*;
 
 import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
 import base.BaseTest;
+import data.dao.UserDAO;
+import data.user.User;
+import data.user.UserType;
 import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
 import org.apache.http.entity.BasicHttpEntity;
@@ -18,7 +22,7 @@ public class APIRegistrationHandlerTest extends BaseTest {
 
   @Test(expected = APIBadMethodException.class)
   public void testCheckRegistrationDataWrongMethod() {
-    HttpRequest httpRequest = buildRequestContentRegistration("registration/check", "GET",
+    HttpRequest httpRequest = buildRequestContentRegistrationCheck("registration/check", "GET",
         "username", "password", "user@email.com");
     checkRegistrationData(httpRequest);
   }
@@ -37,7 +41,7 @@ public class APIRegistrationHandlerTest extends BaseTest {
 
   @Test
   public void testCheckRegistrationData() {
-    HttpRequest httpRequest = buildRequestContentRegistration("registration/check", "POST",
+    HttpRequest httpRequest = buildRequestContentRegistrationCheck("registration/check", "POST",
         "username", "password", "user@email.com");
     String response = checkRegistrationData(httpRequest);
     assertEquals("{\"password-valid\":true,\"username-valid\":true,\"email-valid\":true}",
@@ -46,7 +50,8 @@ public class APIRegistrationHandlerTest extends BaseTest {
 
   @Test
   public void testCheckRegistrationDataFieldsNotValid() {
-    HttpRequest httpRequest = buildRequestContentRegistration("registration/check", "POST", "uu",
+    HttpRequest httpRequest = buildRequestContentRegistrationCheck("registration/check", "POST",
+        "uu",
         "pp", "user");
     String response = checkRegistrationData(httpRequest);
     assertEquals(
@@ -54,16 +59,93 @@ public class APIRegistrationHandlerTest extends BaseTest {
         response);
   }
 
+  @Test(expected = APIBadMethodException.class)
+  public void testRegisterUserWrongMethod() {
+    HttpRequest httpRequest = buildRequestContentRegistration("registration", "GET", "username",
+        "password", "user@email.com", "Student");
+    registerUser(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testRegisterUserNoContent() {
+    HttpRequest httpRequest = new BasicHttpRequest("POST", "registration");
+    registerUser(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testRegisterUserNoFieldsSet() {
+    HttpRequest httpRequest = buildRequestContent("registration", "POST", "{}");
+    registerUser(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testRegisterUserUsernameNotValid() {
+    HttpRequest httpRequest = buildRequestContentRegistration("registration", "POST", "aa",
+        "password", "user@email.com", "Student");
+    registerUser(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testRegisterUserPasswordNotValid() {
+    HttpRequest httpRequest = buildRequestContentRegistration("registration", "POST", "username",
+        "a", "user@email.com", "Student");
+    registerUser(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testRegisterUserEmailNotValid() {
+    HttpRequest httpRequest = buildRequestContentRegistration("registration", "POST", "username",
+        "password", "email", "Student");
+    registerUser(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testRegisterUserUserTypeNotValid() {
+    HttpRequest httpRequest = buildRequestContentRegistration("registration", "POST", "username",
+        "password", "user@email.com", "notavalidusertype");
+    registerUser(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testRegisterUserUserTypeAdmin() {
+    HttpRequest httpRequest = buildRequestContentRegistration("registration", "POST", "username",
+        "password", "user@email.com", "Admin");
+    registerUser(httpRequest);
+  }
+
+  @Test
+  public void testRegisterUser() {
+    HttpRequest httpRequest = buildRequestContentRegistration("registration", "POST", "username",
+        "password", "user@email.com", "Student");
+    String response = registerUser(httpRequest);
+    assertEquals("{\"registered\":true}", response);
+    User user = UserDAO.getInstance().findUserByUsername("username");
+    assertNotNull(user);
+    assertEquals("user@email.com", user.getEmail());
+    assertTrue(user.checkPassword("password"));
+    assertEquals(UserType.STUDENT, user.getUserType());
+  }
+
   private HttpRequest buildRequest(String url, String method) {
     return new BasicHttpEntityEnclosingRequest(method, url);
   }
 
-  private HttpRequest buildRequestContentRegistration(String url, String method, String username,
-      String password, String email) {
+  private HttpRequest buildRequestContentRegistrationCheck(String url, String method,
+      String username, String password, String email) {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("username", username);
     jsonObject.put("password", password);
     jsonObject.put("email", email);
+    return buildRequestContent(url, method, jsonObject.toString());
+  }
+
+  private HttpRequest buildRequestContentRegistration(String url, String method, String username,
+      String password, String email, String userType) {
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("username", username);
+    jsonObject.put("password", password);
+    jsonObject.put("email", email);
+    jsonObject.put("user-type", userType);
     return buildRequestContent(url, method, jsonObject.toString());
   }
 
