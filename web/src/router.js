@@ -122,7 +122,7 @@ export const router = new Router({
       path: '/topic',
       name: 'Topics',
       component: TopicPage,
-      meta: { users: [ 'Admin' ] },
+      meta: { users: [ 'Admin', 'Teacher' ] },
       beforeEnter: requireAuth
     },
     {
