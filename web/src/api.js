@@ -2,6 +2,7 @@ import { auth } from './auth'
 
 import { API_URL } from './constants'
 const USER_INFO_URL = `${API_URL}/user/info`
+const USER_CHECK_URL = `${API_URL}/user/check`
 const LOGIN_URL = `${API_URL}/user/login`
 
 const TOPIC_GET_URL = `${API_URL}/topic/get`
@@ -45,7 +46,7 @@ export const api = {
       }
     }
 
-    return this.postRequest(ctx, USER_INFO_URL, req, callback, error)
+    return this.postRequest(ctx, USER_CHECK_URL, req, callback, error)
   },
 
   /**
