@@ -41,7 +41,7 @@ export default {
 
   // Recieving authentication from server on create.
   created () {
-    this.$store.state.user.authenticated = auth.isAuth()
+    this.$store.state.user.authenticated = auth.hasToken()
     this.$store.state.user.username = auth.getUsername()
   },
   computed: {
