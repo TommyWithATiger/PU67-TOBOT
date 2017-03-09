@@ -1,17 +1,33 @@
 <template>
   <div class="page-content">
     <h1>Søk blant emner og temaer:</h1>
-    <Search
-      class="search-box"
-      v-on:topicResult="topicHandler"
-      v-on:subjectResult="subjectHandler"
-      v-on:search="termChange"
-      placeholder="Søk..."
-    />
-    <div class="search-results">
-      <h2>Emner</h2>
-      <div class="search-list">
-        <router-link to="some">Link</router-link>
+    <div class="search-container">
+      <Search
+        class="search-box"
+        v-on:topicResult="topicHandler"
+        v-on:subjectResult="subjectHandler"
+        v-on:search="termChange"
+        placeholder="Søk..."
+      />
+      <div class="search-results">
+        <h2>Emner</h2>
+        <div class="search-list" v-if="subjects && subjects.length">
+          <div class="search-item" v-for="s in subjects">
+            <router-link :to="'/subject/' + s.id">{{ s.title }}</router-link>
+            <span> - {{ s.description }}</span>
+          </div>
+        </div>
+        <div v-else>Fant ingen emner.</div>
+      </div>
+      <div class="search-results">
+        <h2>Temar</h2>
+        <div class="search-list" v-if="topics && topics.length">
+          <div class="search-item" v-for="t in topics">
+            <router-link :to="'/topic/' + t.id">{{ t.title }}</router-link>
+            <span> - {{ t.description }}</span>
+          </div>
+        </div>
+        <div v-else>Fant ingen temaer.</div>
       </div>
     </div>
   </div>
@@ -26,21 +42,7 @@ export default {
     return {
       search: '',
       subjects: [],
-      topics: [],
-      showBar: false,
-      hidingResult: false
-    }
-  },
-  watch: {
-    '$route' (to, from) {
-      this.hideResult()
-      let sFrom = from.path.split('/')
-      let sTo = to.path.split('/')
-      if (sFrom[1] === sTo[1] && sTo.length > 2 && sFrom.length > 2) {
-        this.$router.go({
-          path: to.path
-        })
-      }
+      topics: []
     }
   },
   methods: {
@@ -62,4 +64,12 @@ export default {
 </script>
 
 <style scoped>
+.search-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  margin: auto;
+}
+
+
 </style>
