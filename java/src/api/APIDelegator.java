@@ -58,6 +58,7 @@ public class APIDelegator {
 
     // User registration
     handlerRegistry.put("user\\/registration\\/check", APIRegistrationHandler::checkRegistrationData);
+    handlerRegistry.put("user\\/registration", APIRegistrationHandler::registerUser);
 
     // Subject and topics
     handlerRegistry.put("topic\\/create", APIAddTopicHandler::handleAddTopicRequest);
