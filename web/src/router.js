@@ -20,14 +20,23 @@ Vue.use(Router)
  * @param {object} next The function which completes the redirection.
  */
 function requireAuth (to, from, next) {
-  // Remember to check token with server!
-  if (auth.isAuth()) {
-    api.getUser(this, (data) => {
-      store.state.user.username = data.username
-      store.state.user.usertype = data.userType
-      store.state.user.email = data.email
+  if (auth.hasToken()) {
+    auth.isAuth(() => {
+      api.getUser(this, (data) => {
+        store.state.user.username = data.username
+        store.state.user.usertype = data.userType
+        store.state.user.email = data.email
+      })
+      next()
+    }, () => {
+      console.log(24)
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
     })
-    next()
   } else {
     next({
       path: '/login',
