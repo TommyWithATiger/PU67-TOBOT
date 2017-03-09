@@ -126,13 +126,14 @@ export const auth = {
     try {
       if (localStorage.getItem('app_token')) {
         api.checkUser(null, (data) => {
-          success()
+          if (data.logged_in) success()
+          else failed()
         }, () => {
           failed()
         })
+      } else {
+        failed()
       }
-
-      failed()
     } catch (exception) {
       failed()
     }
