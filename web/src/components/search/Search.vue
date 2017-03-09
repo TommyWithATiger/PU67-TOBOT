@@ -9,13 +9,18 @@ import { api } from 'api'
 
 export default {
   name: 'searchbar',
+  props: [ 'initialValue' ],
   data () {
     return {
       search: ''
     }
   },
+  created () {
+    this.search = this.initialValue || ''
+  },
   methods: {
     searchHandler () {
+      // this.$router.replace('/search/' + this.search)
       this.$emit('search', this.search)
       if (!this.search.length) {
         this.$emit('subjectResult', [])
