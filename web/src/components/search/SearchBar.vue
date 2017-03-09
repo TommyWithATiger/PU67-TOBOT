@@ -39,10 +39,10 @@ export default {
   },
   methods: {
     topicHandler (topics) {
-      this.topics = topics
+      this.topics = topics.slice(0, 3)
     },
     subjectHandler (subjects) {
-      this.subjects = subjects
+      this.subjects = subjects.slice(0, 3)
     },
     termChange (term) {
       this.showBar = !!term.length
