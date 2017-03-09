@@ -21,6 +21,7 @@ export const auth = {
           if (callback) callback(data)
           localStorage.setItem('app_token', data.token)
           localStorage.setItem('username', data.username)
+          localStorage.setItem('usertype', data.type)
           if (ctx) ctx.$store.state.user.authenticated = true
           if (ctx) ctx.$store.state.user.username = creds.username
           if (ctx) ctx.$router.push(redirect)
@@ -53,6 +54,7 @@ export const auth = {
           if (callback) callback(data)
           localStorage.setItem('app_token', data.token)
           localStorage.setItem('username', data.username)
+          localStorage.setItem('usertype', data.type)
           if (ctx) ctx.$store.state.user.authenticated = true
           if (ctx) ctx.$store.state.user.username = creds.username
           if (ctx) ctx.$router.push(redirect)
@@ -67,7 +69,7 @@ export const auth = {
    * Fetch error handler.
    * @param {object} error Error from feedback.
    * @param {function} callback The function to return to.
-   * @return {string} The message to tell user what happened.
+   * @returns {string} The message to tell user what happened.
    */
   errorHandler (error, callback = null) {
     let msg = ''
@@ -116,6 +118,7 @@ export const auth = {
 
   /**
    * Returning if the user is authenticated.
+   * @returns {boolean} Token isset.
    */
   isAuth () {
     try {
@@ -127,6 +130,7 @@ export const auth = {
 
   /**
    * Returning the username if the user is authenticated.
+   * @returns {string} Username.
    */
   getUsername () {
     try {
@@ -138,6 +142,7 @@ export const auth = {
 
   /**
    * The object to be passed as a header for authenticated requests.
+   * @returns {object} Header object.
    */
   getAuthHeader () {
     try {
