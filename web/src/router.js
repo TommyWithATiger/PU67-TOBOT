@@ -28,11 +28,12 @@ function requireAuth (to, from, next) {
     }
 
     auth.isAuth(() => {
-      if (/^\/login/.test(from.path)) {
+      if (/^\/login|^\/restricted/.test(from.path)) {
         api.getUser(this, (data) => {
           store.state.user.username = data.username
           store.state.user.usertype = data.userType
           store.state.user.email = data.email
+
           if (to.meta.users.indexOf(data.userType) !== -1) {
             next()
           } else {
