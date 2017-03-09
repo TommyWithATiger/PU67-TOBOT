@@ -6,6 +6,7 @@ const LOGIN_URL = `${API_URL}/user/login`
 
 const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_GET_TITLE_URL = `${API_URL}/topic/get/?title=`
+const TOPIC_GET_ID_URL = `${API_URL}/topic/get/?id=`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
 
 const TOPIC_RATE_URL = `${API_URL}/rating/rate`
@@ -70,7 +71,7 @@ export const api = {
   },
 
   /**
-   * Get the subject with the given id form API.
+   * Get the subject with the given id from API.
    * @param {object} ctx Context.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
@@ -102,6 +103,18 @@ export const api = {
    */
   getTopicsByTitle (ctx, term, callback, error) {
     return this.getRequest(ctx, TOPIC_GET_TITLE_URL + term, callback, error)
+  },
+
+  /**
+   * Get the topic with the given id from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @param {integer} id The topic id.
+   * @returns {Promise} A promise from the request.
+   */
+  getTopicById (ctx, callback, error, id) {
+    return this.getRequest(ctx, TOPIC_GET_ID_URL + id, callback, error)
   },
 
   /**
