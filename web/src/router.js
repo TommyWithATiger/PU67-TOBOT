@@ -8,6 +8,8 @@ import TopicPage from 'components/pages/TopicPage'
 import SubjectPage from 'components/pages/SubjectPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import { auth } from 'auth'
+import { api } from 'api'
+import { store } from 'store'
 
 Vue.use(Router)
 
@@ -20,6 +22,11 @@ Vue.use(Router)
 function requireAuth (to, from, next) {
   // Remember to check token with server!
   if (auth.isAuth()) {
+    api.getUser(this, (data) => {
+      store.state.user.username = data.username
+      store.state.user.usertype = data.userType
+      store.state.user.email = data.email
+    })
     next()
   } else {
     next({
