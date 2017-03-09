@@ -177,6 +177,18 @@ export const auth = {
   },
 
   /**
+   * Get the auth token saved in localStorage.
+   * @returns {string} The token in plain text.
+   */
+  getToken () {
+    try {
+      return localStorage.getItem('app_token')
+    } catch (exception) {
+      return ''
+    }
+  },
+
+  /**
    * The object to be passed as a header for authenticated requests.
    * @returns {object} Header object.
    */
