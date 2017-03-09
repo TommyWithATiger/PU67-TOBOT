@@ -23,14 +23,24 @@ export default {
       description: ''
     }
   },
+  watch: {
+    '$route' () {
+      this.updateData()
+    }
+  },
   created () {
-    api.getTopicById(this, this.$route.params.id, (data) => {
-      this.title = data.title
-      this.description = data.description
-    }, () => {
-      this.title = ''
-      this.description = ''
-    })
+    this.updateData()
+  },
+  methods: {
+    updateData () {
+      api.getTopicById(this, this.$route.params.id, (data) => {
+        this.title = data.title
+        this.description = data.description
+      }, () => {
+        this.title = ''
+        this.description = ''
+      })
+    }
   }
 }
 </script>

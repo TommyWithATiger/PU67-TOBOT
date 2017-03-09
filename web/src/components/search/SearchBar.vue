@@ -35,13 +35,6 @@ export default {
   watch: {
     '$route' (to, from) {
       this.hideResult()
-      let sFrom = from.path.split('/')
-      let sTo = to.path.split('/')
-      if (sFrom[1] === sTo[1] && sTo.length > 2 && sFrom.length > 2) {
-        this.$router.go({
-          path: to.path
-        })
-      }
     }
   },
   methods: {

@@ -61,23 +61,13 @@ export default {
       }
     }
   },
+  watch: {
+    '$route' () {
+      this.updateData()
+    }
+  },
   created () {
-    api.getTopics(this, (data) => {
-      // console.log(data)
-      this.topics = data.topics
-    }, () => {
-      this.topics = []
-    })
-    api.getSubjectID(this, (data) => {
-      this.subject = data
-    }, () => {
-      window.location.href = '/subject'
-    }, this.$route.params.id)
-    api.getRelatedTopics(this, (data) => {
-      this.relatedTopics = data.related_topics
-    }, () => {
-
-    }, this.$route.params.id)
+    this.updateData()
   },
   methods: {
     relateTopic (topic) {
@@ -94,6 +84,23 @@ export default {
         }
       }
       return false
+    },
+    updateData () {
+      api.getTopics(this, (data) => {
+        this.topics = data.topics
+      }, () => {
+        this.topics = []
+      })
+
+      api.getSubjectID(this, (data) => {
+        this.subject = data
+      }, () => {
+        window.location.href = '/subject'
+      }, this.$route.params.id)
+
+      api.getRelatedTopics(this, (data) => {
+        this.relatedTopics = data.related_topics
+      }, () => {}, this.$route.params.id)
     }
   }
 }
