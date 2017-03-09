@@ -21,9 +21,8 @@ export const auth = {
           if (callback) callback(data)
           localStorage.setItem('app_token', data.token)
           localStorage.setItem('username', data.username)
-          localStorage.setItem('usertype', data.type)
           if (ctx) ctx.$store.state.user.authenticated = true
-          if (ctx) ctx.$store.state.user.username = creds.username
+          if (ctx) ctx.$store.state.user.username = data.username
           if (ctx) ctx.$router.push(redirect)
         }
       }, err => {
@@ -54,9 +53,8 @@ export const auth = {
           if (callback) callback(data)
           localStorage.setItem('app_token', data.token)
           localStorage.setItem('username', data.username)
-          localStorage.setItem('usertype', data.type)
           if (ctx) ctx.$store.state.user.authenticated = true
-          if (ctx) ctx.$store.state.user.username = creds.username
+          if (ctx) ctx.$store.state.user.username = data.username
           if (ctx) ctx.$router.push(redirect)
         }
       }, err => {
