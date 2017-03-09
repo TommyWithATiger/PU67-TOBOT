@@ -16,12 +16,9 @@
         </div>
         <SearchBar />
         <div class="header-user-info">
-        <!--
-          No information here at the moment, wait for next iteration
           <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
-        -->
           <LogoutBtn />
-      </div>
+        </div>
       </div>
       <div v-else class="header-flat header-fill">
         <div class="header-user-info">
