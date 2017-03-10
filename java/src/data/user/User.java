@@ -396,4 +396,12 @@ public class User {
     return id;
   }
 
+  /**
+   * Checks if the user has a reset token
+   *
+   * @return A boolean indicating if the user has a valid reset token
+   */
+  public boolean hasResetToken() {
+    return passwordResetTokenExpireDate.after(new Date()) && hashedPasswordResetToken != null;
+  }
 }

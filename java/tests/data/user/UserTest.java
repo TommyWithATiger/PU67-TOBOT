@@ -185,4 +185,23 @@ public class UserTest extends BaseTest {
     assertEquals(null, user.getPasswordResetTokenExpireDate());
     assertEquals(null, user.getSessionToken());
   }
+
+  @Test
+  public void testHasResetToken() {
+    User user = new User("Username", "email@email.com", "password");
+    user.create();
+
+    user.generatePasswordResetToken();
+    user.update();
+
+    assertTrue(user.hasResetToken());
+
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date());
+    calendar.add(Calendar.HOUR, -1);
+    user.setPasswordResetTokenExpireDate(calendar.getTime());
+    user.update();
+
+    assertFalse(user.hasResetToken());
+  }
 }
