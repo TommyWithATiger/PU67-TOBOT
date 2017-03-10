@@ -103,7 +103,7 @@ public class APIRegistrationHandler {
     }
 
     String email = jsonObject.getString("email");
-    if (!UserDataValidator.checkPassword(email).isValid()) {
+    if (!UserDataValidator.checkEmail(email).isValid()) {
       throw new APIBadRequestException("Email is not valid");
     }
 
