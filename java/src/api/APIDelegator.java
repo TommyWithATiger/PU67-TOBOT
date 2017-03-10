@@ -65,7 +65,7 @@ public class APIDelegator {
     handlerRegistry.put("user\\/registration", APIRegistrationHandler::registerUser);
 
     // Password reset
-    handlerRegistry.put("user\\/reset", APIResetPasswordHandler::resetPassword);g
+    handlerRegistry.put("user\\/reset", APIResetPasswordHandler::resetPassword);
 
     // Subject and topics
     handlerRegistry.put("topic\\/create", APIAddTopicHandler::handleAddTopicRequest);
