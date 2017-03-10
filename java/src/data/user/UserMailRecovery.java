@@ -83,7 +83,7 @@ public class UserMailRecovery {
       message.setSubject("Requested password recovery from TOBOT");
       message.setText(
           "Someone requested a password reset for your TOBOT account. Your reset link http://localhost:5032/reset/"
-              + passwordResetToken + "/" + user.getEmail());
+              + passwordResetToken + "/" + user.getEmail().replace("@", "%40").replace(".", "%5"));
 
       Transport.send(message);
     } catch (MessagingException me) {
