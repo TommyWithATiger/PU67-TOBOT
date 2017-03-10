@@ -6,6 +6,7 @@ const USER_CHECK_URL = `${API_URL}/user/check`
 const LOGIN_URL = `${API_URL}/user/login`
 
 const USER_RESET_PASSWORD_URL = `${API_URL}/user/reset`
+const USER_RESET_PASSWORD_REQUEST_URL = `${API_URL}/user/reset/request`
 const USER_REGISTRATION_CHECK_DATA_URL = `${API_URL}/user/registration/check`
 const USER_REGISTRATION_URL = `${API_URL}/user/registration`
 
@@ -276,6 +277,25 @@ export const api = {
     }
 
     return this.postRequest(ctx, USER_RESET_PASSWORD_URL, req, callback, error)
+  },
+
+  /**
+   * Request password reset
+   * @param {object} ctx Context.
+   * @param {string} email The email of the user
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  requestPasswordReset (ctx, email, callback, error) {
+    let data = {
+      email: email
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, USER_RESET_PASSWORD_REQUEST_URL, req, callback, error)
   },
 
   /**
