@@ -1,5 +1,6 @@
 package data.dao;
 
+import data.Subject;
 import data.dao.util.FieldTuple;
 import data.Topic;
 import data.user.User;
@@ -49,6 +50,20 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
    */
   public List<Rating> findRatingByTopic(Topic topic) {
     return super.find("findRatingByTopic",
+        new FieldTuple("topicID", topic.getId()));
+  }
+
+  /**
+   * Finds Ratings related to a Subject and a Topic. Only ratings from users that are participating
+   * in the Subject are returned
+   *
+   * @param subject, the related subject object
+   * @param topic, the related topic object
+   * @return List of Rating objects
+   */
+  public List<Rating> findParticipatingRatingBySubjectTopic(Subject subject, Topic topic) {
+    return super.find("findParticipatingRatingBySubjectTopic",
+        new FieldTuple("subjectID", subject.getId()),
         new FieldTuple("topicID", topic.getId()));
   }
 
