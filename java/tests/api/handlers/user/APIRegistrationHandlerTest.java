@@ -145,7 +145,7 @@ public class APIRegistrationHandlerTest extends BaseTest {
     jsonObject.put("username", username);
     jsonObject.put("password", password);
     jsonObject.put("email", email);
-    jsonObject.put("user-type", userType);
+    jsonObject.put("user_type", userType);
     return buildRequestContent(url, method, jsonObject.toString());
   }
 

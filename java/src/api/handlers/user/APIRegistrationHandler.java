@@ -74,7 +74,7 @@ public class APIRegistrationHandler {
    *    username (String): The username to register
    *    password (String): The password to register
    *    email (String): The email to register
-   *    user-type (String): The user type
+   *    user_type (String): The user type
    *
    * @param httpRequest The request to handle
    * @return A JSON string containing the following variables
@@ -88,7 +88,7 @@ public class APIRegistrationHandler {
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
     if (!jsonObject.has("username") || !jsonObject.has("password") || !jsonObject.has("email")
-        || !jsonObject.has("user-type")) {
+        || !jsonObject.has("user_type")) {
       throw new APIBadRequestException("Request must have the required fields set");
     }
 
@@ -108,7 +108,7 @@ public class APIRegistrationHandler {
     }
 
     UserType userType;
-    String userTypeString = jsonObject.getString("user-type");
+    String userTypeString = jsonObject.getString("user_type");
     try {
       userType = UserTypeConverter.stringToUserType(userTypeString);
       if (userType == UserType.ADMIN) {

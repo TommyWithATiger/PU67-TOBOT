@@ -307,14 +307,16 @@ export const api = {
    * @param {string} username The username to use
    * @param {string} email The email to use
    * @param {string} password The password to use
+   * @param {string} userType The type of account to register
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
    */
-  registerUser (ctx, username, email, password, callback, error) {
+  registerUser (ctx, username, email, password, userType, callback, error) {
     let data = {
       username: username,
       email: email,
-      password: password
+      password: password,
+      user_type: userType
     }
 
     let req = {
