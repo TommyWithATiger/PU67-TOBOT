@@ -158,7 +158,7 @@ public class UserTest extends BaseTest {
   public void testGeneratePasswordToken() throws Exception {
     User user = new User();
     String token = user.generatePasswordResetToken();
-    assertEquals(10, token.length());
+    assertEquals(20, token.length());
   }
 
   @Test
