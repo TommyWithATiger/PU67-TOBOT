@@ -7,6 +7,7 @@
       <button @click="login">Logg inn</button>
       <span>{{ feedback }}</span>
     </div>
+    <div class="registration"><a href="/register">Register account</a></div>
   </div>
 </template>
 
