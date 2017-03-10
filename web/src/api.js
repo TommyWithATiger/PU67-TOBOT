@@ -5,6 +5,10 @@ const USER_INFO_URL = `${API_URL}/user/info`
 const USER_CHECK_URL = `${API_URL}/user/check`
 const LOGIN_URL = `${API_URL}/user/login`
 
+const USER_RESET_PASSWORD_URL = `${API_URL}/user/reset`
+const USER_REGISTRATION_CHECK_DATA_URL = `${API_URL}/user/registration/check`
+const USER_REGISTRATION_URL = `${API_URL}/user/registration`
+
 const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_GET_TITLE_URL = `${API_URL}/topic/get/?title=`
 const TOPIC_GET_ID_URL = `${API_URL}/topic/get/?id=`
@@ -249,6 +253,75 @@ export const api = {
     }
 
     return this.postRequest(ctx, SUBJECT_TOPIC_RELATE_URL, req, callback, error)
+  },
+
+  /**
+   * Reset password
+   * @param {object} ctx Context.
+   * @param {string} email The email of the user
+   * @param {string} newPassword The new password
+   * @param {string} resetToken The reset token for the user
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  resetPassword (ctx, email, newPassword, resetToken, callback, error) {
+    let data = {
+      email: email,
+      password: newPassword,
+      resetToken: resetToken
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, USER_RESET_PASSWORD_URL, req, callback, error)
+  },
+
+  /**
+   * Check if the registration data is possible to use for registration
+   * @param {object} ctx Context.
+   * @param {string} username The username to check
+   * @param {string} email The email to check
+   * @param {string} password The password to check
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  checkRegistrationData (ctx, username, email, password, callback, error) {
+    let data = {
+      username: username,
+      email: email,
+      password: password
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, USER_REGISTRATION_CHECK_DATA_URL, req, callback, error)
+  },
+
+  /**
+   * Register the user
+   * @param {object} ctx Context.
+   * @param {string} username The username to use
+   * @param {string} email The email to use
+   * @param {string} password The password to use
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  registerUser (ctx, username, email, password, callback, error) {
+    let data = {
+      username: username,
+      email: email,
+      password: password
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, USER_REGISTRATION_URL, req, callback, error)
   },
 
   /**
