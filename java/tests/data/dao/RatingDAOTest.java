@@ -85,7 +85,9 @@ public class RatingDAOTest extends BaseTest{
     assertTrue(result.contains(rating11));
     assertTrue(result.contains(rating12));
     assertTrue(result.contains(rating21));
-    assertEquals(3, result.size());
+    assertTrue(result.contains(rating13));
+    assertTrue(result.contains(rating23));
+    assertEquals(5, result.size());
   }
 
   @Test
