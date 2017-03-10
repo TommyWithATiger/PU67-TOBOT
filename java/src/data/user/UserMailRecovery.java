@@ -24,6 +24,11 @@ public class UserMailRecovery {
     session = setupSession();
   }
 
+  /**
+   * Setup for the mail session
+   *
+   * @return The working session
+   */
   private Session setupSession() {
     Properties props = new Properties();
     props.put("mail.smtp.auth", "true");
@@ -51,7 +56,9 @@ public class UserMailRecovery {
         });
   }
 
-
+  /**
+   * @return An instance of the mail recovery class
+   */
   public static UserMailRecovery getInstance() {
     if (instance == null) {
       instance = new UserMailRecovery();
@@ -59,6 +66,11 @@ public class UserMailRecovery {
     return instance;
   }
 
+  /**
+   * Sends a recovery email to the specified user
+   *
+   * @param user The user to send a recovery email to
+   */
   public void sendRecoveryMail(User user) {
     try {
       String passwordResetToken = user.generatePasswordResetToken();
@@ -69,7 +81,9 @@ public class UserMailRecovery {
       message.setFrom(new InternetAddress(username));
       message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
       message.setSubject("Requested password recovery from TOBOT");
-      message.setText("Someone requested a password reset for your TOBOT account. Your reset link http://localhost:5032/reset/?token=" + passwordResetToken + "&email=" + user.getEmail());
+      message.setText(
+          "Someone requested a password reset for your TOBOT account. Your reset link http://localhost:5032/reset/?token="
+              + passwordResetToken + "&email=" + user.getEmail());
 
       Transport.send(message);
     } catch (MessagingException me) {
