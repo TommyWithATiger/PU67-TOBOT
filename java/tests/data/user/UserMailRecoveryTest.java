@@ -63,12 +63,11 @@ public class UserMailRecoveryTest extends BaseTest {
 
     Folder folder = store.getFolder("INBOX");
     folder.open(Folder.READ_WRITE);
-    System.out.println(folder.getMessageCount());
 
     Message message = folder.getMessage(folder.getMessageCount());
     String resetToken = message.getContent().toString().split(
         "Someone requested a password reset for your TOBOT account. Your reset link http:\\/\\/localhost:5032\\/reset\\/\\?token=")[1]
-        .replace("\r", "").replace("\n", "");
+        .substring(0, 20).replace("\r", "").replace("\n", "");
 
     // Cleanup
     message.setFlag(Flag.DELETED, true);
