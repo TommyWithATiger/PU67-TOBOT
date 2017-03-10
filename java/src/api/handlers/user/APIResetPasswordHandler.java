@@ -10,6 +10,7 @@ import data.dao.UserDAO;
 import data.dao.util.FieldTuple;
 import data.user.User;
 import data.user.UserDataValidator;
+import data.user.UserMailRecovery;
 import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
@@ -19,13 +20,13 @@ public class APIResetPasswordHandler {
   /**
    * An API handler for resetting a password given a reset token and the email of the given account.
    * Requires the following data to be set:
-   *      password (String): the new password
-   *      resetToken (String): the reset token
-   *      email (String): the email of the user
+   *    password (String): the new password
+   *    resetToken (String): the reset token
+   *    email (String): the email of the user
    *
    * @param httpRequest The request to handle
    * @return A JSON string with the following variables
-   *      changed-password (Boolean): indicates if the password was reset
+   *    changed_password (Boolean): indicates if the password was reset
    */
   public static String resetPassword(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
@@ -72,8 +73,43 @@ public class APIResetPasswordHandler {
     user.update();
 
     JSONObject response = new JSONObject();
-    response.put("changed-password", true);
+    response.put("changed_password", true);
 
+    return response.toString();
+  }
+
+  /**
+   * An API handler for requesting a password reset. If successful it will send an reset email to
+   * the user. Require the following variables:
+   *    email (String): the users email
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON string with the following variables:
+   *    success (Boolean): indicates if the reset request was successful
+   */
+  public static String requestPasswordReset(HttpRequest httpRequest) {
+    checkRequestMethod("POST", httpRequest);
+
+    String requestContent = checkAndGetEntityContent(httpRequest);
+
+    JSONObject jsonObject = checkAndGetJSON(requestContent);
+
+    if (!jsonObject.has("email")) {
+      throw new APIBadRequestException("Request must have email set");
+    }
+
+    String email = jsonObject.getString("email");
+    List<User> users = UserDAO.getInstance()
+        .find("findUsersByEmail", new FieldTuple("email", email));
+    if (users.isEmpty()) {
+      throw new APIBadRequestException("Email not valid");
+    }
+    User user = users.get(0);
+
+    UserMailRecovery.getInstance().sendRecoveryMail(user);
+
+    JSONObject response = new JSONObject();
+    response.put("success", true);
     return response.toString();
   }
 
