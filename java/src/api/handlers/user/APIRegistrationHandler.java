@@ -24,12 +24,12 @@ public class APIRegistrationHandler {
    *
    * @param httpRequest The request to handle
    * @return A JSON string containing the following variables:
-   *    username-valid (Boolean): Indicates if the username is valid
-   *    username-message (String) [if username-valid is 'false']: A message about why the username is not valid
-   *    password-valid (Boolean): Indicates if the password is valid
-   *    password-message (String) [if password-valid is 'false']: A message about why the password is not valid
-   *    email-valid (Boolean): Indicates if the email is valid
-   *    email-message (String) [if email-valid is 'false']: A message about why the email is not valid
+   *    username_valid (Boolean): Indicates if the username is valid
+   *    username_message (String) [if username_valid is 'false']: A message about why the username is not valid
+   *    password_valid (Boolean): Indicates if the password is valid
+   *    password_message (String) [if password_valid is 'false']: A message about why the password is not valid
+   *    email_valid (Boolean): Indicates if the email is valid
+   *    email_message (String) [if email_valid is 'false']: A message about why the email is not valid
    *
    */
   public static String checkRegistrationData(HttpRequest httpRequest) {
@@ -47,23 +47,23 @@ public class APIRegistrationHandler {
 
     // Username check
     IsValidToken usernameValid = UserDataValidator.checkUsername(jsonObject.getString("username"));
-    response.put("username-valid", usernameValid.isValid());
+    response.put("username_valid", usernameValid.isValid());
     if (!usernameValid.isValid()) {
-      response.put("username-message", usernameValid.getMessage());
+      response.put("username_message", usernameValid.getMessage());
     }
 
     // Password check
     IsValidToken passwordValid = UserDataValidator.checkPassword(jsonObject.getString("password"));
-    response.put("password-valid", passwordValid.isValid());
+    response.put("password_valid", passwordValid.isValid());
     if (!passwordValid.isValid()) {
-      response.put("password-message", passwordValid.getMessage());
+      response.put("password_message", passwordValid.getMessage());
     }
 
     // Password check
     IsValidToken emailValid = UserDataValidator.checkEmail(jsonObject.getString("email"));
-    response.put("email-valid", emailValid.isValid());
+    response.put("email_valid", emailValid.isValid());
     if (!emailValid.isValid()) {
-      response.put("email-message", emailValid.getMessage());
+      response.put("email_message", emailValid.getMessage());
     }
 
     return response.toString();

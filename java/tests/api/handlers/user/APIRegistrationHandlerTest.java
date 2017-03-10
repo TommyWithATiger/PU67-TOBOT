@@ -44,7 +44,7 @@ public class APIRegistrationHandlerTest extends BaseTest {
     HttpRequest httpRequest = buildRequestContentRegistrationCheck("registration/check", "POST",
         "username", "password", "user@email.com");
     String response = checkRegistrationData(httpRequest);
-    assertEquals("{\"password-valid\":true,\"username-valid\":true,\"email-valid\":true}",
+    assertEquals("{\"username_valid\":true,\"email_valid\":true,\"password_valid\":true}",
         response);
   }
 
@@ -55,7 +55,7 @@ public class APIRegistrationHandlerTest extends BaseTest {
         "pp", "user");
     String response = checkRegistrationData(httpRequest);
     assertEquals(
-        "{\"username-message\":\"Username must have a length of 3 - 32 symbols\",\"password-valid\":false,\"username-valid\":false,\"password-message\":\"Passwords must be of length 8 or longer\",\"email-valid\":false,\"email-message\":\"Email address is not in a valid format\"}",
+        "{\"username_valid\":false,\"email_message\":\"Email address is not in a valid format\",\"password_message\":\"Passwords must be of length 8 or longer\",\"email_valid\":false,\"password_valid\":false,\"username_message\":\"Username must have a length of 3 - 32 symbols\"}",
         response);
   }
 
