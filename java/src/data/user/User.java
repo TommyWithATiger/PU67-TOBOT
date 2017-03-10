@@ -402,6 +402,15 @@ public class User {
    * @return A boolean indicating if the user has a valid reset token
    */
   public boolean hasResetToken() {
-    return passwordResetTokenExpireDate.after(new Date()) && hashedPasswordResetToken != null;
+    return passwordResetTokenExpireDate != null && passwordResetTokenExpireDate.after(new Date())
+        && hashedPasswordResetToken != null;
+  }
+
+  /**
+   * Removes the reset token
+   */
+  public void removeResetToken() {
+    hashedPasswordResetToken = null;
+    passwordResetTokenExpireDate = null;
   }
 }

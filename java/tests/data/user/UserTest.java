@@ -204,4 +204,20 @@ public class UserTest extends BaseTest {
 
     assertFalse(user.hasResetToken());
   }
+
+  @Test
+  public void testRemoveResetToken() {
+    User user = new User("Username", "email@email.com", "password");
+    user.create();
+
+    user.generatePasswordResetToken();
+    user.update();
+
+    assertTrue(user.hasResetToken());
+
+    user.removeResetToken();
+    user.update();
+
+    assertFalse(user.hasResetToken());
+  }
 }
