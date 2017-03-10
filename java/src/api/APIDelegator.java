@@ -89,6 +89,10 @@ public class APIDelegator {
     handlerRegistry.put("topic\\/get", APIGetTopicHandler::getAllTopics);
     handlerRegistry.put("topic\\/rating\\/get", APIGetTopicRatingHandler::getTopicsWithRatings);
 
+    handlerRegistry.put("topic\\/subject\\/ordered",
+        APIGetTopicHandler::getTopicsBySubjectSortedByRating);
+    // might want change this to order by a more advanced method in the future
+
     // Ratings
     handlerRegistry.put("rating\\/rate", APIRateTopicHandler::rateTopic);
     handlerRegistry
