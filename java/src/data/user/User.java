@@ -33,6 +33,7 @@ public class User {
   private String email;
   private String hashword;
   private String sessionToken;
+  private String hashedPasswordResetToken;
 
   @Enumerated(value = EnumType.STRING)
   @Convert(converter = UserTypeConverter.class)
@@ -40,6 +41,9 @@ public class User {
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date sessionTokenExpireDate;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date passwordResetTokenExpireDate;
 
   public User() {
     super();
@@ -117,6 +121,53 @@ public class User {
     return BCrypt.checkpw(candidate, hashword);
   }
 
+  /**
+   * Generates the password reset token of 10 capital letters and numbers. Stores hash of token
+   * in database. Sets expire date to one day from now.
+   *
+   * @return The session token
+   */
+  public String generatePasswordResetToken() {
+    String symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    StringBuilder partialToken = new StringBuilder();
+    Random random = new Random();
+    while (partialToken.length() < 10){
+      partialToken.append(symbols.charAt(random.nextInt(symbols.length())));
+    }
+    String passwordResetToken = partialToken.toString();
+    hashedPasswordResetToken = BCrypt.hashpw(passwordResetToken, BCrypt.gensalt());
+    generatePasswordResetExpireDate();
+    return passwordResetToken;
+  }
+
+  /**
+   * A helper method for generation and setting of the password reset token expiration date.
+   * It is set to be one day in the future.
+   */
+  private void generatePasswordResetExpireDate() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date());
+    calendar.add(Calendar.DATE, 1);
+    passwordResetTokenExpireDate = calendar.getTime();
+  }
+
+  /**
+   * Checks if a given token matches the stored hash.
+   *
+   * @param candidate A candidate token
+   * @return True if candidate matches hash and current date is not past expire date, false otherwise
+   */
+  public boolean checkPasswordResetToken(String candidate){
+    if (hashedPasswordResetToken == null || !BCrypt.checkpw(candidate, hashedPasswordResetToken)){
+      return false;
+    }
+    else if (passwordResetTokenExpireDate.before(new Date())) {
+      passwordResetTokenExpireDate = null;
+      hashedPasswordResetToken = null;
+      return false;
+    }
+    return true;
+  }
 
   /**
    * Return the id of the User.
@@ -300,6 +351,24 @@ public class User {
    */
   public boolean isAdmin() {
     return userType == UserType.ADMIN;
+  }
+
+  /**
+   * Get the passwordResetTokenExpireDate  of the User.
+   *
+   * @return The passwordResetTokenExpireDate of the User
+   */
+  public Date getPasswordResetTokenExpireDate() {
+    return passwordResetTokenExpireDate;
+  }
+
+  /**
+   * Set the passwordResetTokenExpireDate of the User.
+   *
+   * @param passwordResetTokenExpireDate New passwordResetTokenExpireDate of the User
+   */
+  public void setPasswordResetTokenExpireDate(Date passwordResetTokenExpireDate) {
+    this.passwordResetTokenExpireDate = passwordResetTokenExpireDate;
   }
 
   /**

@@ -5,19 +5,14 @@
     </div>
     <div class="header-flat header-fill-calc">
       <div v-if="authenticated" class="header-flat header-fill">
-        <div class="header-navigation-button">
-          <h2><router-link to="/subject">Emner</router-link></h2>
+        <div v-for="link in links" v-if="checkUsertype(link.users)" class="header-navigation-button">
+          <h2><router-link exact :to="link.path">{{ link.name }}</router-link></h2>
         </div>
-        <div class="header-navigation-button">
-          <h2><router-link to="/topic">Temaer</router-link></h2>
-        </div>
+        <SearchBar />
         <div class="header-user-info">
-        <!--
-          No information here at the moment, wait for next iteration
           <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
-        -->
           <LogoutBtn />
-      </div>
+        </div>
       </div>
       <div v-else class="header-flat header-fill">
         <div class="header-user-info">
@@ -32,15 +27,38 @@
 
 <script>
 import LogoutBtn from 'components/auth/LogoutBtn'
+import SearchBar from 'components/search/SearchBar'
 import { auth } from 'auth'
 
 export default {
   name: 'header',
+  data () {
+    return {
+      links: [
+        {
+          name: 'Hjem',
+          path: '/',
+          users: ['Admin', 'Teacher', 'Student']
+        },
+        {
+          name: 'Emner',
+          path: '/subject',
+          users: ['Admin', 'Teacher']
+        },
+        {
+          name: 'Temaer',
+          path: '/topic',
+          users: ['Admin', 'Teacher']
+        }
+      ]
+    }
+  },
 
   // Recieving authentication from server on create.
   created () {
-    this.$store.state.user.authenticated = auth.isAuth()
+    this.$store.state.user.authenticated = auth.hasToken()
     this.$store.state.user.username = auth.getUsername()
+    this.$store.state.user.usertype = auth.getUsertype()
   },
   computed: {
 
@@ -59,8 +77,14 @@ export default {
       return `/user/${this.$store.state.user.username}`
     }
   },
+  methods: {
+    checkUsertype (users) {
+      return users.indexOf(this.$store.state.user.usertype) !== -1
+    }
+  },
   components: {
-    LogoutBtn
+    LogoutBtn,
+    SearchBar
   }
 }
 </script>
@@ -80,7 +104,8 @@ export default {
   text-align: center;
 }
 
-.header-navigation-button > h2 > a:hover {
+.header-navigation-button > h2 > a:hover,
+.header-navigation-button > h2 > a.router-link-active {
   border-bottom: 4px solid #87CEEB;
 }
 
