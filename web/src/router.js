@@ -117,18 +117,21 @@ export const router = new Router({
       path: '/subject',
       name: 'Subject',
       component: SubjectsPage,
+      meta: { users: [ 'Admin', 'Teacher' ] },
       beforeEnter: requireAuth
     },
     {
       path: '/subject/:id',
       name: 'RelateSubjectTopic',
       component: RelateSubjectTopicPage,
+      meta: { users: [ 'Admin', 'Teacher' ] },
       beforeEnter: requireAuth
     },
     {
       path: '/topic',
       name: 'Topics',
       component: TopicsPage,
+      meta: { users: [ 'Admin', 'Teacher' ] },
       beforeEnter: requireAuth
     },
     {
@@ -142,12 +145,14 @@ export const router = new Router({
       path: '/search',
       name: 'SearchPage',
       component: SearchPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {
       path: '/search/:term',
       name: 'Search',
       component: SearchPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {
