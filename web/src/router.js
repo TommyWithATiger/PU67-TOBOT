@@ -10,6 +10,7 @@ import SubjectsPage from 'components/pages/SubjectsPage'
 import TopicPage from 'components/pages/TopicPage'
 import SearchPage from 'components/pages/SearchPage'
 import RegisterPage from 'components/pages/RegisterPage'
+import RequestResetPage from 'components/pages/RequestResetPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import { auth } from 'auth'
 import { api } from 'api'
@@ -172,6 +173,11 @@ export const router = new Router({
       path: '/register',
       name: 'Register',
       component: RegisterPage
+    },
+    {
+      path: '/reset/request',
+      name: 'RequestReset',
+      component: RequestResetPage
     },
     {
       path: '/restricted',
