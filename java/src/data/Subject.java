@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,12 +37,18 @@ public class Subject {
   private Collection<Topic> topics;
 
   @ManyToMany
+  @JoinTable(name="EDITORS")
   private Collection<User> editors;
+
+  @ManyToMany
+  @JoinTable(name="PARTICIPANTS")
+  private Collection<User> participants;
 
   public Subject() {
     super();
     topics = new ArrayList<>();
     editors = new ArrayList<>();
+    participants = new ArrayList<>();
   }
 
   /**
@@ -221,6 +228,38 @@ public class Subject {
   public void removeEditor(User user) {
     if (editors.contains(user)) {
       editors.remove(user);
+    }
+  }
+
+  /**
+   * Get the participants of this subject
+   *
+   * @return Collection of User Objects
+   */
+  public Collection<User> getParticipants() {
+    return new ArrayList<User>(participants);
+  }
+
+
+  /**
+   * Adds a user to the subjects participant list
+   *
+   * @param user, the User to be added
+   */
+  public void addParticipant(User user) {
+    if (!participants.contains(user)) {
+      participants.add(user);
+    }
+  }
+
+  /**
+   * Removes a user from the subject participant list
+   *
+   * @param user, the User to be removed
+   */
+  public void removeParticipant(User user) {
+    if (participants.contains(user)) {
+      participants.remove(user);
     }
   }
 

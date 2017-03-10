@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import FrontPage from 'components/pages/FrontPage'
 import LoginPage from 'components/pages/LoginPage'
+import RestrictedPage from 'components/pages/RestrictedPage'
 import UserPage from 'components/pages/UserPage'
 import TopicsPage from 'components/pages/TopicsPage'
 import SubjectsPage from 'components/pages/SubjectsPage'
@@ -10,6 +11,8 @@ import TopicPage from 'components/pages/TopicPage'
 import SearchPage from 'components/pages/SearchPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import { auth } from 'auth'
+import { api } from 'api'
+import { store } from 'store'
 
 Vue.use(Router)
 
@@ -20,16 +23,83 @@ Vue.use(Router)
  * @param {object} next The function which completes the redirection.
  */
 function requireAuth (to, from, next) {
-  // Remember to check token with server!
-  if (auth.isAuth()) {
-    next()
-  } else {
-    next({
-      path: '/login',
-      query: {
-        redirect: to.fullPath
+  if (auth.hasToken()) {
+    if (/^\/login/.test(from.path)) {
+      store.state.user.username = ''
+      store.state.user.usertype = ''
+    }
+
+    auth.isAuth(() => {
+      if (/^\/login|^\/restricted/.test(from.path)) {
+        api.getUser(this, (data) => {
+          store.state.user.username = data.username
+          store.state.user.usertype = data.userType
+          store.state.user.email = data.email
+
+          if (to.meta.users.indexOf(data.userType) !== -1) {
+            next()
+          } else {
+            next(getRestrictedRoute(to))
+          }
+        })
+      } else {
+        api.getUser(this, (data) => {
+          store.state.user.username = data.username
+          store.state.user.usertype = data.userType
+          store.state.user.email = data.email
+        })
+
+        if (to.meta.users.indexOf(store.state.user.usertype) !== -1) {
+          next()
+        } else {
+          if (store.state.user.usertype === 'undefined') {
+            api.getUser(this, (data) => {
+              store.state.user.username = data.username
+              store.state.user.usertype = data.userType
+              store.state.user.email = data.email
+
+              if (to.meta.users.indexOf(store.state.user.usertype) !== -1) {
+                next()
+              } else {
+                next(getRestrictedRoute(to))
+              }
+            })
+          } else {
+            next(getRestrictedRoute(to))
+          }
+        }
       }
+    }, () => {
+      next(getLoginRoute(to))
     })
+  } else {
+    next(getLoginRoute(to))
+  }
+}
+
+/**
+ * Get the next route for restricted login.
+ * @param {object} to The route to go to. Needs fullPath.
+ */
+function getRestrictedRoute (to) {
+  return {
+    path: '/restricted',
+    query: {
+      redirect: to.fullPath
+    }
+  }
+}
+
+/**
+ * Get the next route for login.
+ * @param {object} to The route to go to. Needs fullPath.
+ */
+function getLoginRoute (to) {
+  return {
+    path: '/login',
+    query: {
+      redirect: to.fullPath
+    }
   }
 }
 
@@ -40,6 +110,7 @@ export const router = new Router({
       path: '/',
       name: 'Home',
       component: FrontPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {
@@ -64,6 +135,7 @@ export const router = new Router({
       path: '/topic/:id',
       name: 'Topic',
       component: TopicPage,
+      meta: { users: [ 'Admin', 'Teacher' ] },
       beforeEnter: requireAuth
     },
     {
@@ -82,6 +154,7 @@ export const router = new Router({
       path: '/user/:user',
       name: 'User',
       component: UserPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {
@@ -90,9 +163,15 @@ export const router = new Router({
       component: LoginPage
     },
     {
+      path: '/restricted',
+      name: 'Restricted',
+      component: RestrictedPage
+    },
+    {
       path: '/*',
       name: 'Default',
       component: FrontPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: (to, from, next) => {
         next('/')
       }

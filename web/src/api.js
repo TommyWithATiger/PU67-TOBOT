@@ -1,7 +1,8 @@
 import { auth } from './auth'
 
 import { API_URL } from './constants'
-// const USER_URL = `${API_URL}/user/`
+const USER_INFO_URL = `${API_URL}/user/info`
+const USER_CHECK_URL = `${API_URL}/user/check`
 const LOGIN_URL = `${API_URL}/user/login`
 
 const TOPIC_GET_URL = `${API_URL}/topic/get`
@@ -23,17 +24,30 @@ const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
 export const api = {
   /**
-   * Get the user from API
+   * Get the user from API.
    * @param {object} ctx Context.
-   * @param {string} username Username.
    */
-  getUser (ctx, username) {
-    // Return the user from GET request.
-    return {
-      username: 'ole',
-      firstName: 'Ola',
-      lastName: 'Nordmann'
+  getUser (ctx, callback, error) {
+    let req = {
+      body: ' '
     }
+
+    return this.postRequest(ctx, USER_INFO_URL, req, callback, error)
+  },
+
+  /**
+   * Get the user from API.
+   * @param {object} ctx Context.
+   */
+  checkUser (ctx, callback, error) {
+    let req = {
+      body: {
+        username: auth.getUsername(),
+        token: auth.getToken()
+      }
+    }
+
+    return this.postRequest(ctx, USER_CHECK_URL, req, callback, error)
   },
 
   /**
