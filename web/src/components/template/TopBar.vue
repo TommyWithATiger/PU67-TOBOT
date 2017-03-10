@@ -8,7 +8,7 @@
         <div v-for="link in links" v-if="checkUsertype(link.users)" class="header-navigation-button">
           <h2><router-link exact :to="link.path">{{ link.name }}</router-link></h2>
         </div>
-        <SearchBar />
+        <SearchBar v-if="!isSearchRoute" />
         <div class="header-user-info">
           <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
           <LogoutBtn />
@@ -70,6 +70,11 @@ export default {
     // Making store state available through state.
     state () {
       return this.$store.state
+    },
+
+    // Checking if the route is on search page. Else hide searchbar.
+    isSearchRoute () {
+      return /^\/search/.test(this.$route.path)
     },
 
     // Return user url

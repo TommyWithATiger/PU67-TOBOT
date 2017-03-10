@@ -4,6 +4,7 @@ import api.exceptions.APIHandlerNotFoundException;
 import api.handlers.rating.APIGetTopicRatingHandler;
 import api.handlers.rating.APIRateTopicHandler;
 import api.handlers.relators.APIGetRelatedTopicsSubjectHandler;
+import api.handlers.relators.APIGetRelatedTopicsWithRatingCountHandler;
 import api.handlers.relators.APIRelateSubjectTopicHandler;
 import api.handlers.subject.APIAddSubjectHandler;
 import api.handlers.subject.APIGetSubjectHandler;
@@ -70,6 +71,9 @@ public class APIDelegator {
 
     handlerRegistry.put("subject\\/related\\/\\?id=.*",
         APIGetRelatedTopicsSubjectHandler::getRelatedTopicsSubjectID);
+
+    handlerRegistry.put("subject\\/related\\/count\\/\\?id=.*",
+        APIGetRelatedTopicsWithRatingCountHandler::getTopicWithRatingCountSubjectID);
 
     handlerRegistry.put("subject\\/get\\/\\?id=.*", APIGetSubjectHandler::getSubjectByID);
     handlerRegistry.put("subject\\/get\\/\\?title=.*", APIGetSubjectHandler::getSubjectsByTitle);

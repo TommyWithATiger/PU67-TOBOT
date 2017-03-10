@@ -5,8 +5,10 @@ import FrontPage from 'components/pages/FrontPage'
 import LoginPage from 'components/pages/LoginPage'
 import RestrictedPage from 'components/pages/RestrictedPage'
 import UserPage from 'components/pages/UserPage'
+import TopicsPage from 'components/pages/TopicsPage'
+import SubjectsPage from 'components/pages/SubjectsPage'
 import TopicPage from 'components/pages/TopicPage'
-import SubjectPage from 'components/pages/SubjectPage'
+import SearchPage from 'components/pages/SearchPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import { auth } from 'auth'
 import { api } from 'api'
@@ -113,15 +115,8 @@ export const router = new Router({
     },
     {
       path: '/subject',
-      name: 'Subjects',
-      component: SubjectPage,
-      meta: { users: [ 'Admin', 'Teacher' ] },
-      beforeEnter: requireAuth
-    },
-    {
-      path: '/topic',
-      name: 'Topics',
-      component: TopicPage,
+      name: 'Subject',
+      component: SubjectsPage,
       meta: { users: [ 'Admin', 'Teacher' ] },
       beforeEnter: requireAuth
     },
@@ -130,6 +125,34 @@ export const router = new Router({
       name: 'RelateSubjectTopic',
       component: RelateSubjectTopicPage,
       meta: { users: [ 'Admin', 'Teacher' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/topic',
+      name: 'Topics',
+      component: TopicsPage,
+      meta: { users: [ 'Admin', 'Teacher' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/topic/:id',
+      name: 'Topic',
+      component: TopicPage,
+      meta: { users: [ 'Admin', 'Teacher' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/search',
+      name: 'SearchPage',
+      component: SearchPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/search/:term',
+      name: 'Search',
+      component: SearchPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {

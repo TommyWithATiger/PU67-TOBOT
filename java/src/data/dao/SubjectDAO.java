@@ -109,7 +109,7 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
     try {
       EntityManager entityManager = emFactory.createEntityManager();
       Query query = entityManager.createNativeQuery(
-          "SELECT * FROM SUBJECT WHERE id IN (SELECT Subject_ID FROM SUBJECT_USER WHERE editors_ID = ?)",
+          "SELECT * FROM SUBJECT WHERE id IN (SELECT Subject_ID FROM EDITORS WHERE editors_ID = ?)",
           Subject.class);
       query.setParameter(1, user.getId());
       entityList = (List<Subject>) query.getResultList(); //FIXME find a better fix
