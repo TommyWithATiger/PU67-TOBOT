@@ -7,7 +7,8 @@
       <button @click="login">Logg inn</button>
       <span>{{ feedback }}</span>
     </div>
-    <div class="registration"><a href="/register">Register account</a></div>
+    <a href="/register">Register account</a>
+    <a href="/reset/request">Forgotten password?</a>
   </div>
 </template>
 
