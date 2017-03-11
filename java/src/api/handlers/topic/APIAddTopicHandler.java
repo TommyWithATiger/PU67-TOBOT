@@ -16,10 +16,7 @@ public class APIAddTopicHandler {
    *        description (String): the topic description
    *
    * @param httpRequest The request to handle
-   * @return A JSON string with the following data:
-   *        title (String): the topic title
-   *        description (String): the topic description
-   *        id (int): the topic id
+   * @return A JSON string with the data from topic.createAbout
    */
   public static String handleAddTopicRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);

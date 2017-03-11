@@ -12,11 +12,7 @@ public class APIGetUserInfoHandler {
    * An API handler for a user to get it's user information. Requires the user to be logged in.
    *
    * @param httpRequest the request to handle
-   * @return A JSON object with the following variables:
-   *        username (String): the username
-   *        token (String): the user token
-   *        userType (String): The user type
-   *        email (String): the user email
+   * @return A JSON object with the data from user.createAbout
    */
   public static String getUserInfo(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);

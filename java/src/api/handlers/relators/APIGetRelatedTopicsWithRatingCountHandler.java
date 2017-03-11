@@ -62,7 +62,7 @@ public class APIGetRelatedTopicsWithRatingCountHandler {
    * Creates a JSON object with information about a topic
    *
    * @param topic The topic to create a JSON object about
-   * @return A JSON object with all the data in createAbout
+   * @return A JSON object with all the data in topic.createAbout
    *        Also has an additional ratingCount field, which holds an array of frequencies of each
    *        rating. ratingCount[1] = 5 means five participants have rated the topic as 1 star, etc.
    */

@@ -99,10 +99,8 @@ public class APIGetTopicRatingHandler {
    *
    * @param httpRequest The request to handle
    * @return A JSON object consisting of a variable "ratings" which is an array of JSON objects,
-   * where each JSON object represents a single rating. These JSON objects have the following variables:
-   *        id (int): topicID of the topic
-   *        title (String): Title of the topic
-   *        description (String): Description of the topic
+   * where each JSON object represents a single rating. These JSON objects have all the variables
+   * from topic.createAbout, and:
    *        has-rating (Boolean): Indicates if there is a rating for the given topic
    *        rating (String)[If 'has-rating' is 'true']: the rating of the topic, has 5 valid values
    *                            None, Poor, Ok, Good, Superb

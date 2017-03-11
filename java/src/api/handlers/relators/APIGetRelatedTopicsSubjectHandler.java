@@ -21,7 +21,7 @@ public class APIGetRelatedTopicsSubjectHandler {
    *
    * @param httpRequest The request to handle
    * @return A JSON object containing a variable "related-topics" which is an JSON array where each
-   * topic follows the structure of the createAboutTopic method
+   * topic follows the structure of the topic.createAbout method
    */
   public static String getRelatedTopicsSubjectID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);

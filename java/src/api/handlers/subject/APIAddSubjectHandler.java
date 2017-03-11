@@ -18,12 +18,7 @@ public class APIAddSubjectHandler {
    *        description (String): the description of the subject
    *
    * @param httpRequest The request to handle
-   * @return A JSON string with the following data:
-   *        title (String): the subject title
-   *        institution (String): the institution that has the subject
-   *        subjectCode (String): the subject code
-   *        description (String): the subject description
-   *        id (int): the subject id
+   * @return A JSON string with the data from Subject.createAbout
    */
   public static String handleAddSubject(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
