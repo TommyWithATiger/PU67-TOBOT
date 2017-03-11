@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.json.JSONObject;
 
 @Entity
 @NamedQueries({
@@ -282,6 +283,26 @@ public class Subject {
    */
   public void update() {
     SubjectDAO.getInstance().merge(this);
+  }
+
+  /**
+   * Creates a JSON object about the subject
+   *
+   * @return A JSON object with the following data
+   *        id (int): the subject id
+   *        title (String): the subject title
+   *        description (String): the subject description
+   *        institution (String): the institution that arranges the subject
+   *        subjectCode (String): the subject code
+   */
+  public JSONObject createAbout() {
+    JSONObject aboutSubject = new JSONObject();
+    aboutSubject.put("id", id);
+    aboutSubject.put("title", title);
+    aboutSubject.put("description", description);
+    aboutSubject.put("institution", institution);
+    aboutSubject.put("subjectCode", subjectCode);
+    return aboutSubject;
   }
 
   /**

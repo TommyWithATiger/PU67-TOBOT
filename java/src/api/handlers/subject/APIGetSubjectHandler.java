@@ -53,8 +53,7 @@ public class APIGetSubjectHandler {
       throw new APIBadRequestException("No subject with the given id");
     }
 
-    JSONObject response = createAboutSubject(subject);
-
+    JSONObject response = subject.createAbout();
     return response.toString();
   }
 
@@ -82,7 +81,7 @@ public class APIGetSubjectHandler {
 
     JSONObject response = new JSONObject();
     JSONArray subjectArray = new JSONArray();
-    subjects.forEach(subject -> subjectArray.put(createAboutSubject(subject)));
+    subjects.forEach(subject -> subjectArray.put(subject.createAbout()));
     response.put("subjects", subjectArray);
 
     return response.toString();
@@ -103,31 +102,10 @@ public class APIGetSubjectHandler {
 
     JSONObject response = new JSONObject();
     JSONArray subjectArray = new JSONArray();
-    subjects.forEach(subject -> subjectArray.put(createAboutSubject(subject)));
+    subjects.forEach(subject -> subjectArray.put(subject.createAbout()));
     response.put("subjects", subjectArray);
 
     return response.toString();
-  }
-
-  /**
-   * Creates a JSON object from a subject
-   *
-   * @param subject The subject from which to create the JSON object
-   * @return A JSON object with the following data
-   *        id (int): the subject id
-   *        title (String): the subject title
-   *        description (String): the subject description
-   *        institution (String): the institution that arranges the subject
-   *        subjectCode (String): the subject code
-   */
-  private static JSONObject createAboutSubject(Subject subject) {
-    JSONObject aboutSubject = new JSONObject();
-    aboutSubject.put("id", subject.getId());
-    aboutSubject.put("title", subject.getTitle());
-    aboutSubject.put("description", subject.getDescription());
-    aboutSubject.put("institution", subject.getInstitution());
-    aboutSubject.put("subjectCode", subject.getSubjectCode());
-    return aboutSubject;
   }
 
 }

@@ -47,14 +47,7 @@ public class APIAddSubjectHandler {
     Subject subject = new Subject(title, institution, subjectCode, description);
     subject.create();
 
-    JSONObject response = new JSONObject();
-    response.put("title", title);
-    response.put("institution", institution);
-    response.put("subjectCode", subjectCode);
-    response.put("description", description);
-    response.put("id", subject.getId());
-
-    return response.toString();
+    return subject.createAbout().toString();
   }
 
 }
