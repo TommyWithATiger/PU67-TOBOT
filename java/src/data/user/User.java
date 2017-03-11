@@ -1,5 +1,7 @@
 package data.user;
 
+import static data.user.UserTypeConverter.userTypeToString;
+
 import data.dao.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +18,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
@@ -369,6 +372,16 @@ public class User {
    */
   public void setPasswordResetTokenExpireDate(Date passwordResetTokenExpireDate) {
     this.passwordResetTokenExpireDate = passwordResetTokenExpireDate;
+  }
+
+  public JSONObject createAbout(){
+    JSONObject response = new JSONObject();
+
+    response.put("username", username);
+    response.put("token", sessionToken);
+    response.put("userType", userTypeToString(userType));
+    response.put("email", email);
+    return response;
   }
 
   /**
