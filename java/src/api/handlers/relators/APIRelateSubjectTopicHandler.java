@@ -3,10 +3,9 @@ package api.handlers.relators;
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
+import static api.helpers.isLoggedInHelper.getUserPost;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.dao.SubjectDAO;
 import data.dao.TopicDAO;
 import data.Subject;
@@ -36,9 +35,7 @@ public class APIRelateSubjectTopicHandler {
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
     // User must be logged in
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
-    }
+    getUserPost(httpRequest, ", cannot create a new subject");
 
     // Require subjectID and topicID
     if (!jsonObject.has("subjectID") || !jsonObject.has("topicID")) {

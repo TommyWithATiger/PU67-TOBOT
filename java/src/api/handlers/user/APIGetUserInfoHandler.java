@@ -1,10 +1,8 @@
 package api.handlers.user;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
+import static api.helpers.isLoggedInHelper.getUserPost;
 
-import api.exceptions.APIRequestForbiddenException;
-import data.dao.UserDAO;
 import data.user.User;
 import data.user.UserTypeConverter;
 import org.apache.http.HttpRequest;
@@ -25,13 +23,7 @@ public class APIGetUserInfoHandler {
   public static String getUserInfo(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User must be logged in to get info");
-    }
-
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
+    User user = getUserPost(httpRequest, ", cannot get user info");
 
     JSONObject response = new JSONObject();
 

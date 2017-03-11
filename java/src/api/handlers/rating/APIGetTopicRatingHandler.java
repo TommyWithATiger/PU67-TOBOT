@@ -3,13 +3,11 @@ package api.handlers.rating;
 import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
+import static api.helpers.isLoggedInHelper.getUserPost;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.dao.RatingDAO;
 import data.dao.TopicDAO;
-import data.dao.UserDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
@@ -36,10 +34,7 @@ public class APIGetTopicRatingHandler {
   public static String getTopicRatingByTopicID(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    // Must be logged in
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
-    }
+    User user = getUserPost(httpRequest, ", cannot find ratings");
 
     HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
@@ -60,10 +55,6 @@ public class APIGetTopicRatingHandler {
     if (topic == null) {
       throw new APIBadRequestException("no topic with the given id exists");
     }
-
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
 
     Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topicID));
 
@@ -89,13 +80,7 @@ public class APIGetTopicRatingHandler {
   public static String getTopicRatings(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
-    }
-
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
+    User user = getUserPost(httpRequest, ", cannot find ratings");
 
     List<Rating> ratings = RatingDAO.getInstance().findRatingByUser(user);
 
@@ -128,13 +113,7 @@ public class APIGetTopicRatingHandler {
   public static String getTopicsWithRatings(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
-    }
-
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
+    User user = getUserPost(httpRequest, ", cannot find ratings");
 
     List<Topic> topics = TopicDAO.getInstance().findAll();
     List<Rating> ratingsUser = RatingDAO.getInstance().findRatingByUser(user);

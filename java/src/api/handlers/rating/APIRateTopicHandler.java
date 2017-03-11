@@ -3,13 +3,11 @@ package api.handlers.rating;
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
+import static api.helpers.isLoggedInHelper.getUserPost;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.dao.RatingDAO;
 import data.dao.TopicDAO;
-import data.dao.UserDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
@@ -42,16 +40,12 @@ public class APIRateTopicHandler {
 
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
-    // The user must be logged in
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
-    }
+    User user = getUserPost(httpRequest, ", cannot create a new subject");
 
     // Require topic id
     if (!jsonObject.has("topicID") || !jsonObject.has("rating")) {
       throw new APIBadRequestException("topicID must be set");
     }
-
 
     // Check that there is a valid rating
     String ratingValue = jsonObject.getString("rating");
@@ -75,10 +69,6 @@ public class APIRateTopicHandler {
     if (topic == null) {
       throw new APIBadRequestException("No topic with the given id");
     }
-
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
 
     // Either update an old rating or create a new one
     Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topic.getId()));

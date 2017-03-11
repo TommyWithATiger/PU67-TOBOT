@@ -3,10 +3,9 @@ package api.handlers.topic;
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
+import static api.helpers.isLoggedInHelper.getUserPost;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.Topic;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
@@ -31,10 +30,8 @@ public class APIAddTopicHandler {
 
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
-    // The user must be logged in
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
-    }
+    // User must be logged in
+    getUserPost(httpRequest, ", cannot create a new topic");
 
     // Require title and description
     if (!jsonObject.has("title") || !jsonObject.has("description")) {
