@@ -2,6 +2,7 @@ package api.handlers.user;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.requireJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
@@ -29,10 +30,7 @@ public class APILoginHandler {
 
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
-    // Require username and password
-    if (!jsonObject.has("username") || !jsonObject.has("password")) {
-      throw new APIBadRequestException("Login data not complete");
-    }
+    requireJSONFields(jsonObject, "username", "password");
 
     String username = jsonObject.getString("username");
     String password = jsonObject.getString("password");

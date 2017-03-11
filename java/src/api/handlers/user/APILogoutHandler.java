@@ -2,6 +2,7 @@ package api.handlers.user;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.requireJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
@@ -28,9 +29,7 @@ public class APILogoutHandler {
 
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
-    if (!jsonObject.has("username") || !jsonObject.has("token")) {
-      throw new APIBadRequestException("Logout data not complete");
-    }
+    requireJSONFields(jsonObject, "username", "token");
 
     String username = jsonObject.getString("username");
     String token = jsonObject.getString("token");

@@ -2,10 +2,10 @@ package api.handlers.subject;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.requireJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
-import api.exceptions.APIBadRequestException;
 import data.Subject;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
@@ -37,11 +37,7 @@ public class APIAddSubjectHandler {
     // User must be logged in
     getUserPost(httpRequest, ", cannot create a new subject");
 
-    // Require title, institution, subjectCode and description
-    if (!jsonObject.has("title") || !jsonObject.has("institution") || !jsonObject.has("subjectCode")
-        || !jsonObject.has("description")) {
-      throw new APIBadRequestException("Request does not have the required data");
-    }
+    requireJSONFields(jsonObject, "title", "institution", "subjectCode", "description");
 
     String title = jsonObject.getString("title");
     String institution = jsonObject.getString("institution");

@@ -22,4 +22,18 @@ public class JSONCheckerHelper {
     return jsonObject;
   }
 
+  /**
+   * A helper for checking if the given JSONObject contains the required fields
+   * @param jsonObject The JSONObject to check
+   * @param fields Varargs of fields that must be set
+   * @throws APIBadRequestException Thrown if the JSONObject does not contain one of the fields
+   */
+  public static void requireJSONFields(JSONObject jsonObject, String... fields) throws APIBadRequestException {
+    for(String field : fields){
+      if (!jsonObject.has(field)){
+        throw new APIBadRequestException(field + " must be set");
+      }
+    }
+  }
+
 }

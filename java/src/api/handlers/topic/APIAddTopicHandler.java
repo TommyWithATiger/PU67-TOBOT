@@ -2,6 +2,7 @@ package api.handlers.topic;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.requireJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
@@ -33,10 +34,7 @@ public class APIAddTopicHandler {
     // User must be logged in
     getUserPost(httpRequest, ", cannot create a new topic");
 
-    // Require title and description
-    if (!jsonObject.has("title") || !jsonObject.has("description")) {
-      throw new APIBadRequestException("Topic information is not complete");
-    }
+    requireJSONFields(jsonObject, "title", "description");
 
     String title = jsonObject.getString("title");
     String description = jsonObject.getString("description");
@@ -46,5 +44,4 @@ public class APIAddTopicHandler {
 
     return topic.createAbout().toString();
   }
-
 }

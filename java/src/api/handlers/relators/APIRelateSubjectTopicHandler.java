@@ -2,6 +2,7 @@ package api.handlers.relators;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.requireJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
@@ -38,9 +39,7 @@ public class APIRelateSubjectTopicHandler {
     getUserPost(httpRequest, ", cannot create a new subject");
 
     // Require subjectID and topicID
-    if (!jsonObject.has("subjectID") || !jsonObject.has("topicID")) {
-      throw new APIBadRequestException("Request does not have the required data");
-    }
+    requireJSONFields(jsonObject, "subjectID", "topicID");
 
     // subjectID and topicID must be integers
     Integer subjectID, topicID;

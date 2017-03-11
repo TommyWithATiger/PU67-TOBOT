@@ -2,6 +2,7 @@ package api.handlers.rating;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.requireJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
@@ -42,10 +43,7 @@ public class APIRateTopicHandler {
 
     User user = getUserPost(httpRequest, ", cannot create a new subject");
 
-    // Require topic id
-    if (!jsonObject.has("topicID") || !jsonObject.has("rating")) {
-      throw new APIBadRequestException("topicID must be set");
-    }
+    requireJSONFields(jsonObject, "rating", "topicID");
 
     // Check that there is a valid rating
     String ratingValue = jsonObject.getString("rating");
