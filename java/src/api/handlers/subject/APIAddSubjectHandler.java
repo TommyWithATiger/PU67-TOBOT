@@ -2,7 +2,7 @@ package api.handlers.subject;
 
 import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.getUserPost;
+import static api.helpers.isLoggedInHelper.getUserFromHeader;
 
 import data.Subject;
 import java.util.List;
@@ -24,7 +24,7 @@ public class APIAddSubjectHandler {
     checkRequestMethod("POST", httpRequest);
 
     // User must be logged in
-    getUserPost(httpRequest, ", cannot create a new subject");
+    getUserFromHeader(httpRequest, ", cannot create a new subject");
 
     List<String> fields = getJSONFields(httpRequest, String.class,
         "title", "institution", "subjectCode", "description");

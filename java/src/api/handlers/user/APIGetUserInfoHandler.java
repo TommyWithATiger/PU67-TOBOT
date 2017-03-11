@@ -1,7 +1,7 @@
 package api.handlers.user;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.getUserPost;
+import static api.helpers.isLoggedInHelper.getUserFromHeader;
 
 import data.user.User;
 import org.apache.http.HttpRequest;
@@ -16,7 +16,7 @@ public class APIGetUserInfoHandler {
    */
   public static String getUserInfo(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
-    User user = getUserPost(httpRequest, ", cannot get user info");
+    User user = getUserFromHeader(httpRequest, ", cannot get user info");
     return user.createAbout().toString();
   }
 

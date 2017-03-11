@@ -11,11 +11,12 @@ public class isLoggedInHelper {
    * A helper method for checking if the user is logged in
    *
    * @param httpRequest The request
+   * @param exceptionSuffix a suffix to the base exception message
    * @throws APIRequestForbiddenException if the header is missing X-Username or Authorization, or if
    * the user does not exist, or if the users's session is expired.
    * @return The User that made the request
    */
-  public static User getUserPost(HttpRequest httpRequest, String exceptionSuffix) {
+  public static User getUserFromHeader(HttpRequest httpRequest, String exceptionSuffix) {
     String base = "User is not logged in";
 
     // Must have username in the data and the Authentication header set

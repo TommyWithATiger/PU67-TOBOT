@@ -4,7 +4,7 @@ import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.getUserPost;
+import static api.helpers.isLoggedInHelper.getUserFromHeader;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.RatingDAO;
@@ -39,7 +39,7 @@ public class APIRateTopicHandler {
     String requestContent = checkAndGetEntityContent(httpRequest);
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
-    User user = getUserPost(httpRequest, ", cannot create a new subject");
+    User user = getUserFromHeader(httpRequest, ", cannot create a new subject");
 
     String ratingValue = getJSONFields(jsonObject, String.class, "rating").get(0);
     RatingEnum ratingEnum;

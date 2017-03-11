@@ -2,7 +2,7 @@ package api.handlers.relators;
 
 import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.getUserPost;
+import static api.helpers.isLoggedInHelper.getUserFromHeader;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.SubjectDAO;
@@ -30,7 +30,7 @@ public class APIRelateSubjectTopicHandler {
     checkRequestMethod("POST", httpRequest);
 
     // User must be logged in
-    getUserPost(httpRequest, ", cannot create a new subject");
+    getUserFromHeader(httpRequest, ", cannot create a new subject");
 
     List<Integer> fields = getJSONFields(httpRequest, Integer.class,
         "subjectID", "topicID");
