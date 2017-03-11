@@ -1,6 +1,5 @@
 package api.handlers.rating;
 
-import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 import static api.helpers.isLoggedInHelper.getUserPost;
@@ -121,7 +120,7 @@ public class APIGetTopicRatingHandler {
     JSONObject response = new JSONObject();
     JSONArray topicArray = new JSONArray();
     topics.forEach(topic -> {
-      JSONObject aboutTopic = createAboutTopic(topic);
+      JSONObject aboutTopic = topic.createAbout();
       Optional<Rating> ratingTopic = ratingsUser.stream()
           .filter((rating) -> rating.getTopicID() == topic.getId()).findFirst();
       aboutTopic.put("has-rating", ratingTopic.isPresent());

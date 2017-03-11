@@ -45,7 +45,7 @@ public class APIGetTopicHandler {
       throw new APIBadRequestException("No topic with the given id");
     }
 
-    return createAboutTopic(topic).toString();
+    return topic.createAbout().toString();
   }
 
   /**
@@ -72,7 +72,7 @@ public class APIGetTopicHandler {
 
     JSONObject response = new JSONObject();
     JSONArray topicArray = new JSONArray();
-    topics.forEach(topic -> topicArray.put(createAboutTopic(topic)));
+    topics.forEach(topic -> topicArray.put(topic.createAbout()));
     response.put("topics", topicArray);
     return response.toString();
   }
@@ -91,26 +91,9 @@ public class APIGetTopicHandler {
 
     JSONObject response = new JSONObject();
     JSONArray topicArray = new JSONArray();
-    topics.forEach(topic -> topicArray.put(createAboutTopic(topic)));
+    topics.forEach(topic -> topicArray.put(topic.createAbout()));
     response.put("topics", topicArray);
     return response.toString();
-  }
-
-  /**
-   * Creates a JSON object with information about a topic
-   *
-   * @param topic The topic to create a JSON object about
-   * @return A JSON object with the following data:
-   *        id (int): the topic id
-   *        title (String): the topic title
-   *        description (String): the topic description
-   */
-  public static JSONObject createAboutTopic(Topic topic){
-    JSONObject aboutTopic = new JSONObject();
-    aboutTopic.put("id", topic.getId());
-    aboutTopic.put("title", topic.getTitle());
-    aboutTopic.put("description", topic.getDescription());
-    return aboutTopic;
   }
 
 }

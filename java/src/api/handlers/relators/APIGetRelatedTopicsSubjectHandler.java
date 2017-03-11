@@ -1,6 +1,5 @@
 package api.handlers.relators;
 
-import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 
@@ -52,7 +51,7 @@ public class APIGetRelatedTopicsSubjectHandler {
 
     JSONObject response = new JSONObject();
     JSONArray topics = new JSONArray();
-    relatedTopics.forEach(topic -> topics.put(createAboutTopic(topic)));
+    relatedTopics.forEach(topic -> topics.put(topic.createAbout()));
     response.put("related_topics", topics);
 
     return response.toString();

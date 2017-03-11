@@ -1,6 +1,5 @@
 package api.handlers.relators;
 
-import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 
@@ -65,12 +64,12 @@ public class APIGetRelatedTopicsWithRatingCountHandler {
    * Creates a JSON object with information about a topic
    *
    * @param topic The topic to create a JSON object about
-   * @return A JSON object with all the data in createAboutTopic.
+   * @return A JSON object with all the data in createAbout
    *        Also has an additional ratingCount field, which holds an array of frequencies of each
    *        rating. ratingCount[1] = 5 means five participants have rated the topic as 1 star, etc.
    */
   public static JSONObject createAboutTopicWithRatingCount(Topic topic, Subject subject){
-    JSONObject aboutTopic = createAboutTopic(topic);
+    JSONObject aboutTopic = topic.createAbout();
 
     int[] starFrequency = new int[] {0, 0, 0, 0, 0, 0};
     Collection<Rating> ratings = RatingDAO.getInstance()

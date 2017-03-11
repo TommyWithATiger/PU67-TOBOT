@@ -44,12 +44,7 @@ public class APIAddTopicHandler {
     Topic topic = new Topic(title, description);
     topic.create();
 
-    JSONObject creationResponse = new JSONObject();
-    creationResponse.put("id", topic.getId());
-    creationResponse.put("title", title);
-    creationResponse.put("description", description);
-
-    return creationResponse.toString();
+    return topic.createAbout().toString();
   }
 
 }
