@@ -1,14 +1,12 @@
 package api.handlers.subject;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
-import static api.helpers.JSONCheckerHelper.requireJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
 import data.Subject;
+import java.util.List;
 import org.apache.http.HttpRequest;
-import org.json.JSONObject;
 
 public class APIAddSubjectHandler {
 
@@ -30,19 +28,16 @@ public class APIAddSubjectHandler {
   public static String handleAddSubject(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
-
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
     // User must be logged in
     getUserPost(httpRequest, ", cannot create a new subject");
 
-    requireJSONFields(jsonObject, "title", "institution", "subjectCode", "description");
+    List<String> fields = getJSONFields(httpRequest, String.class,
+        "title", "institution", "subjectCode", "description");
 
-    String title = jsonObject.getString("title");
-    String institution = jsonObject.getString("institution");
-    String subjectCode = jsonObject.getString("subjectCode");
-    String description = jsonObject.getString("description");
+    String title = fields.get(0);
+    String institution = fields.get(1);
+    String subjectCode = fields.get(2);
+    String description = fields.get(3);
 
     Subject subject = new Subject(title, institution, subjectCode, description);
     subject.create();

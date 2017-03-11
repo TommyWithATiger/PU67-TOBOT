@@ -1,13 +1,12 @@
 package api.handlers.user;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
-import static api.helpers.JSONCheckerHelper.requireJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.UserDAO;
 import data.user.User;
+import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -26,16 +25,11 @@ public class APILoginHandler {
   public static String handleLoginRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
+    List<String> fields = getJSONFields(httpRequest, String.class, "username", "password");
 
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
+    User user = UserDAO.getInstance().findUserByUsername(fields.get(0));
+    String password = fields.get(1);
 
-    requireJSONFields(jsonObject, "username", "password");
-
-    String username = jsonObject.getString("username");
-    String password = jsonObject.getString("password");
-
-    User user = UserDAO.getInstance().findUserByUsername(username);
     if (user == null) {
       throw new APIBadRequestException("User not found");
     }
@@ -55,12 +49,10 @@ public class APILoginHandler {
     user.update();
 
     JSONObject loginResponse = new JSONObject();
-    loginResponse.put("username", username);
+    loginResponse.put("username", user.getUsername());
     loginResponse.put("token", token);
 
     return loginResponse.toString();
   }
-
-
 
 }

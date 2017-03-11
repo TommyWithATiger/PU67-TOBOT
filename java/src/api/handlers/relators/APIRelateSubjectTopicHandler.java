@@ -1,8 +1,6 @@
 package api.handlers.relators;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
-import static api.helpers.JSONCheckerHelper.requireJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
@@ -11,8 +9,8 @@ import data.dao.SubjectDAO;
 import data.dao.TopicDAO;
 import data.Subject;
 import data.Topic;
+import java.util.List;
 import org.apache.http.HttpRequest;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class APIRelateSubjectTopicHandler {
@@ -31,27 +29,14 @@ public class APIRelateSubjectTopicHandler {
   public static String relateSubjectTopicHandler(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
-
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
     // User must be logged in
     getUserPost(httpRequest, ", cannot create a new subject");
 
-    // Require subjectID and topicID
-    requireJSONFields(jsonObject, "subjectID", "topicID");
+    List<Integer> fields = getJSONFields(httpRequest, Integer.class,
+        "subjectID", "topicID");
 
-    // subjectID and topicID must be integers
-    Integer subjectID, topicID;
-    try {
-      subjectID = jsonObject.getInt("subjectID");
-      topicID = jsonObject.getInt("topicID");
-    } catch (JSONException je) {
-      throw new APIBadRequestException("Topic or subject ID is not integer");
-    }
-
-    Subject subject = SubjectDAO.getInstance().findById(subjectID);
-    Topic topic = TopicDAO.getInstance().findById(topicID);
+    Subject subject = SubjectDAO.getInstance().findById(fields.get(0));
+    Topic topic = TopicDAO.getInstance().findById(fields.get(1));
 
     if (subject == null || topic == null) {
       throw new APIBadRequestException("One of the id's does not exists");

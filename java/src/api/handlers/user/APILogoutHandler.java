@@ -1,13 +1,12 @@
 package api.handlers.user;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
-import static api.helpers.JSONCheckerHelper.requireJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.UserDAO;
 import data.user.User;
+import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -25,16 +24,10 @@ public class APILogoutHandler {
   public static String handleLogoutRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
+    List<String> fields = getJSONFields(httpRequest, String.class, "username", "token");
 
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
-    requireJSONFields(jsonObject, "username", "token");
-
-    String username = jsonObject.getString("username");
-    String token = jsonObject.getString("token");
-
-    User user = UserDAO.getInstance().findUserByUsername(username);
+    User user = UserDAO.getInstance().findUserByUsername(fields.get(0));
+    String token = fields.get(1);
 
     if (user == null) {
       throw new APIBadRequestException("User does not exist");

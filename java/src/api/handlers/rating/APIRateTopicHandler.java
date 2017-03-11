@@ -2,7 +2,7 @@ package api.handlers.rating;
 
 import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
-import static api.helpers.JSONCheckerHelper.requireJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
@@ -16,7 +16,6 @@ import data.rating.RatingConverter;
 import data.rating.RatingEnum;
 import data.rating.RatingKey;
 import org.apache.http.HttpRequest;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class APIRateTopicHandler {
@@ -38,15 +37,11 @@ public class APIRateTopicHandler {
     checkRequestMethod("POST", httpRequest);
 
     String requestContent = checkAndGetEntityContent(httpRequest);
-
     JSONObject jsonObject = checkAndGetJSON(requestContent);
 
     User user = getUserPost(httpRequest, ", cannot create a new subject");
 
-    requireJSONFields(jsonObject, "rating", "topicID");
-
-    // Check that there is a valid rating
-    String ratingValue = jsonObject.getString("rating");
+    String ratingValue = getJSONFields(jsonObject, String.class, "rating").get(0);
     RatingEnum ratingEnum;
     try {
       ratingEnum = RatingConverter.convertFullRatingNameToEnum(ratingValue);
@@ -54,13 +49,7 @@ public class APIRateTopicHandler {
       throw new APIBadRequestException("rating is not a valid rating");
     }
 
-    // Check topicID is integer
-    int topicID;
-    try {
-      topicID = jsonObject.getInt("topicID");
-    } catch (JSONException je){
-      throw new APIBadRequestException("topicID must be integer");
-    }
+    Integer topicID = getJSONFields(jsonObject, Integer.class, "topicID").get(0);
 
     // Check topic exists
     Topic topic = TopicDAO.getInstance().findById(topicID);

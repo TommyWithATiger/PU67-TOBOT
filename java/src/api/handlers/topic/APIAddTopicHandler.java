@@ -1,15 +1,12 @@
 package api.handlers.topic;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
-import static api.helpers.JSONCheckerHelper.requireJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONFields;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
-import api.exceptions.APIBadRequestException;
 import data.Topic;
+import java.util.List;
 import org.apache.http.HttpRequest;
-import org.json.JSONObject;
 
 public class APIAddTopicHandler {
 
@@ -27,17 +24,13 @@ public class APIAddTopicHandler {
   public static String handleAddTopicRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
-
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
     // User must be logged in
     getUserPost(httpRequest, ", cannot create a new topic");
 
-    requireJSONFields(jsonObject, "title", "description");
+    List<String> fields = getJSONFields(httpRequest, String.class, "title", "description");
 
-    String title = jsonObject.getString("title");
-    String description = jsonObject.getString("description");
+    String title = fields.get(0);
+    String description = fields.get(1);
 
     Topic topic = new Topic(title, description);
     topic.create();
