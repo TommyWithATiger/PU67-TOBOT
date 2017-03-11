@@ -1,8 +1,7 @@
 package api.handlers.relators;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
-import static api.helpers.UrlArgumentHelper.requireURIFields;
+import static api.helpers.UrlArgumentHelper.getIntegerURIFields;
 
 import api.exceptions.APIBadRequestException;
 import data.Subject;
@@ -11,7 +10,6 @@ import data.dao.RatingDAO;
 import data.dao.SubjectDAO;
 import data.rating.Rating;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.stream.IntStream;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
@@ -30,17 +28,7 @@ public class APIGetRelatedTopicsWithRatingCountHandler {
   public static String getTopicWithRatingCountSubjectID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    requireURIFields(uriArguments, "id");
-
-    // id must be integer
-    int subjectID;
-    try {
-      subjectID = Integer.parseInt(uriArguments.get("id"));
-    } catch (NumberFormatException nfe) {
-      throw new APIBadRequestException("id must be integer");
-    }
+    Integer subjectID = getIntegerURIFields(httpRequest, "id").get(0);
 
     Subject subject = SubjectDAO.getInstance().findById(subjectID);
 

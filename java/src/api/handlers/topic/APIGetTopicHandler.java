@@ -1,13 +1,12 @@
 package api.handlers.topic;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
-import static api.helpers.UrlArgumentHelper.requireURIFields;
+import static api.helpers.UrlArgumentHelper.getIntegerURIFields;
+import static api.helpers.UrlArgumentHelper.getURIFields;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.TopicDAO;
 import data.Topic;
-import java.util.HashMap;
 import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
@@ -25,20 +24,7 @@ public class APIGetTopicHandler {
   public static String getTopicByID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    if (!uriArguments.containsKey("id")) {
-      throw new APIBadRequestException("id must be given");
-    }
-
-    int topicID;
-
-    // Subject id must be integer
-    try {
-      topicID = Integer.parseInt(uriArguments.get("id"));
-    } catch (NumberFormatException nfe) {
-      throw new APIBadRequestException("id must be integer");
-    }
+    Integer topicID = getIntegerURIFields(httpRequest, "id").get(0);
 
     Topic topic = TopicDAO.getInstance().findById(topicID);
 
@@ -60,11 +46,7 @@ public class APIGetTopicHandler {
   public static String getTopicsByTitle(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    requireURIFields(uriArguments, "title");
-
-    String title = uriArguments.get("title");
+    String title = getURIFields(httpRequest, "title").get(0);
 
     List<Topic> topics = TopicDAO.getInstance().findTopicsByTitle(title);
 

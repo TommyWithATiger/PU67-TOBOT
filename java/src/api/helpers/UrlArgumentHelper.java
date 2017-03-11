@@ -1,7 +1,9 @@
 package api.helpers;
 
 import api.exceptions.APIBadRequestException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.apache.http.HttpRequest;
 
 public class UrlArgumentHelper {
@@ -38,20 +40,38 @@ public class UrlArgumentHelper {
     return arguments;
   }
 
-  /**
-   * A helper for checking if the given HashMap contains the required fields
-   *
-   * @param uriArguments The HashMap of arguments to check
-   * @param fields Varargs of fields that must be set
-   * @throws APIBadRequestException Thrown if the HashMap does not contain one of the fields
-   */
-  public static void requireURIFields(HashMap<String, String> uriArguments, String... fields)
+  public static List<String> getURIFields(HttpRequest httpRequest, String... fields)
       throws APIBadRequestException {
+    List<String> ret = new ArrayList<>();
+
+    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
+
     for (String field : fields) {
       if (!uriArguments.containsKey(field)) {
         throw new APIBadRequestException(field + " must be given");
       }
+      ret.add(uriArguments.get(field));
     }
+    return ret;
+  }
+
+  public static List<Integer> getIntegerURIFields(HttpRequest httpRequest, String... fields)
+      throws APIBadRequestException {
+    List<Integer> ret = new ArrayList<>();
+
+    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
+
+    for (String field : fields) {
+      if (!uriArguments.containsKey(field)) {
+        throw new APIBadRequestException(field + " must be given");
+      }
+      try {
+        ret.add(Integer.valueOf(uriArguments.get(field)));
+      } catch (NumberFormatException nfe) {
+        throw new APIBadRequestException(field + " must be int");
+      }
+    }
+    return ret;
   }
 
 }

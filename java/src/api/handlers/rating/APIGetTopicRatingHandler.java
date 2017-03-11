@@ -1,8 +1,7 @@
 package api.handlers.rating;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
-import static api.helpers.UrlArgumentHelper.requireURIFields;
+import static api.helpers.UrlArgumentHelper.getIntegerURIFields;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
 import api.exceptions.APIBadRequestException;
@@ -13,7 +12,6 @@ import data.user.User;
 import data.rating.Rating;
 import data.rating.RatingConverter;
 import data.rating.RatingKey;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import org.apache.http.HttpRequest;
@@ -36,16 +34,7 @@ public class APIGetTopicRatingHandler {
 
     User user = getUserPost(httpRequest, ", cannot find ratings");
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    requireURIFields(uriArguments, "id");
-
-    int topicID;
-    try {
-      topicID = Integer.parseInt(uriArguments.get("id"));
-    } catch (NumberFormatException nfe) {
-      throw new APIBadRequestException("id must be integer");
-    }
+    Integer topicID = getIntegerURIFields(httpRequest, "id").get(0);
 
     Topic topic = TopicDAO.getInstance().findById(topicID);
 
