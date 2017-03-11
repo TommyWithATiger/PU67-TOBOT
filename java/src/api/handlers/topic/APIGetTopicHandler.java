@@ -2,6 +2,7 @@ package api.handlers.topic;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
+import static api.helpers.UrlArgumentHelper.requireURIFields;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.TopicDAO;
@@ -61,10 +62,7 @@ public class APIGetTopicHandler {
 
     HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
-    // Require title
-    if (!uriArguments.containsKey("title")) {
-      throw new APIBadRequestException("title must be given");
-    }
+    requireURIFields(uriArguments, "title");
 
     String title = uriArguments.get("title");
 

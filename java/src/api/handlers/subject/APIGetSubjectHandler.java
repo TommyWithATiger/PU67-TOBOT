@@ -2,6 +2,7 @@ package api.handlers.subject;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
+import static api.helpers.UrlArgumentHelper.requireURIFields;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.SubjectDAO;
@@ -33,10 +34,7 @@ public class APIGetSubjectHandler {
 
     HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
-    // Require id
-    if (!uriArguments.containsKey("id")) {
-      throw new APIBadRequestException("id must be given");
-    }
+    requireURIFields(uriArguments, "id");
 
     int subjectID;
 

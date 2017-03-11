@@ -38,4 +38,20 @@ public class UrlArgumentHelper {
     return arguments;
   }
 
+  /**
+   * A helper for checking if the given HashMap contains the required fields
+   *
+   * @param uriArguments The HashMap of arguments to check
+   * @param fields Varargs of fields that must be set
+   * @throws APIBadRequestException Thrown if the HashMap does not contain one of the fields
+   */
+  public static void requireURIFields(HashMap<String, String> uriArguments, String... fields)
+      throws APIBadRequestException {
+    for (String field : fields) {
+      if (!uriArguments.containsKey(field)) {
+        throw new APIBadRequestException(field + " must be given");
+      }
+    }
+  }
+
 }

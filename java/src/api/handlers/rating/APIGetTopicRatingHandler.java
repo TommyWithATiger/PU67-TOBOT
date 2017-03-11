@@ -2,6 +2,7 @@ package api.handlers.rating;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
+import static api.helpers.UrlArgumentHelper.requireURIFields;
 import static api.helpers.isLoggedInHelper.getUserPost;
 
 import api.exceptions.APIBadRequestException;
@@ -37,10 +38,7 @@ public class APIGetTopicRatingHandler {
 
     HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
-    // Require id
-    if (!uriArguments.containsKey("id")) {
-      throw new APIBadRequestException("id must be given");
-    }
+    requireURIFields(uriArguments, "id");
 
     int topicID;
     try {

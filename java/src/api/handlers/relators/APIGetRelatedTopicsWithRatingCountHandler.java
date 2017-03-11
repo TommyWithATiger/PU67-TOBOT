@@ -2,6 +2,7 @@ package api.handlers.relators;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
+import static api.helpers.UrlArgumentHelper.requireURIFields;
 
 import api.exceptions.APIBadRequestException;
 import data.Subject;
@@ -31,10 +32,7 @@ public class APIGetRelatedTopicsWithRatingCountHandler {
 
     HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
 
-    // Require id
-    if (!uriArguments.containsKey("id")) {
-      throw new APIBadRequestException("id must be given");
-    }
+    requireURIFields(uriArguments, "id");
 
     // id must be integer
     int subjectID;
