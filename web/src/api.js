@@ -1,11 +1,13 @@
 import { auth } from './auth'
 
 import { API_URL } from './constants'
-// const USER_URL = `${API_URL}/user/`
+const USER_INFO_URL = `${API_URL}/user/info`
+const USER_CHECK_URL = `${API_URL}/user/check`
 const LOGIN_URL = `${API_URL}/user/login`
 
 const TOPIC_GET_URL = `${API_URL}/topic/get`
 const TOPIC_GET_TITLE_URL = `${API_URL}/topic/get/?title=`
+const TOPIC_GET_ID_URL = `${API_URL}/topic/get/?id=`
 const TOPIC_ADD_URL = `${API_URL}/topic/create`
 
 const TOPIC_RATE_URL = `${API_URL}/rating/rate`
@@ -22,17 +24,30 @@ const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
 export const api = {
   /**
-   * Get the user from API
+   * Get the user from API.
    * @param {object} ctx Context.
-   * @param {string} username Username.
    */
-  getUser (ctx, username) {
-    // Return the user from GET request.
-    return {
-      username: 'ole',
-      firstName: 'Ola',
-      lastName: 'Nordmann'
+  getUser (ctx, callback, error) {
+    let req = {
+      body: ' '
     }
+
+    return this.postRequest(ctx, USER_INFO_URL, req, callback, error)
+  },
+
+  /**
+   * Get the user from API.
+   * @param {object} ctx Context.
+   */
+  checkUser (ctx, callback, error) {
+    let req = {
+      body: {
+        username: auth.getUsername(),
+        token: auth.getToken()
+      }
+    }
+
+    return this.postRequest(ctx, USER_CHECK_URL, req, callback, error)
   },
 
   /**
@@ -61,23 +76,24 @@ export const api = {
   /**
    * Get topics related to a subject from the API
    * @param {object} ctx Context.
+   * @param {integer} id The subject id.
    * @param {function} callback Handle the request output.
-   * @param {integer} id The subject id
+   * @param {function} error Feedback error.
    * @returns {Promise} A promise from the request.
    */
-  getRelatedTopics (ctx, callback, error, id) {
+  getRelatedTopics (ctx, id, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_RELATED_URL + id, callback, error)
   },
 
   /**
-   * Get the subject with the given id form API.
+   * Get the subject with the given id from API.
    * @param {object} ctx Context.
+   * @param {integer} id The subject id.
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
-   * @param {integer} id The subject id.
    * @returns {Promise} A promise from the request.
    */
-  getSubjectID (ctx, callback, error, id) {
+  getSubjectById (ctx, id, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_ID_URL + id, callback, error)
   },
 
@@ -102,6 +118,18 @@ export const api = {
    */
   getTopicsByTitle (ctx, term, callback, error) {
     return this.getRequest(ctx, TOPIC_GET_TITLE_URL + term, callback, error)
+  },
+
+  /**
+   * Get the topic with the given id from API.
+   * @param {object} ctx Context.
+   * @param {integer} id The topic id.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getTopicById (ctx, id, callback, error) {
+    return this.getRequest(ctx, TOPIC_GET_ID_URL + id, callback, error)
   },
 
   /**

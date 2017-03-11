@@ -1,38 +1,53 @@
 <template>
   <div class="search-container">
-    <input class="search-box" v-model="search" placeholder="Søk..." v-on:focus="showResult" v-on:blur="hideResult"/>
-    <div class="search-result" v-if="showBar && search.length && result$">
-      <router-link v-for="s in result$.subjects" :to="'/subject/' + s.id">{{ s.title }}</router-link>
+    <Search
+      class="search-box"
+      @topicResult="topicHandler"
+      @subjectResult="subjectHandler"
+      @search="termChange"
+      placeholder="Søk..."
+    />
+    <div class="search-result" v-if="showBar && ((subjects && subjects.length) || (topics && topics.length))">
+      <router-link v-for="s in subjects" :to="'/subject/' + s.id">{{ s.title }}</router-link>
+      <router-link v-for="s in topics" :to="'/topic/' + s.id">{{ s.title }}</router-link>
+      <router-link :to="'/search/' + search">Flere resultater...</router-link>
+    </div>
+    <div class="search-result" v-else-if="search.length > 1 && showBar">
+      <p>Fant ingen resultater.</p>
     </div>
   </div>
 </template>
 
 <script>
-import Rx from 'rxjs/Rx'
-
-import { api } from 'api'
+import Search from 'components/search/Search'
 
 export default {
-  name: 'header',
+  name: 'searchbar',
   data () {
     return {
       search: '',
+      subjects: [],
+      topics: [],
       showBar: false,
       hidingResult: false
     }
   },
   watch: {
     '$route' (to, from) {
-      let sFrom = from.path.split('/')
-      let sTo = to.path.split('/')
-      if (sFrom[1] === sTo[1] && sTo.length > 2 && sFrom.length > 2) {
-        this.$router.go({
-          path: to.path
-        })
-      }
+      this.hideResult()
     }
   },
   methods: {
+    topicHandler (topics) {
+      this.topics = topics.slice(0, 3)
+    },
+    subjectHandler (subjects) {
+      this.subjects = subjects.slice(0, 3)
+    },
+    termChange (term) {
+      this.showBar = !!term.length
+      this.search = term
+    },
     showResult () {
       this.showBar = true
       this.hidingResult = false
@@ -44,24 +59,8 @@ export default {
       }, 100)
     }
   },
-  subscriptions () {
-    return {
-      result$: this.$watchAsObservable('search')
-        .pluck('newValue')
-        .filter(term => term.length > 1)
-        .debounceTime(100)
-        .distinctUntilChanged()
-        .switchMap((term) => {
-          return Rx.Observable.fromPromise(
-            api.getSubjectsByTitle(this, term)
-          )
-        })
-        .map((res) => {
-          return {
-            subjects: res.subjects
-          }
-        })
-    }
+  components: {
+    Search
   }
 }
 </script>
@@ -82,16 +81,17 @@ export default {
 .search-result {
   position: absolute;
   width: 100%;
-  background-color: rgba(0, 0, 0, .2);
+  background-color: #aaa;
   display: flex;
   flex-direction: column;
 }
 
-.search-result > a {
+.search-result > a,
+.search-result > p {
   padding: 4px 8px;
   box-sizing: border-box;
 }
 .search-result > a:hover {
-  background-color: rgba(0, 0, 0, .2);
+  background-color: #888;
 }
 </style>
