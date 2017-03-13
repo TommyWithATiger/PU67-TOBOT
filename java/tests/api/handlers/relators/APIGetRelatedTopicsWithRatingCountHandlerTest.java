@@ -100,17 +100,17 @@ public class APIGetRelatedTopicsWithRatingCountHandlerTest extends BaseTest {
 
   @Test
   public void testGetTopicWithRatingCountSubjectIDRatings() {
-    Rating rating11 = new Rating(user1.getId(), topic1.getId(), RatingEnum.GOOD);
-    Rating rating12 = new Rating(user1.getId(), topic2.getId(), RatingEnum.POOR);
+    Rating rating11 = new Rating(user1.getId(), topic1.getId(), RatingEnum.Good);
+    Rating rating12 = new Rating(user1.getId(), topic2.getId(), RatingEnum.Poor);
 
-    Rating rating21 = new Rating(user2.getId(), topic1.getId(), RatingEnum.GOOD);
-    Rating rating22 = new Rating(user2.getId(), topic2.getId(), RatingEnum.SUPERB);
+    Rating rating21 = new Rating(user2.getId(), topic1.getId(), RatingEnum.Good);
+    Rating rating22 = new Rating(user2.getId(), topic2.getId(), RatingEnum.Superb);
 
     // rating31 does not exist
-    Rating rating32 = new Rating(user3.getId(), topic2.getId(), RatingEnum.OK);
+    Rating rating32 = new Rating(user3.getId(), topic2.getId(), RatingEnum.Ok);
 
-    Rating rating41 = new Rating(user4.getId(), topic1.getId(), RatingEnum.NONE);
-    Rating rating42 = new Rating(user4.getId(), topic2.getId(), RatingEnum.OK);
+    Rating rating41 = new Rating(user4.getId(), topic1.getId(), RatingEnum.None);
+    Rating rating42 = new Rating(user4.getId(), topic2.getId(), RatingEnum.Ok);
 
     rating11.create();
     rating12.create();

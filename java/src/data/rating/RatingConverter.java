@@ -1,7 +1,5 @@
 package data.rating;
 
-import static data.rating.RatingEnum.*;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
@@ -21,37 +19,19 @@ public class RatingConverter implements AttributeConverter<RatingEnum, Integer> 
     return RatingEnum.get(dbData);
   }
 
+  /**
+   * @deprecated Use RatingEnum.valueOf instead
+   */
+  @Deprecated
   public static RatingEnum convertFullRatingNameToEnum(String fullRatingName) {
-    switch (fullRatingName) {
-      case "None":
-        return NONE;
-      case "Poor":
-        return POOR;
-      case "Ok":
-        return OK;
-      case "Good":
-        return GOOD;
-      case "Superb":
-        return SUPERB;
-      default:
-        throw new IllegalArgumentException("Unknown " + fullRatingName);
-    }
+    return RatingEnum.valueOf(fullRatingName);
   }
 
+  /**
+   * @deprecated Use ratingEnum.toString instead
+   */
+  @Deprecated
   public static String convertEnumToFullRatingName(RatingEnum ratingEnum){
-    switch (ratingEnum) {
-      case NONE:
-        return "None";
-      case POOR:
-        return "Poor";
-      case OK:
-        return "Ok";
-      case GOOD:
-        return "Good";
-      case SUPERB:
-        return "Superb";
-      default:
-        throw new IllegalArgumentException("Unknown " + ratingEnum);
-    }
+    return ratingEnum.toString();
   }
 }

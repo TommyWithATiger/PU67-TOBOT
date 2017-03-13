@@ -8,7 +8,6 @@ import data.Subject;
 import data.Topic;
 import data.rating.Rating;
 import data.rating.RatingEnum;
-import data.rating.RatingKey;
 import data.user.User;
 import java.util.List;
 import org.junit.Before;
@@ -52,10 +51,10 @@ public class TopicDAOTest extends BaseTest{
     subject.addTopic(topic4);
     subject.create();
 
-    rating1 = new Rating(user.getId(), topic1.getId(), RatingEnum.SUPERB);
-    rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.GOOD);
-    rating3 = new Rating(user.getId(), topic3.getId(), RatingEnum.OK);
-    rating4 = new Rating(user.getId(), topic4.getId(), RatingEnum.POOR);
+    rating1 = new Rating(user.getId(), topic1.getId(), RatingEnum.Superb);
+    rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.Good);
+    rating3 = new Rating(user.getId(), topic3.getId(), RatingEnum.Ok);
+    rating4 = new Rating(user.getId(), topic4.getId(), RatingEnum.Poor);
 
     rating1.create();
     rating2.create();

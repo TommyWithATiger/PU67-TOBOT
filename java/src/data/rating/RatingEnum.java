@@ -4,7 +4,7 @@ package data.rating;
  * Enum type to specify the value of the rating
  */
 public enum RatingEnum {
-  NONE(1), POOR(2), OK(3), GOOD(4), SUPERB(5);
+  None(1), Poor(2), Ok(3), Good(4), Superb(5);
 
   private int value;
 
@@ -22,15 +22,15 @@ public enum RatingEnum {
         // should maybe return null here ?
         throw new IllegalArgumentException("0 is currently not supported as a rating");
       case 1:
-        return NONE;
+        return None;
       case 2:
-        return POOR;
+        return Poor;
       case 3:
-        return OK;
+        return Ok;
       case 4:
-        return GOOD;
+        return Good;
       case 5:
-        return SUPERB;
+        return Superb;
       default:
         throw new IllegalArgumentException("Unknown " + ratingValue);
     }

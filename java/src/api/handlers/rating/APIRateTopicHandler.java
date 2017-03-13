@@ -10,7 +10,6 @@ import data.dao.TopicDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
-import data.rating.RatingConverter;
 import data.rating.RatingEnum;
 import data.rating.RatingKey;
 import org.apache.http.HttpRequest;
@@ -39,7 +38,7 @@ public class APIRateTopicHandler {
     String ratingValue = getJSONField(httpRequest, String.class, "rating");
     RatingEnum ratingEnum;
     try {
-      ratingEnum = RatingConverter.convertFullRatingNameToEnum(ratingValue);
+      ratingEnum = RatingEnum.valueOf(ratingValue);
     } catch (IllegalArgumentException iae) {
       throw new APIBadRequestException("rating is not a valid rating");
     }

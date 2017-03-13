@@ -10,7 +10,6 @@ import data.dao.TopicDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
-import data.rating.RatingConverter;
 import data.rating.RatingKey;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +48,7 @@ public class APIGetTopicRatingHandler {
     }
 
     JSONObject response = new JSONObject();
-    response.put("rating", RatingConverter.convertEnumToFullRatingName(rating.getRating()));
+    response.put("rating", rating.getRating().toString());
     return response.toString();
   }
 
@@ -74,7 +73,7 @@ public class APIGetTopicRatingHandler {
     JSONArray ratingArray = new JSONArray();
     ratings.forEach(rating -> {
       JSONObject ratingJSON = new JSONObject();
-      ratingJSON.put("rating", RatingConverter.convertEnumToFullRatingName(rating.getRating()));
+      ratingJSON.put("rating", rating.getRating().toString());
       ratingJSON.put("topicID", rating.getTopicID());
       ratingArray.put(ratingJSON);
     });
@@ -110,7 +109,7 @@ public class APIGetTopicRatingHandler {
           .filter((rating) -> rating.getTopicID() == topic.getId()).findFirst();
       aboutTopic.put("has-rating", ratingTopic.isPresent());
       ratingTopic.ifPresent(rating -> aboutTopic.put("rating",
-          RatingConverter.convertEnumToFullRatingName(rating.getRating())));
+          rating.getRating().toString()));
       topicArray.put(aboutTopic);
     });
     response.put("topics", topicArray);
