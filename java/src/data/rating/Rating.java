@@ -26,7 +26,7 @@ import javax.persistence.Table;
             + " AND s.id = :subjectID AND u.id = :userID"
     )
 })
-@Table
+@Table(name = "RATING_INT")
 public class Rating {
 
   @EmbeddedId

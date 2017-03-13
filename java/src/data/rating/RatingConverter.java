@@ -6,45 +6,19 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * This class converts between RatingEnum and the corresponding chars in the database
+ * This class converts between RatingEnum and the corresponding ints in the database
  */
 @Converter
-public class RatingConverter implements AttributeConverter<RatingEnum, String> {
+public class RatingConverter implements AttributeConverter<RatingEnum, Integer> {
 
   @Override
-  public String convertToDatabaseColumn(RatingEnum attribute) {
-    switch (attribute) {
-      case NONE:
-        return "N";
-      case POOR:
-        return "P";
-      case OK:
-        return "O";
-      case GOOD:
-        return "G";
-      case SUPERB:
-        return "S";
-      default:
-        throw new IllegalArgumentException("Unknown " + attribute);
-    }
+  public Integer convertToDatabaseColumn(RatingEnum attribute) {
+    return attribute.value();
   }
 
   @Override
-  public RatingEnum convertToEntityAttribute(String dbData) {
-    switch (dbData) {
-      case "N":
-        return NONE;
-      case "P":
-        return POOR;
-      case "O":
-        return OK;
-      case "G":
-        return GOOD;
-      case "S":
-        return SUPERB;
-      default:
-        throw new IllegalArgumentException("Unknown " + dbData);
-    }
+  public RatingEnum convertToEntityAttribute(Integer dbData) {
+    return RatingEnum.get(dbData);
   }
 
   public static RatingEnum convertFullRatingNameToEnum(String fullRatingName) {
