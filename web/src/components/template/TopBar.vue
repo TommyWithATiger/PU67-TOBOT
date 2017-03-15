@@ -1,25 +1,24 @@
 <template>
-  <div class="header-content">
-    <div class="header-flat">
-      <router-link to="/"><img class="header-logo" v-bind:src="'/static/images/TOBOT_mascot.png'"></img></router-link>
-    </div>
-    <div class="header-flat header-fill-calc">
-      <div v-if="authenticated" class="header-flat header-fill">
-        <div v-for="link in links" v-if="checkUsertype(link.users)" class="header-navigation-button">
-          <h2><router-link exact :to="link.path">{{ link.name }}</router-link></h2>
-        </div>
-        <SearchBar v-if="!isSearchRoute" />
-        <div class="header-user-info">
-          <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
-          <LogoutBtn />
-        </div>
+  <div class="header">
+    <div class="header-container">
+      <router-link to="/"><img class="header-img" v-bind:src="'/static/images/TOBOT_mascot.svg'"></img></router-link>
+      <div class="header-links" v-if="authenticated">
+        <router-link v-for="link in links"
+          v-if="checkUsertype(link.users)"
+          exact
+          :to="link.path">
+          {{ link.name }}
+        </router-link>
       </div>
-      <div v-else class="header-flat header-fill">
-        <div class="header-user-info">
-          <router-link to="/login">
-            <button>Logg inn</button>
-          </router-link>
-        </div>
+      <SearchBar v-if="authenticated && !isSearchRoute" />
+      <button class="header-user-menu-btn"
+        v-if="authenticated"
+        @click="userMenu = !userMenu">
+        Menu
+      </button>
+      <div :class="`header-user-menu ${userMenu ? 'show' : ''}`" v-if="authenticated">
+        <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
+        <LogoutBtn />
       </div>
     </div>
   </div>
@@ -34,6 +33,7 @@ export default {
   name: 'header',
   data () {
     return {
+      userMenu: false,
       links: [
         {
           name: 'Hjem',
@@ -95,72 +95,37 @@ export default {
 </script>
 
 <style scoped>
-.header-content {
-  padding: 16px;
-  background-color: #eee;
-  flex: 0 0 64px;
-}
-
-.header-navigation-button {
-  display: inline-block;
-  width: 100px;
-  height: 68px;
-  padding: 4px;
-  text-align: center;
-}
-
-.header-navigation-button > h2 > a:hover,
-.header-navigation-button > h2 > a.router-link-active {
-  border-bottom: 4px solid #87CEEB;
-}
-
-.header-navigation-button > h2 > a:visited {
-  color: #333;
-}
-
-.header-navigation-button > h2 > a {
-  color: #333;
-  text-decoration: none;
-}
-
-.header-logo {
-  display: inline-block;
-  height: inherit;
-  width: 180px;
-  margin-right: 20px;
-}
-
-.header-flat {
-  display: inline-block;
-  vertical-align: top;
-}
-
-.header-user-info {
-  display: inline-block;
-  height: 68px;
-  float: right;
-}
-
-.header-fill-calc {
-  width: calc(100% - 250px);
-}
-
-.header-fill {
+.header-img {
+  max-width: 200px;
   width: 100%;
 }
 
-.header-user-info button {
-  width: 100px;
-  height: 30px;
-  margin-top: 20px;
-  background-color: #f7f7f7;
-  border-radius: 2px;
-  border: 1px solid #666;
-  margin-left: 20px;
+.header-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.header-user-info button:hover {
-  border: 1px solid #333;
-  background-color: #e9e9e9;
+.header-links {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header-links > a {
+  padding: 10px;
+}
+
+.header-user-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-user-menu {
+  display: none;
+}
+
+.header-user-menu.show {
+  display: block;
 }
 </style>

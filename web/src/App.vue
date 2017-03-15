@@ -33,4 +33,11 @@ export default {
 .error {
   color: #a00;
 }
+
+.content-container,
+.page-content {
+  max-width: 960px;
+  width: 100%;
+  margin: auto;
+}
 </style>
