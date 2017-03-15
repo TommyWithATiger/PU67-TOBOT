@@ -65,7 +65,7 @@ public class APILoginHandlerTest extends BaseTest {
     String response = handleLoginRequest(httpRequest);
     user = UserDAO.getInstance().findUserByUsername(user.getUsername());
     assertTrue(user.getSessionToken() != null);
-    assertEquals("{\"username\":\"username\",\"token\":\"" + user.getSessionToken() + "\"}",
+    assertEquals("{\"type\":\"Student\",\"username\":\"username\",\"token\":\"" + user.getSessionToken() + "\"}",
         response);
   }
 
@@ -78,7 +78,7 @@ public class APILoginHandlerTest extends BaseTest {
     String response = handleLoginRequest(httpRequest);
     user = UserDAO.getInstance().findUserByUsername(user.getUsername());
     assertEquals(sessionToken, user.getSessionToken());
-    assertEquals("{\"username\":\"username\",\"token\":\"" + user.getSessionToken() + "\"}",
+    assertEquals("{\"type\":\"Student\",\"username\":\"username\",\"token\":\"" + user.getSessionToken() + "\"}",
         response);
   }
 

@@ -7,6 +7,7 @@ import api.exceptions.APIBadRequestException;
 import data.dao.UserDAO;
 import data.user.User;
 import java.util.List;
+import data.user.UserTypeConverter;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -21,6 +22,7 @@ public class APILoginHandler {
    * @return A JSON string containing the following data
    *        username (String): the username
    *        token (String): the session token
+   *        type (String): the user type
    */
   public static String handleLoginRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
@@ -51,6 +53,7 @@ public class APILoginHandler {
     JSONObject loginResponse = new JSONObject();
     loginResponse.put("username", user.getUsername());
     loginResponse.put("token", token);
+    loginResponse.put("type", UserTypeConverter.userTypeToString(user.getUserType()));
 
     return loginResponse.toString();
   }

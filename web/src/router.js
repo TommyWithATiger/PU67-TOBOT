@@ -9,6 +9,9 @@ import TopicsPage from 'components/pages/TopicsPage'
 import SubjectsPage from 'components/pages/SubjectsPage'
 import TopicPage from 'components/pages/TopicPage'
 import SearchPage from 'components/pages/SearchPage'
+import RegisterPage from 'components/pages/RegisterPage'
+import RequestResetPage from 'components/pages/RequestResetPage'
+import PasswordResetPage from 'components/pages/ResetPasswordPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import { auth } from 'auth'
 import { api } from 'api'
@@ -24,13 +27,13 @@ Vue.use(Router)
  */
 function requireAuth (to, from, next) {
   if (auth.hasToken()) {
-    if (/^\/login/.test(from.path)) {
+    if (/^\/login|^\/register/.test(from.path)) {
       store.state.user.username = ''
       store.state.user.usertype = ''
     }
 
     auth.isAuth(() => {
-      if (/^\/login|^\/restricted/.test(from.path)) {
+      if (/^\/login|^\/register|^\/restricted/.test(from.path)) {
         api.getUser(this, (data) => {
           store.state.user.username = data.username
           store.state.user.usertype = data.userType
@@ -166,6 +169,21 @@ export const router = new Router({
       path: '/login',
       name: 'Login',
       component: LoginPage
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: RegisterPage
+    },
+    {
+      path: '/reset/request',
+      name: 'RequestReset',
+      component: RequestResetPage
+    },
+    {
+      path: '/reset/:token/:email',
+      name: 'PasswordReset',
+      component: PasswordResetPage
     },
     {
       path: '/restricted',

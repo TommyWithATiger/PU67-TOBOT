@@ -131,10 +131,10 @@ public class User {
    * @return The session token
    */
   public String generatePasswordResetToken() {
-    String symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    String symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     StringBuilder partialToken = new StringBuilder();
     Random random = new Random();
-    while (partialToken.length() < 10){
+    while (partialToken.length() < 20){
       partialToken.append(symbols.charAt(random.nextInt(symbols.length())));
     }
     String passwordResetToken = partialToken.toString();
@@ -150,7 +150,7 @@ public class User {
   private void generatePasswordResetExpireDate() {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(new Date());
-    calendar.add(Calendar.DATE, 1);
+    calendar.add(Calendar.HOUR, 1);
     passwordResetTokenExpireDate = calendar.getTime();
   }
 
@@ -409,4 +409,21 @@ public class User {
     return id;
   }
 
+  /**
+   * Checks if the user has a reset token
+   *
+   * @return A boolean indicating if the user has a valid reset token
+   */
+  public boolean hasResetToken() {
+    return passwordResetTokenExpireDate != null && passwordResetTokenExpireDate.after(new Date())
+        && hashedPasswordResetToken != null;
+  }
+
+  /**
+   * Removes the reset token
+   */
+  public void removeResetToken() {
+    hashedPasswordResetToken = null;
+    passwordResetTokenExpireDate = null;
+  }
 }

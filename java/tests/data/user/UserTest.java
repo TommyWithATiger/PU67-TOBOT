@@ -158,7 +158,7 @@ public class UserTest extends BaseTest {
   public void testGeneratePasswordToken() throws Exception {
     User user = new User();
     String token = user.generatePasswordResetToken();
-    assertEquals(10, token.length());
+    assertEquals(20, token.length());
   }
 
   @Test
@@ -184,5 +184,40 @@ public class UserTest extends BaseTest {
     assertFalse(user.checkPasswordResetToken(token));
     assertEquals(null, user.getPasswordResetTokenExpireDate());
     assertEquals(null, user.getSessionToken());
+  }
+
+  @Test
+  public void testHasResetToken() {
+    User user = new User("Username", "email@email.com", "password");
+    user.create();
+
+    user.generatePasswordResetToken();
+    user.update();
+
+    assertTrue(user.hasResetToken());
+
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date());
+    calendar.add(Calendar.HOUR, -1);
+    user.setPasswordResetTokenExpireDate(calendar.getTime());
+    user.update();
+
+    assertFalse(user.hasResetToken());
+  }
+
+  @Test
+  public void testRemoveResetToken() {
+    User user = new User("Username", "email@email.com", "password");
+    user.create();
+
+    user.generatePasswordResetToken();
+    user.update();
+
+    assertTrue(user.hasResetToken());
+
+    user.removeResetToken();
+    user.update();
+
+    assertFalse(user.hasResetToken());
   }
 }

@@ -42,17 +42,27 @@ public class APIHttpHandler {
     } catch (APIHandlerNotFoundException e) {
       // Cannot find a API handler to handle the request, the requested resource must not exist
       httpResponse.setStatusCode(404);
+      APIHttpHandler.printAPIException(e, httpResponse);
     } catch (APIErrorException e) {
       httpResponse.setStatusCode(500);
+      APIHttpHandler.printAPIException(e, httpResponse);
     } catch (APIBadRequestException e) {
       httpResponse.setStatusCode(400);
+      APIHttpHandler.printAPIException(e, httpResponse);
     } catch (APIBadMethodException e) {
       httpResponse.setStatusCode(405);
+      APIHttpHandler.printAPIException(e, httpResponse);
     } catch (APIRequestForbiddenException e) {
       httpResponse.setStatusCode(403);
+      APIHttpHandler.printAPIException(e, httpResponse);
     }
 
     return httpResponse;
+  }
+
+  private static void printAPIException(Exception e, HttpResponse httpResponse) {
+    System.out.println("LOG: " + e.getMessage() + " => " +
+        httpResponse.getStatusLine().toString().substring(9));
   }
 
 }
