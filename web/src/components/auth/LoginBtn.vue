@@ -1,5 +1,5 @@
 <template>
-  <button>Logg inn</button>
+  <button>Login</button>
 </template>
 
 <script>

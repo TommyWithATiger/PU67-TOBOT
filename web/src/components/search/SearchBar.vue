@@ -5,15 +5,15 @@
       @topicResult="topicHandler"
       @subjectResult="subjectHandler"
       @search="termChange"
-      placeholder="Søk..."
+      placeholder="Search ..."
     />
     <div class="search-result" v-if="showBar && ((subjects && subjects.length) || (topics && topics.length))">
       <router-link v-for="s in subjects" :to="'/subject/' + s.id">{{ s.title }}</router-link>
       <router-link v-for="s in topics" :to="'/topic/' + s.id">{{ s.title }}</router-link>
-      <router-link :to="'/search/' + search">Flere resultater...</router-link>
+      <router-link :to="'/search/' + search">More results ...</router-link>
     </div>
     <div class="search-result" v-else-if="search.length > 1 && showBar">
-      <p>Fant ingen resultater.</p>
+      <p>Could not find any results.</p>
     </div>
   </div>
 </template>

@@ -1,38 +1,38 @@
 <template>
   <div class="page-content">
-    <h1>Emner</h1>
-    <h2>Legg til emne</h2>
+    <h1>Subjects</h1>
+    <h2>Add subject</h2>
     <p class="subject-add-fields">
-      <label>Tittel: </label>
+      <label>Title: </label>
       <input @keydown.enter="addSubject" v-model="subject.title" type="text" />
       <br>
-      <label>Institusjon: </label>
+      <label>Institution: </label>
       <input @keydown.enter="addSubject" v-model="subject.institution" type="text" />
       <br>
-      <label>Fagkode: </label>
+      <label>Subject code: </label>
       <input @keydown.enter="addSubject" v-model="subject.subjectCode" type="text" />
       <br>
-      <label>Beskrivelse: </label>
+      <label>Description: </label>
       <input @keydown.enter="addSubject" v-model="subject.description" type="text" />
-      <button @click="addSubject">Legg til</button>
+      <button @click="addSubject">Add</button>
       <span class="error">{{ addFeedback }}</span>
     </p>
-    <h2>Alle emner</h2>
+    <h2>All subjects</h2>
     <div v-if="subjects.length">
       <div class="subject-info subject-info-header">
-        <div class="subject-code">Emnekode</div>
-        <div class="subject-title">Tittel</div>
-        <div class="subject-description">Beskrivelse</div>
-        <div class="subject-relate">Temaer</div>
+        <div class="subject-code">Subject code</div>
+        <div class="subject-title">Title</div>
+        <div class="subject-description">Description</div>
+        <div class="subject-relate">Topics</div>
       </div>
       <div v-for="s in subjects" class="subject-info">
         <div class="subject-code">{{ s.subjectCode }}</div>
         <div class="subject-title">{{ s.title }}</div>
         <div class="subject-description">{{ s.description }}</div>
-        <div class="subject-relate"><router-link :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">Temaer</router-link></div>
+        <div class="subject-relate"><router-link :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">Topics</router-link></div>
       </div>
     </div>
-    <div v-else><span v-if="!getFeedback.length">Ingen emner.</span></div>
+    <div v-else><span v-if="!getFeedback.length">Not subjects.</span></div>
     <p class="error">{{ getFeedback }}</p>
   </div>
 </template>

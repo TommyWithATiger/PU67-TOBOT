@@ -36,17 +36,17 @@ export default {
     return {
       links: [
         {
-          name: 'Hjem',
+          name: 'Home',
           path: '/',
           users: ['Admin', 'Teacher', 'Student']
         },
         {
-          name: 'Emner',
+          name: 'Subjects',
           path: '/subject',
           users: ['Admin', 'Teacher']
         },
         {
-          name: 'Temaer',
+          name: 'Topics',
           path: '/topic',
           users: ['Admin', 'Teacher']
         }

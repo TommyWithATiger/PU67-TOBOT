@@ -2,9 +2,9 @@
   <div class="page-content">
     <h1>{{ title }}</h1>
     <div>
-      <input @keydown.enter="login" v-model="creds.username" placeholder="Brukernavn ..." type="text" />
-      <input @keydown.enter="login" v-model="creds.password" placeholder="Passord ..." type="password" />
-      <button @click="login">Logg inn</button>
+      <input @keydown.enter="login" v-model="creds.username" placeholder="Username ..." type="text" />
+      <input @keydown.enter="login" v-model="creds.password" placeholder="Password ..." type="password" />
+      <button @click="login">Login</button>
       <span>{{ feedback }}</span>
     </div>
   </div>
@@ -37,7 +37,7 @@ export default {
      */
     login () {
       if (this.creds.username.length) {
-        this.feedback = 'Sjekker validering ...'
+        this.feedback = 'Validating ...'
         auth.login(this.creds, this, this.$route.query.redirect || '/', () => {
           this.successHandler('Valid login.')
         }, (err) => {
