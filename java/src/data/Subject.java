@@ -2,8 +2,8 @@ package data;
 
 import data.dao.SubjectDAO;
 import data.user.User;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,9 +47,9 @@ public class Subject {
 
   protected Subject() {
     super();
-    topics = new ArrayList<>();
-    editors = new ArrayList<>();
-    participants = new ArrayList<>();
+    topics = new HashSet<>();
+    editors = new HashSet<>();
+    participants = new HashSet<>();
   }
 
   /**
@@ -165,7 +165,7 @@ public class Subject {
    * @return Collection of Topic Objects
    */
   public Collection<Topic> getTopics() {
-    return new ArrayList<Topic>(topics);
+    return new HashSet<>(topics);
   }
 
   /**
@@ -238,7 +238,7 @@ public class Subject {
    * @return Collection of User Objects
    */
   public Collection<User> getParticipants() {
-    return new ArrayList<User>(participants);
+    return new HashSet<>(participants);
   }
 
 
