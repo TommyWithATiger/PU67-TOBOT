@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE doc [
+<!DOCTYPE persistence [
         <!ENTITY login SYSTEM "src/META-INF/db_login.xml" >
         ] >
 
@@ -12,7 +12,8 @@
 
         <!-- <class>EntityClassname</class>  -->
         <class>data.Topic</class>
-        <class>data.User</class>
+        <class>data.user.User</class>
+        <class>data.user.UserTypeConverter</class>
         <class>data.Subject</class>
         <class>data.rating.Rating</class>
         <class>data.rating.RatingConverter</class>

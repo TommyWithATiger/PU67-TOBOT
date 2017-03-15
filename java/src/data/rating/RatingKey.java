@@ -42,4 +42,23 @@ public class RatingKey implements Serializable {
   public void setTopicID(Integer topicID) {
     this.topicID = topicID;
   }
+
+  @Override
+  public boolean equals(Object other){
+    if(userID == null || topicID == null){
+      return super.equals(other);
+    }
+    else if(other instanceof RatingKey){
+      RatingKey otherRatingKey = (RatingKey) other;
+      return userID == otherRatingKey.userID && topicID == otherRatingKey.topicID;
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode(){
+    // http://stackoverflow.com/a/11742634/1428218
+    return 31 * userID + topicID;
+  }
+
 }

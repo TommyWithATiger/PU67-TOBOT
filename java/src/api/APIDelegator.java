@@ -4,14 +4,18 @@ import api.exceptions.APIHandlerNotFoundException;
 import api.handlers.rating.APIGetTopicRatingHandler;
 import api.handlers.rating.APIRateTopicHandler;
 import api.handlers.relators.APIGetRelatedTopicsSubjectHandler;
+import api.handlers.relators.APIGetRelatedTopicsWithRatingCountHandler;
 import api.handlers.relators.APIRelateSubjectTopicHandler;
 import api.handlers.subject.APIAddSubjectHandler;
 import api.handlers.subject.APIGetSubjectHandler;
 import api.handlers.topic.APIAddTopicHandler;
 import api.handlers.topic.APIGetTopicHandler;
+import api.handlers.user.APIGetUserInfoHandler;
 import api.handlers.user.APILoggedInCheckHandler;
 import api.handlers.user.APILoginHandler;
 import api.handlers.user.APILogoutHandler;
+import api.handlers.user.APIRegistrationHandler;
+import api.handlers.user.APIResetPasswordHandler;
 import java.util.HashMap;
 import java.util.function.Function;
 import org.apache.http.HttpRequest;
@@ -54,6 +58,15 @@ public class APIDelegator {
     handlerRegistry.put("user\\/login", APILoginHandler::handleLoginRequest);
     handlerRegistry.put("user\\/logout", APILogoutHandler::handleLogoutRequest);
     handlerRegistry.put("user\\/check", APILoggedInCheckHandler::handleLoggedInCheckRequest);
+    handlerRegistry.put("user\\/info", APIGetUserInfoHandler::getUserInfo);
+
+    // User registration
+    handlerRegistry.put("user\\/registration\\/check", APIRegistrationHandler::checkRegistrationData);
+    handlerRegistry.put("user\\/registration", APIRegistrationHandler::registerUser);
+
+    // Password reset
+    handlerRegistry.put("user\\/reset\\/request", APIResetPasswordHandler::requestPasswordReset);
+    handlerRegistry.put("user\\/reset", APIResetPasswordHandler::resetPassword);
 
     // Subject and topics
     handlerRegistry.put("topic\\/create", APIAddTopicHandler::handleAddTopicRequest);
@@ -64,6 +77,9 @@ public class APIDelegator {
     handlerRegistry.put("subject\\/related\\/\\?id=.*",
         APIGetRelatedTopicsSubjectHandler::getRelatedTopicsSubjectID);
 
+    handlerRegistry.put("subject\\/related\\/count\\/\\?id=.*",
+        APIGetRelatedTopicsWithRatingCountHandler::getTopicWithRatingCountSubjectID);
+
     handlerRegistry.put("subject\\/get\\/\\?id=.*", APIGetSubjectHandler::getSubjectByID);
     handlerRegistry.put("subject\\/get\\/\\?title=.*", APIGetSubjectHandler::getSubjectsByTitle);
     handlerRegistry.put("subject\\/get", APIGetSubjectHandler::getAllSubjects);
@@ -71,6 +87,7 @@ public class APIDelegator {
     handlerRegistry.put("topic\\/get\\/\\?id=.*", APIGetTopicHandler::getTopicByID);
     handlerRegistry.put("topic\\/get\\/\\?title=.*", APIGetTopicHandler::getTopicsByTitle);
     handlerRegistry.put("topic\\/get", APIGetTopicHandler::getAllTopics);
+    handlerRegistry.put("topic\\/rating\\/get", APIGetTopicRatingHandler::getTopicsWithRatings);
 
     // Ratings
     handlerRegistry.put("rating\\/rate", APIRateTopicHandler::rateTopic);

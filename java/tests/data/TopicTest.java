@@ -7,11 +7,10 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
+import data.dao.TopicDAO;
+import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class TopicTest extends BaseTest {
 
   @Test
@@ -93,6 +92,66 @@ public class TopicTest extends BaseTest {
 
     topic.removeFromSubject(subject);
     assertFalse(subject.hasTopic(topic));
+  }
+
+  @Test
+  public void testCreate() throws Exception {
+    Topic topic = new Topic("topic", "The best topic");
+
+    topic.create();
+
+    Topic test = TopicDAO.getInstance().findById(topic.getId());
+
+    assertEquals(topic, test);
+  }
+
+  @Test
+  public void testDelete() throws Exception {
+    Topic topic = new Topic("topic", "The best topic");
+    topic.create();
+    Topic test = TopicDAO.getInstance().findById(topic.getId());
+    assertEquals(topic, test);
+
+    topic.delete();
+    test = TopicDAO.getInstance().findById(topic.getId());
+    assertEquals(null, test);
+  }
+
+  @Test
+  public void testUpdate() throws Exception {
+    Topic topic = new Topic("topic", "The best topic");
+
+    topic.create();
+
+    topic.setTitle("other topic");
+    topic.update();
+
+    List<Topic> results = TopicDAO.getInstance().findTopicsByTitle("other topic");
+
+    assertTrue(results.contains(topic));
+
+    assertEquals(topic.hashCode(), topic.getId());
+  }
+
+  @Test
+  public void testEquals() {
+    Topic topic = new Topic("topic", "The best topic");
+    topic.create();
+    Topic topic2 = new Topic("topic2", "The second best topic");
+    topic2.create();
+
+    assertNotSame(topic, topic2);
+    assertEquals(topic, TopicDAO.getInstance().findById(topic.getId()));
+    assertFalse(topic.equals(5));
+    assertFalse(topic.equals(null));
+  }
+
+  @Test
+  public void testHashCode() {
+    Topic topic = new Topic("topic", "The best topic");
+    topic.create();
+
+    assertEquals(topic.hashCode(), topic.getId());
   }
 
 }

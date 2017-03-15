@@ -8,6 +8,7 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.io.DefaultHttpRequestParser;
 import org.apache.http.impl.io.DefaultHttpResponseWriter;
@@ -15,6 +16,7 @@ import org.apache.http.impl.io.HttpTransportMetricsImpl;
 import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.apache.http.impl.io.SessionOutputBufferImpl;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicHttpResponse;
 import server.http.HTTPHandler;
 
 /**
@@ -33,7 +35,7 @@ public class ServerThread extends Thread {
     this.clientSocket = clientSocket;
 
     // Initiate input buffers
-     sessionInputBuffer = new SessionInputBufferImpl(
+    sessionInputBuffer = new SessionInputBufferImpl(
         new HttpTransportMetricsImpl(), 8192);
     sessionInputBuffer.bind(clientSocket.getInputStream());
     requestParser = new DefaultHttpRequestParser(sessionInputBuffer);
@@ -58,8 +60,11 @@ public class ServerThread extends Thread {
 
       HttpResponse response;
 
+      if (request.getRequestLine().getMethod().equals("OPTIONS")) {
+        response = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK");
+      }
       // Check if request has content, in that case read content
-      if (request.containsHeader("Content-Length")){
+      else if (request.containsHeader("Content-Length")) {
         HttpEntityEnclosingRequest entityRequest = (HttpEntityEnclosingRequest) request;
         BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 
@@ -69,11 +74,19 @@ public class ServerThread extends Thread {
         basicHttpEntity.setContent(new ByteArrayInputStream(responseContent));
         entityRequest.setEntity(basicHttpEntity);
 
+        if (request.containsHeader("Content-Type")) {
+          basicHttpEntity.setContentType(request.getFirstHeader("Content-Type"));
+        }
+
         response = HTTPHandler.handleRequest(entityRequest);
       } else {
         response = HTTPHandler.handleRequest(request);
       }
 
+      // Set base headers
+      response.addHeader(new BasicHeader("Allow", "GET,POST,OPTIONS,DELETE"));
+      response.addHeader(new BasicHeader("Access-Control-Allow-Origin", "*"));
+      response.addHeader(new BasicHeader("Access-Control-Allow-Headers", "x-username, authorization"));
 
       // Set content headers if there is content
       if (response.getEntity() != null) {

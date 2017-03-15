@@ -1,40 +1,40 @@
 <template>
-	<div class="page-content">
-		<h1> {{subject.subjectCode}} - {{subject.title}} </h1>
-		<h1>Tilknyttede temaer</h1>
-		<div v-if="related_topics.length">
-			<div class="topic-info topic-info-header">
-        		<div class="topic-title"> Tittel </div>
-       		 	<div class="topic-description"> Beskrivelse </div>
-      		</div>
-      		<div v-for="t in related_topics" class="topic-info">
-        		<div class="topic-title"> {{ t.title }} </div>
-        		<div class="topic-description"> {{ t.description }} </div>
-      		</div>
-		</div>
-		<div v-else>
-			Dette emnet er ikke knyttet til noen temaer
-		</div>
-		<h1>Legge til temaer</h1>
-		<div v-if="topics.length">
-			<div class="topic-info topic-info-header">
-        		<div class="topic-title"> Tittel </div>
-       		 	<div class="topic-description"> Beskrivelse </div>
-       		 	<div class="topic-relate"> </div>
-      		</div>
-      		<div v-for="t in topics">
-      			<div v-if="!isRelated(t)" class="topic-info">
-        			<div class="topic-title"> {{ t.title }} </div>
-        			<div class="topic-description"> {{ t.description }} </div>
-        			<div @click="relateTopic(t)" class="topic-relate"> Knytt til </div>
-        		</div>
-      		</div>
-		</div>
-		<div v-else>
-			Ingen temaer tilgjenglig
-		</div>
-		<p class="error">{{ getFeedback }}</p>
-	</div>
+  <div class="page-content">
+    <h1>{{subject.subjectCode}} - {{subject.title}}</h1>
+    <h1>Tilknyttede temaer</h1>
+    <div v-if="relatedTopics.length">
+      <div class="topic-info topic-info-header">
+            <div class="topic-title">Tittel</div>
+            <div class="topic-description">Beskrivelse</div>
+          </div>
+          <div v-for="t in relatedTopics" class="topic-info">
+            <div class="topic-title">{{ t.title }}</div>
+            <div class="topic-description">{{ t.description }}</div>
+          </div>
+    </div>
+    <div v-else>
+      Dette emnet er ikke knyttet til noen temaer
+    </div>
+    <h1>Legge til temaer</h1>
+    <div v-if="topics.length">
+      <div class="topic-info topic-info-header">
+            <div class="topic-title">Tittel</div>
+            <div class="topic-description">Beskrivelse</div>
+            <div class="topic-relate"></div>
+          </div>
+          <div v-for="t in topics">
+            <div v-if="!isRelated(t)" class="topic-info">
+              <div class="topic-title">{{ t.title }}</div>
+              <div class="topic-description">{{ t.description }}</div>
+              <div @click="relateTopic(t)" class="topic-relate">Knytt til</div>
+            </div>
+          </div>
+    </div>
+    <div v-else>
+      Ingen temaer tilgjenglig
+    </div>
+    <p class="error">{{ getFeedback }}</p>
+  </div>
 </template>
 
 <script>
@@ -44,7 +44,7 @@ export default {
   name: 'relatetopicsubjectpage',
   data () {
     return {
-      related_topics: [],
+      relatedTopics: [],
       topic: {
         title: '',
         description: ''
@@ -61,39 +61,46 @@ export default {
       }
     }
   },
-  created () {
-    api.getTopics(this, (data) => {
-      console.log(data)
-      this.topics = data.topics
-    }, () => {
-      this.topics = []
-    })
-    api.getSubjectID(this, (data) => {
-      this.subject = data
-    }, () => {
-      window.location.href = '/subject'
-    }, this.$route.params.id)
-    api.getRelatedTopics(this, (data) => {
-      this.related_topics = data.related_topics
-    }, () => {
-
-    }, this.$route.params.id)
+  watch: {
+    '$route' () {
+      this.updateData()
+    }
   },
-  computed: {
+  created () {
+    this.updateData()
   },
   methods: {
     relateTopic (topic) {
-      api.relateSubjectTopic(this, topic, this.subject, () => {
-        location.reload()
-      }, () => {})
+      api.relateSubjectTopic(this, topic, this.subject, (data) => {
+        if (data['already-related'] !== data['is-related']) {
+          this.relatedTopics.push(topic)
+        }
+      })
     },
     isRelated (topic) {
-      for (var index = 0; index < this.related_topics.length; index++) {
-        if (this.related_topics[index].id === topic.id) {
+      for (var index = 0; index < this.relatedTopics.length; index++) {
+        if (this.relatedTopics[index].id === topic.id) {
           return true
         }
       }
       return false
+    },
+    updateData () {
+      api.getTopics(this, (data) => {
+        this.topics = data.topics
+      }, () => {
+        this.topics = []
+      })
+
+      api.getSubjectById(this, this.$route.params.id, (data) => {
+        this.subject = data
+      }, () => {
+        window.location.href = '/subject'
+      })
+
+      api.getRelatedTopics(this, this.$route.params.id, (data) => {
+        this.relatedTopics = data.related_topics
+      })
     }
   }
 }

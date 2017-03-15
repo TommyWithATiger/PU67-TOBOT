@@ -1,7 +1,7 @@
 package interactive;
 
-import data.DataAccessObjects.UserDAO;
-import data.User;
+import data.dao.UserDAO;
+import data.user.User;
 
 import java.io.IOException;
 import javax.persistence.EntityManagerFactory;
@@ -25,7 +25,8 @@ public class AddMaintainUsers {
     try {
       EntityManagerFactory entityManagerFactory = Persistence
           .createEntityManagerFactory("Eclipselink_JPA");
-      UserDAO userDAO = UserDAO.getInstance(entityManagerFactory);
+      UserDAO.initialize(entityManagerFactory);
+      UserDAO userDAO = UserDAO.getInstance();
 
       System.out.print("Enter R to remove, U to update, anything else to create: ");
       String choice = bufferedReader.readLine();

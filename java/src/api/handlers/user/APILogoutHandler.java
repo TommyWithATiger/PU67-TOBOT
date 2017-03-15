@@ -5,8 +5,8 @@ import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
-import data.DataAccessObjects.UserDAO;
-import data.User;
+import data.dao.UserDAO;
+import data.user.User;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -48,7 +48,7 @@ public class APILogoutHandler {
     user.update();
 
     JSONObject logoutResponse = new JSONObject();
-    logoutResponse.put("logged_out", String.valueOf(user.getSessionToken() == null));
+    logoutResponse.put("logged_out", user.getSessionToken() == null);
 
     return logoutResponse.toString();
   }

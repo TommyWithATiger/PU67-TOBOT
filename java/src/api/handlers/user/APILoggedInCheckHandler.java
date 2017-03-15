@@ -5,8 +5,8 @@ import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
-import data.DataAccessObjects.UserDAO;
-import data.User;
+import data.dao.UserDAO;
+import data.user.User;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -46,7 +46,7 @@ public class APILoggedInCheckHandler {
     user.update();
 
     JSONObject loginCheckResponse = new JSONObject();
-    loginCheckResponse.put("logged_in", String.valueOf(userLoggedIn));
+    loginCheckResponse.put("logged_in", userLoggedIn);
 
     return loginCheckResponse.toString();
   }

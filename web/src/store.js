@@ -9,7 +9,9 @@ export const store = new Vuex.Store({
   state: {
     user: {
       authenticated: auth.checkAuth(),
-      username: ''
+      username: '',
+      usertype: '',
+      email: ''
     }
   }
 })

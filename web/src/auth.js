@@ -22,7 +22,7 @@ export const auth = {
           localStorage.setItem('app_token', data.token)
           localStorage.setItem('username', data.username)
           if (ctx) ctx.$store.state.user.authenticated = true
-          if (ctx) ctx.$store.state.user.username = creds.username
+          if (ctx) ctx.$store.state.user.username = data.username
           if (ctx) ctx.$router.push(redirect)
         }
       }, err => {
@@ -54,7 +54,7 @@ export const auth = {
           localStorage.setItem('app_token', data.token)
           localStorage.setItem('username', data.username)
           if (ctx) ctx.$store.state.user.authenticated = true
-          if (ctx) ctx.$store.state.user.username = creds.username
+          if (ctx) ctx.$store.state.user.username = data.username
           if (ctx) ctx.$router.push(redirect)
         }
       }, err => {
@@ -67,7 +67,7 @@ export const auth = {
    * Fetch error handler.
    * @param {object} error Error from feedback.
    * @param {function} callback The function to return to.
-   * @return {string} The message to tell user what happened.
+   * @returns {string} The message to tell user what happened.
    */
   errorHandler (error, callback = null) {
     let msg = ''
@@ -116,8 +116,32 @@ export const auth = {
 
   /**
    * Returning if the user is authenticated.
+   * @param {function} success If the auth succeeded.
+   * @param {function} failed If the auth failed.
+   * @returns {boolean} Token isset.
    */
-  isAuth () {
+  isAuth (success, failed) {
+    try {
+      if (localStorage.getItem('app_token')) {
+        api.checkUser(null, (data) => {
+          if (data.logged_in) success()
+          else failed()
+        }, () => {
+          failed()
+        })
+      } else {
+        failed()
+      }
+    } catch (exception) {
+      failed()
+    }
+  },
+
+  /**
+   * Returning if the user has a token.
+   * @returns {boolean} Token isset.
+   */
+  hasToken () {
     try {
       return !!localStorage.getItem('app_token')
     } catch (exception) {
@@ -127,6 +151,7 @@ export const auth = {
 
   /**
    * Returning the username if the user is authenticated.
+   * @returns {string} Username.
    */
   getUsername () {
     try {
@@ -137,7 +162,56 @@ export const auth = {
   },
 
   /**
+   * Returning the usertype if the user is authenticated.
+   * @returns {string} Usertype.
+   */
+  getUsertype () {
+    try {
+      return !!localStorage.getItem('app_token') && localStorage.getItem('usertype')
+    } catch (exception) {
+      return false
+    }
+  },
+
+  /**
+   * Returning if the usertype is admin.
+   * @returns {string} Is admin.
+   */
+  isAdmin () {
+    return this.getUsertype() === 'admin'
+  },
+
+  /**
+   * Returning if the usertype is teacher.
+   * @returns {string} Is teacher.
+   */
+  isTeacher () {
+    return this.getUsertype() === 'teacher'
+  },
+
+  /**
+   * Returning if the usertype is student.
+   * @returns {string} Is student.
+   */
+  isStudent () {
+    return this.getUsertype() === 'student'
+  },
+
+  /**
+   * Get the auth token saved in localStorage.
+   * @returns {string} The token in plain text.
+   */
+  getToken () {
+    try {
+      return localStorage.getItem('app_token')
+    } catch (exception) {
+      return ''
+    }
+  },
+
+  /**
    * The object to be passed as a header for authenticated requests.
+   * @returns {object} Header object.
    */
   getAuthHeader () {
     try {

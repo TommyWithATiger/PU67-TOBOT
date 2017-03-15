@@ -7,11 +7,12 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
+import data.dao.SubjectDAO;
+import data.user.User;
+import data.user.UserType;
+import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class SubjectTest extends BaseTest {
 
   @Test
@@ -20,7 +21,8 @@ public class SubjectTest extends BaseTest {
     subject1.setTitle("Math");
     subject1.setDescription("From algebra to calculus.");
     Subject subject2 = new Subject("English for beginners", "blah, blah");
-    Subject subject3 = new Subject("Piano", "Musical Academy", "MUS1001", "Classical piano lessons");
+    Subject subject3 = new Subject("Piano", "Musical Academy", "MUS1001",
+        "Classical piano lessons");
 
     assertNotNull(subject1);
     assertEquals("Math", subject1.getTitle());
@@ -105,9 +107,94 @@ public class SubjectTest extends BaseTest {
 
     subject.addTopic(topic);
     assertTrue(subject.hasTopic(topic));
+    assertTrue(subject.getTopics().contains(topic));
 
     subject.removeTopic(topic);
     assertFalse(subject.hasTopic(topic));
+  }
+
+  @Test
+  public void testCreate() throws Exception {
+    Subject subject = new Subject("subject", "The best subject");
+
+    subject.create();
+
+    Subject test = SubjectDAO.getInstance().findById(subject.getId());
+
+    assertEquals(subject, test);
+  }
+
+  @Test
+  public void testDelete() throws Exception {
+    Subject subject = new Subject("subject", "The best subject");
+    subject.create();
+    Subject test = SubjectDAO.getInstance().findById(subject.getId());
+    assertEquals(subject, test);
+
+    subject.delete();
+    test = SubjectDAO.getInstance().findById(subject.getId());
+    assertEquals(null, test);
+  }
+
+  @Test
+  public void testUpdate() throws Exception {
+    Subject subject = new Subject("something", "we do stuff");
+
+    subject.create();
+
+    subject.setTitle("other subject");
+    subject.update();
+
+    List<Subject> results = SubjectDAO.getInstance().findSubjectsByTitle("other subject");
+
+    assertTrue(results.contains(subject));
+  }
+
+  @Test
+  public void testEquals() {
+    Subject subject = new Subject("subject", "The best subject");
+    subject.create();
+    Subject subject2 = new Subject("subject2", "The second best subject");
+    subject2.create();
+
+    assertNotSame(subject, subject2);
+    assertEquals(subject, SubjectDAO.getInstance().findById(subject.getId()));
+    assertFalse(subject.equals(5));
+    assertFalse(subject.equals(null));
+  }
+
+  @Test
+  public void testHashCode() {
+    Subject subject = new Subject("subject", "The best subject");
+    subject.create();
+
+    assertEquals(subject.hashCode(), subject.getId());
+  }
+
+  @Test
+  public void testGetSetEditor() {
+    Subject subject = new Subject("subject", "The best subject");
+    subject.create();
+
+    User admin = new User("admin", "admin@mail.com", "root", UserType.ADMIN);
+    User editor1 = new User("editor1", "editor1@mail.com", "1234");
+    User editor2 = new User("editor2", "editor2@mail.com", "IHateMondays");
+    admin.create();
+    editor1.create();
+    editor2.create();
+
+    subject.addEditor(editor1);
+    subject.update();
+
+    assertTrue(subject.isEditor(editor1));
+    assertFalse(subject.isEditor(editor2));
+
+    subject.removeEditor(editor1);
+    subject.update();
+    assertFalse(subject.isEditor(editor1));
+
+    assertTrue(subject.isEditor(admin));
+
   }
 
 }
