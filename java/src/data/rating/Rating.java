@@ -32,7 +32,7 @@ public class Rating {
   @Convert(converter = RatingConverter.class)
   private RatingEnum rating;
 
-  public Rating() {
+  protected Rating() {
     super();
     ratingKeyPK = new RatingKey();
   }

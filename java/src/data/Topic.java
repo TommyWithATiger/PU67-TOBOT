@@ -27,7 +27,7 @@ public class Topic {
   private String description;
   private int parentId;
 
-  public Topic() {
+  protected Topic() {
     super();
   }
 

@@ -45,7 +45,7 @@ public class Subject {
   @JoinTable(name="PARTICIPANTS")
   private Collection<User> participants;
 
-  public Subject() {
+  protected Subject() {
     super();
     topics = new ArrayList<>();
     editors = new ArrayList<>();

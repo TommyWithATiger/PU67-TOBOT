@@ -48,7 +48,7 @@ public class User {
   @Temporal(TemporalType.TIMESTAMP)
   private Date passwordResetTokenExpireDate;
 
-  public User() {
+  protected User() {
     super();
   }
 

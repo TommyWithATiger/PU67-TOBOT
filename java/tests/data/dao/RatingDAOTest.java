@@ -54,7 +54,7 @@ public class RatingDAOTest extends BaseTest{
     topic2.create();
     topic3.create();
 
-    subject = new Subject();
+    subject = new Subject("Math & Philosophy & Programming", "Do stuff");
     subject.addParticipant(user1);
     subject.addParticipant(user2);
     subject.addTopic(topic1);
