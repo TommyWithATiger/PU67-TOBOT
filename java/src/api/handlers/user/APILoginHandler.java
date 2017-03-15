@@ -1,12 +1,11 @@
 package api.handlers.user;
 
-import static api.helpers.JSONCheckerHelper.getJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.UserDAO;
 import data.user.User;
-import java.util.List;
 import data.user.UserTypeConverter;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
@@ -27,10 +26,8 @@ public class APILoginHandler {
   public static String handleLoginRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    List<String> fields = getJSONFields(httpRequest, String.class, "username", "password");
-
-    User user = UserDAO.getInstance().findUserByUsername(fields.get(0));
-    String password = fields.get(1);
+    User user = UserDAO.getInstance().findUserByUsername(getJSONField(httpRequest, String.class, "username"));
+    String password = getJSONField(httpRequest, String.class, "password");
 
     if (user == null) {
       throw new APIBadRequestException("User not found");

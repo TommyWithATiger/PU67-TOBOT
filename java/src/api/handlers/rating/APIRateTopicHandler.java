@@ -1,8 +1,6 @@
 package api.handlers.rating;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
-import static api.helpers.JSONCheckerHelper.getJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserFromHeader;
 
@@ -36,12 +34,9 @@ public class APIRateTopicHandler {
   public static String rateTopic(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
     User user = getUserFromHeader(httpRequest, ", cannot create a new subject");
 
-    String ratingValue = getJSONFields(jsonObject, String.class, "rating").get(0);
+    String ratingValue = getJSONField(httpRequest, String.class, "rating");
     RatingEnum ratingEnum;
     try {
       ratingEnum = RatingConverter.convertFullRatingNameToEnum(ratingValue);
@@ -49,10 +44,8 @@ public class APIRateTopicHandler {
       throw new APIBadRequestException("rating is not a valid rating");
     }
 
-    Integer topicID = getJSONFields(jsonObject, Integer.class, "topicID").get(0);
-
     // Check topic exists
-    Topic topic = TopicDAO.getInstance().findById(topicID);
+    Topic topic = TopicDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "topicID"));
     if (topic == null) {
       throw new APIBadRequestException("No topic with the given id");
     }
@@ -60,7 +53,7 @@ public class APIRateTopicHandler {
     // Either update an old rating or create a new one
     Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topic.getId()));
     if (rating == null) {
-      rating = new Rating(user.getId(), topicID, ratingEnum);
+      rating = new Rating(user.getId(), topic.getId(), ratingEnum);
       rating.create();
     } else {
       rating.setRating(ratingEnum);
@@ -68,7 +61,7 @@ public class APIRateTopicHandler {
     }
 
     JSONObject response = new JSONObject();
-    response.put("topicID", topicID);
+    response.put("topicID", topic.getId());
     response.put("rating", ratingValue);
     return response.toString();
   }

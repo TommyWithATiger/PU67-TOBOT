@@ -1,6 +1,6 @@
 package api.handlers.relators;
 
-import static api.helpers.JSONCheckerHelper.getJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserFromHeader;
 
@@ -9,7 +9,6 @@ import data.dao.SubjectDAO;
 import data.dao.TopicDAO;
 import data.Subject;
 import data.Topic;
-import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -32,11 +31,8 @@ public class APIRelateSubjectTopicHandler {
     // User must be logged in
     getUserFromHeader(httpRequest, ", cannot create a new subject");
 
-    List<Integer> fields = getJSONFields(httpRequest, Integer.class,
-        "subjectID", "topicID");
-
-    Subject subject = SubjectDAO.getInstance().findById(fields.get(0));
-    Topic topic = TopicDAO.getInstance().findById(fields.get(1));
+    Subject subject = SubjectDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "subjectID"));
+    Topic topic = TopicDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "topicID"));
 
     if (subject == null || topic == null) {
       throw new APIBadRequestException("One of the id's does not exists");

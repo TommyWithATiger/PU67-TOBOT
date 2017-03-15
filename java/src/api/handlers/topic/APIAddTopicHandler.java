@@ -1,11 +1,10 @@
 package api.handlers.topic;
 
-import static api.helpers.JSONCheckerHelper.getJSONFields;
+import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserFromHeader;
 
 import data.Topic;
-import java.util.List;
 import org.apache.http.HttpRequest;
 
 public class APIAddTopicHandler {
@@ -24,10 +23,8 @@ public class APIAddTopicHandler {
     // User must be logged in
     getUserFromHeader(httpRequest, ", cannot create a new topic");
 
-    List<String> fields = getJSONFields(httpRequest, String.class, "title", "description");
-
-    String title = fields.get(0);
-    String description = fields.get(1);
+    String title = getJSONField(httpRequest, String.class, "title");
+    String description = getJSONField(httpRequest, String.class, "description");
 
     Topic topic = new Topic(title, description);
     topic.create();
