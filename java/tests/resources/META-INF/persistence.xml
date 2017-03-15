@@ -13,6 +13,7 @@
         <class>data.Subject</class>
         <class>data.rating.Rating</class>
         <class>data.rating.RatingConverter</class>
+        <class>data.exercise.Exercise</class>
 
         <properties>
             <!-- Configuring JDBC properties -->
