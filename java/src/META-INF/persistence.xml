@@ -18,6 +18,8 @@
         <class>data.rating.Rating</class>
         <class>data.rating.RatingConverter</class>
         <class>data.exercise.Exercise</class>
+        <class>data.exerciserating.ExerciseRating</class>
+        <class>data.exerciserating.ExerciseRatingConverter</class>
 
         <properties>
             &login;
