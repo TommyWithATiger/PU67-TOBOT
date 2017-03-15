@@ -27,13 +27,13 @@ Vue.use(Router)
  */
 function requireAuth (to, from, next) {
   if (auth.hasToken()) {
-    if (/^\/login/.test(from.path)) {
+    if (/^\/login|^\/register/.test(from.path)) {
       store.state.user.username = ''
       store.state.user.usertype = ''
     }
 
     auth.isAuth(() => {
-      if (/^\/login|^\/restricted/.test(from.path)) {
+      if (/^\/login|^\/register|^\/restricted/.test(from.path)) {
         api.getUser(this, (data) => {
           store.state.user.username = data.username
           store.state.user.usertype = data.userType
