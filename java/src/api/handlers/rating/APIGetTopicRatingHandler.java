@@ -1,7 +1,7 @@
 package api.handlers.rating;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getIntegerURIFields;
+import static api.helpers.UrlArgumentHelper.getIntegerURIField;
 import static api.helpers.isLoggedInHelper.getUserFromHeader;
 
 import api.exceptions.APIBadRequestException;
@@ -34,7 +34,7 @@ public class APIGetTopicRatingHandler {
 
     User user = getUserFromHeader(httpRequest, ", cannot find ratings");
 
-    Integer topicID = getIntegerURIFields(httpRequest, "id").get(0);
+    Integer topicID = getIntegerURIField(httpRequest, "id");
 
     Topic topic = TopicDAO.getInstance().findById(topicID);
 

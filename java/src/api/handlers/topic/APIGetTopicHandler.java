@@ -1,8 +1,8 @@
 package api.handlers.topic;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getIntegerURIFields;
-import static api.helpers.UrlArgumentHelper.getURIFields;
+import static api.helpers.UrlArgumentHelper.getIntegerURIField;
+import static api.helpers.UrlArgumentHelper.getURIField;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.TopicDAO;
@@ -24,7 +24,7 @@ public class APIGetTopicHandler {
   public static String getTopicByID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    Integer topicID = getIntegerURIFields(httpRequest, "id").get(0);
+    Integer topicID = getIntegerURIField(httpRequest, "id");
 
     Topic topic = TopicDAO.getInstance().findById(topicID);
 
@@ -46,7 +46,7 @@ public class APIGetTopicHandler {
   public static String getTopicsByTitle(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    String title = getURIFields(httpRequest, "title").get(0);
+    String title = getURIField(httpRequest, "title");
 
     List<Topic> topics = TopicDAO.getInstance().findTopicsByTitle(title);
 

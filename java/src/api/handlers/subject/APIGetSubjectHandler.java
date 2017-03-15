@@ -2,7 +2,7 @@ package api.handlers.subject;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
-import static api.helpers.UrlArgumentHelper.getIntegerURIFields;
+import static api.helpers.UrlArgumentHelper.getIntegerURIField;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.SubjectDAO;
@@ -32,7 +32,7 @@ public class APIGetSubjectHandler {
   public static String getSubjectByID(HttpRequest httpRequest) {
     checkRequestMethod("GET", httpRequest);
 
-    Integer subjectID = getIntegerURIFields(httpRequest, "id").get(0);
+    Integer subjectID = getIntegerURIField(httpRequest, "id");
 
     Subject subject = SubjectDAO.getInstance().findById(subjectID);
 
@@ -61,7 +61,7 @@ public class APIGetSubjectHandler {
       throw new APIBadRequestException("title must be given");
     }
 
-    String subjectTitle = (String) uriArguments.get("title");
+    String subjectTitle = uriArguments.get("title");
 
     List<Subject> subjects = SubjectDAO.getInstance().findSubjectsByTitle(subjectTitle);
     subjects.sort(Comparator.comparing(Subject::getTitle));
