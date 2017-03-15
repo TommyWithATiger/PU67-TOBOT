@@ -19,6 +19,7 @@ const SUBJECT_GET_TITLE_URL = `${API_URL}/subject/get/?title=`
 const SUBJECT_GET_ID_URL = `${API_URL}/subject/get/?id=`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 const SUBJECT_GET_RELATED_URL = `${API_URL}/subject/related/?id=`
+const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
@@ -74,7 +75,7 @@ export const api = {
   },
 
   /**
-   * Get topics related to a subject from the API
+   * Get topics related to a subject from the API.
    * @param {object} ctx Context.
    * @param {integer} id The subject id.
    * @param {function} callback Handle the request output.
@@ -83,6 +84,18 @@ export const api = {
    */
   getRelatedTopics (ctx, id, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_RELATED_URL + id, callback, error)
+  },
+
+  /**
+   * Get topics count related to a subject from the API.
+   * @param {object} ctx Context.
+   * @param {integer} id The subject id.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getRelatedTopicsCount (ctx, id, callback, error) {
+    return this.getRequest(ctx, SUBJECT_GET_RELATED_COUNT_URL + id, callback, error)
   },
 
   /**
