@@ -12,7 +12,7 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
    *
    * @param emFactory, the static EntityManagerFactory for the server instance
    */
-  public UserDAO(EntityManagerFactory emFactory) {
+  private UserDAO(EntityManagerFactory emFactory) {
     super(User.class, emFactory);
   }
 

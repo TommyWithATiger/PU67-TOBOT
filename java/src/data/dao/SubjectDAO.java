@@ -18,10 +18,9 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    *
    * @param emFactory, the static EntityManagerFactory for the server instance
    */
-  public SubjectDAO(EntityManagerFactory emFactory) {
+  private SubjectDAO(EntityManagerFactory emFactory) {
     super(Subject.class, emFactory);
   }
-
 
   /**
    * Get all database occurrences of Subject

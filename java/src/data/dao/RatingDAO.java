@@ -18,7 +18,7 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
    *
    * @param emFactory, the static EntityManagerFactory for the server instance
    */
-  public RatingDAO(EntityManagerFactory emFactory) {
+  private RatingDAO(EntityManagerFactory emFactory) {
     super(Rating.class, emFactory);
   }
 
