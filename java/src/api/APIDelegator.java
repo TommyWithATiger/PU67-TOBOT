@@ -14,6 +14,8 @@ import api.handlers.user.APIGetUserInfoHandler;
 import api.handlers.user.APILoggedInCheckHandler;
 import api.handlers.user.APILoginHandler;
 import api.handlers.user.APILogoutHandler;
+import api.handlers.user.APIRegistrationHandler;
+import api.handlers.user.APIResetPasswordHandler;
 import java.util.HashMap;
 import java.util.function.Function;
 import org.apache.http.HttpRequest;
@@ -57,6 +59,14 @@ public class APIDelegator {
     handlerRegistry.put("user\\/logout", APILogoutHandler::handleLogoutRequest);
     handlerRegistry.put("user\\/check", APILoggedInCheckHandler::handleLoggedInCheckRequest);
     handlerRegistry.put("user\\/info", APIGetUserInfoHandler::getUserInfo);
+
+    // User registration
+    handlerRegistry.put("user\\/registration\\/check", APIRegistrationHandler::checkRegistrationData);
+    handlerRegistry.put("user\\/registration", APIRegistrationHandler::registerUser);
+
+    // Password reset
+    handlerRegistry.put("user\\/reset\\/request", APIResetPasswordHandler::requestPasswordReset);
+    handlerRegistry.put("user\\/reset", APIResetPasswordHandler::resetPassword);
 
     // Subject and topics
     handlerRegistry.put("topic\\/create", APIAddTopicHandler::handleAddTopicRequest);
