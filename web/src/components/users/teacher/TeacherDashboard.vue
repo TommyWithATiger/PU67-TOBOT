@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 v-if="username">Hei, {{ username }}!</h1>
-    <h1 v-else>Hei</h1>
+    <h1 v-if="username">Hi, {{ username }}!</h1>
+    <h1 v-else>Hi</h1>
     <StudentStatistics />
   </div>
 </template>
