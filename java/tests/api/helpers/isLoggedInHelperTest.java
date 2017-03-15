@@ -1,6 +1,6 @@
 package api.helpers;
 
-import static api.helpers.isLoggedInHelper.getUserFromHeader;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
 import static junit.framework.TestCase.assertEquals;
 
 import api.exceptions.APIRequestForbiddenException;
@@ -24,12 +24,12 @@ public class isLoggedInHelperTest extends BaseTest {
     httpRequest.addHeader("X-Username", user.getUsername());
     httpRequest.addHeader("Authorization", "Bearer " + user.getSessionToken());
 
-    assertEquals(user, getUserFromHeader(httpRequest, ""));
+    assertEquals(user, getUserFromRequest(httpRequest, ""));
   }
 
   @Test(expected = APIRequestForbiddenException.class)
   public void testMissingHeaders() {
-    getUserFromHeader(new BasicHttpRequest("GET", "URL"), "");
+    getUserFromRequest(new BasicHttpRequest("GET", "URL"), "");
     //assertFalse(isLoggedIn(new BasicHttpRequest("GET", "URL")));
   }
 
@@ -44,7 +44,7 @@ public class isLoggedInHelperTest extends BaseTest {
     HttpRequest httpRequest = new BasicHttpRequest("GET", "URL");
     httpRequest.addHeader("Authorization", "Bearer " + user.getSessionToken());
 
-    getUserFromHeader(httpRequest, "");
+    getUserFromRequest(httpRequest, "");
   }
 
   @Test(expected = APIRequestForbiddenException.class)
@@ -58,7 +58,7 @@ public class isLoggedInHelperTest extends BaseTest {
     HttpRequest httpRequest = new BasicHttpRequest("GET", "URL");
     httpRequest.addHeader("X-Username", user.getUsername());
 
-    getUserFromHeader(httpRequest, "");
+    getUserFromRequest(httpRequest, "");
   }
 
   @Test(expected = APIRequestForbiddenException.class)
@@ -67,7 +67,7 @@ public class isLoggedInHelperTest extends BaseTest {
     httpRequest.addHeader("X-Username", "admin");
     httpRequest.addHeader("Authorization", "Bearer: adshjasdkhk");
 
-    getUserFromHeader(httpRequest, "");
+    getUserFromRequest(httpRequest, "");
   }
 
 }

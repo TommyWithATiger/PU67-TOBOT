@@ -2,7 +2,7 @@ package api.handlers.rating;
 
 import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.getUserFromHeader;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.RatingDAO;
@@ -34,7 +34,7 @@ public class APIRateTopicHandler {
   public static String rateTopic(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    User user = getUserFromHeader(httpRequest, ", cannot create a new subject");
+    User user = getUserFromRequest(httpRequest, ", cannot create a new subject");
 
     String ratingValue = getJSONField(httpRequest, String.class, "rating");
     RatingEnum ratingEnum;

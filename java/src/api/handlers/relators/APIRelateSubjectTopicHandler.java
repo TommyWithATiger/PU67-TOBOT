@@ -2,7 +2,7 @@ package api.handlers.relators;
 
 import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.getUserFromHeader;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.SubjectDAO;
@@ -29,7 +29,7 @@ public class APIRelateSubjectTopicHandler {
     checkRequestMethod("POST", httpRequest);
 
     // User must be logged in
-    getUserFromHeader(httpRequest, ", cannot create a new subject");
+    getUserFromRequest(httpRequest, ", cannot create a new subject");
 
     Subject subject = SubjectDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "subjectID"));
     Topic topic = TopicDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "topicID"));

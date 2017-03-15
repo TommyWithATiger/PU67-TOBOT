@@ -2,7 +2,7 @@ package api.handlers.rating;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getIntegerURIField;
-import static api.helpers.isLoggedInHelper.getUserFromHeader;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.RatingDAO;
@@ -32,7 +32,7 @@ public class APIGetTopicRatingHandler {
   public static String getTopicRatingByTopicID(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    User user = getUserFromHeader(httpRequest, ", cannot find ratings");
+    User user = getUserFromRequest(httpRequest, ", cannot find ratings");
 
     Integer topicID = getIntegerURIField(httpRequest, "id");
 
@@ -66,7 +66,7 @@ public class APIGetTopicRatingHandler {
   public static String getTopicRatings(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    User user = getUserFromHeader(httpRequest, ", cannot find ratings");
+    User user = getUserFromRequest(httpRequest, ", cannot find ratings");
 
     List<Rating> ratings = RatingDAO.getInstance().findRatingByUser(user);
 
@@ -97,7 +97,7 @@ public class APIGetTopicRatingHandler {
   public static String getTopicsWithRatings(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    User user = getUserFromHeader(httpRequest, ", cannot find ratings");
+    User user = getUserFromRequest(httpRequest, ", cannot find ratings");
 
     List<Topic> topics = TopicDAO.getInstance().findAll();
     List<Rating> ratingsUser = RatingDAO.getInstance().findRatingByUser(user);

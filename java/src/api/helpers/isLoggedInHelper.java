@@ -16,7 +16,7 @@ public class isLoggedInHelper {
    * the user does not exist, or if the users's session is expired.
    * @return The User that made the request
    */
-  public static User getUserFromHeader(HttpRequest httpRequest, String exceptionSuffix) {
+  public static User getUserFromRequest(HttpRequest httpRequest, String exceptionSuffix) {
     String base = "User is not logged in";
 
     // Must have username in the data and the Authentication header set
