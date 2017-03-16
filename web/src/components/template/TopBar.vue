@@ -18,6 +18,7 @@
       </button>
       <div :class="`header-user-menu ${userMenu ? 'show' : ''}`" v-if="authenticated">
         <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
+        <span @click="changeTheme">Change theme</span>
         <LogoutBtn />
       </div>
     </div>
@@ -85,6 +86,24 @@ export default {
   methods: {
     checkUsertype (users) {
       return users.indexOf(this.$store.state.user.usertype) !== -1
+    },
+    changeTheme () {
+      let theme = this.$store.state.theme
+
+      switch (this.$store.state.theme) {
+        case 'dark':
+          theme = 'light'
+          break
+        case 'light':
+          theme = 'dark'
+          break
+      }
+
+      this.$store.state.theme = theme
+
+      try {
+        localStorage.setItem('theme', theme)
+      } catch (err) {}
     }
   },
   components: {
