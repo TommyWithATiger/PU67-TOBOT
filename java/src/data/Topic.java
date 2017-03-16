@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.json.JSONObject;
 
 
 @Entity
@@ -160,6 +161,22 @@ public class Topic {
    */
   public void update() {
     TopicDAO.getInstance().merge(this);
+  }
+
+  /**
+   * Creates a JSON object with information about the topic
+   *
+   * @return A JSON object with the following data:
+   *        id (int): the topic id
+   *        title (String): the topic title
+   *        description (String): the topic description
+   */
+  public JSONObject createAbout(){
+    JSONObject aboutTopic = new JSONObject();
+    aboutTopic.put("id", id);
+    aboutTopic.put("title", title);
+    aboutTopic.put("description", description);
+    return aboutTopic;
   }
 
   /**
