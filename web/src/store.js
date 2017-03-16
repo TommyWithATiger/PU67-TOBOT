@@ -5,6 +5,16 @@ import { auth } from 'auth'
 
 Vue.use(Vuex)
 
+let theme = 'light'
+
+try {
+  if (localStorage.getItem('theme') === null) {
+    localStorage.setItem('theme', theme)
+  }
+
+  theme = localStorage.getItem('theme')
+} catch (err) {}
+
 export const store = new Vuex.Store({
   state: {
     user: {
@@ -12,6 +22,7 @@ export const store = new Vuex.Store({
       username: '',
       usertype: '',
       email: ''
-    }
+    },
+    theme: theme
   }
 })
