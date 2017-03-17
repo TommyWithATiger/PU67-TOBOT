@@ -200,7 +200,7 @@ input[type=text], input {
   outline: none;
   border: none;
   border-radius: 4px;
-  padding: 8px 16px;
+  padding: 8px;
   margin: 4px 8px;
   transition: background-color .2s;
 }
