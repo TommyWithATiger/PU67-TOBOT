@@ -2,7 +2,7 @@
   <div class="page-content">
     <h1>Emner</h1>
     <h2>Legg til emne</h2>
-    <p class="subject-add-fields">
+    <div class="subject-add-fields">
       <label>Tittel: </label>
       <input @keydown.enter="addSubject" v-model="subject.title" type="text" />
       <br>
@@ -14,9 +14,11 @@
       <br>
       <label>Beskrivelse: </label>
       <input @keydown.enter="addSubject" v-model="subject.description" type="text" />
-      <button @click="addSubject">Legg til</button>
-      <span class="error">{{ addFeedback }}</span>
-    </p>
+      <p>
+        <button @click="addSubject">Legg til</button>
+        <span class="error">{{ addFeedback }}</span>
+      </p>
+    </div>
     <h2>Alle emner</h2>
     <div v-if="subjects.length">
       <div class="subject-info subject-info-header">
@@ -82,22 +84,6 @@ export default {
 .subject-add-fields > label {
   width: 5em;
   display: inline-block;
-}
-
-.subject-add-fields > button {
-  display: block;
-  width: 100px;
-  height: 25px;
-  border: 1px solid #666;
-  border-radius: 4px;
-  background-color: #e9e9e9;
-  margin-top: 8px;
-  margin-left: 30px;
-}
-
-.subject-add-fields > button:hover {
-  border: 1px solid #333;
-  background-color: #e1e1e1;
 }
 
 .subject-title, .subject-description, .subject-code, .subject-relate {

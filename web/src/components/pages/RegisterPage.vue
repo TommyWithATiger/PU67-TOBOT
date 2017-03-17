@@ -1,29 +1,29 @@
 <template>
   <div class="page-content">
-  	<div class="form-content">
-  		<div class="form-row">
-  			<label for="username">Username: </label>
-  			<input @focusout="checkRegistration" @keydown.enter="register" placeholder="Username" v-model="username" id="username" type="text">
-  			<div class="inputError" id="username-error"></div>
-  		</div>
-  		<div class="form-row">
-  			<label for="password">Password: </label>
-  			<input @focusout="checkRegistration" @keydown.enter="register" placeholder="Password" v-model="password" id="password" type="password">
-  			<div class="inputError" id="password-error"></div>
-  		</div>
-  		<div class="form-row">
-  			<label for="email">E-mail: </label>
-  			<input @focusout="checkRegistration" @keydown.enter="register" placeholder="E-mail" v-model="email" id="email" type="email">
-  			<div class="inputError" id="email-error"></div>
-  		</div>
-  		<div class="form-row userType">
-  			<input v-model="userType" type="radio" name="userType" value="Student"> Student
-  			<input v-model="userType" type="radio" name="userType" value="Teacher"> Teacher 
-  		</div>
-  		<div class="form-row">
-  			<button class="registerButton" @click="register">Registrer</button>
-  		</div>
-  	</div>
+    <div class="form-content">
+      <div class="form-row">
+        <label for="username">Username: </label>
+        <input @focusout="checkRegistration" @keydown.enter="register" placeholder="Username" v-model="username" id="username" type="text">
+        <div class="inputError" id="username-error"></div>
+      </div>
+      <div class="form-row">
+        <label for="password">Password: </label>
+        <input @focusout="checkRegistration" @keydown.enter="register" placeholder="Password" v-model="password" id="password" type="password">
+        <div class="inputError" id="password-error"></div>
+      </div>
+      <div class="form-row">
+        <label for="email">E-mail: </label>
+        <input @focusout="checkRegistration" @keydown.enter="register" placeholder="E-mail" v-model="email" id="email" type="email">
+        <div class="inputError" id="email-error"></div>
+      </div>
+      <div class="form-row userType">
+        <input v-model="userType" type="radio" name="userType" value="Student"> Student
+        <input v-model="userType" type="radio" name="userType" value="Teacher"> Teacher 
+      </div>
+      <div class="form-row">
+        <button class="registerButton" @click="register">Registrer</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -116,7 +116,6 @@ export default {
 	font-weight: bold;
 }
 
-
 .form-row > input[type="text"].invalidInput, .form-row > input[type="password"].invalidInput, .form-row > input[type="email"].invalidInput{
 	border-color: red;
 }
@@ -145,21 +144,10 @@ export default {
 	width: 
 }
 
-
 .userType > input {
 	margin-left: 40px;
 	height: 18px;
 	width: 18px;
 	margin-top: 15px;
 }
-
-.registerButton {
-	width: 150px;
-	height: 35px;
-	background: #FFF;
-	border: 1px solid gray;
-	border-radius: 5px;
-	margin-left: 105px;
-}
-
 </style>
