@@ -30,6 +30,7 @@ import Logo from 'components/template/Logo'
 import LogoutBtn from 'components/auth/LogoutBtn'
 import SearchBar from 'components/search/SearchBar'
 import { auth } from 'auth'
+import { ChangeTheme } from 'common/ChangeTheme'
 
 export default {
   name: 'header',
@@ -90,20 +91,27 @@ export default {
     },
     changeTheme () {
       let theme = this.$store.state.theme
+      let hue = this.$store.state.hue
 
       switch (this.$store.state.theme) {
         case 'dark':
           theme = 'light'
+          hue = 0x00ffff
           break
         case 'light':
           theme = 'dark'
+          hue = 0x00ff00
           break
       }
 
       this.$store.state.theme = theme
+      this.$store.state.hue = hue
+
+      ChangeTheme.change(theme, hue)
 
       try {
         localStorage.setItem('theme', theme)
+        localStorage.setItem('hue', hue)
       } catch (err) {}
     }
   },
