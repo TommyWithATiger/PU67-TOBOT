@@ -152,6 +152,7 @@ export default {
   flex: 1;
   display: flex;
   justify-content: flex-end;
+  padding: 0 16px;
 }
 
 .header-links > a {
