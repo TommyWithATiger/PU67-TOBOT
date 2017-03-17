@@ -131,6 +131,7 @@ export default {
 <style scoped>
 .header {
   box-shadow: 0 0 8px rgba(0, 0, 0, .4);
+  box-shadow: var(--box-shadow-1);
   padding: 12px 24px;
   box-sizing: border-box;
 }
@@ -181,6 +182,7 @@ export default {
   background-color: var(--n-color-1);
   flex-direction: column;
   box-shadow: 0 0 8px rgba(0, 0, 0, .2);
+  box-shadow: var(--box-shadow-2);
 }
 
 .user-menu.show {

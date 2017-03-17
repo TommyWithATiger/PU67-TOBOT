@@ -64,6 +64,10 @@ The numbers behind each defines how strong it is where 1 is the strongest.
   --nn-color-6: #aaaaaa;
   --nn-color-7: #999999;
   --nn-color-8: #888888;
+
+  --box-shadow-1: 0 0 8px rgba(0, 0, 0, .4);
+  --box-shadow-2: 0 0 8px rgba(0, 0, 0, .2);
+  --box-shadow-3: 0 0 8px rgba(0, 0, 0, .1);
 }
 
 .background-color-p1 { background-color: #00ffff; background-color: var(--p-color-1); }
