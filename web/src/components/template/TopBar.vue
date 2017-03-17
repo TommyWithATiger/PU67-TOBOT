@@ -107,12 +107,12 @@ export default {
       this.$store.state.theme = theme
       this.$store.state.hue = hue
 
-      ChangeTheme.change(theme, hue)
-
       try {
         localStorage.setItem('theme', theme)
         localStorage.setItem('hue', hue)
       } catch (err) {}
+
+      ChangeTheme.change(theme, hue)
     }
   },
   components: {
