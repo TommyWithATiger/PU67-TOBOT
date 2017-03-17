@@ -129,6 +129,7 @@ The numbers behind each defines how strong it is where 1 is the strongest.
 
 .page-content {
   padding: 16px;
+  box-sizing: border-box;
   flex: 1;
 }
 

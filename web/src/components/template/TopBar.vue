@@ -11,15 +11,20 @@
         </router-link>
       </div>
       <SearchBar v-if="authenticated && !isSearchRoute" />
-      <button class="header-user-menu-btn"
-        v-if="authenticated"
-        @click="userMenu = !userMenu">
-        Menu
-      </button>
-      <div :class="`header-user-menu ${userMenu ? 'show' : ''}`" v-if="authenticated">
-        <router-link :to="getUserUrl">{{ state.user.username }}</router-link>
-        <span @click="changeTheme">Change theme</span>
-        <LogoutBtn />
+      <div class="user-menu-container">
+        <button class="user-menu-btn"
+          v-if="authenticated"
+          @click="userMenu = !userMenu">
+          {{ state.user.username }} 
+          <svg viewBox="0 0 10 10" class="user-menu-icon">
+            <rect x="0" y="0" width="5" height="5" transform="rotate(-45)" />
+          </svg>
+        </button>
+        <div :class="`user-menu ${userMenu ? 'show' : ''}`" v-if="authenticated">
+          <router-link :to="getUserUrl">Profile</router-link>
+          <span @click="changeTheme">Change theme</span>
+          <LogoutBtn />
+        </div>
       </div>
     </div>
   </div>
@@ -124,9 +129,16 @@ export default {
 </script>
 
 <style scoped>
+.header {
+  box-shadow: 0 0 8px rgba(0, 0, 0, .4);
+  padding: 12px 24px;
+  box-sizing: border-box;
+}
+
 .header-img {
-  max-width: 200px;
+  max-width: 160px;
   width: 100%;
+  height: inherit;
 }
 
 .header-container {
@@ -145,16 +157,40 @@ export default {
   padding: 10px;
 }
 
-.header-user-menu {
-  display: flex;
-  flex-direction: column;
+.user-menu-btn {
+  margin: 4px 16px;
 }
 
-.header-user-menu {
+.user-menu-container {
+  position: relative;
+}
+
+.user-menu > * {
+  margin: 4px 0;
+}
+
+.user-menu {
+  margin: 4px 16px 0 0;
   display: none;
+  position: absolute;
+  top: 100%;
+  border-radius: 4px;
+  right: 0;
+  padding: 8px;
+  background-color: #ccc;
+  background-color: var(--n-color-1);
+  flex-direction: column;
+  box-shadow: 0 0 8px rgba(0, 0, 0, .2);
 }
 
-.header-user-menu.show {
-  display: block;
+.user-menu.show {
+  display: flex;
+}
+
+.user-menu-icon {
+  fill: #000;
+  width: 10px;
+  margin-top: 4px;
+  margin-bottom: -4px;
 }
 </style>
