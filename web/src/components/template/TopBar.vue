@@ -1,7 +1,7 @@
 <template>
-  <div class="header">
+  <div class="header primary-background-color">
     <div class="header-container">
-      <router-link to="/"><img class="header-img" v-bind:src="'/static/images/TOBOT_mascot.svg'"></img></router-link>
+      <router-link to="/"><Logo class="header-img" /></router-link>
       <div class="header-links" v-if="authenticated">
         <router-link v-for="link in links"
           v-if="checkUsertype(link.users)"
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import Logo from 'components/template/Logo'
 import LogoutBtn from 'components/auth/LogoutBtn'
 import SearchBar from 'components/search/SearchBar'
 import { auth } from 'auth'
@@ -107,6 +108,7 @@ export default {
     }
   },
   components: {
+    Logo,
     LogoutBtn,
     SearchBar
   }
