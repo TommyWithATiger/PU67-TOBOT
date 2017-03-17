@@ -179,6 +179,7 @@ export default {
 
 .user-menu {
   margin: 4px 16px 0 0;
+  width: 140px;
   display: none;
   position: absolute;
   top: 100%;
