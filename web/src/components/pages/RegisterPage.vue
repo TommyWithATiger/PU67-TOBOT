@@ -62,10 +62,7 @@ export default {
       username: '',
       password: '',
       email: '',
-      userType: 'Student',
-      usernameError: '',
-      passwordError: '',
-      emailError: ''
+      userType: 'Student'
     }
   },
   computed: {
@@ -148,56 +145,56 @@ export default {
 <style scoped>
 
 .form-content {
-	position: absolute;
-	font-size: 20px;
-	width: 400px;
-	left: 50%;
-	top: 50%;
-	margin-left: -200px;
-	margin-top: -70px;
+  position: absolute;
+  font-size: 20px;
+  width: 400px;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -70px;
 }
 
 .form-row {
-	padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .form-row > label {
-	width: 100px;
-	display: inline-block;
-	vertical-align: middle;
-	font-weight: bold;
+  width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: bold;
 }
 
 .form-row > input[type="text"].invalid-input,
 .form-row > input[type="password"].invalid-input,
 .form-row > input[type="email"].invalid-input {
-	border-color: red;
+  border-color: red;
 }
 
 .form-row > input[type="text"],
 .form-row > input[type="password"],
 .form-row > input[type="email"] {
-	text-align: center;
+  text-align: center;
   width: 100%;
 }
 
 .userType {
-	text-align: center;
+  text-align: center;
 }
 
 .inputError {
-	padding-left: 10px;
-	padding-top: 5px;
-	color: #ff0000;
-	font-size: 14px;
-	text-align: center;
-	width: 
+  padding-left: 10px;
+  padding-top: 5px;
+  color: #ff0000;
+  font-size: 14px;
+  text-align: center;
+  width: 
 }
 
 .userType > input {
-	margin-left: 40px;
-	height: 18px;
-	width: 18px;
-	margin-top: 15px;
+  margin-left: 40px;
+  height: 18px;
+  width: 18px;
+  margin-top: 15px;
 }
 </style>
