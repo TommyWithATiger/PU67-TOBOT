@@ -118,10 +118,13 @@ The numbers behind each defines how strong it is where 1 is the strongest.
 .color-nn7 { color: #666666; color: var(--nn-color-7); }
 .color-nn8 { color: #777777; color: var(--nn-color-8); }
 
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
 }
 
 .page-content {
@@ -140,6 +143,7 @@ The numbers behind each defines how strong it is where 1 is the strongest.
   width: 100%;
   margin: auto;
 }
+
 .header-container {
   max-width: 1200px;
 }
@@ -148,7 +152,7 @@ button,
 input[type=submit],
 input[type=reset] {
   background-color: #0df;
-  background-color: var(--button-background-color);
+  background-color: var(--p-color-1);
   border: none;
   padding: 8px 16px;
   cursor: pointer;
@@ -163,7 +167,7 @@ button:hover,
 input[type=submit]:hover,
 input[type=reset]:hover {
   background-color: #0bd;
-  background-color: var(--button-hover-background-color);
+  background-color: var(--p-color-3);
   transition-duration: .05s;
 }
 
@@ -178,15 +182,16 @@ button[disabled],
 input[type=submit][disabled],
 input[type=reset][disabled] {
   background-color: #0bd;
-  background-color: var(--button-background-color);
+  background-color: var(--n-color-4);
+  color: #aaa;
+  color: var(--nn-color-1);
 }
 
-input[type=text],
-input {
+input[type=text], input {
   background-color: #555;
-  background-color: var(--input-background-color);
+  background-color: var(--n-color-3);
   color: #999;
-  color: var(--input-color);
+  color: var(--nn-color-1);
   outline: none;
   border: none;
   border-radius: 4px;
