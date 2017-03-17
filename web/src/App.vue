@@ -215,5 +215,10 @@ a {
   color: #00f;
   color: var(--p-color-6);
   text-decoration: none;
+  outline: none;
+}
+
+a:focus {
+  box-shadow: inset 0 0 0 2px var(--p-color-2);
 }
 </style>
