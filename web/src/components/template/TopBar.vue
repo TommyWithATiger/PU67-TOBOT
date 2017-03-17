@@ -159,7 +159,8 @@ export default {
   padding: 10px;
 }
 
-.header-links > a.router-link-active {
+.header-links > a.router-link-active,
+.user-menu > a.router-link-active {
   color: var(--nn-color-6);
 }
 
