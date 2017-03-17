@@ -22,7 +22,7 @@ export class ChangeTheme {
         document.body.style.setProperty(`--n${dark ? 'n' : ''}-color-${n}`, '#' + Format.digits(i.toString(16), 6))
       }
 
-      for (let i = 0, n = 1; i <= 0x777777; i += 0x111111, n++) {
+      for (let i = 0x333333, n = 1; i <= 0x777777; i += 0x111111, n++) {
         document.body.style.setProperty(`--n${dark ? '' : 'n'}-color-${n}`, '#' + Format.digits(i.toString(16), 6))
       }
     } else {

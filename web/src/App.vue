@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="`app background-color-n1 color-n1 ${theme}`">
+  <div id="app" :class="`app background-color-n2 color-nn1 ${theme}`">
     <TopBar></TopBar>
     <router-view></router-view>
   </div>
@@ -47,23 +47,23 @@ The numbers behind each defines how strong it is where 1 is the strongest.
   --p-color-8: #008fff;
   --p-color-9: #007fff;
 
-  --n-color-1: #ffffff;
-  --n-color-2: #eeeeee;
-  --n-color-3: #dddddd;
-  --n-color-4: #cccccc;
-  --n-color-5: #bbbbbb;
-  --n-color-6: #aaaaaa;
-  --n-color-7: #999999;
-  --n-color-8: #888888;
-  --n-color-9: #777777;
+  --n-color-1: #000000;
+  --n-color-2: #111111;
+  --n-color-3: #222222;
+  --n-color-4: #333333;
+  --n-color-5: #444444;
+  --n-color-6: #555555;
+  --n-color-7: #666666;
+  --n-color-8: #777777;
 
-  --nn-color-1: #000000;
-  --nn-color-2: #111111;
-  --nn-color-3: #222222;
-  --nn-color-4: #333333;
-  --nn-color-5: #444444;
-  --nn-color-6: #555555;
-  --nn-color-7: #666666;
+  --nn-color-1: #ffffff;
+  --nn-color-2: #eeeeee;
+  --nn-color-3: #dddddd;
+  --nn-color-4: #cccccc;
+  --nn-color-5: #bbbbbb;
+  --nn-color-6: #aaaaaa;
+  --nn-color-7: #999999;
+  --nn-color-8: #888888;
 }
 
 .background-color-p1 { background-color: #00ffff; background-color: var(--p-color-1); }

@@ -1,5 +1,5 @@
 <template>
-  <div class="header primary-background-color">
+  <div class="header background-color-n1">
     <div class="header-container">
       <router-link to="/"><Logo class="header-img" /></router-link>
       <div class="header-links" v-if="authenticated">
