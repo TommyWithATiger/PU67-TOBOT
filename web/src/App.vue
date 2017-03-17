@@ -193,7 +193,7 @@ input[type=reset][disabled] {
 }
 
 input[type=text], input {
-  background-color: #555;
+  background-color: #999;
   background-color: var(--n-color-3);
   color: #999;
   color: var(--nn-color-1);
@@ -201,6 +201,14 @@ input[type=text], input {
   border: none;
   border-radius: 4px;
   padding: 8px 16px;
+  margin: 4px 8px;
+  transition: background-color .2s;
+}
+
+input[type=text]:focus, input:focus {
+  background-color: #999;
+  background-color: var(--n-color-4);
+  transition-duration: .05s;
 }
 
 a {
