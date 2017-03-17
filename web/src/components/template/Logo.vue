@@ -33,11 +33,15 @@ export default {
 </script>
 
 <style scoped>
-.logo-group { stroke: #09f; }
-.dark .logo-group { stroke: #0df; }
+.logo-group {
+  stroke: #09f;
+  stroke: var(--p-color-3);
+}
 
-.logo-element { fill: #09f; }
-.dark .logo-element { fill: #0df; }
+.logo-element {
+  fill: #09f;
+  fill: var(--p-color-3);
+}
 
 .logo-square {
   fill: none;
