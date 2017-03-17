@@ -198,4 +198,10 @@ input[type=text], input {
   border-radius: 4px;
   padding: 8px 16px;
 }
+
+a {
+  color: #00f;
+  color: var(--p-color-6);
+  text-decoration: none;
+}
 </style>

@@ -22,7 +22,7 @@
         </button>
         <div :class="`user-menu ${userMenu ? 'show' : ''}`" v-if="authenticated">
           <router-link :to="getUserUrl">Profile</router-link>
-          <span @click="changeTheme">Change theme</span>
+          <a @click="changeTheme" href="#">Change theme</a>
           <LogoutBtn />
         </div>
       </div>
