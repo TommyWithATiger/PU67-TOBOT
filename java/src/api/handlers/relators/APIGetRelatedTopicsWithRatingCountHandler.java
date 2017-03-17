@@ -1,8 +1,7 @@
 package api.handlers.relators;
 
-import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
+import static api.helpers.UrlArgumentHelper.getIntegerURIField;
 
 import api.exceptions.APIBadRequestException;
 import data.Subject;
@@ -11,7 +10,6 @@ import data.dao.RatingDAO;
 import data.dao.SubjectDAO;
 import data.rating.Rating;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.stream.IntStream;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
@@ -30,20 +28,7 @@ public class APIGetRelatedTopicsWithRatingCountHandler {
   public static String getTopicWithRatingCountSubjectID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    // Require id
-    if (!uriArguments.containsKey("id")) {
-      throw new APIBadRequestException("id must be given");
-    }
-
-    // id must be integer
-    int subjectID;
-    try {
-      subjectID = Integer.parseInt(uriArguments.get("id"));
-    } catch (NumberFormatException nfe) {
-      throw new APIBadRequestException("id must be integer");
-    }
+    Integer subjectID = getIntegerURIField(httpRequest, "id");
 
     Subject subject = SubjectDAO.getInstance().findById(subjectID);
 
@@ -65,12 +50,12 @@ public class APIGetRelatedTopicsWithRatingCountHandler {
    * Creates a JSON object with information about a topic
    *
    * @param topic The topic to create a JSON object about
-   * @return A JSON object with all the data in createAboutTopic.
+   * @return A JSON object with all the data in topic.createAbout
    *        Also has an additional ratingCount field, which holds an array of frequencies of each
    *        rating. ratingCount[1] = 5 means five participants have rated the topic as 1 star, etc.
    */
   public static JSONObject createAboutTopicWithRatingCount(Topic topic, Subject subject){
-    JSONObject aboutTopic = createAboutTopic(topic);
+    JSONObject aboutTopic = topic.createAbout();
 
     int[] starFrequency = new int[] {0, 0, 0, 0, 0, 0};
     Collection<Rating> ratings = RatingDAO.getInstance()

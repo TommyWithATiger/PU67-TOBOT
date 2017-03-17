@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>Statistikk over studenter:</h1>
+    <h1>Statistics from students:</h1>
     <div v-for="s in subjects">
       <h2><router-link :to="'/subject/' + s.id">{{ s.title }}</router-link></h2>
-      <p v-if="s.relatedTopics && !s.relatedTopics.length" class="related-topics-empty">Ingen temaer.</p>
+      <p v-if="s.relatedTopics && !s.relatedTopics.length" class="related-topics-empty">No topics.</p>
       <div v-for="t in s.relatedTopics" class="related-topics">
         <span>
           <svg width="50" height="20" viewBox="0 0 500 200">

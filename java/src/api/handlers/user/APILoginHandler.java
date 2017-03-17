@@ -1,7 +1,6 @@
 package api.handlers.user;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
@@ -27,19 +26,9 @@ public class APILoginHandler {
   public static String handleLoginRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
+    User user = UserDAO.getInstance().findUserByUsername(getJSONField(httpRequest, String.class, "username"));
+    String password = getJSONField(httpRequest, String.class, "password");
 
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
-    // Require username and password
-    if (!jsonObject.has("username") || !jsonObject.has("password")) {
-      throw new APIBadRequestException("Login data not complete");
-    }
-
-    String username = jsonObject.getString("username");
-    String password = jsonObject.getString("password");
-
-    User user = UserDAO.getInstance().findUserByUsername(username);
     if (user == null) {
       throw new APIBadRequestException("User not found");
     }
@@ -59,13 +48,11 @@ public class APILoginHandler {
     user.update();
 
     JSONObject loginResponse = new JSONObject();
-    loginResponse.put("username", username);
+    loginResponse.put("username", user.getUsername());
     loginResponse.put("token", token);
     loginResponse.put("type", UserTypeConverter.userTypeToString(user.getUserType()));
 
     return loginResponse.toString();
   }
-
-
 
 }

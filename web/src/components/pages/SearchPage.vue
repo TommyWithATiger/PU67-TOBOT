@@ -1,6 +1,6 @@
 <template>
   <div class="page-content">
-    <h1>Søk blant emner og temaer:</h1>
+    <h1>Search among subjects and topics:</h1>
     <div class="search-container">
       <Search
         class="search-box"
@@ -11,24 +11,24 @@
         placeholder="Søk..."
       />
       <div class="search-results">
-        <h2>Emner</h2>
+        <h2>Subjects</h2>
         <div class="search-list" v-if="subjects && subjects.length">
           <div class="search-item" v-for="s in subjects">
             <router-link :to="'/subject/' + s.id">{{ s.title }}</router-link>
             <span> - {{ s.description }}</span>
           </div>
         </div>
-        <div v-else>Fant ingen emner.</div>
+        <div v-else>Could not find any subjects.</div>
       </div>
       <div class="search-results">
-        <h2>Temar</h2>
+        <h2>Topics</h2>
         <div class="search-list" v-if="topics && topics.length">
           <div class="search-item" v-for="t in topics">
             <router-link :to="'/topic/' + t.id">{{ t.title }}</router-link>
             <span> - {{ t.description }}</span>
           </div>
         </div>
-        <div v-else>Fant ingen temaer.</div>
+        <div v-else>Could not find any topics.</div>
       </div>
     </div>
   </div>

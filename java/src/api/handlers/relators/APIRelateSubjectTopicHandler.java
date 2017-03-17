@@ -1,18 +1,15 @@
 package api.handlers.relators;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.dao.SubjectDAO;
 import data.dao.TopicDAO;
 import data.Subject;
 import data.Topic;
 import org.apache.http.HttpRequest;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class APIRelateSubjectTopicHandler {
@@ -31,31 +28,11 @@ public class APIRelateSubjectTopicHandler {
   public static String relateSubjectTopicHandler(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
-
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
     // User must be logged in
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
-    }
+    getUserFromRequest(httpRequest, ", cannot create a new subject");
 
-    // Require subjectID and topicID
-    if (!jsonObject.has("subjectID") || !jsonObject.has("topicID")) {
-      throw new APIBadRequestException("Request does not have the required data");
-    }
-
-    // subjectID and topicID must be integers
-    Integer subjectID, topicID;
-    try {
-      subjectID = jsonObject.getInt("subjectID");
-      topicID = jsonObject.getInt("topicID");
-    } catch (JSONException je) {
-      throw new APIBadRequestException("Topic or subject ID is not integer");
-    }
-
-    Subject subject = SubjectDAO.getInstance().findById(subjectID);
-    Topic topic = TopicDAO.getInstance().findById(topicID);
+    Subject subject = SubjectDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "subjectID"));
+    Topic topic = TopicDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "topicID"));
 
     if (subject == null || topic == null) {
       throw new APIBadRequestException("One of the id's does not exists");

@@ -1,15 +1,12 @@
 package api.handlers.rating;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.dao.RatingDAO;
 import data.dao.TopicDAO;
-import data.dao.UserDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
@@ -17,7 +14,6 @@ import data.rating.RatingConverter;
 import data.rating.RatingEnum;
 import data.rating.RatingKey;
 import org.apache.http.HttpRequest;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class APIRateTopicHandler {
@@ -38,23 +34,9 @@ public class APIRateTopicHandler {
   public static String rateTopic(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
+    User user = getUserFromRequest(httpRequest, ", cannot create a new subject");
 
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
-    // The user must be logged in
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot create a new subject");
-    }
-
-    // Require topic id
-    if (!jsonObject.has("topicID") || !jsonObject.has("rating")) {
-      throw new APIBadRequestException("topicID must be set");
-    }
-
-
-    // Check that there is a valid rating
-    String ratingValue = jsonObject.getString("rating");
+    String ratingValue = getJSONField(httpRequest, String.class, "rating");
     RatingEnum ratingEnum;
     try {
       ratingEnum = RatingConverter.convertFullRatingNameToEnum(ratingValue);
@@ -62,28 +44,16 @@ public class APIRateTopicHandler {
       throw new APIBadRequestException("rating is not a valid rating");
     }
 
-    // Check topicID is integer
-    int topicID;
-    try {
-      topicID = jsonObject.getInt("topicID");
-    } catch (JSONException je){
-      throw new APIBadRequestException("topicID must be integer");
-    }
-
     // Check topic exists
-    Topic topic = TopicDAO.getInstance().findById(topicID);
+    Topic topic = TopicDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "topicID"));
     if (topic == null) {
       throw new APIBadRequestException("No topic with the given id");
     }
 
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
-
     // Either update an old rating or create a new one
     Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topic.getId()));
     if (rating == null) {
-      rating = new Rating(user.getId(), topicID, ratingEnum);
+      rating = new Rating(user.getId(), topic.getId(), ratingEnum);
       rating.create();
     } else {
       rating.setRating(ratingEnum);
@@ -91,7 +61,7 @@ public class APIRateTopicHandler {
     }
 
     JSONObject response = new JSONObject();
-    response.put("topicID", topicID);
+    response.put("topicID", topic.getId());
     response.put("rating", ratingValue);
     return response.toString();
   }

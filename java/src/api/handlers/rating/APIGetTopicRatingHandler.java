@@ -1,21 +1,17 @@
 package api.handlers.rating;
 
-import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
-import static api.helpers.isLoggedInHelper.isLoggedIn;
+import static api.helpers.UrlArgumentHelper.getIntegerURIField;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.dao.RatingDAO;
 import data.dao.TopicDAO;
-import data.dao.UserDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
 import data.rating.RatingConverter;
 import data.rating.RatingKey;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import org.apache.http.HttpRequest;
@@ -36,34 +32,15 @@ public class APIGetTopicRatingHandler {
   public static String getTopicRatingByTopicID(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    // Must be logged in
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
-    }
+    User user = getUserFromRequest(httpRequest, ", cannot find ratings");
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    // Require id
-    if (!uriArguments.containsKey("id")) {
-      throw new APIBadRequestException("id must be given");
-    }
-
-    int topicID;
-    try {
-      topicID = Integer.parseInt(uriArguments.get("id"));
-    } catch (NumberFormatException nfe) {
-      throw new APIBadRequestException("id must be integer");
-    }
+    Integer topicID = getIntegerURIField(httpRequest, "id");
 
     Topic topic = TopicDAO.getInstance().findById(topicID);
 
     if (topic == null) {
       throw new APIBadRequestException("no topic with the given id exists");
     }
-
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
 
     Rating rating = RatingDAO.getInstance().findById(new RatingKey(user.getId(), topicID));
 
@@ -89,13 +66,7 @@ public class APIGetTopicRatingHandler {
   public static String getTopicRatings(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
-    }
-
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
+    User user = getUserFromRequest(httpRequest, ", cannot find ratings");
 
     List<Rating> ratings = RatingDAO.getInstance().findRatingByUser(user);
 
@@ -117,10 +88,8 @@ public class APIGetTopicRatingHandler {
    *
    * @param httpRequest The request to handle
    * @return A JSON object consisting of a variable "ratings" which is an array of JSON objects,
-   * where each JSON object represents a single rating. These JSON objects have the following variables:
-   *        id (int): topicID of the topic
-   *        title (String): Title of the topic
-   *        description (String): Description of the topic
+   * where each JSON object represents a single rating. These JSON objects have all the variables
+   * from topic.createAbout, and:
    *        has-rating (Boolean): Indicates if there is a rating for the given topic
    *        rating (String)[If 'has-rating' is 'true']: the rating of the topic, has 5 valid values
    *                            None, Poor, Ok, Good, Superb
@@ -128,13 +97,7 @@ public class APIGetTopicRatingHandler {
   public static String getTopicsWithRatings(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    if (!isLoggedIn(httpRequest)) {
-      throw new APIRequestForbiddenException("User is not logged in, cannot find ratings");
-    }
-
-    String username = httpRequest.getFirstHeader("X-Username").getValue();
-    // Will never be null due to login check above
-    User user = UserDAO.getInstance().findUserByUsername(username);
+    User user = getUserFromRequest(httpRequest, ", cannot find ratings");
 
     List<Topic> topics = TopicDAO.getInstance().findAll();
     List<Rating> ratingsUser = RatingDAO.getInstance().findRatingByUser(user);
@@ -142,7 +105,7 @@ public class APIGetTopicRatingHandler {
     JSONObject response = new JSONObject();
     JSONArray topicArray = new JSONArray();
     topics.forEach(topic -> {
-      JSONObject aboutTopic = createAboutTopic(topic);
+      JSONObject aboutTopic = topic.createAbout();
       Optional<Rating> ratingTopic = ratingsUser.stream()
           .filter((rating) -> rating.getTopicID() == topic.getId()).findFirst();
       aboutTopic.put("has-rating", ratingTopic.isPresent());

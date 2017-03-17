@@ -1,7 +1,6 @@
 package api.handlers.user;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
+import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 
 import api.exceptions.APIBadRequestException;
@@ -24,19 +23,9 @@ public class APILoggedInCheckHandler {
   public static String handleLoggedInCheckRequest(HttpRequest httpRequest) {
     checkRequestMethod("POST", httpRequest);
 
-    String requestContent = checkAndGetEntityContent(httpRequest);
+    User user = UserDAO.getInstance().findUserByUsername(getJSONField(httpRequest, String.class, "username"));
+    String token = getJSONField(httpRequest, String.class, "token");
 
-    JSONObject jsonObject = checkAndGetJSON(requestContent);
-
-    // Require username and token
-    if (!jsonObject.has("username") || !jsonObject.has("token")) {
-      throw new APIBadRequestException("Login check data not complete");
-    }
-
-    String username = jsonObject.getString("username");
-    String token = jsonObject.getString("token");
-
-    User user = UserDAO.getInstance().findUserByUsername(username);
     if (user == null) {
       throw new APIBadRequestException("User does not exist");
     }
