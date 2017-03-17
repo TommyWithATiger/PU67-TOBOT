@@ -4,51 +4,54 @@
       <div class="form-row">
         <label for="username">Username: </label>
         <input
-          @focusout="checkRegistration"
           @keydown.enter="register"
           placeholder="Username"
           v-model="username"
           id="username"
-          :class="usernameValid ? '' : 'invalid-input'"
+          autofocus
+          autocorrect="false"
+          :class="(this.usernameFeedback$ && this.usernameFeedback$.valid) ? '' : 'invalid-input'"
           type="text">
-        <div class="inputError">{{ usernameError }}</div>
+        <div class="inputError">{{ (this.usernameFeedback$ && this.usernameFeedback$.message) }}</div>
       </div>
       <div class="form-row">
         <label for="password">Password: </label>
         <input
-          @focusout="checkRegistration"
           @keydown.enter="register"
           placeholder="Password"
           v-model="password"
           id="password"
-          :class="passwordValid ? '' : 'invalid-input'"
+          autocorrect="false"
+          :class="(this.passwordFeedback$ && this.passwordFeedback$.valid) ? '' : 'invalid-input'"
           type="password">
-        <div class="inputError">{{ passwordError }}</div>
+        <div class="inputError">{{ (this.passwordFeedback$ && this.passwordFeedback$.message) }}</div>
       </div>
       <div class="form-row">
         <label for="email">E-mail: </label>
         <input
-          @focusout="checkRegistration"
           @keydown.enter="register"
           placeholder="E-mail"
           v-model="email"
           id="email"
-          :class="emailValid ? '' : 'invalid-input'"
+          autocorrect="false"
+          :class="(this.emailFeedback$ && this.emailFeedback$.valid) ? '' : 'invalid-input'"
           type="email">
-        <div class="inputError">{{ emailError }}</div>
+        <div class="inputError">{{ (this.emailFeedback$ && this.emailFeedback$.message) }}</div>
       </div>
       <div class="form-row userType">
         <input v-model="userType" type="radio" id="student" value="Student"><label for="student">Student</label>
         <input v-model="userType" type="radio" id="teacher" value="Teacher"><label for="teacher">Teacher</label>
       </div>
       <div class="form-row">
-        <button class="registerButton" @click="register" :disabled="canSubmit">Registrer</button>
+        <button class="registerButton" @click="register" :disabled="canSubmit ? null : 'true'">Registrer</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Rx from 'rxjs/Rx'
+
 import { api } from 'api'
 import { auth } from 'auth'
 
@@ -59,34 +62,21 @@ export default {
       username: '',
       password: '',
       email: '',
-      usernameValid: true,
-      passwordValid: true,
-      emailValid: true,
       userType: 'Student',
-      canSubmit: false,
       usernameError: '',
       passwordError: '',
       emailError: ''
     }
   },
+  computed: {
+    canSubmit () {
+      return (this.usernameFeedback$ && this.usernameFeedback$.valid) &&
+        (this.passwordFeedback$ && this.passwordFeedback$.valid) &&
+        (this.emailFeedback$ && this.emailFeedback$.valid)
+    }
+  },
   methods: {
-    checkRegistration () {
-      api.checkRegistrationData(this, this.username, this.email, this.password, (data) => {
-        if (data.username_valid && data.password_valid && data.email_valid) {
-          this.canSubmit = true
-        }
-
-        this.usernameValid = data.username_valid
-        this.passwordValid = data.password_valid
-        this.emailValid = data.email_valid
-
-        this.usernameError = data.username_valid ? '' : data.username_message
-        this.passwordError = data.password_valid ? '' : data.password_message
-        this.emailError = data.email_valid ? '' : data.email_message
-      })
-    },
     register () {
-      this.checkRegistration()
       if (this.canSubmit) {
         api.registerUser(this, this.username, this.email, this.password, this.userType, (data) => {
           auth.login({
@@ -98,6 +88,58 @@ export default {
           })
         })
       }
+    }
+  },
+  subscriptions () {
+    return {
+      usernameFeedback$: this.$watchAsObservable('username')
+        .pluck('newValue')
+        .filter(term => term.length > 2)
+        .debounceTime(100)
+        .distinctUntilChanged()
+        .switchMap((term) => {
+          return Rx.Observable.fromPromise(
+            api.checkRegistrationData(this, term.trim(), this.email, this.password)
+          )
+        })
+        .map((res) => {
+          return {
+            valid: res.username_valid,
+            message: res.username_message
+          }
+        }),
+      passwordFeedback$: this.$watchAsObservable('password')
+        .pluck('newValue')
+        .filter(term => term.length > 1)
+        .debounceTime(100)
+        .distinctUntilChanged()
+        .switchMap((term) => {
+          return Rx.Observable.fromPromise(
+            api.checkRegistrationData(this, this.username, this.email, term.trim())
+          )
+        })
+        .map((res) => {
+          return {
+            valid: res.password_valid,
+            message: res.password_message
+          }
+        }),
+      emailFeedback$: this.$watchAsObservable('email')
+        .pluck('newValue')
+        .filter(term => term.length > 1)
+        .debounceTime(100)
+        .distinctUntilChanged()
+        .switchMap((term) => {
+          return Rx.Observable.fromPromise(
+            api.checkRegistrationData(this, this.username, term.trim(), this.password)
+          )
+        })
+        .map((res) => {
+          return {
+            valid: res.email_valid,
+            message: res.email_message
+          }
+        })
     }
   }
 }
