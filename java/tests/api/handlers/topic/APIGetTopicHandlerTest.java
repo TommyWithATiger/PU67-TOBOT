@@ -1,6 +1,5 @@
 package api.handlers.topic;
 
-import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.handlers.topic.APIGetTopicHandler.getAllTopics;
 import static api.handlers.topic.APIGetTopicHandler.getTopicByID;
 import static api.handlers.topic.APIGetTopicHandler.getTopicsByTitle;
@@ -28,7 +27,7 @@ public class APIGetTopicHandlerTest extends BaseTest {
 
   @Test
   public void testCreateAboutTopic() {
-    JSONObject data = createAboutTopic(topic);
+    JSONObject data = topic.createAbout();
     assertEquals(topic.getId(), data.getInt("id"));
     assertEquals(topic.getTitle(), data.getString("title"));
     assertEquals(topic.getDescription(), data.getString("description"));

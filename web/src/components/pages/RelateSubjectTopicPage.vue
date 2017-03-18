@@ -1,11 +1,11 @@
 <template>
   <div class="page-content">
     <h1>{{subject.subjectCode}} - {{subject.title}}</h1>
-    <h1>Tilknyttede temaer</h1>
+    <h1>Connected topics</h1>
     <div v-if="relatedTopics.length">
       <div class="topic-info topic-info-header">
-            <div class="topic-title">Tittel</div>
-            <div class="topic-description">Beskrivelse</div>
+            <div class="topic-title">Title</div>
+            <div class="topic-description">Description</div>
           </div>
           <div v-for="t in relatedTopics" class="topic-info">
             <div class="topic-title">{{ t.title }}</div>
@@ -13,23 +13,23 @@
           </div>
     </div>
     <div v-else>
-      Dette emnet er ikke knyttet til noen temaer
+      This subject is not connected to any topics.
     </div>
-    <h1>Legge til temaer</h1>
+    <h1>Add topics</h1>
     <div v-if="topics.length">
       <div class="topic-info topic-info-header">
-        <div class="topic-title">Tittel</div>
-        <div class="topic-description">Beskrivelse</div>
+        <div class="topic-title">Title</div>
+        <div class="topic-description">Description</div>
         <div class="topic-relate"></div>
       </div>
       <div v-for="t in topics" v-if="!isRelated(t)" class="topic-info">
         <div class="topic-title">{{ t.title }}</div>
         <div class="topic-description">{{ t.description }}</div>
-        <button @click="relateTopic(t)" class="topic-relate">Knytt til</button>
+        <button @click="relateTopic(t)" class="topic-relate">Connect</button>
       </div>
     </div>
     <div v-else>
-      Ingen temaer tilgjenglig
+      No topics available.
     </div>
     <p class="error">{{ getFeedback }}</p>
   </div>

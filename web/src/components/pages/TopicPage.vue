@@ -4,10 +4,10 @@
     <p>{{ description }}</p>
   </div>
   <div class="page-content" v-else-if="loading">
-    <h1>Laster inn...</h1>
+    <h1>Loading ...</h1>
   </div>
   <div class="page-content" v-else>
-    <h1>Fant ingen emne.</h1>
+    <h1>Could not find topic.</h1>
   </div>
 </template>
 

@@ -1,12 +1,12 @@
 package api.handlers.topic;
 
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
+import static api.helpers.UrlArgumentHelper.getIntegerURIField;
+import static api.helpers.UrlArgumentHelper.getURIField;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.TopicDAO;
 import data.Topic;
-import java.util.HashMap;
 import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
@@ -24,20 +24,7 @@ public class APIGetTopicHandler {
   public static String getTopicByID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    if (!uriArguments.containsKey("id")) {
-      throw new APIBadRequestException("id must be given");
-    }
-
-    int topicID;
-
-    // Subject id must be integer
-    try {
-      topicID = Integer.parseInt(uriArguments.get("id"));
-    } catch (NumberFormatException nfe) {
-      throw new APIBadRequestException("id must be integer");
-    }
+    Integer topicID = getIntegerURIField(httpRequest, "id");
 
     Topic topic = TopicDAO.getInstance().findById(topicID);
 
@@ -45,7 +32,7 @@ public class APIGetTopicHandler {
       throw new APIBadRequestException("No topic with the given id");
     }
 
-    return createAboutTopic(topic).toString();
+    return topic.createAbout().toString();
   }
 
   /**
@@ -59,20 +46,13 @@ public class APIGetTopicHandler {
   public static String getTopicsByTitle(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    // Require title
-    if (!uriArguments.containsKey("title")) {
-      throw new APIBadRequestException("title must be given");
-    }
-
-    String title = uriArguments.get("title");
+    String title = getURIField(httpRequest, "title");
 
     List<Topic> topics = TopicDAO.getInstance().findTopicsByTitle(title);
 
     JSONObject response = new JSONObject();
     JSONArray topicArray = new JSONArray();
-    topics.forEach(topic -> topicArray.put(createAboutTopic(topic)));
+    topics.forEach(topic -> topicArray.put(topic.createAbout()));
     response.put("topics", topicArray);
     return response.toString();
   }
@@ -91,26 +71,9 @@ public class APIGetTopicHandler {
 
     JSONObject response = new JSONObject();
     JSONArray topicArray = new JSONArray();
-    topics.forEach(topic -> topicArray.put(createAboutTopic(topic)));
+    topics.forEach(topic -> topicArray.put(topic.createAbout()));
     response.put("topics", topicArray);
     return response.toString();
-  }
-
-  /**
-   * Creates a JSON object with information about a topic
-   *
-   * @param topic The topic to create a JSON object about
-   * @return A JSON object with the following data:
-   *        id (int): the topic id
-   *        title (String): the topic title
-   *        description (String): the topic description
-   */
-  public static JSONObject createAboutTopic(Topic topic){
-    JSONObject aboutTopic = new JSONObject();
-    aboutTopic.put("id", topic.getId());
-    aboutTopic.put("title", topic.getTitle());
-    aboutTopic.put("description", topic.getDescription());
-    return aboutTopic;
   }
 
 }

@@ -1,24 +1,24 @@
 <template>
   <div class="page-content">
-    <h1>Temaer</h1>
-    <h2>Legg til tema</h2>
+    <h1>Topics</h1>
+    <h2>Add topic</h2>
     <div class="topic-add-fields">
-      <label>Tittel: </label>
+      <label>Title: </label>
       <input @keydown.enter="addTopic" v-model="topic.title" type="text" />
       <br>
-      <label>Beskrivelse: </label>
+      <label>Description: </label>
       <input @keydown.enter="addTopic" v-model="topic.description" type="text" />
       <p>
-        <button @click="addTopic">Legg til</button>
+        <button @click="addTopic">Add</button>
         <span class="error">{{ addFeedback }}</span>
       </p>
     </div>
-    <h2>Alle temaer</h2>
+    <h2>All topics</h2>
     <div v-if="topics.length">
       <div class="topic-info topic-info-header">
-        <div class="topic-title"> Tittel </div>
-        <div class="topic-description"> Beskrivelse </div>
-        <div class="topic-rating-header"> Min kunnskap </div>
+        <div class="topic-title">Title</div>
+        <div class="topic-description">Description</div>
+        <div class="topic-rating-header">My knowledge</div>
       </div>
       <div v-for="(t, id) in topics" v-if="id != 'length'" class="topic-info">
         <div class="topic-title"> {{ t.title }} </div>
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div v-else><span v-if="!getFeedback.length">Ingen emner.</span></div>
+    <div v-else><span v-if="!getFeedback.length">No topics.</span></div>
     <p class="error">{{ getFeedback }}</p>
   </div>
 </template>
@@ -60,7 +60,7 @@ export default {
         '4': 'Good',
         '5': 'Superb'
       },
-      getFeedback: 'Laster inn ...'
+      getFeedback: 'Loading ...'
     }
   },
   created () {
@@ -77,7 +77,7 @@ export default {
       this.getFeedback = ''
     }, () => {
       this.topics = []
-      this.getFeedback = 'Klarte ikke å hente temaer.'
+      this.getFeedback = 'Could not fetch topics.'
     })
     api.getRatedTopics(this, (data) => {
       for (let t of data.ratings) {
@@ -103,9 +103,9 @@ export default {
           rating: 0
         }
         this.topics.length++
-        this.addFeedback = 'Lagt til i database.'
+        this.addFeedback = 'Added to database.'
       }, () => {
-        this.addFeedback = 'Feilet med å legge til.'
+        this.addFeedback = 'Failed to add topic.'
       })
     },
     rateTopic (id, rating) {

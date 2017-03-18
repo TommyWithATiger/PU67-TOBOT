@@ -1,9 +1,9 @@
 package api.helpers;
 
-import static api.helpers.isLoggedInHelper.isLoggedIn;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
+import static junit.framework.TestCase.assertEquals;
 
+import api.exceptions.APIRequestForbiddenException;
 import base.BaseTest;
 import data.user.User;
 import org.apache.http.HttpRequest;
@@ -24,15 +24,16 @@ public class isLoggedInHelperTest extends BaseTest {
     httpRequest.addHeader("X-Username", user.getUsername());
     httpRequest.addHeader("Authorization", "Bearer " + user.getSessionToken());
 
-    assertTrue(isLoggedIn(httpRequest));
+    assertEquals(user, getUserFromRequest(httpRequest, ""));
   }
 
-  @Test
+  @Test(expected = APIRequestForbiddenException.class)
   public void testMissingHeaders() {
-    assertFalse(isLoggedIn(new BasicHttpRequest("GET", "URL")));
+    getUserFromRequest(new BasicHttpRequest("GET", "URL"), "");
+    //assertFalse(isLoggedIn(new BasicHttpRequest("GET", "URL")));
   }
 
-  @Test
+  @Test(expected = APIRequestForbiddenException.class)
   public void testMissingUsernameHeader() {
     User user = new User("user", "valid@email.com", "qwerty");
     user.create();
@@ -43,10 +44,10 @@ public class isLoggedInHelperTest extends BaseTest {
     HttpRequest httpRequest = new BasicHttpRequest("GET", "URL");
     httpRequest.addHeader("Authorization", "Bearer " + user.getSessionToken());
 
-    assertFalse(isLoggedIn(httpRequest));
+    getUserFromRequest(httpRequest, "");
   }
 
-  @Test
+  @Test(expected = APIRequestForbiddenException.class)
   public void testMissingAuthorizationHeader() {
     User user = new User("user", "valid@email.com", "qwerty");
     user.create();
@@ -57,16 +58,16 @@ public class isLoggedInHelperTest extends BaseTest {
     HttpRequest httpRequest = new BasicHttpRequest("GET", "URL");
     httpRequest.addHeader("X-Username", user.getUsername());
 
-    assertFalse(isLoggedIn(httpRequest));
+    getUserFromRequest(httpRequest, "");
   }
 
-  @Test
+  @Test(expected = APIRequestForbiddenException.class)
   public void testInvalidLogin() {
     HttpRequest httpRequest = new BasicHttpRequest("GET", "URL");
     httpRequest.addHeader("X-Username", "admin");
     httpRequest.addHeader("Authorization", "Bearer: adshjasdkhk");
 
-    assertFalse(isLoggedIn(httpRequest));
+    getUserFromRequest(httpRequest, "");
   }
 
 }
