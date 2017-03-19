@@ -13,7 +13,6 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findAllRatings", query = "SELECT r FROM Rating r"),
     @NamedQuery(name = "findRatingByUser", query = "SELECT r FROM Rating r WHERE r.ratingKeyPK.userID = :userID"),
     @NamedQuery(name = "findRatingByTopic", query = "SELECT r FROM Rating r WHERE r.ratingKeyPK.topicID = :topicID"),
     @NamedQuery(name = "findParticipatingRatingBySubjectTopic", query = "SELECT r FROM Rating r JOIN User u JOIN Subject s JOIN Topic t"

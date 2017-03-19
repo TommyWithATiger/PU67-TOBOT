@@ -19,15 +19,6 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
   private static UserDAO instance;
 
   /**
-   * Get all database occurrences of Subject
-   *
-   * @return List of all Subjects
-   */
-  public List<User> findAll() {
-    return super.find("findAllUsers");
-  }
-
-  /**
    * Finds a User by doing a query for the username
    *
    * @param username, the username to query for

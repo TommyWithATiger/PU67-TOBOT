@@ -19,15 +19,6 @@ public class ExerciseRatingDAO extends AbstractBaseDAO<ExerciseRating, ExerciseR
   }
 
   /**
-   * Finds all ratings in the database
-   *
-   * @return List of all ExerciseRating objects in the database
-   */
-  public List<ExerciseRating> findAll() {
-    return super.find("findAllExerciseRatings");
-  }
-
-  /**
    * Returns the static ExerciseRatingDAO instance
    *
    * @return ExerciseRatingDAO, null if not instantiated

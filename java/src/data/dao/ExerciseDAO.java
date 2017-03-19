@@ -18,16 +18,6 @@ public class ExerciseDAO extends AbstractBaseDAO<Exercise, Integer> {
   }
 
   /**
-   * Finds all exercises in the database
-   *
-   * @return List of all Exercise objects in the database
-   */
-  @Override
-  public List<Exercise> findAll() {
-    return super.find("findAllExercises");
-  }
-
-  /**
    * Returns the static ExerciseDAO instance
    *
    * @return RatingDAO, null if not instantiated

@@ -23,15 +23,6 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
   }
 
   /**
-   * Finds all ratings in the database
-   *
-   * @return List of Rating objects
-   */
-  public List<Rating> findAll() {
-    return super.find("findAllRatings");
-  }
-
-  /**
    * Finds Ratings related to the user
    *
    * @param user, the related user object

@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findAllExerciseRatings", query = "SELECT er FROM ExerciseRating er")
 })
 @Table
 public class ExerciseRating {

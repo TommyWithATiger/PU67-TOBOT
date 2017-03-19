@@ -23,7 +23,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findAllUsers", query = "SELECT u FROM User u"),
     @NamedQuery(name = "findUsersByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
     @NamedQuery(name = "findUsersByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
 })

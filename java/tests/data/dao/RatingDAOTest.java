@@ -80,17 +80,6 @@ public class RatingDAOTest extends BaseTest{
   }
 
   @Test
-  public void testFindAll() throws Exception {
-    List result = RatingDAO.getInstance().findAll();
-    assertTrue(result.contains(rating11));
-    assertTrue(result.contains(rating12));
-    assertTrue(result.contains(rating21));
-    assertTrue(result.contains(rating13));
-    assertTrue(result.contains(rating23));
-    assertEquals(5, result.size());
-  }
-
-  @Test
   public void testFindRatingByUser() throws Exception {
     List result1 = RatingDAO.getInstance().findRatingByUser(user1);
     assertTrue(result1.contains(rating11));
