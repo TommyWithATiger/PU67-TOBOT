@@ -1,5 +1,6 @@
 package main;
 
+import data.dao.ExerciseAttemptHistoryDAO;
 import data.dao.ExerciseDAO;
 import data.dao.ExerciseRatingDAO;
 import data.dao.RatingDAO;
@@ -43,6 +44,7 @@ public class ServerInitializer {
     RatingDAO.initialize(entityManagerFactory);
     ExerciseDAO.initialize(entityManagerFactory);
     ExerciseRatingDAO.initialize(entityManagerFactory);
+    ExerciseAttemptHistoryDAO.initialize(entityManagerFactory);
 
     // need to return in order to close after server is shut down
     return entityManagerFactory;
