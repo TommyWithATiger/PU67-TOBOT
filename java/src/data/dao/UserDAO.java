@@ -34,12 +34,7 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
    * @return User with matching username, or null if it is not in the database
    */
   public User findUserByUsername(String username) {
-    List<User> results = super.find("findUsersByUsername", new FieldTuple("username", username));
-    if (!results.isEmpty()) {
-      return results.get(0);
-    }
-    return null;
-    //Fixme handle no result exception here
+    return super.findSingle("findUsersByUsername", new FieldTuple("username", username));
   }
 
   /**
