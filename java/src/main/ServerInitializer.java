@@ -1,6 +1,7 @@
 package main;
 
 import data.dao.RatingDAO;
+import data.dao.ReferenceDAO;
 import data.dao.SubjectDAO;
 import data.dao.TopicDAO;
 import data.dao.UserDAO;
@@ -39,6 +40,7 @@ public class ServerInitializer {
     SubjectDAO.initialize(entityManagerFactory);
     UserDAO.initialize(entityManagerFactory);
     RatingDAO.initialize(entityManagerFactory);
+    ReferenceDAO.initialize(entityManagerFactory);
 
     // need to return in order to close after server is shut down
     return entityManagerFactory;

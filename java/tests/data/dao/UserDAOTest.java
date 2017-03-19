@@ -35,7 +35,7 @@ public class UserDAOTest extends BaseTest{
   }
 
   @Test
-  public void testFindRatingByUser() throws Exception {
+  public void testFindUserByName() throws Exception {
     User u1 = UserDAO.getInstance().findUserByUsername(user1.getUsername());
     assertEquals(user1, u1);
 
@@ -47,7 +47,7 @@ public class UserDAOTest extends BaseTest{
   }
 
   @Test
-  public void testFindRatingById() throws Exception {
+  public void testFindUserById() throws Exception {
     User u1 = UserDAO.getInstance().findById(user1.getId());
     assertEquals(user1, u1);
 

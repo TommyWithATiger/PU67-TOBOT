@@ -14,7 +14,7 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
   private static RatingDAO instance;
 
   /**
-   * Instantiates the SubjectDataAccessObject
+   * Instantiates the RatingDataAccessObject
    *
    * @param emFactory, the static EntityManagerFactory for the server instance
    */
@@ -68,7 +68,7 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
   }
 
   /**
-   * Returns the static SubjectDAO instance
+   * Returns the static RatingDAO instance
    *
    * @return RatingDAO, null if not instantiated
    */
