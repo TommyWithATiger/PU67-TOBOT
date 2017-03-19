@@ -1,5 +1,7 @@
 package data.dao;
 
+import data.Topic;
+import data.dao.util.FieldTuple;
 import data.exercise.Exercise;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
@@ -15,6 +17,11 @@ public class ExerciseDAO extends AbstractBaseDAO<Exercise, Integer> {
    */
   private ExerciseDAO(EntityManagerFactory emFactory) {
     super(Exercise.class, emFactory);
+  }
+
+  public List<Exercise> findExerciseByTopic(Topic topic) {
+    return super.find("findExerciseByTopic",
+        new FieldTuple("topic", topic));
   }
 
   /**
