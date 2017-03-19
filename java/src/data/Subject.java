@@ -26,8 +26,12 @@ import org.json.JSONObject;
         query = " SELECT s FROM Subject s"
               + " JOIN Topic t"
               + " WHERE t.id = :topicID"
-              + " AND t MEMBER OF s.topics"
-    )
+              + " AND t MEMBER OF s.topics"),
+    @NamedQuery(name = "findSubjectsByEditor",
+        query = " SELECT s FROM Subject s"
+            + " JOIN User u"
+            + " WHERE u.id = :editorID"
+            + " AND u MEMBER OF s.editors")
 })
 @Table
 public class Subject extends AbstractBaseEntity {
