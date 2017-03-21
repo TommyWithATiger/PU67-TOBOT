@@ -15,7 +15,7 @@ import java.util.Collection;
     @NamedQuery(name = "findTopicsByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId"),
 })
 @Table
-public class Topic {
+public class Topic extends AbstractBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

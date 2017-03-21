@@ -1,5 +1,6 @@
 package data.rating;
 
+import data.AbstractBaseEntity;
 import data.dao.RatingDAO;
 import javax.persistence.Convert;
 import javax.persistence.EmbeddedId;
@@ -22,7 +23,7 @@ import javax.persistence.Table;
     )
 })
 @Table
-public class Rating {
+public class Rating extends AbstractBaseEntity {
 
   @EmbeddedId
   private RatingKey ratingKeyPK;

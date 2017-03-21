@@ -1,5 +1,6 @@
 package data.exercise;
 
+import data.AbstractBaseEntity;
 import data.Topic;
 import data.dao.ExerciseDAO;
 import java.util.Collection;
@@ -14,7 +15,7 @@ import org.json.JSONObject;
         query = " SELECT e FROM Exercise e  WHERE :topic MEMBER OF e.topics")
 })
 @Table
-public class Exercise {
+public class Exercise extends AbstractBaseEntity{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

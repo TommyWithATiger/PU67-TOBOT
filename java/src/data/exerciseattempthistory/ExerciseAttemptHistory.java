@@ -1,5 +1,6 @@
 package data.exerciseattempthistory;
 
+import data.AbstractBaseEntity;
 import data.dao.ExerciseAttemptHistoryDAO;
 import data.exercise.Exercise;
 import data.user.User;
@@ -14,7 +15,7 @@ import javax.persistence.*;
         query = "SELECT eah FROM ExerciseAttemptHistory eah WHERE eah.exercise = :exercise"),
 })
 @Table
-public class ExerciseAttemptHistory {
+public class ExerciseAttemptHistory extends AbstractBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

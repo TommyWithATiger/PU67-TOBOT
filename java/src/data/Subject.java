@@ -24,7 +24,7 @@ import org.json.JSONObject;
     @NamedQuery(name = "findSubjectsByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%') AND s.subjectCode LIKE CONCAT('%', :subjectCode, '%')")
 })
 @Table
-public class Subject {
+public class Subject extends AbstractBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

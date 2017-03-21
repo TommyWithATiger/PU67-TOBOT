@@ -1,5 +1,6 @@
 package data.exerciserating;
 
+import data.AbstractBaseEntity;
 import data.dao.ExerciseRatingDAO;
 import data.exercise.Exercise;
 import data.user.User;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @NamedQueries({
 })
 @Table
-public class ExerciseRating {
+public class ExerciseRating extends AbstractBaseEntity {
 
   @EmbeddedId
   private ExerciseRatingKey id;

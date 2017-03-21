@@ -2,6 +2,7 @@ package data.user;
 
 import static data.user.UserTypeConverter.userTypeToString;
 
+import data.AbstractBaseEntity;
 import data.dao.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +27,7 @@ import org.mindrot.jbcrypt.BCrypt;
     @NamedQuery(name = "findUsersByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
     @NamedQuery(name = "findUsersByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
 })
-public class User {
+public class User extends AbstractBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
