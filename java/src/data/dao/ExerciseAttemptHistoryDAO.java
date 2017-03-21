@@ -1,11 +1,9 @@
 package data.dao;
 
 import data.exerciseattempthistory.ExerciseAttemptHistory;
-import data.exerciseattempthistory.ExerciseAttemptHistoryKey;
-import java.util.List;
 import javax.persistence.EntityManagerFactory;
 
-public class ExerciseAttemptHistoryDAO extends AbstractBaseDAO<ExerciseAttemptHistory, ExerciseAttemptHistoryKey> {
+public class ExerciseAttemptHistoryDAO extends AbstractBaseDAO<ExerciseAttemptHistory, Integer> {
 
   private static ExerciseAttemptHistoryDAO instance;
 

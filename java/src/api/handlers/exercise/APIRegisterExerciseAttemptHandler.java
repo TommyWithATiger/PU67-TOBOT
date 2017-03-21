@@ -5,15 +5,11 @@ import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
-import data.dao.ExerciseAttemptHistoryDAO;
 import data.dao.ExerciseDAO;
 import data.dao.ExerciseRatingDAO;
 import data.exercise.Exercise;
 import data.exerciseattempthistory.ExerciseAttemptHistory;
-import data.exerciseattempthistory.ExerciseAttemptHistoryKey;
-import data.exerciserating.ExerciseRating;
 import data.exerciserating.ExerciseRatingEnum;
-import data.exerciserating.ExerciseRatingKey;
 import data.user.User;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
@@ -55,24 +51,10 @@ public class APIRegisterExerciseAttemptHandler {
       throw new APIBadRequestException("'Unknown' is not a valid difficulty");
     }
 
-    ExerciseAttemptHistory eah = ExerciseAttemptHistoryDAO.getInstance().findById(new ExerciseAttemptHistoryKey(user, exercise));
-    if(eah == null){
-      eah = new ExerciseAttemptHistory(user, exercise);
-      eah.registerAttempt(success);
-      eah.create();
-    } else {
-      eah.registerAttempt(success);
-      eah.update();
-    }
+    ExerciseAttemptHistory eah = new ExerciseAttemptHistory(user, exercise, success);
+    eah.create();
 
-    ExerciseRating exerciseRating = ExerciseRatingDAO.getInstance().findById(new ExerciseRatingKey(user, exercise));
-    if(exerciseRating == null){
-      exerciseRating = new ExerciseRating(user, exercise, difficulty);
-      exerciseRating.create();
-    } else {
-      exerciseRating.setExerciseRating(difficulty);
-      exerciseRating.update();
-    }
+    ExerciseRatingDAO.getInstance().createOrUpdate(user, exercise, difficulty);
 
     JSONObject response = new JSONObject();
     response.put("exercise-registered", true);

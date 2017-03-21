@@ -9,36 +9,56 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findAllExerciseAttemptHistoriesForUser",
-        query = "SELECT eah FROM ExerciseAttemptHistory eah WHERE eah.id.userID = :userID"),
+        query = "SELECT eah FROM ExerciseAttemptHistory eah WHERE eah.user = :user"),
     @NamedQuery(name = "findAllExerciseAttemptHistoriesForExercise",
-        query = "SELECT eah FROM ExerciseAttemptHistory eah WHERE eah.id.exerciseID = :exerciseID"),
+        query = "SELECT eah FROM ExerciseAttemptHistory eah WHERE eah.exercise = :exercise"),
 })
 @Table
 public class ExerciseAttemptHistory {
 
-  private static final int CONSECUTIVE_COMPLETIONS_TO_RETIRE = 6;
-
-  @EmbeddedId
-  private ExerciseAttemptHistoryKey id;
-
-  private int attempts = 0;
-  private int consecutiveSuccessAttempts = 0;
-
-  private boolean isRetired = false;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date lastAttemptDate;
+  private Date attemptDate;
+
+  private boolean success;
+
+  @ManyToOne
+  private User user;
+
+  @ManyToOne
+  private Exercise exercise;
 
   protected ExerciseAttemptHistory(){
-    id = new ExerciseAttemptHistoryKey();
   }
 
-  public ExerciseAttemptHistory(ExerciseAttemptHistoryKey id){
-    this.id = id;
+  public ExerciseAttemptHistory(User user, Exercise exercise, boolean wasSuccessful){
+    this.user = user;
+    this.exercise = exercise;
+    this.success = wasSuccessful;
+    attemptDate = new Date();
   }
 
-  public ExerciseAttemptHistory(User user, Exercise exercise){
-    this(new ExerciseAttemptHistoryKey(user, exercise));
+  public Integer getId() {
+    return id;
+  }
+
+  public Date getAttemptDate() {
+    return attemptDate;
+  }
+
+  public boolean wasSuccess() {
+    return success;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public Exercise getExercise() {
+    return exercise;
   }
 
   /**
@@ -62,27 +82,6 @@ public class ExerciseAttemptHistory {
     ExerciseAttemptHistoryDAO.getInstance().merge(this);
   }
 
-  public boolean isRetired() {
-    return isRetired;
-  }
-
-  /**
-   * Registers an attempt on the related exercise by the related user.
-   *
-   * @param wasSuccess true if the user was successful in its attempt to do the exercise
-   */
-  public void registerAttempt(boolean wasSuccess){
-    attempts += 1;
-    lastAttemptDate = new Date();
-    if (wasSuccess){
-      consecutiveSuccessAttempts += 1;
-      if (consecutiveSuccessAttempts >= CONSECUTIVE_COMPLETIONS_TO_RETIRE){
-        isRetired = true;
-      }
-    } else{
-      consecutiveSuccessAttempts = 0;
-    }
-  }
 
   @Override
   public boolean equals(Object other) {

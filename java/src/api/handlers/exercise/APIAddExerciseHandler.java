@@ -9,9 +9,7 @@ import data.Topic;
 import data.dao.ExerciseRatingDAO;
 import data.dao.TopicDAO;
 import data.exercise.Exercise;
-import data.exerciserating.ExerciseRating;
 import data.exerciserating.ExerciseRatingEnum;
-import data.exerciserating.ExerciseRatingKey;
 import data.user.User;
 import org.apache.http.HttpRequest;
 
@@ -57,14 +55,7 @@ public class APIAddExerciseHandler {
     topic.addExercise(exercise);
     topic.update();
 
-    ExerciseRating exerciseRating = ExerciseRatingDAO.getInstance().findById(new ExerciseRatingKey(user, exercise));
-    if(exerciseRating == null){
-      exerciseRating = new ExerciseRating(user, exercise, difficulty);
-      exerciseRating.create();
-    } else {
-      exerciseRating.setExerciseRating(difficulty);
-      exerciseRating.update();
-    }
+    ExerciseRatingDAO.getInstance().createOrUpdate(user, exercise, difficulty);
 
     return exercise.createAbout().toString();
   }
