@@ -3,7 +3,7 @@ package data.reference;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-//ARTRICLE, VIDEO, WEBSITE, IMAGE, DOCUMENT, SLIDE, NOTES
+//ARTICLE, VIDEO, WEBSITE, IMAGE, DOCUMENT, SLIDE, NOTES
 
 
 /**
@@ -15,7 +15,7 @@ public class ReferenceTypeConverter implements AttributeConverter<ReferenceType,
   @Override
   public String convertToDatabaseColumn(ReferenceType attribute) {
     switch (attribute) {
-      case ARTRICLE:
+      case ARTICLE:
         return "A";
       case VIDEO:
         return "V";
@@ -38,7 +38,7 @@ public class ReferenceTypeConverter implements AttributeConverter<ReferenceType,
   public ReferenceType convertToEntityAttribute(String dbData) {
     switch (dbData) {
       case "A":
-        return ReferenceType.ARTRICLE;
+        return ReferenceType.ARTICLE;
       case "V":
         return ReferenceType.VIDEO;
       case "W":
@@ -59,7 +59,7 @@ public class ReferenceTypeConverter implements AttributeConverter<ReferenceType,
   public static ReferenceType stringToReferenceType(String fullRatingName) {
     switch (fullRatingName.toLowerCase()) {
       case "article":
-        return ReferenceType.ARTRICLE;
+        return ReferenceType.ARTICLE;
       case "video":
         return ReferenceType.VIDEO;
       case "website":
@@ -79,7 +79,7 @@ public class ReferenceTypeConverter implements AttributeConverter<ReferenceType,
 
   public static String referenceTypeToString(ReferenceType referenceEnum) {
     switch (referenceEnum) {
-      case ARTRICLE:
+      case ARTICLE:
         return "Article";
       case VIDEO:
         return "Video";

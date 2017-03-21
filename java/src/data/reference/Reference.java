@@ -18,7 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import org.apache.commons.validator.routines.UrlValidator;
 
 @Entity
 @NamedQueries({
@@ -81,23 +80,20 @@ public class Reference {
     return link;
   }
 
-  public void setLink(String link) throws MalformedURLException {
-    String[] schemes = {"http","https"};
-    UrlValidator urlValidator = new UrlValidator(schemes, UrlValidator.ALLOW_2_SLASHES);
-    if (link.matches("(https?:\\/\\/(?:www\\.|(?!www))[^\\s\\.]+\\.[^\\s]{2,}|www\\.[^\\s]+\\.[^\\s]{2,})")) {
-    //if (urlValidator.isValid(link)) {
+  public void setLink(String link) throws MalformedURLException, IllegalArgumentException {
+    if (LinkValidation.validateLink(this, link)) {
       this.link = link;
     }
-    else throw new MalformedURLException();
-    //TODO different validation based on what type of link it is (youtube etc.)
   }
 
   public ReferenceType getReferenceType() {
     return referenceType;
   }
 
-  public void setReferenceType(ReferenceType referenceType) {
-    this.referenceType = referenceType;
+  public void setReferenceType(ReferenceType referenceType) throws IllegalArgumentException {
+    if (this.referenceType != null && referenceType == ReferenceType.VIDEO && !LinkValidation.validateVideoLink(this, link)) {
+      throw new IllegalArgumentException("Can't type to VIDEO, link is not from youtube");
+    } else this.referenceType = referenceType;
   }
 
   /***
@@ -118,8 +114,18 @@ public class Reference {
     }
   }
 
-  public void addTags(Collection<Topic> newTags) {
-    newTags.forEach(this::addTag);
+  public void addTags(Collection<Topic> tagList) {
+    tagList.forEach(this::addTag);
+  }
+
+  public void removeTag(Topic topic) {
+    if (hasTag(topic)) {
+      tags.remove(topic);
+    }
+  }
+
+  public void removeTags(Collection<Topic> tagList) {
+    tagList.forEach(this::removeTag);
   }
 
   /**

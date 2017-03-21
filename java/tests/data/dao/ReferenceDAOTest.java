@@ -26,7 +26,7 @@ public class ReferenceDAOTest extends BaseTest {
     reference1.create();
     reference2 = new Reference("Title 2", "Description 2", "http://link2.com/abcd/file.png", ReferenceType.IMAGE);
     reference2.create();
-    reference3 = new Reference("Title 3", "Description 3", "https://www.link1.com/dsjfdsij/file.html", ReferenceType.ARTRICLE);
+    reference3 = new Reference("Title 3", "Description 3", "https://www.link1.com/dsjfdsij/file.html", ReferenceType.ARTICLE);
     reference3.create();
   }
 
@@ -48,6 +48,8 @@ public class ReferenceDAOTest extends BaseTest {
 
     reference1.addTag(tag1);
     reference2.addTags(Arrays.asList(tag1, tag2));
+    reference1.update();
+    reference2.update();
 
     List<Reference> result1 = ReferenceDAO.getInstance().findReferenceByTag(tag2);
     List<Reference> result2 = ReferenceDAO.getInstance().findReferenceByTag(tag1);
