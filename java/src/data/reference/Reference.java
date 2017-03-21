@@ -48,6 +48,18 @@ public class Reference {
     tags = new ArrayList<>();
   }
 
+  /***
+   * Instantiates a Reference object
+   *
+   * @param title, the title/name of the reference
+   * @param description, description of the reference
+   * @param link, the URL link of the reference
+   * @param referenceType, what kind of ReferenceType the reference is
+   * @throws IOException, if it cannot read/write to socket
+   * @throws HttpException, if it cannot connect to the URL
+   * @throws IllegalArgumentException, if the URL is not properly formatted
+   * @throws java.net.MalformedURLException, if the link string is not a URL
+   */
   public Reference(String title, String description, String link, ReferenceType referenceType)
       throws IOException, HttpException {
     this();
@@ -57,36 +69,80 @@ public class Reference {
     setLink(link);
   }
 
+  /***
+   * returns the id of the Reference
+   *
+   * @return int id
+   */
   public int getId() {
     return id;
   }
 
+  /***
+   * gets the title of the Reference
+   *
+   * @return String title
+   */
   public String getTitle() {
     return title;
   }
 
+  /***
+   * sets the title of the Reference
+   *
+   * @param title, String title to be set
+   */
   public void setTitle(String title) {
     this.title = title;
   }
 
+  /***
+   * gets the description of the Reference
+   *
+   * @return String description
+   */
   public String getDescription() {
     return description;
   }
 
+  /***
+   * sets the description of the Reference
+   *
+   * @param description, String description to be set
+   */
   public void setDescription(String description) {
     this.description = description;
   }
 
+  /***
+   * gets the URL link of the Reference
+   *
+   * @return String link
+   */
   public String getLink() {
     return link;
   }
 
+  /***
+   * sets the URL link of the Reference
+   *
+   * @param link, String link to be set
+   * @throws IOException, if not able to read/write to socket
+   * @throws IllegalArgumentException, if link is not properly formatted
+   * @throws HttpException, if not able to connect/access the link
+   * @throws java.net.MalformedURLException, if the String link is not a URL link
+   */
   public void setLink(String link) throws IOException, IllegalArgumentException, HttpException {
     if (LinkValidation.validateLink(this, link)) {
       this.link = link;
     }
   }
 
+  /***
+   * gets the type of Reference this instance is
+   *
+   * @return ReferenceType referenceType
+   */
   public ReferenceType getReferenceType() {
     return referenceType;
   }
@@ -99,33 +155,60 @@ public class Reference {
   }
 
   /***
+   * returns an unmodifiable copy of the tags this Reference has
    *
-   * @return unmodifiable copy of the tag collection
+   * @return Collection<Topic> tags
    */
   public Collection<Topic> getTags() {
     return Collections.unmodifiableCollection(tags);
   }
 
+  /***
+   * returns True if the Reference is tagged with the tag
+   *
+   * @param topic, the tag to look for
+   * @return boolean, True if tagged else False
+   */
   public boolean hasTag(Topic topic) {
     return tags.contains(topic);
   }
 
+  /***
+   * adds a tag to the Reference
+   *
+   * @param tag, Topic to be added as a tag
+   */
   public void addTag(Topic tag) {
     if (!tags.contains(tag)) {
       tags.add(tag);
     }
   }
 
+  /***
+   * adds multiple tags to the Reference
+   *
+   * @param tagList, Collection of topics to be added as tags
+   */
   public void addTags(Collection<Topic> tagList) {
     tagList.forEach(this::addTag);
   }
 
-  public void removeTag(Topic topic) {
-    if (hasTag(topic)) {
-      tags.remove(topic);
+  /***
+   * removes a tag from the Reference if it is tagged
+   *
+   * @param tag, Topic to be removed as a tag
+   */
+  public void removeTag(Topic tag) {
+    if (hasTag(tag)) {
+      tags.remove(tag);
     }
   }
 
+  /***
+   * removes multiple tags from the Reference
+   *
+   * @param tagList, Collection of topics to be removed as tags
+   */
   public void removeTags(Collection<Topic> tagList) {
     tagList.forEach(this::removeTag);
   }
