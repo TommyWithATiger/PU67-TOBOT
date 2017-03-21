@@ -22,11 +22,11 @@ public class ReferenceDAOTest extends BaseTest {
 
   @Before
   public void populate() throws Exception{
-    reference1 = new Reference("Title 1", "Description 1", "www.link1.com", ReferenceType.WEBSITE);
+    reference1 = new Reference("Title 1", "Description 1", "www.google.com", ReferenceType.WEBSITE);
     reference1.create();
-    reference2 = new Reference("Title 2", "Description 2", "http://link2.com/abcd/file.png", ReferenceType.IMAGE);
+    reference2 = new Reference("Title 2", "Description 2", "https://abs.twimg.com/errors/logo23x19.png", ReferenceType.IMAGE);
     reference2.create();
-    reference3 = new Reference("Title 3", "Description 3", "https://www.link1.com/dsjfdsij/file.html", ReferenceType.ARTICLE);
+    reference3 = new Reference("Title 3", "Description 3", "http://en.wikipedia.org/wiki/NP-completeness", ReferenceType.ARTICLE);
     reference3.create();
   }
 

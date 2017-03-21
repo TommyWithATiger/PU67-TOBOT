@@ -2,7 +2,7 @@ package data.reference;
 
 import data.Topic;
 import data.dao.ReferenceDAO;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.apache.http.HttpException;
 
 @Entity
 @NamedQueries({
@@ -48,7 +49,7 @@ public class Reference {
   }
 
   public Reference(String title, String description, String link, ReferenceType referenceType)
-      throws MalformedURLException {
+      throws IOException, HttpException {
     this();
     setTitle(title);
     setDescription(description);
@@ -80,7 +81,7 @@ public class Reference {
     return link;
   }
 
-  public void setLink(String link) throws MalformedURLException, IllegalArgumentException {
+  public void setLink(String link) throws IOException, IllegalArgumentException, HttpException {
     if (LinkValidation.validateLink(this, link)) {
       this.link = link;
     }
@@ -90,7 +91,8 @@ public class Reference {
     return referenceType;
   }
 
-  public void setReferenceType(ReferenceType referenceType) throws IllegalArgumentException {
+  public void setReferenceType(ReferenceType referenceType)
+      throws IllegalArgumentException, IOException, HttpException {
     if (this.referenceType != null && referenceType == ReferenceType.VIDEO && !LinkValidation.validateVideoLink(this, link)) {
       throw new IllegalArgumentException("Can't type to VIDEO, link is not from youtube");
     } else this.referenceType = referenceType;

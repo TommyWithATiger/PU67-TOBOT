@@ -22,13 +22,13 @@ public class ReferenceTest extends BaseTest {
 
   @Before
   public void populate() throws Exception{
-    reference = new Reference("Title", "Description", "www.link.com", ReferenceType.WEBSITE);
+    reference = new Reference("Title", "Description", "www.google.com", ReferenceType.WEBSITE);
     reference.create();
   }
 
   @Test
   public void testMakeReference() throws Exception{
-    reference = new Reference("Title", "Description", "www.link.com", ReferenceType.WEBSITE);
+    reference = new Reference("Title", "Description", "https://www.google.com", ReferenceType.WEBSITE);
   }
 
   @Test
@@ -65,9 +65,9 @@ public class ReferenceTest extends BaseTest {
 
   @Test
   public void getSetLink() throws Exception {
-    assertEquals("www.link.com", reference.getLink());
-    reference.setLink("https://newlink.com");
-    assertEquals("https://newlink.com", reference.getLink());
+    assertEquals("www.google.com", reference.getLink());
+    reference.setLink("https://google.com");
+    assertEquals("https://google.com", reference.getLink());
   }
 
   @Test
