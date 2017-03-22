@@ -1,6 +1,7 @@
 package data.dao;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 import base.BaseTest;
 import data.Topic;
@@ -82,6 +83,18 @@ public class ExerciseDAOTest extends BaseTest{
     assertEquals(1, exercises.size());
 
     assertEquals(1, ExerciseDAO.getInstance().getNextExercises(user1, topic1, 1).size());
+  }
+
+  @Test
+  public void testFindExerciseByTopic(){
+    List<Exercise> exercises = ExerciseDAO.getInstance().findExerciseByTopic(topic1);
+    assertTrue(exercises.contains(exercise1));
+    assertTrue(exercises.contains(exercise2));
+    assertEquals(2, exercises.size());
+
+    exercises = ExerciseDAO.getInstance().findExerciseByTopic(topic2);
+    assertTrue(exercises.contains(exercise2));
+    assertEquals(1, exercises.size());
   }
 
 }
