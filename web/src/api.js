@@ -28,6 +28,8 @@ const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
+const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
+
 export const api = {
   /**
    * Get the user from API.
@@ -267,6 +269,34 @@ export const api = {
     }
 
     return this.postRequest(ctx, SUBJECT_TOPIC_RELATE_URL, req, callback, error)
+  },
+
+  /**
+   * Upload a pdf
+   * @param {object} ctx Context.
+   * @param {object} file ArrayBuffer of a file
+   * @param {function} callback Handler the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request
+   */
+  uploadPDF (ctx, file, callback, error) {
+    let req = {
+      body: file
+    }
+
+    req.headers = Object.assign({}, req.headers || {}, {
+      'Authorization': auth.getAuthHeader()['Authorization'],
+      'X-Username': auth.getUsername()
+    })
+
+    req.method = 'POST'
+    let h = req.headers
+    req.headers = new Headers(h)
+
+    return fetch(new Request(UPLOAD_PDF_URL, req))
+    .then(res => res.json())
+    .then(callback)
+    .catch(error)
   },
 
   /**
