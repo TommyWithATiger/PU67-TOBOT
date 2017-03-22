@@ -167,6 +167,7 @@ export default {
    content: "\2605";
    position: absolute;
    color: #dddd00;
+   color: var(--p-color-1);
 }
 
 .topic-rating > span:hover:before,
@@ -174,6 +175,7 @@ export default {
    content: "\2605";
    position: absolute;
    color: #ffff00;
+   color: var(--nn-color-2);
    cursor: pointer;
 }
 </style>
