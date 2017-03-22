@@ -1,7 +1,6 @@
 <template>
 	<div class="page-content">
-		<div>
-			{{ creationContext }}
+		<div class="context_container" v-html="creationContext">
 		</div>
 	</div>
 </template>
@@ -29,26 +28,27 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
-.p, .r {
-  position:absolute;
+.context_container .p, .context_container .r {
+  position: absolute;
 }
 
 @supports(-webkit-text-stroke: 1px black) {
-  .p {
-    text-shadow:none !important;
+  .context_container .p {
+    text-shadow: none !important;
   }
 }
 
-.container {
-  width:595pt;
+.context_container .container {
+  width: 595pt;
   position: relative;
 }
 
-.exercise{
-  position:absolute;
-  width:595pt
+.context_container .exercise{
+  position: absolute;
+  width: 595pt;
+  border: 2px solid var(--p-color-1);
 }
 
 </style>
