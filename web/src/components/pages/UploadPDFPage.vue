@@ -20,6 +20,7 @@
 
 <script>
 import { api } from 'api'
+import { store } from 'store'
 
 export default {
   name: 'uploadpage',
@@ -37,13 +38,12 @@ export default {
       let context = this
       reader.onload = function (event) {
         api.uploadPDF(context, event.target.result, (data) => {
-          document.getElementById('cont').innerHTML = data.content
-          document.getElementById('loader').classList.toggle('hidden', true)
-          context.content = data.content
+          store.exercise_creation_context = data.content
+          context.$router.push('/exercise/create')
         }, (err) => {
           document.getElementById('loader').classList.toggle('hidden', true)
           document.getElementById('feedback').classList.toggle('hidden', false)
-          err
+          console.log(err)
         })
       }
       reader.readAsArrayBuffer(this.file)
