@@ -1,7 +1,17 @@
 <template>
 	<div class="page-content">
+    <div id="feedback" class="hidden feedback">
+      Could not read the uploaded file. Is it a PDF?
+    </div>
 		<input v-on:change="registerFileChange" type="file" name="file">
 		<input @click="upload" type="submit">
+    <div id="loader" class="hidden">
+      <div class="spinner">
+      </div>
+      <div>
+        Extracting exercises from the PDF, this might take a couple of seconds. Sit tight!
+      </div>
+    </div>
 		<div id="cont">
 			{{ content }}
 		</div>
@@ -21,13 +31,18 @@ export default {
   },
   methods: {
     upload () {
+      document.getElementById('loader').classList.toggle('hidden', false)
+      document.getElementById('feedback').classList.toggle('hidden', true)
       let reader = new FileReader()
       let context = this
       reader.onload = function (event) {
         api.uploadPDF(context, event.target.result, (data) => {
           document.getElementById('cont').innerHTML = data.content
+          document.getElementById('loader').classList.toggle('hidden', true)
           context.content = data.content
         }, (err) => {
+          document.getElementById('loader').classList.toggle('hidden', true)
+          document.getElementById('feedback').classList.toggle('hidden', false)
           err
         })
       }
@@ -42,10 +57,46 @@ export default {
 </script>
 
 <style>
+.hidden {
+  display: none;
+}
+
+.feedback {
+  color: #f00;
+}
+
+.spinner {
+    border: 8px solid var(--n-color-3);
+    border-top: 8px solid var(--p-color-1);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .p, .r {
   position:absolute;
 }
-@supports(-webkit-text-stroke: 1px black) {.p{text-shadow:none !important;}}
-.container{width:595pt;position: relative;}
-.exercise{position:absolute;width:595pt}
+
+@supports(-webkit-text-stroke: 1px black) {
+  .p {
+    text-shadow:none !important;
+  }
+}
+
+.container {
+  width:595pt;
+  position: relative;
+}
+
+.exercise{
+  position:absolute;
+  width:595pt
+}
+
 </style>
