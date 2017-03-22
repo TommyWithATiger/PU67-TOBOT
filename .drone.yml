@@ -6,8 +6,8 @@ pipeline:
     password: ${DEPLOY_PASSWORD}
     port: 22
     when:
-      event: push
-      branch: development
+      event: push, pull_request
+      branch: fix/deploy/drone-support
     script:
       - echo "test" >> file.txt
       - make docker-prod
