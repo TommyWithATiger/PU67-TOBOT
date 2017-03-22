@@ -1,10 +1,10 @@
 <template>
   <div class="page-content">
     <h1>{{ title }}</h1>
-    <div>
+    <div class="login-container">
       <input @keydown.enter="login" v-model="creds.username" placeholder="Username ..." type="text" />
       <input @keydown.enter="login" v-model="creds.password" placeholder="Password ..." type="password" />
-      <button @click="login">Login</button>
+      <button @click="login" :disabled="creds.username.length && creds.password.length ? null : 'true'">Login</button>
       <span>{{ feedback }}</span>
     </div>
     <a href="/register">Register account</a>
@@ -52,4 +52,26 @@ export default {
 </script>
 
 <style scoped>
+.page-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 160px;
+  align-items: center;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 240px;
+}
+
+.login-container > button {
+  margin: 10px;
+}
+
+a {
+  margin: 8px;
+}
 </style>
