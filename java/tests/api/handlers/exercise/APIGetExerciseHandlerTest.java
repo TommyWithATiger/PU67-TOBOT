@@ -1,6 +1,7 @@
 package api.handlers.exercise;
 
 import static api.handlers.exercise.APIGetExerciseHandler.getExerciseByID;
+import static api.handlers.exercise.APIGetExerciseHandler.getExercisesByTopic;
 import static junit.framework.TestCase.assertEquals;
 
 import api.exceptions.APIBadMethodException;
@@ -17,26 +18,20 @@ public class APIGetExerciseHandlerTest extends BaseTest {
 
   private Exercise exercise1;
   private Exercise exercise2;
-  private Exercise exercise3;
 
-  private Topic topic1;
-  private Topic topic2;
+  private Topic topic;
 
   @Before
   public void setup() {
     exercise1 = new Exercise("title1", "text1");
     exercise2 = new Exercise("title2", "text2");
-    exercise3 = new Exercise("title3", "text3");
     exercise1.create();
     exercise2.create();
-    exercise3.create();
-    topic1 = new Topic("title1", "description");
-    topic2 = new Topic("title2", "description");
-    topic1.addExercise(exercise1);
-    topic1.addExercise(exercise2);
-    topic2.addExercise(exercise3);
-    topic1.create();
-    topic2.create();
+
+    topic = new Topic("title1", "description");
+    topic.addExercise(exercise1);
+    topic.addExercise(exercise2);
+    topic.create();
   }
 
   @Test(expected = APIBadMethodException.class)
@@ -78,5 +73,50 @@ public class APIGetExerciseHandlerTest extends BaseTest {
     String response = getExerciseByID(httpRequest);
     assertEquals("{\"id\":" + exercise1.getId() + ",\"text\":\"" + exercise1.getText() +
         "\",\"title\":\"" + exercise1.getTitle() + "\"}", response);
+  }
+
+  @Test(expected = APIBadMethodException.class)
+  public void testGetExercisesByTopicWrongMethod() {
+    HttpRequest httpRequest = new BasicHttpRequest("POST", "exercise/url?topic=12");
+    getExercisesByTopic(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testGetExerciseByTopicNoTopicInURL() {
+    HttpRequest httpRequest = new BasicHttpRequest("GET", "exercise/url?test=21");
+    getExercisesByTopic(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testGetExerciseByTopicTopicNotValid() {
+    HttpRequest httpRequest = new BasicHttpRequest("GET", "exercise/url?topic=-21");
+    getExercisesByTopic(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testGetExerciseByTopicTopicIDNotNumber() {
+    HttpRequest httpRequest = new BasicHttpRequest("GET", "exercise/url?topic=lol");
+    getExercisesByTopic(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testGetExerciseByTopicNotInDatabase() {
+    int id = topic.getId();
+    topic.delete();
+    HttpRequest httpRequest = new BasicHttpRequest("GET", "exercise/url?topic=" + String.valueOf(id));
+    getExercisesByTopic(httpRequest);
+  }
+
+  @Test
+  public void testGetExerciseByTopicValid() {
+    HttpRequest httpRequest = new BasicHttpRequest("GET",
+        "exercise/url?topic=" + String.valueOf(topic.getId()));
+    String response = getExercisesByTopic(httpRequest);
+    assertEquals("{\"exercises\":" +
+            "[{\"id\":" + exercise1.getId() + ",\"text\":\"" + exercise1.getText() +
+            "\",\"title\":\"" + exercise1.getTitle() + "\"}," +
+            "{\"id\":" + exercise2.getId() + ",\"text\":\"" + exercise2.getText() +
+            "\",\"title\":\"" + exercise2.getTitle() + "\"}]}",
+        response);
   }
 }
