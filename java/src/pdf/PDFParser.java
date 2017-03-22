@@ -2,6 +2,7 @@ package pdf;
 
 
 import static pdf.dom.ElementCreator.createElement;
+import static pdf.dom.images.ImageExtractor.extractImages;
 import static pdf.exercises.ExerciseFinder.findExercises;
 
 import java.io.IOException;
@@ -102,6 +103,7 @@ public class PDFParser {
       container.appendChild(node);
     }
 
+    extractImages(container);
     // Find exercises
     findExercises(document, container);
 
