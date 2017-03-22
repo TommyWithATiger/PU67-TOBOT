@@ -105,10 +105,8 @@ public class PDFParser {
     // Find exercises
     findExercises(document, container);
 
-    body.appendChild(container);
-
-    // Convert the DOM to a HTML string
-    return DOMConverter.DOMToString(document);
+    // Convert the container node to a HTML string
+    return DOMConverter.DOMToString(container);
   }
 
 
