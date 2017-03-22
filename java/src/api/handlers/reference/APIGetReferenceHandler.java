@@ -53,8 +53,7 @@ public class APIGetReferenceHandler {
       throw new APIBadRequestException("No topic with the given id");
     }
 
-    List<Reference> references = ReferenceDAO.getInstance()
-        .findReferenceByTag(topic);
+    List<Reference> references = ReferenceDAO.getInstance().findReferenceByTag(topic);
 
     if (references == null) {
       throw new APIBadRequestException("Could not get related references");

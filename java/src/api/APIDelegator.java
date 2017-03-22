@@ -6,6 +6,7 @@ import api.handlers.exercise.APIAddExerciseHandler;
 import api.handlers.exercise.APIGetExerciseHandler;
 import api.handlers.rating.APIGetTopicRatingHandler;
 import api.handlers.rating.APIRateTopicHandler;
+import api.handlers.reference.APIAddReferenceHandler;
 import api.handlers.reference.APIGetReferenceHandler;
 import api.handlers.relators.APIGetRelatedTopicsSubjectHandler;
 import api.handlers.relators.APIGetRelatedTopicsWithRatingCountHandler;
@@ -111,6 +112,7 @@ public class APIDelegator {
         .put("reference\\/get\\/\\?id=.*", APIGetReferenceHandler::getReferenceById);
     handlerRegistry
         .put("reference\\/get\\/\\?topic=.*", APIGetReferenceHandler::getReferencesByTopic);
+    handlerRegistry.put("reference\\/create", APIAddReferenceHandler::handleAddReferenceRequest);
 
     return handlerRegistry;
   }
