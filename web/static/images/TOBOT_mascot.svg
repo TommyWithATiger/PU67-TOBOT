@@ -9,15 +9,30 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="300mm"
-   height="120mm"
-   viewBox="0 0 300 120"
+   width="360mm"
+   height="144mm"
+   viewBox="0 0 360 144"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.0 unknown"
-   sodipodi:docname="TOBOT_mascot.svg">
+   inkscape:version="0.92.1 unknown"
+   sodipodi:docname="TOBOT_mascot_outline.svg"
+   inkscape:export-filename="/home/nos/Pictures/TOBOT_mascot_outline.svg.png"
+   inkscape:export-xdpi="50"
+   inkscape:export-ydpi="50"
+   style="enable-background:new">
   <defs
-     id="defs2" />
+     id="defs2">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4536">
+      <feBlend
+         inkscape:collect="always"
+         mode="normal"
+         in2="BackgroundImage"
+         id="feBlend4538" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,9 +40,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.32"
-     inkscape:cx="1111.3291"
-     inkscape:cy="-144.37976"
+     inkscape:zoom="0.6063368"
+     inkscape:cx="839.12972"
+     inkscape:cy="34.008665"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -40,8 +55,8 @@
     <inkscape:grid
        type="xygrid"
        id="grid3900"
-       originx="-255.42478"
-       originy="-1939.6294" />
+       originx="-225.42479"
+       originy="-1927.6295" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -51,7 +66,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -59,7 +74,8 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-60,673)">
+     transform="translate(-30,685)"
+     style="filter:url(#filter4536)">
     <rect
        rx="9.715169"
        ry="9.715169"
@@ -68,13 +84,13 @@
        height="120"
        width="200"
        id="rect14619"
-       style="fill:#c8b7b7;stroke-width:0.68119478" />
+       style="fill:none;fill-opacity:1;stroke:#333333;stroke-width:8;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <g
-       style="fill:#483737"
+       style="fill:#333333;fill-opacity:1"
        id="g3724-9"
        transform="matrix(0,-1.25,1,0,-87,-559.75)">
       <rect
-         style="fill:#483737;stroke-width:0.27456257"
+         style="fill:#333333;fill-opacity:1;stroke-width:0.27456257"
          y="157"
          x="38.599998"
          height="40"
@@ -82,7 +98,7 @@
          id="rect3688-2" />
       <rect
          transform="rotate(90)"
-         style="fill:#483737;stroke-width:0.3069703"
+         style="fill:#333333;fill-opacity:1;stroke-width:0.3069703"
          y="-65"
          x="147"
          height="40"
@@ -93,26 +109,26 @@
        id="path3747-8"
        cx="155"
        cy="-616"
-       style="fill:#916f6f;stroke-width:0.25996575"
+       style="fill:#333333;fill-opacity:1;stroke-width:0.25996575"
        r="25" />
     <g
-       style="fill:#483737"
+       style="fill:#333333;fill-opacity:1"
        transform="rotate(90,523.29374,-191.29374)"
        id="g3773-9">
       <circle
          r="12.5"
-         style="fill:#483737;stroke-width:0.25996575"
+         style="fill:#333333;fill-opacity:1;stroke-width:0.25996575"
          cy="134.5"
          cx="119.08749"
          id="path3751-7" />
       <circle
          r="12.5"
-         style="fill:#483737;stroke-width:0.25996575"
+         style="fill:#333333;fill-opacity:1;stroke-width:0.25996575"
          cy="109.50001"
          cx="119.08749"
          id="path3751-5-3" />
       <rect
-         style="fill:#483737;stroke-width:0.19282179"
+         style="fill:#333333;fill-opacity:1;stroke-width:0.19282179"
          y="97"
          x="100"
          height="50"
@@ -123,14 +139,14 @@
        id="path3747-6-1"
        cx="265"
        cy="-616"
-       style="fill:#916f6f;stroke-width:0.25996575"
+       style="fill:#333333;fill-opacity:1;stroke-width:0.25996575"
        r="25" />
     <g
-       style="fill:#483737"
+       style="fill:#333333;fill-opacity:1"
        id="g3724-2-2"
        transform="matrix(0,1.25,-1,0,507,-672.25)">
       <rect
-         style="fill:#483737;stroke-width:0.27456257"
+         style="fill:#333333;fill-opacity:1;stroke-width:0.27456257"
          y="157"
          x="38.599998"
          height="40"
@@ -138,7 +154,7 @@
          id="rect3688-9-9" />
       <rect
          transform="rotate(90)"
-         style="fill:#483737;stroke-width:0.3069703"
+         style="fill:#333333;fill-opacity:1;stroke-width:0.3069703"
          y="-65"
          x="147"
          height="40"

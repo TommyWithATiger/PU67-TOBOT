@@ -2,15 +2,17 @@
   <div class="page-content">
     <h1>Topics</h1>
     <h2>Add topic</h2>
-    <p class="topic-add-fields">
+    <div class="topic-add-fields">
       <label>Title: </label>
       <input @keydown.enter="addTopic" v-model="topic.title" type="text" />
       <br>
       <label>Description: </label>
       <input @keydown.enter="addTopic" v-model="topic.description" type="text" />
-      <button @click="addTopic">Add</button>
-      <span class="error">{{ addFeedback }}</span>
-    </p>
+      <p>
+        <button @click="addTopic">Add</button>
+        <span class="error">{{ addFeedback }}</span>
+      </p>
+    </div>
     <h2>All topics</h2>
     <div v-if="topics.length">
       <div class="topic-info topic-info-header">
@@ -122,22 +124,6 @@ export default {
   display: inline-block;
 }
 
-.topic-add-fields > button {
-  display: block;
-  width: 100px;
-  height: 25px;
-  border: 1px solid #666;
-  border-radius: 4px;
-  background-color: #e9e9e9;
-  margin-top: 8px;
-  margin-left: 30px;
-}
-
-.topic-add-fields > button:hover {
-  border: 1px solid #333;
-  background-color: #e1e1e1;
-}
-
 .topic-title, .topic-description {
   padding-right: 20px;
   flex-grow: 1;
@@ -148,34 +134,28 @@ export default {
   flex-grow: 3;
 }
 
+.topic-info:nth-child(even) {
+  background-color: #ccc;
+  background-color: var(--n-color-3);
+  border-radius: 4px;
+}
+
 .topic-info {
   display: flex;
-  display: -webkit-flex;
-  flex-direction: row;
-  webkit-flex-direction: row;
-  flex-wrap: wrap;
-  webkit-flex-wrap: wrap;
-  flex-grow: 0;
-  webkit-flex-grow: grow;
-  padding-left: 15px;
-  padding-right: 15px;
-  border-bottom: 1px solid #d6d6d6;
-  max-width: 1500px;
-  background-color: #f9f9f9;
-  padding-top: 1px;
-  padding-bottom: 2px;
+  flex-flow: row wrap;
+  padding: 10px 12px;
 }
 
 .topic-info-header {
   font-weight: bold;
   font-size: 1.2em;
-  background-color: #eeeeee;
 }
 
 .topic-rating {
   unicode-bidi: bidi-override;
   direction: rtl;
 }
+
 .topic-rating > span {
   display: inline-block;
   position: relative;
@@ -187,6 +167,7 @@ export default {
    content: "\2605";
    position: absolute;
    color: #dddd00;
+   color: var(--p-color-1);
 }
 
 .topic-rating > span:hover:before,
@@ -194,6 +175,7 @@ export default {
    content: "\2605";
    position: absolute;
    color: #ffff00;
+   color: var(--nn-color-2);
    cursor: pointer;
 }
 </style>
