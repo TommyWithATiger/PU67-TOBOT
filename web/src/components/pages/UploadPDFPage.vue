@@ -11,9 +11,6 @@
       <div>
         Extracting exercises from the PDF, this might take a couple of seconds. Sit tight!
       </div>
-    </div>
-		<div id="cont">
-			{{ content }}
 		</div>
 	</div>
 </template>
@@ -26,8 +23,7 @@ export default {
   name: 'uploadpage',
   data () {
     return {
-      file: '',
-      content: ''
+      file: ''
     }
   },
   methods: {
