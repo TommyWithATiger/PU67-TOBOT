@@ -57,6 +57,11 @@ export default {
           name: 'Topics',
           path: '/topic',
           users: ['Admin', 'Teacher']
+        },
+        {
+          name: 'Upload',
+          path: '/upload',
+          users: ['Admin', 'Teacher', 'Student']
         }
       ]
     }
