@@ -22,8 +22,8 @@ public class APIAddExerciseHandler {
    *        text (String): the text of the exercise
    *        difficulty (String): the difficulty of the exercise, as rated by the uploader of the
    *  exercise. Valid values are "Easy", "Medium",  "Hard", or "Unknown".
-   *        solution (String): the solution of the exercise
    *        topicID (Integer): id of the topic the exercise is related to
+   *        solution (String, optional): the solution of the exercise
    *
    * @param httpRequest The request to handle
    * @return A JSON string with the data from exercise.createAbout()
@@ -36,7 +36,13 @@ public class APIAddExerciseHandler {
 
     String title = getJSONField(httpRequest, String.class, "title");
     String text = getJSONField(httpRequest, String.class, "text");
-    String solution = getJSONField(httpRequest, String.class, "solution");
+
+    String solution;
+    try{
+      solution = getJSONField(httpRequest, String.class, "solution");
+    } catch (APIBadRequestException are){
+      solution = null;
+    }
 
     ExerciseRatingEnum difficulty;
     try{
