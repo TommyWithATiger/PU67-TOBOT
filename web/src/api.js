@@ -272,7 +272,8 @@ export const api = {
   },
 
   /**
-   * Upload a pdf
+   * Upload a pdf, has to handle it's request content a bit different. This is because in PDFs all characters are important
+   * and translating the content to a json string would replace the byte values, with others due to the character encoding
    * @param {object} ctx Context.
    * @param {object} file ArrayBuffer of a file
    * @param {function} callback Handler the request output.
