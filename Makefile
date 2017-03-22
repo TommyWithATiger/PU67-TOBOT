@@ -41,6 +41,12 @@ backend-build:
 	@cd java && mvn -Dmaven.test.skip=true clean install
 	@echo Done!
 
+# Building backend with tests
+backend-build-tests:
+	@echo Builing java application ...
+	@cd java && mvn clean install
+	@echo Done!
+
 # Running backend
 backend-run:
 	@echo Running server on http://localhost:5032
@@ -50,6 +56,8 @@ backend-run:
 # Make the backend
 backend: backend-build backend-run
 
+# Make the backend with tests
+backend-tests: backend-build-tests backend-run
 
 # Create a base image
 docker-baseimage:
