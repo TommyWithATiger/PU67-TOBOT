@@ -101,6 +101,24 @@ public abstract class AbstractBaseDAO<E, K> {
   }
 
   /**
+   * Returns the first n results that matches the query. This method should only be used on queries
+   * where the order of the results is well defined, like ordered queries.
+   *
+   * @param namedQueryString, the query to be performed
+   * @param limit, the maximum number of results to get
+   * @param fieldTuples, varargs of tuples consisting of the name of the field the query is executed on, and
+   * the value that is looked for in the given field
+   * @return The first entity that matches the query, null if there is none
+   **/
+  List<E> findLimited(String namedQueryString, int limit, FieldTuple... fieldTuples) {
+    EntityManager entityManager = emFactory.createEntityManager();
+    TypedQuery<E> query = entityManager.createNamedQuery(namedQueryString, entityClass);
+    query.setMaxResults(limit);
+    setParameters(query, fieldTuples);
+    return executeQuery(query, entityManager);
+  }
+
+  /**
    * Returns the first result that matches the query.This method should only be used on queries
    * where the first result is well defined, like ordered queries, or queries that should only have
    * a single match.
@@ -111,17 +129,12 @@ public abstract class AbstractBaseDAO<E, K> {
    * @return The first entity that matches the query, null if there is none
    **/
   E findSingle(String namedQueryString, FieldTuple... fieldTuples) {
-    EntityManager entityManager = emFactory.createEntityManager();
-    TypedQuery<E> query = entityManager.createNamedQuery(namedQueryString, entityClass);
-    query.setMaxResults(1);
-    setParameters(query, fieldTuples);
-    E result;
-    try {
-      result = query.getSingleResult();
-    } catch (Exception e) {
-      result = null;
+    List<E> resultList = findLimited(namedQueryString, 1, fieldTuples);
+    if (resultList.size() == 0){
+      return null;
+    } else {
+      return resultList.get(0);
     }
-    return result;
   }
 
   /**
