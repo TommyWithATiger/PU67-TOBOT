@@ -56,7 +56,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .hidden {
   display: none;
 }
@@ -77,26 +77,6 @@ export default {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-.p, .r {
-  position:absolute;
-}
-
-@supports(-webkit-text-stroke: 1px black) {
-  .p {
-    text-shadow:none !important;
-  }
-}
-
-.container {
-  width:595pt;
-  position: relative;
-}
-
-.exercise{
-  position:absolute;
-  width:595pt
 }
 
 </style>

@@ -18,9 +18,10 @@ export default {
   },
   created () {
     if (store.exercise_creation_context === null) {
-      this.$router.go(window.history.back())
+      this.$router.push(window.history.back())
     }
     this.creationContext = store.exercise_creation_context
+    store.exercise_creation_context = null
   },
   methods: {
 
@@ -29,5 +30,25 @@ export default {
 </script>
 
 <style scoped>
+
+.p, .r {
+  position:absolute;
+}
+
+@supports(-webkit-text-stroke: 1px black) {
+  .p {
+    text-shadow:none !important;
+  }
+}
+
+.container {
+  width:595pt;
+  position: relative;
+}
+
+.exercise{
+  position:absolute;
+  width:595pt
+}
 
 </style>
