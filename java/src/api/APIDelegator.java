@@ -103,6 +103,7 @@ public class APIDelegator {
     handlerRegistry.put("exercise\\/get\\/\\?topic=.*", APIGetExerciseHandler::getExercisesByTopic);
     handlerRegistry.put("exercise\\/create", APIAddExerciseHandler::handleAddTextOnlyExercise);
     handlerRegistry.put("exercise\\/register", APIRegisterExerciseAttemptHandler::handleRegisterExercise);
+    handlerRegistry.put("exercise\\/next", APIGetExerciseHandler::getNextExercises);
 
     return handlerRegistry;
   }
