@@ -40,7 +40,7 @@ public class ReferenceDAO extends AbstractBaseDAO<Reference, Integer> {
     try {
       EntityManager entityManager = emFactory.createEntityManager();
       Query query = entityManager.createNativeQuery(
-          "SELECT * FROM Reference WHERE id IN (SELECT Reference_id FROM REFERENCE_TAGS WHERE tags_id = ?)",
+          "SELECT * FROM REFERENCE WHERE id IN (SELECT Reference_id FROM REFERENCE_TAGS WHERE tags_id = ?)",
           Reference.class);
       query.setParameter(1, tag.getId());
       entityList = (List<Reference>) query.getResultList(); //FIXME find a better fix
