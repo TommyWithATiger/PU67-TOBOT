@@ -20,20 +20,21 @@ public class LinkValidation {
 
   public static boolean validateLink(Reference reference, String link)
       throws IOException, IllegalArgumentException, HttpException {
-    if (reference.getReferenceType() == ReferenceType.VIDEO) return validateVideoLink(reference, link);
+    if (reference.getReferenceType() == ReferenceType.VIDEO) {
+      return validateVideoLink(link);
+    }
 
-    String[] schemes = {"http", "https"};
-    UrlValidator urlValidator = new UrlValidator(schemes, UrlValidator.ALLOW_2_SLASHES);
-    if (link.matches("(https?:\\/\\/(?:www\\.|(?!www))[^\\s\\.]+\\.[^\\s]{2,}|www\\.[^\\s]+\\.[^\\s]{2,})")) {
-    //if (urlValidator.isValid(link)) {
+    if (link.matches(
+        "(https?://(?:www\\.|(?!www))[^\\s.]+\\.[^\\s]{2,}|www\\.[^\\s]+\\.[^\\s]{2,})")) {
       return testLinkAccessible(link);
     }
     throw new MalformedURLException();
   }
 
-  public static boolean validateVideoLink(Reference reference, String link)
+  public static boolean validateVideoLink(String link)
       throws IllegalArgumentException, IOException, HttpException {
-    if (link.matches("^((?:https?:)?\\/\\/)?((?:www)\\.)?((?:youtube\\.com|youtu.be))(\\/(?:[\\w\\-]+\\?v=|embed\\/|v\\/)?)([\\w\\-]+)(\\S+)?$")) {
+    if (link.matches(
+        "^((?:https?:)?//)?((?:www)\\.)?((?:youtube\\.com|youtu.be))(/(?:[\\w\\-]+\\?v=|embed/|v/)?)([\\w\\-]+)(\\S+)?$")) {
       return testLinkAccessible(link);
     }
     throw new IllegalArgumentException("Video URL has to be from Youtube");
@@ -41,19 +42,20 @@ public class LinkValidation {
 
   public static boolean testLinkAccessible(String link) throws IOException, HttpException {
     if (!link.contains("http")) {
-      link = "http://"+link;
+      link = "http://" + link;
     }
     URL url = new URL(link);
     Socket socket = new Socket();
     if (link.charAt(4) == 's') {
-      socket = ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(url.getHost(), 443);
+      socket = SSLSocketFactory.getDefault().createSocket(url.getHost(), 443);
     } else {
       socket.connect(new InetSocketAddress(url.getHost(), 80));
     }
 
     PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
 
-    SessionInputBufferImpl sessionInputBuffer = new SessionInputBufferImpl(new HttpTransportMetricsImpl(), 8192);
+    SessionInputBufferImpl sessionInputBuffer = new SessionInputBufferImpl(
+        new HttpTransportMetricsImpl(), 8192);
     sessionInputBuffer.bind(socket.getInputStream());
     DefaultHttpResponseParser responseParser = new DefaultHttpResponseParser(sessionInputBuffer);
 

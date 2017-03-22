@@ -149,7 +149,7 @@ public class Reference {
 
   public void setReferenceType(ReferenceType referenceType)
       throws IllegalArgumentException, IOException, HttpException {
-    if (this.referenceType != null && referenceType == ReferenceType.VIDEO && !LinkValidation.validateVideoLink(this, link)) {
+    if (this.referenceType != null && referenceType == ReferenceType.VIDEO && !LinkValidation.validateVideoLink(link)) {
       throw new IllegalArgumentException("Can't type to VIDEO, link is not from youtube");
     } else this.referenceType = referenceType;
   }
