@@ -14,6 +14,7 @@ import RequestResetPage from 'components/pages/RequestResetPage'
 import PasswordResetPage from 'components/pages/ResetPasswordPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import UploadPDFPage from 'components/pages/UploadPDFPage'
+import ExerciseCreationPage from 'components/pages/ExerciseCreationPage'
 import { auth } from 'auth'
 import { api } from 'api'
 import { store } from 'store'
@@ -170,6 +171,13 @@ export const router = new Router({
       path: '/upload',
       name: 'UploadPDF',
       component: UploadPDFPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/exercise/create',
+      name: 'ExerciseCreate',
+      component: ExerciseCreationPage,
       meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
