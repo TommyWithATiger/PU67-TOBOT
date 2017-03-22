@@ -109,6 +109,8 @@ public class APIDelegator {
     // References
     handlerRegistry
         .put("reference\\/get\\/\\?id=.*", APIGetReferenceHandler::getReferenceById);
+    handlerRegistry
+        .put("reference\\/get\\/\\?topic=.*", APIGetReferenceHandler::getReferencesByTopic);
 
     return handlerRegistry;
   }
