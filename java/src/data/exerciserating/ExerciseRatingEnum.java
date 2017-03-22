@@ -24,10 +24,8 @@ public enum ExerciseRatingEnum {
         return Medium;
       case 3:
         return Hard;
-      case 4:
-        return Unknown;
       default:
-        throw new IllegalArgumentException("Unknown " + ratingValue);
+        return Unknown;
     }
   }
 }
