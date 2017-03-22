@@ -12,7 +12,16 @@ import org.json.JSONObject;
 @NamedQueries({
     @NamedQuery(name = "findAllExercises", query = "SELECT e FROM Exercise e"),
     @NamedQuery(name = "findExerciseByTopic",
-        query = " SELECT e FROM Exercise e  WHERE :topic MEMBER OF e.topics")
+        query = " SELECT e FROM Exercise e  WHERE :topic MEMBER OF e.topics"),
+    @NamedQuery(name = "getNextExercises", query =
+          " SELECT e FROM Exercise e"
+        + " LEFT JOIN ExerciseAttemptHistory eah ON eah.exercise = e"
+        + " LEFT JOIN ExerciseRating er ON er.id.exerciseID = e.id"
+        + " LEFT JOIN User u ON eah.user = u"
+        + " WHERE u = :user"
+        + " AND :topic MEMBER OF e.topics"
+        + " GROUP BY e"
+        + " ORDER BY SUM(eah.success), AVG(er.rating) NULLS LAST"),
 })
 @Table
 public class Exercise extends AbstractBaseEntity{
@@ -32,7 +41,7 @@ public class Exercise extends AbstractBaseEntity{
   private String imagePath;
 
   @ManyToMany(cascade=CascadeType.ALL, mappedBy="exercises")
-  @JoinTable(name="TOPIC_ID")
+  @JoinTable(name="TOPIC_EXERCISE")
   private Collection<Topic> topics;
 
   protected Exercise(){
