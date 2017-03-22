@@ -14,7 +14,7 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
    *
    * @param emFactory, the static EntityManagerFactory for the server instance
    */
-  public TopicDAO(EntityManagerFactory emFactory) {
+  private TopicDAO(EntityManagerFactory emFactory) {
     super(Topic.class, emFactory);
   }
 
