@@ -34,11 +34,8 @@ public class Exercise extends AbstractBaseEntity{
 
   @Column(columnDefinition = "TEXT")
   private String text;
-
   @Column(columnDefinition = "TEXT")
   private String solution;
-
-  private String imagePath;
 
   @ManyToMany(cascade=CascadeType.ALL, mappedBy="exercises")
   @JoinTable(name="TOPIC_EXERCISE")
@@ -109,21 +106,12 @@ public class Exercise extends AbstractBaseEntity{
     this.solution = solution;
   }
 
-  public String getImagePath() {
-    return imagePath;
-  }
-
-  public void setImagePath(String imagePath) {
-    this.imagePath = imagePath;
-  }
-
   public JSONObject createAbout(){
     JSONObject response = new JSONObject();
     response.put("id", id);
     response.put("title", title);
     response.put("text", text);
     response.put("solution", solution);
-    response.put("imagePath", imagePath);
     return response;
   }
 
