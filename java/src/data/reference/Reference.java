@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -38,6 +39,7 @@ public class Reference {
 
   @Enumerated(value = EnumType.STRING)
   @Convert(converter = ReferenceTypeConverter.class)
+  @Column(name = "type")
   private ReferenceType referenceType;
 
   @ManyToMany
