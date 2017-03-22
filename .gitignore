@@ -185,6 +185,8 @@ Session.vim
 .netrwhist
 # auto-generated tag files
 tags
+# track drone sig-file
+!.drone.yml.sig
 
 ### Windows ###
 # Windows thumbnail cache files
