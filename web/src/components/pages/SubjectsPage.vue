@@ -14,8 +14,10 @@
       <br>
       <label>Description: </label>
       <input @keydown.enter="addSubject" v-model="subject.description" type="text" />
+      <div>
       <button @click="addSubject">Add</button>
       <span class="error">{{ addFeedback }}</span>
+      </div>
     </p>
     <h2>All subjects</h2>
     <div v-if="subjects.length">
@@ -23,13 +25,13 @@
         <div class="subject-code">Subject code</div>
         <div class="subject-title">Title</div>
         <div class="subject-description">Description</div>
-        <div class="subject-relate">Topics</div>
+        <div class="subject-relate">Link</div>
       </div>
       <div v-for="s in subjects" class="subject-info">
         <div class="subject-code">{{ s.subjectCode }}</div>
         <div class="subject-title">{{ s.title }}</div>
         <div class="subject-description">{{ s.description }}</div>
-        <div class="subject-relate"><router-link :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">Topics</router-link></div>
+        <div class="subject-relate"><router-link class="colored-link" :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">details ➜</router-link></div>
       </div>
     </div>
     <div v-else><span v-if="!getFeedback.length">Not subjects.</span></div>

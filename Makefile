@@ -38,6 +38,12 @@ frontend-api:
 # Building backend
 backend-build:
 	@echo Building java application ...
+	@cd java && mvn -Dmaven.test.skip=true clean install
+	@echo Done!
+
+# Building backend with tests
+backend-build-tests:
+	@echo Builing java application ...
 	@cd java && mvn clean install
 	@echo Done!
 
@@ -50,6 +56,8 @@ backend-run:
 # Make the backend
 backend: backend-build backend-run
 
+# Make the backend with tests
+backend-tests: backend-build-tests backend-run
 
 # Create a base image
 docker-baseimage:
@@ -114,7 +122,7 @@ docker-enter-container-prod:
 	@docker exec -it tobot-container-prod /bin/bash
 
 # Create the whole development container from scratch
-docker: docker-baseimage docker-image docker-container-dev
+docker: docker-baseimage docker-image docker-container
 
 # Create the whole production container from scratch
 docker-prod: docker-baseimage docker-image-prod docker-container-prod

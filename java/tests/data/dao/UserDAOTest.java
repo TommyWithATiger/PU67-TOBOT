@@ -26,16 +26,7 @@ public class UserDAOTest extends BaseTest{
   }
 
   @Test
-  public void testFindAll() throws Exception {
-    List result = UserDAO.getInstance().findAll();
-    assertTrue(result.contains(user1));
-    assertTrue(result.contains(user2));
-    assertTrue(result.contains(user3));
-    assertEquals(3, result.size());
-  }
-
-  @Test
-  public void testFindUserByName() throws Exception {
+  public void testFindUserByUsername() throws Exception {
     User u1 = UserDAO.getInstance().findUserByUsername(user1.getUsername());
     assertEquals(user1, u1);
 

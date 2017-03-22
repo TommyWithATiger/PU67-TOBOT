@@ -18,17 +18,8 @@ public class RatingDAO extends AbstractBaseDAO<Rating, RatingKey> {
    *
    * @param emFactory, the static EntityManagerFactory for the server instance
    */
-  public RatingDAO(EntityManagerFactory emFactory) {
+  private RatingDAO(EntityManagerFactory emFactory) {
     super(Rating.class, emFactory);
-  }
-
-  /**
-   * Finds all ratings in the database
-   *
-   * @return List of Rating objects
-   */
-  public List<Rating> findAll() {
-    return super.find("findAllRatings");
   }
 
   /**

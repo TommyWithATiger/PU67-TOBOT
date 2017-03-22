@@ -12,20 +12,11 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
    *
    * @param emFactory, the static EntityManagerFactory for the server instance
    */
-  public UserDAO(EntityManagerFactory emFactory) {
+  private UserDAO(EntityManagerFactory emFactory) {
     super(User.class, emFactory);
   }
 
   private static UserDAO instance;
-
-  /**
-   * Get all database occurrences of Subject
-   *
-   * @return List of all Subjects
-   */
-  public List<User> findAll() {
-    return super.find("findAllUsers");
-  }
 
   /**
    * Finds a User by doing a query for the username
@@ -34,12 +25,7 @@ public class UserDAO extends AbstractBaseDAO<User, Integer> {
    * @return User with matching username, or null if it is not in the database
    */
   public User findUserByUsername(String username) {
-    List<User> results = super.find("findUsersByUsername", new FieldTuple("username", username));
-    if (!results.isEmpty()) {
-      return results.get(0);
-    }
-    return null;
-    //Fixme handle no result exception here
+    return super.findSingle("findUsersByUsername", new FieldTuple("username", username));
   }
 
   /**

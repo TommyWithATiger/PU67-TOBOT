@@ -98,15 +98,34 @@ export default {
       let theme = this.$store.state.theme
       let hue = this.$store.state.hue
 
-      switch (this.$store.state.theme) {
-        case 'dark':
+      switch (parseInt(this.$store.state.hue)) {
+        case 0xf0f0f0:
           theme = 'light'
-          hue = 0x00ffff
+          hue = 0x0099ff
           break
-        case 'light':
+        case 0x0099ff:
+          theme = 'light'
+          hue = 0x22cc33
+          break
+        case 0x22cc33:
+          theme = 'light'
+          hue = 0x6f6f6f
+          break
+        case 0x6f6f6f:
           theme = 'dark'
-          hue = 0x00ff00
+          hue = 0xff8800
           break
+        case 0xff8800:
+          theme = 'dark'
+          hue = 0xcc3322
+          break
+        case 0xcc3322:
+          theme = 'dark'
+          hue = 0xf0f0f0
+          break
+        default:
+          theme = 'dark'
+          hue = 0xff8800
       }
 
       this.$store.state.theme = theme
