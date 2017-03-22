@@ -1,5 +1,7 @@
 package data.dao;
 
+import static junit.framework.TestCase.assertEquals;
+
 import base.BaseTest;
 import data.Topic;
 import data.exercise.Exercise;
@@ -7,7 +9,9 @@ import data.exerciseattempthistory.ExerciseAttemptHistory;
 import data.exerciserating.ExerciseRating;
 import data.exerciserating.ExerciseRatingEnum;
 import data.user.User;
+import java.util.List;
 import org.junit.Before;
+import org.junit.Test;
 
 public class ExerciseDAOTest extends BaseTest{
 
@@ -19,16 +23,6 @@ public class ExerciseDAOTest extends BaseTest{
 
   private static Exercise exercise1;
   private static Exercise exercise2;
-
-  private static ExerciseRating exerciseRating11;
-  private static ExerciseRating exerciseRating21;
-  private static ExerciseRating exerciseRating12;
-  private static ExerciseRating exerciseRating22;
-
-  private static ExerciseAttemptHistory eah11;
-  private static ExerciseAttemptHistory eah12;
-  private static ExerciseAttemptHistory eah21;
-  private static ExerciseAttemptHistory eah22;
 
   @Before
   public void populate(){
@@ -42,8 +36,8 @@ public class ExerciseDAOTest extends BaseTest{
     exercise1.create();
     exercise2.create();
 
-    exerciseRating11 = new ExerciseRating(user1.getId(), exercise1.getId(), ExerciseRatingEnum.Easy);
-    exerciseRating21 = new ExerciseRating(user2.getId(), exercise1.getId(), ExerciseRatingEnum.Hard);
+    ExerciseRating exerciseRating11 = new ExerciseRating(user1.getId(), exercise1.getId(), ExerciseRatingEnum.Easy);
+    ExerciseRating exerciseRating21 = new ExerciseRating(user2.getId(), exercise1.getId(), ExerciseRatingEnum.Hard);
     exerciseRating11.create();
     exerciseRating21.create();
 
@@ -51,21 +45,43 @@ public class ExerciseDAOTest extends BaseTest{
     topic2 = new Topic("Philosophy 101", "Think and argue");
     topic1.addExercise(exercise1);
     topic1.addExercise(exercise2);
-    topic2.addExercise(exercise1);
     topic2.addExercise(exercise2);
     topic1.create();
     topic2.create();
 
-    eah11 = new ExerciseAttemptHistory(user1, exercise1, false);
-    eah12 = new ExerciseAttemptHistory(user1, exercise2, false);
-    eah21 = new ExerciseAttemptHistory(user2, exercise1, true);
-    eah22 = new ExerciseAttemptHistory(user2, exercise2, true);
+    ExerciseAttemptHistory eah11 = new ExerciseAttemptHistory(user1, exercise1, false);
+    ExerciseAttemptHistory eah12 = new ExerciseAttemptHistory(user1, exercise2, false);
+    ExerciseAttemptHistory eah21 = new ExerciseAttemptHistory(user2, exercise1, true);
+    ExerciseAttemptHistory eah22 = new ExerciseAttemptHistory(user2, exercise2, false);
 
     eah11.create();
     eah12.create();
     eah21.create();
     eah22.create();
 
+  }
+
+  @Test
+  public void testGetNextExercises(){
+    List<Exercise> exercises = ExerciseDAO.getInstance().getNextExercises(user1, topic1, 1000);
+    assertEquals(exercise1, exercises.get(0));
+    assertEquals(exercise2, exercises.get(1));
+    assertEquals(2, exercises.size());
+
+    exercises = ExerciseDAO.getInstance().getNextExercises(user2, topic1, 1000);
+    assertEquals(exercise2, exercises.get(0));
+    assertEquals(exercise1, exercises.get(1));
+    assertEquals(2, exercises.size());
+
+    exercises = ExerciseDAO.getInstance().getNextExercises(user1, topic2, 1000);
+    assertEquals(exercise2, exercises.get(0));
+    assertEquals(1, exercises.size());
+
+    exercises = ExerciseDAO.getInstance().getNextExercises(user2, topic2, 1000);
+    assertEquals(exercise2, exercises.get(0));
+    assertEquals(1, exercises.size());
+
+    assertEquals(1, ExerciseDAO.getInstance().getNextExercises(user1, topic1, 1).size());
   }
 
 }
