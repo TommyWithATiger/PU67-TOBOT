@@ -13,6 +13,7 @@ import RegisterPage from 'components/pages/RegisterPage'
 import RequestResetPage from 'components/pages/RequestResetPage'
 import PasswordResetPage from 'components/pages/ResetPasswordPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
+import ReferencePage from 'components/pages/ReferencePage'
 import { auth } from 'auth'
 import { api } from 'api'
 import { store } from 'store'
@@ -128,6 +129,13 @@ export const router = new Router({
       name: 'RelateSubjectTopic',
       component: RelateSubjectTopicPage,
       meta: { users: [ 'Admin', 'Teacher' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/reference/:id',
+      name: 'Reference',
+      component: ReferencePage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {

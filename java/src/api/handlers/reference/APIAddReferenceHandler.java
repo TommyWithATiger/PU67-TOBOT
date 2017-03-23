@@ -49,13 +49,17 @@ public class APIAddReferenceHandler {
       reference.create();
       return reference.createAbout().toString();
     } catch (MalformedURLException mue){
+      //TODO return response with error
       throw new APIBadRequestException("Link is not an URL");
     } catch (IOException ioe){
+      //TODO return response with error
       throw new APIBadRequestException("Cannot read/write to socket");
     } catch (HttpException he){
+      //TODO return response with error
       throw new APIBadRequestException("Cannot connect to URL");
     } catch (IllegalArgumentException iae){
-      throw new APIBadRequestException("URL is not properly formatted");
+      //TODO return response with error
+      throw new APIBadRequestException("URL is not properly formatted:" + iae.getMessage());
     }
   }
 }

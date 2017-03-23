@@ -28,6 +28,9 @@ const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
+const REFERENCE_GET_URL = `${API_URL}/reference/get/`
+const REFERENCE_GET_ID_URL = `${API_URL}/reference/get/?id=`
+
 export const api = {
   /**
    * Get the user from API.
@@ -113,6 +116,29 @@ export const api = {
    */
   getSubjectById (ctx, id, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_ID_URL + id, callback, error)
+  },
+
+  /**
+   * Get all references from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getReferences (ctx, callback, error) {
+    return this.getRequest(ctx, REFERENCE_GET_URL, callback, error)
+  },
+
+  /**
+   * Get the reference with the given id from API.
+   * @param {object} ctx Context.
+   * @param {integer} id The topic id.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getReferenceById (ctx, id, callback, error) {
+    return this.getRequest(ctx, REFERENCE_GET_ID_URL + id, callback, error)
   },
 
   /**

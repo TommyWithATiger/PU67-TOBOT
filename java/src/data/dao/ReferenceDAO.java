@@ -4,9 +4,7 @@ import data.Topic;
 import data.dao.util.FieldTuple;
 import data.reference.Reference;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 
 public class ReferenceDAO extends AbstractBaseDAO<Reference, Integer> {
 
