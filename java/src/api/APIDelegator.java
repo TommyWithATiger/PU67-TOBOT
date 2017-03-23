@@ -14,6 +14,7 @@ import api.handlers.relators.APIGetRelatedTopicsWithRatingCountHandler;
 import api.handlers.relators.APIRelateSubjectTopicHandler;
 import api.handlers.subject.APIAddSubjectHandler;
 import api.handlers.subject.APIGetSubjectHandler;
+import api.handlers.subject.APIJoinSubjectHandler;
 import api.handlers.topic.APIAddTopicHandler;
 import api.handlers.topic.APIGetTopicHandler;
 import api.handlers.user.APIGetUserInfoHandler;
@@ -89,6 +90,9 @@ public class APIDelegator {
     handlerRegistry.put("subject\\/get\\/\\?id=.*", APIGetSubjectHandler::getSubjectByID);
     handlerRegistry.put("subject\\/get\\/\\?title=.*", APIGetSubjectHandler::getSubjectsByTitle);
     handlerRegistry.put("subject\\/get", APIGetSubjectHandler::getAllSubjects);
+
+    handlerRegistry.put("subject\\/join/participant", APIJoinSubjectHandler::joinSubjectParticipantHandler);
+    handlerRegistry.put("subject\\/join/editor", APIJoinSubjectHandler::joinSubjectEditorHandler);
 
     handlerRegistry.put("topic\\/get\\/\\?id=.*", APIGetTopicHandler::getTopicByID);
     handlerRegistry.put("topic\\/get\\/\\?title=.*", APIGetTopicHandler::getTopicsByTitle);
