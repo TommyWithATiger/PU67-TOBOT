@@ -2,6 +2,7 @@ package server.connection;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -10,9 +11,14 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.entity.ContentLengthStrategy;
+import org.apache.http.impl.entity.StrictContentLengthStrategy;
+import org.apache.http.impl.io.ChunkedInputStream;
+import org.apache.http.impl.io.ContentLengthInputStream;
 import org.apache.http.impl.io.DefaultHttpRequestParser;
 import org.apache.http.impl.io.DefaultHttpResponseWriter;
 import org.apache.http.impl.io.HttpTransportMetricsImpl;
+import org.apache.http.impl.io.IdentityInputStream;
 import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.apache.http.impl.io.SessionOutputBufferImpl;
 import org.apache.http.message.BasicHeader;
@@ -36,14 +42,14 @@ public class ServerThread extends Thread {
 
     // Initiate input buffers
     sessionInputBuffer = new SessionInputBufferImpl(
-        new HttpTransportMetricsImpl(), 8192);
+        new HttpTransportMetricsImpl(), 33554432);
     sessionInputBuffer.bind(clientSocket.getInputStream());
     requestParser = new DefaultHttpRequestParser(sessionInputBuffer);
 
     // Initiate output streams and handlers
     outputStream = clientSocket.getOutputStream();
     sessionOutputBuffer = new SessionOutputBufferImpl(
-        new HttpTransportMetricsImpl(), 8192);
+        new HttpTransportMetricsImpl(), 33554432);
     sessionOutputBuffer.bind(outputStream);
     responseWriter = new DefaultHttpResponseWriter(sessionOutputBuffer);
   }
@@ -54,6 +60,7 @@ public class ServerThread extends Thread {
    */
   @Override
   public void run() {
+
     try {
       // Get and handle the request
       HttpRequest request = requestParser.parse();
@@ -68,10 +75,20 @@ public class ServerThread extends Thread {
         HttpEntityEnclosingRequest entityRequest = (HttpEntityEnclosingRequest) request;
         BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
 
-        byte[] responseContent = new byte[sessionInputBuffer.length()];
-        sessionInputBuffer.read(responseContent);
+        InputStream contentStream;
 
-        basicHttpEntity.setContent(new ByteArrayInputStream(responseContent));
+        ContentLengthStrategy contentLengthStrategy = StrictContentLengthStrategy.INSTANCE;
+        long len = contentLengthStrategy.determineLength(request);
+        if (len == ContentLengthStrategy.CHUNKED) {
+          contentStream = new ChunkedInputStream(sessionInputBuffer);
+        } else if (len == ContentLengthStrategy.IDENTITY) {
+          contentStream = new IdentityInputStream(sessionInputBuffer);
+        } else {
+          contentStream = new ContentLengthInputStream(sessionInputBuffer, len);
+        }
+
+        basicHttpEntity.setContent(contentStream);
+
         entityRequest.setEntity(basicHttpEntity);
 
         if (request.containsHeader("Content-Type")) {

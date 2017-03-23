@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -139,7 +141,17 @@ public class Reference {
    */
   public void setLink(String link) throws IOException, IllegalArgumentException, HttpException {
     if (LinkValidation.validateLink(this, link)) {
-      this.link = link;
+      if (referenceType == ReferenceType.VIDEO) {
+        String reg = "(?:youtube(?:-nocookie)?\\.com\\/(?:[^\\/\\n\\s]+\\/\\S+\\/|(?:v|e(?:mbed)?)\\/|\\S*?[?&]v=)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})";
+        Pattern pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(link);
+        if (matcher.find()) {
+          this.link = matcher.group(1);
+        } else {
+          throw new IllegalArgumentException("Could not get Youtube video ID");
+        }
+
+      } else this.link = link;
     }
   }
 
