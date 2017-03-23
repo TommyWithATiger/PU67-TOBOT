@@ -3,10 +3,11 @@ pipeline:
     image: plugins/ssh
     host: ci.niklasmh.no
     username: tobot
-    password: ${DEPLOY_PASSWORD}
+    key: ${SSH_KEY}
     port: 22
     when:
       event: push
       branch: development
     script:
-      - echo "test2" >> file.txt
+      - echo Test >> file.txt
+      - echo Testing ...
