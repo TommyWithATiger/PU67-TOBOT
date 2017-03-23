@@ -2,11 +2,12 @@ pipeline:
   deploy:
     image: plugins/ssh
     host: ci.niklasmh.no
-    username: tobot
+    username: root
     port: 22
     when:
       event: push
       branch: development
     script:
+      - cd /home/tobot
       - echo Test >> file.txt
       - echo Testing ...
