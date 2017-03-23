@@ -2,7 +2,8 @@ pipeline:
   deploy:
     image: plugins/ssh
     host: ci.niklasmh.no
-    username: root
+    username: tobot
+    password: ${DEPLOY_PASSWORD}
     port: 22
     when:
       event: push
