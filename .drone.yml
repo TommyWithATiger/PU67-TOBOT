@@ -9,5 +9,5 @@ pipeline:
       event: push
       branch: development
     script:
-      - echo "test" >> file.txt
+      - echo "test2" >> file.txt
       - make docker-prod
