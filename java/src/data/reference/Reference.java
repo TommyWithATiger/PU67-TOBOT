@@ -25,7 +25,9 @@ import org.json.JSONObject;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findAllReferences", query = "SELECT r FROM Reference r"),
-    @NamedQuery(name = "findReferencesByTitle", query = "SELECT r FROM Reference r WHERE r.title LIKE CONCAT('%', :title, '%')")
+    @NamedQuery(name = "findReferencesByTitle", query = "SELECT r FROM Reference r WHERE r.title LIKE CONCAT('%', :title, '%')"),
+    @NamedQuery(name = "findReferencesByTag", query = "SELECT r FROM Reference r "
+        + "JOIN Topic t WHERE t = :tag AND t MEMBER OF r.tags"),
 })
 @Table
 public class Reference {
