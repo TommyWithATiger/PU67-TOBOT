@@ -1,5 +1,5 @@
 pipeline:
-  ssh:
+  deploy:
     image: plugins/ssh
     host: ci.niklasmh.no
     username: tobot
@@ -11,3 +11,4 @@ pipeline:
       - cd /home/tobot
       - date >> file.txt
       - echo Testing ...
+      - make drone-prod
