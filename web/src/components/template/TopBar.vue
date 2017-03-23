@@ -16,8 +16,9 @@
           v-if="authenticated"
           @click="userMenu = !userMenu">
           {{ state.user.username }} 
-          <svg viewBox="0 0 10 10" class="user-menu-icon">
-            <rect x="0" y="0" width="5" height="5" transform="rotate(-45)" />
+          <svg viewBox="0 0 10 10" :class="`user-menu-icon ${userMenu ? 'open' : ''}`">
+            <rect x="-7" y="7" width="5" height="5" transform="rotate(-45)" v-if="userMenu" />
+            <rect x="0" y="0" width="5" height="5" transform="rotate(-45)" v-else />
           </svg>
         </button>
         <div :class="`user-menu ${userMenu ? 'show' : ''}`" v-if="authenticated">
@@ -98,15 +99,34 @@ export default {
       let theme = this.$store.state.theme
       let hue = this.$store.state.hue
 
-      switch (this.$store.state.theme) {
-        case 'dark':
+      switch (parseInt(this.$store.state.hue)) {
+        case 0xf0f0f0:
           theme = 'light'
-          hue = 0x00ffff
+          hue = 0x0099ff
           break
-        case 'light':
+        case 0x0099ff:
+          theme = 'light'
+          hue = 0x22cc33
+          break
+        case 0x22cc33:
+          theme = 'light'
+          hue = 0x6f6f6f
+          break
+        case 0x6f6f6f:
           theme = 'dark'
-          hue = 0x00ff00
+          hue = 0xff8800
           break
+        case 0xff8800:
+          theme = 'dark'
+          hue = 0xcc3322
+          break
+        case 0xcc3322:
+          theme = 'dark'
+          hue = 0xf0f0f0
+          break
+        default:
+          theme = 'dark'
+          hue = 0xff8800
       }
 
       this.$store.state.theme = theme
@@ -200,7 +220,12 @@ export default {
 .user-menu-icon {
   fill: #000;
   width: 10px;
-  margin-top: 4px;
-  margin-bottom: -4px;
+  margin-top: 5px;
+  margin-bottom: -5px;
+}
+
+.user-menu-icon.open {
+  margin-top: -2px;
+  margin-bottom: 2px;
 }
 </style>

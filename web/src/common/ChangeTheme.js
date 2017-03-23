@@ -13,8 +13,18 @@ export class ChangeTheme {
         }
       } catch (err) {}
 
-      for (let i = hue, n = 1; i >= hue / 2; i -= hue / 16, n++) {
-        document.body.style.setProperty('--p-color-' + n, '#' + Format.digits(Math.floor(i).toString(16), 6))
+      let r = Math.floor(hue / 256 / 256)
+      let g = Math.floor((hue - r * 256 * 256) / 256)
+      let b = hue - g * 256
+
+      for (let i = 256, n = 1; i >= 256 / 2; i -= 256 / 16, n++) {
+        let rf = Format.digits(Math.floor(r).toString(16), 2)
+        let gf = Format.digits(Math.floor(g).toString(16), 2)
+        let bf = Format.digits(Math.floor(b).toString(16), 2)
+        document.body.style.setProperty('--p-color-' + n, '#' + rf + gf + bf)
+        r *= 15 / 16
+        g *= 15 / 16
+        b *= 15 / 16
       }
 
       let max = 256 * 256 * 256 - 1

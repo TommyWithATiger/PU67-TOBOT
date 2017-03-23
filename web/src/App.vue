@@ -211,9 +211,14 @@ input[type=text]:focus, input:focus {
   transition-duration: .05s;
 }
 
-a {
+.link, .colored-link, a {
+  -webkit-apperance: none;
   color: #00f;
-  color: var(--p-color-6);
+  color: var(--nn-color-2);
   text-decoration: none;
+}
+
+.colored-link {
+  color: var(--p-color-2);
 }
 </style>
