@@ -13,7 +13,7 @@ import org.apache.http.impl.io.SessionInputBufferImpl;
 
 public class ImageSaver {
 
-  public static final String BASEURL = "cdn.tobot.hummel.io:8080/images/";
+  public static final String BASEURL = "http://cdn.tobot.hummel.io:8080/images/";
 
   public static String saveBase64Image(String base64) {
     try {
