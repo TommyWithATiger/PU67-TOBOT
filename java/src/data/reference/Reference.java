@@ -137,18 +137,11 @@ public class Reference {
   public void setLink(String link) throws IOException, IllegalArgumentException, HttpException {
     if (LinkValidation.validateLink(this, link)) {
       if (referenceType == ReferenceType.VIDEO) {
-        /*Pattern regrex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com\\/(?:[^\\/\\n\\s]+\\/\\S+\\/|(?:v|e(?:mbed)?)\\/|\\S*?[?&]v=)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})", Pattern.CASE_INSENSITIVE);
-        regrex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com\\/(?:[^\\/\\n\\s]+\\/\\S+\\/|(?:v|e(?:mbed)?)\\/|\\S*?[?&]v=)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = regrex.matcher(link);
-        System.out.println(matcher.matches());*/
-
         String reg = "(?:youtube(?:-nocookie)?\\.com\\/(?:[^\\/\\n\\s]+\\/\\S+\\/|(?:v|e(?:mbed)?)\\/|\\S*?[?&]v=)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})";
         Pattern pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(link);
-
         if (matcher.find()) {
           this.link = matcher.group(1);
-          System.out.println(matcher.group(1));
         } else {
           throw new IllegalArgumentException("Could not get Youtube video ID");
         }
