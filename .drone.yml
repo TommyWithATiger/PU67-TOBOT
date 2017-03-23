@@ -1,5 +1,5 @@
 pipeline:
-  deploy:
+  deployment:
     image: plugins/ssh
     host: ci.niklasmh.no
     username: tobot
@@ -7,7 +7,7 @@ pipeline:
     when:
       event: push
       branch: development
-    scripts:
+    script:
       - cd /home/tobot
       - date >> file.txt
       - echo Testing ...
