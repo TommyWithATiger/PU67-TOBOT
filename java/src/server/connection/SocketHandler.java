@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import org.apache.commons.io.IOUtils;
+import sun.nio.ch.IOUtil;
 
 /**
  * The main server class
@@ -18,6 +20,7 @@ public class SocketHandler extends Thread {
     try {
       // Bind the socket
       serverSocket = new ServerSocket(PORT);
+      serverSocket.setReceiveBufferSize(33554432);
     } catch (IOException exception) {
       // If the server cannot bind to the port, it will shutdown
       System.out.println(
@@ -36,6 +39,8 @@ public class SocketHandler extends Thread {
       try {
         // Accept all new connections and start a new thread for them
         Socket client = serverSocket.accept();
+        client.setReceiveBufferSize(33554432);
+        client.setSendBufferSize(33554432);
         ServerThread clientThread = new ServerThread(client);
         clientThread.start();
       } catch (SocketException se) {
