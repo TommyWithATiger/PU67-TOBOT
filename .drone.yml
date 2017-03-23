@@ -3,7 +3,6 @@ pipeline:
     image: plugins/ssh
     host: ci.niklasmh.no
     username: tobot
-    key: ${SSH_KEY}
     port: 22
     when:
       event: push
