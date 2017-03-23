@@ -27,12 +27,13 @@ public class JSONCheckerHelper {
   }
 
   /**
-   * A helper for checking if the given HttpRequest contains the required fields in the JSON,
-   * and getting the fields if they all exist
+   * A helper for checking if the given HttpRequest contains the required field in the JSON,
+   * and getting the field if it exists
    * @param httpRequest The HttpRequest to check
    * @param field Field to get
-   * @param tClass Class of the values in the fields
-   * @throws APIBadRequestException Thrown if the JSONObject does not contain one of the fields
+   * @param tClass Class of the value in the field
+   * @throws APIBadRequestException Thrown if the JSONObject does not contain the field, or the value
+   * of the field is not of the correct type.
    * @throws APIErrorException Thrown if there is a IOException while reading the content
    * @return Value of field, casted to tClass
    */
