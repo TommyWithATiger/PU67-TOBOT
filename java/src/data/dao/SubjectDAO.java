@@ -81,43 +81,19 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
    * @return List of Subject objects that match the query
    */
   public List<Subject> findSubjectsByTopic(Topic topic) {
-    List<Subject> entityList;
-    try {
-      EntityManager entityManager = emFactory.createEntityManager();
-      Query query = entityManager.createNativeQuery(
-          "SELECT * FROM SUBJECT WHERE id IN (SELECT Subject_ID FROM SUBJECT_TOPIC WHERE topics_ID = ?)",
-          Subject.class);
-      query.setParameter(1, topic.getId());
-      entityList = (List<Subject>) query.getResultList(); //FIXME find a better fix
-      entityManager.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      entityList = null;
-    }
-    return entityList;
+    return super.find("findSubjectsByTopic",
+        new FieldTuple("topicID", topic.getId()));
   }
 
   /**
    * Finds subjects with user as an editor
    *
-   * @param user, the user to query for
+   * @param editor, the user to query for
    * @return List of Subject objects that has user as an editor
    */
-  public List<Subject> findSubjectsByEditor(User user) {
-    List<Subject> entityList;
-    try {
-      EntityManager entityManager = emFactory.createEntityManager();
-      Query query = entityManager.createNativeQuery(
-          "SELECT * FROM SUBJECT WHERE id IN (SELECT Subject_ID FROM EDITORS WHERE editors_ID = ?)",
-          Subject.class);
-      query.setParameter(1, user.getId());
-      entityList = (List<Subject>) query.getResultList(); //FIXME find a better fix
-      entityManager.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      entityList = null;
-    }
-    return entityList;
+  public List<Subject> findSubjectsByEditor(User editor) {
+    return super.find("findSubjectsByEditor",
+        new FieldTuple("editorID", editor.getId()));
   }
 
   /**
