@@ -29,6 +29,9 @@ public class StyleHandler {
         if (splitStyle.length != 2) {
           continue;
         }
+        if (splitStyle[0].equals("font-family")) {
+          splitStyle[1] = splitStyle[1].replaceAll("\\+", " ");
+        }
         styleMap.put(splitStyle[0], splitStyle[1]);
       }
     }
