@@ -150,7 +150,8 @@ public class Reference {
         } else {
           throw new IllegalArgumentException("Could not get Youtube video ID");
         }
-
+      } else if (!link.substring(0, 4).equals("http")) {
+        this.link = "http://" + link;
       } else this.link = link;
     }
   }

@@ -343,6 +343,7 @@ export default {
             if (!context.hasTag(context.tags[tagIndex].id)) {
               context.createTag(context.tags[tagIndex].id, context.tags[tagIndex].title)
             }
+            tag.parentNode.removeChild(tag)
           }
           tag.classList.toggle('tag_search_result', true)
           tag.textContent = this.tags[tagIndex].title
@@ -535,48 +536,6 @@ export default {
   background-color: var(--n-color-2);
 }
 
-.add_tag_container {
-  z-index: 11;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--n-color-2);
-  border: 2px solid var(--n-color-4);
-  border-radius: 15px;
-  padding: 20px;
-  width: 300px;
-  opacity: 1;
-  min-height: 100px;
-}
-
-.add_tag_container input[type=text] {
-  width: 260px;
-}
-
-.close_tag_input {
-  position: absolute;
-  border-radius: 3px;
-  left: 320px;
-  top: 8px;
-  font-size: 15px;
-  width: 12px;
-  height: 12px;
-}
-
-.add_tag_input {
-  width: 320px;
-  margin-left: -20px;
-  padding-left: 20px;
-  border-bottom: 2px solid var(--n-color-4);
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-}
-
-.close_tag_input:hover {
-  cursor: pointer;
-}
-
 .add_tag_full {
   z-index: 10;
   position: fixed;
@@ -586,11 +545,6 @@ export default {
   left: 0;
   top: 0;
   background-color: var(--n-color-2);
-}
-
-.tags {
-  width: 300px;
-  min-height: 50px;
 }
 
 .topic_tag {
@@ -646,6 +600,56 @@ export default {
 
 .add_exercise {
   font-size: 25px;
+}
+
+</style>
+
+<style scoped>
+.add_tag_container input[type=text] {
+  width: 260px;
+}
+
+.close_tag_input {
+  position: absolute;
+  border-radius: 3px;
+  left: 320px;
+  top: 8px;
+  font-size: 15px;
+  width: 12px;
+  height: 12px;
+}
+
+.add_tag_input {
+  width: 320px;
+  margin-left: -20px;
+  padding-left: 20px;
+  border-bottom: 2px solid var(--n-color-4);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.close_tag_input:hover {
+  cursor: pointer;
+}
+
+.add_tag_container {
+  z-index: 11;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--n-color-2);
+  border: 2px solid var(--n-color-4);
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;
+  opacity: 1;
+  min-height: 100px;
+}
+
+.tags {
+  width: 300px;
+  min-height: 50px;
 }
 
 </style>

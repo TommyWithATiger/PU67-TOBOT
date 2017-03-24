@@ -1,16 +1,22 @@
 package api.handlers.reference;
 
 
+import static api.helpers.JSONCheckerHelper.getJSONArray;
 import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
+import data.Topic;
+import data.dao.TopicDAO;
 import data.reference.Reference;
 import data.reference.ReferenceType;
 import data.reference.ReferenceTypeConverter;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 
@@ -23,6 +29,7 @@ public class APIAddReferenceHandler {
    *        link (String): the reference link
    *        type (String): the reference type, has 7 valid values
    *                      Article, Video, Website, Image, Document, Slide, Notes
+   *        tags (list(int)): the topic ID that are the tags for this reference
    *
    * @param httpRequest The request to handle
    * @return A JSON string with the data from reference.createAbout
@@ -44,8 +51,17 @@ public class APIAddReferenceHandler {
       throw new APIBadRequestException("Reference type is not valid");
     }
 
+    List<Topic> topics = getJSONArray(httpRequest, Integer.class, "tags").stream()
+        .map(id -> TopicDAO.getInstance().findById(id)).collect(Collectors.toList());
+
+    boolean hadNulls = topics.removeAll(Collections.singleton(null));
+    if(hadNulls){
+      throw new APIBadRequestException("One of the topics does not exist");
+    }
+
     try {
       Reference reference = new Reference(title, description, link, type);
+      reference.addTags(topics);
       reference.create();
       return reference.createAbout().toString();
     } catch (MalformedURLException mue){
@@ -55,7 +71,7 @@ public class APIAddReferenceHandler {
     } catch (HttpException he){
       throw new APIBadRequestException("Cannot connect to URL");
     } catch (IllegalArgumentException iae){
-      throw new APIBadRequestException("URL is not properly formatted");
+      throw new APIBadRequestException("URL is not properly formatted:" + iae.getMessage());
     }
   }
 }

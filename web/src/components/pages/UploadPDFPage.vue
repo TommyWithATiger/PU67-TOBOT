@@ -1,5 +1,6 @@
 <template>
 	<div class="page-content">
+    <h2> Upload exercise PDF </h2>
     <div id="feedback" class="hidden feedback">
       Could not read the uploaded file. Is it a PDF?
     </div>
