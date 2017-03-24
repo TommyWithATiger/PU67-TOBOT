@@ -19,10 +19,13 @@ import javax.persistence.Table;
     @NamedQuery(name = "findParticipatingRatingBySubjectTopic", query = "SELECT r FROM Rating r JOIN User u JOIN Subject s JOIN Topic t"
             + " WHERE u MEMBER OF s.participants AND u.id = r.ratingKeyPK.userID"
             + " AND t MEMBER OF s.topics AND t.id = r.ratingKeyPK.topicID"
-            + " AND s.id = :subjectID AND t.id = :topicID"
+            + " AND s.id = :subjectID AND t.id = :topicID"),
+    @NamedQuery(name = "findRatingBySubjectUser", query = "SELECT r FROM Rating r JOIN User u JOIN Subject s JOIN Topic t"
+            + " WHERE t MEMBER OF s.topics"
+            + " AND s.id = :subjectID AND u.id = :userID"
     )
 })
-@Table
+@Table(name = "RATING_INT")
 public class Rating extends AbstractBaseEntity {
 
   @EmbeddedId

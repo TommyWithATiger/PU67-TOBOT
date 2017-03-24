@@ -13,6 +13,14 @@ import java.util.Collection;
     @NamedQuery(name = "findAllTopics", query = "SELECT t FROM Topic t"),
     @NamedQuery(name = "findTopicsByTitle", query = "SELECT t FROM Topic t WHERE t.title LIKE CONCAT('%', :title, '%')"),
     @NamedQuery(name = "findTopicsByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId"),
+    @NamedQuery(name = "findTopicBySubjectUserSortedByRating", query =
+          " SELECT t FROM Rating r JOIN User u JOIN Subject s JOIN Topic t"
+        + " WHERE t MEMBER OF s.topics"
+        + " AND s.id = :subjectID"
+        + " AND u.id = :userID AND r.ratingKeyPK.userID = :userID"
+        + " AND t.id = r.ratingKeyPK.topicID"
+        + " ORDER BY r.rating"
+    )
 })
 @Table
 public class Topic extends AbstractBaseEntity {

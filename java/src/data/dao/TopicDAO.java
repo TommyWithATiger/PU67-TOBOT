@@ -1,7 +1,9 @@
 package data.dao;
 
+import data.Subject;
 import data.dao.util.FieldTuple;
 import data.Topic;
+import data.user.User;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 
@@ -36,6 +38,21 @@ public class TopicDAO extends AbstractBaseDAO<Topic, Integer> {
   public List<Topic> findTopicsByTitle(String title) {
     return super.find("findTopicsByTitle", new FieldTuple("title", title));
   }
+
+  /**
+   * Finds Ratings related to a Subject and a User, sorted by rating (number of stars).
+   * Only ratings for topics related to the subject are returned.
+   *
+   * @param subject, the related subject object
+   * @param user, the related user object
+   * @return List of Rating objects
+   */
+  public List<Topic> findTopicBySubjectUserSortedByRating(Subject subject, User user) {
+    return super.find("findTopicBySubjectUserSortedByRating",
+        new FieldTuple("subjectID", subject.getId()),
+        new FieldTuple("userID", user.getId()));
+  }
+
 
   /**
    * Returns the static TopicDAO instance
