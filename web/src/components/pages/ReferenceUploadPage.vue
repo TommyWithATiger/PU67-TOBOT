@@ -1,8 +1,6 @@
 <template>
   <div class="page-content">
-    <div class="error"> 
-      {{ error }}
-    </div>
+    <h2>Add reference</h2>
     <div class="reference_form">
       <div class="input-field">
         <label for="title"> Title: </label>
@@ -33,6 +31,9 @@
         </select>
       </div>  
       <input class="submit_button" type="submit" v-on:click="submitReference"/>
+      <div class="error"> 
+        {{ error }}
+      </div>
     </div>
     <div class="reference_form_tags">
       <div class="topic_list">
@@ -99,9 +100,21 @@ export default {
       }
 
       let tagIDs = []
-      for (let tagIndex = 0;  tagIndex < tags.length; tagIndex++) {
-        tagID[tagIndex] = parseInt(tags[tagIndex].getAttribute('tagID'))
+      for (let tagIndex = 0; tagIndex < tags.length; tagIndex++) {
+        tagIDs[tagIndex] = parseInt(tags[tagIndex].getAttribute('tagID'))
       }
+
+      api.addReference(this, {
+        title: this.title,
+        description: this.description,
+        link: this.link,
+        type: this.type,
+        tags: tagIDs
+      }, (data) => {
+        this.$router.push('reference/' + data.id)
+      }, () => {
+        this.error = 'Link is malformed or site cannot accessed'
+      })
     },
     createTag (id, title) {
       let tag = document.createElement('div')
@@ -190,6 +203,7 @@ export default {
 
 .error {
   color: #ff0000;
+  margin-top: 10px;
 }
 
 .input-field label {
