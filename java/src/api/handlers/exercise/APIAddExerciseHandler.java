@@ -1,5 +1,6 @@
 package api.handlers.exercise;
 
+import static api.helpers.JSONCheckerHelper.getJSONArray;
 import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserFromRequest;
@@ -11,6 +12,9 @@ import data.dao.TopicDAO;
 import data.exercise.Exercise;
 import data.exerciserating.ExerciseRatingEnum;
 import data.user.User;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.http.HttpRequest;
 
 public class APIAddExerciseHandler {
@@ -22,7 +26,7 @@ public class APIAddExerciseHandler {
    *        text (String): the text of the exercise
    *        difficulty (String): the difficulty of the exercise, as rated by the uploader of the
    *  exercise. Valid values are "Easy", "Medium",  "Hard", or "Unknown".
-   *        topicID (Integer): id of the topic the exercise is related to
+   *        topicIDs (Array of integers): id's of the topic's the exercise is related to
    *        solution (String, optional): the solution of the exercise
    *
    * @param httpRequest The request to handle
@@ -51,15 +55,17 @@ public class APIAddExerciseHandler {
       throw new APIBadRequestException("Invalid difficulty");
     }
 
-    Topic topic = TopicDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "topicID"));
-    if(topic == null){
-      throw new APIBadRequestException("Topic does not exist");
+    List<Topic> topics = getJSONArray(httpRequest, Integer.class, "topicIDs").stream()
+        .map(id -> TopicDAO.getInstance().findById(id)).collect(Collectors.toList());
+
+    boolean hadNulls = topics.removeAll(Collections.singleton(null));
+    if(hadNulls){
+      throw new APIBadRequestException("One of the topics does not exist");
     }
 
     Exercise exercise = new Exercise(title, text, solution);
+    exercise.addToTopics(topics);
     exercise.create();
-    topic.addExercise(exercise);
-    topic.update();
 
     ExerciseRatingDAO.getInstance().createOrUpdate(user, exercise, difficulty);
 
