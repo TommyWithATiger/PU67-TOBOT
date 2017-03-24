@@ -14,6 +14,7 @@ import api.handlers.relators.APIGetRelatedTopicsWithRatingCountHandler;
 import api.handlers.relators.APIRelateSubjectTopicHandler;
 import api.handlers.subject.APIAddSubjectHandler;
 import api.handlers.subject.APIGetSubjectHandler;
+import api.handlers.subject.APIJoinSubjectHandler;
 import api.handlers.topic.APIAddTopicHandler;
 import api.handlers.topic.APIGetTopicHandler;
 import api.handlers.user.APIGetUserInfoHandler;
@@ -90,10 +91,17 @@ public class APIDelegator {
     handlerRegistry.put("subject\\/get\\/\\?title=.*", APIGetSubjectHandler::getSubjectsByTitle);
     handlerRegistry.put("subject\\/get", APIGetSubjectHandler::getAllSubjects);
 
+    handlerRegistry.put("subject\\/join/participant", APIJoinSubjectHandler::joinSubjectParticipantHandler);
+    handlerRegistry.put("subject\\/join/editor", APIJoinSubjectHandler::joinSubjectEditorHandler);
+
     handlerRegistry.put("topic\\/get\\/\\?id=.*", APIGetTopicHandler::getTopicByID);
     handlerRegistry.put("topic\\/get\\/\\?title=.*", APIGetTopicHandler::getTopicsByTitle);
     handlerRegistry.put("topic\\/get", APIGetTopicHandler::getAllTopics);
     handlerRegistry.put("topic\\/rating\\/get", APIGetTopicRatingHandler::getTopicsWithRatings);
+
+    handlerRegistry.put("topic\\/subject\\/ordered",
+        APIGetTopicHandler::getTopicsBySubjectSortedByRating);
+    // might want change this to order by a more advanced method in the future
 
     // Ratings
     handlerRegistry.put("rating\\/rate", APIRateTopicHandler::rateTopic);

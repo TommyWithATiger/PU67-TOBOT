@@ -1,6 +1,5 @@
 package api.handlers.topic;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
 import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserFromRequest;
@@ -24,12 +23,8 @@ public class APIAddTopicHandler {
     // User must be logged in
     getUserFromRequest(httpRequest, ", cannot create a new topic");
 
-    String content = checkAndGetEntityContent(httpRequest);
-    //String title = checkAndGetJSON(content).getString("title");
-    //String description = checkAndGetJSON(content).getString("description");
     String title = getJSONField(httpRequest, String.class, "title");
     String description = getJSONField(httpRequest, String.class, "description");
-
 
     Topic topic = new Topic(title, description);
     topic.create();

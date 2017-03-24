@@ -14,7 +14,7 @@ public class RatingTest extends BaseTest {
   @Test
   public void testCreate() throws Exception {
     RatingKey rk = new RatingKey(1, 1);
-    Rating rating = new Rating(rk.getUserID(), rk.getTopicID(), RatingEnum.GOOD);
+    Rating rating = new Rating(rk.getUserID(), rk.getTopicID(), RatingEnum.Good);
 
     rating.create();
 
@@ -25,7 +25,7 @@ public class RatingTest extends BaseTest {
   @Test
   public void testDelete() throws Exception {
     RatingKey rk = new RatingKey(1, 1);
-    Rating rating = new Rating(rk.getUserID(), rk.getTopicID(), RatingEnum.GOOD);
+    Rating rating = new Rating(rk.getUserID(), rk.getTopicID(), RatingEnum.Good);
     rating.create();
 
     rating.delete();
@@ -37,14 +37,14 @@ public class RatingTest extends BaseTest {
   @Test
   public void testUpdate() throws Exception {
     RatingKey rk = new RatingKey(1, 1);
-    Rating rating = new Rating(rk.getUserID(), rk.getTopicID(), RatingEnum.GOOD);
+    Rating rating = new Rating(rk.getUserID(), rk.getTopicID(), RatingEnum.Good);
     rating.create();
 
-    rating.setRating(RatingEnum.POOR);
+    rating.setRating(RatingEnum.Poor);
     rating.update();
 
     Rating rating1 = RatingDAO.getInstance().findById(new RatingKey(1, 1));
-    assertEquals(RatingEnum.POOR, rating1.getRating());
+    assertEquals(RatingEnum.Poor, rating1.getRating());
   }
 
 }

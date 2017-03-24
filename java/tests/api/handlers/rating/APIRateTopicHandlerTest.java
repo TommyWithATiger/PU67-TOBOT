@@ -12,7 +12,6 @@ import data.dao.RatingDAO;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
-import data.rating.RatingConverter;
 import data.rating.RatingEnum;
 import data.rating.RatingKey;
 import java.io.ByteArrayInputStream;
@@ -87,12 +86,12 @@ public class APIRateTopicHandlerTest extends BaseTest {
     Rating rating = RatingDAO.getInstance()
         .findById(new RatingKey(user.getId(), topic.getId()));
     assertNotNull(rating);
-    assertEquals(RatingEnum.GOOD, rating.getRating());
+    assertEquals(RatingEnum.Good, rating.getRating());
   }
 
   @Test
   public void testRateTopicRatingExists() {
-    Rating rating = new Rating(user.getId(), topic.getId(), RatingEnum.GOOD);
+    Rating rating = new Rating(user.getId(), topic.getId(), RatingEnum.Good);
     rating.create();
 
     HttpRequest httpRequest = buildRequestContent("rate/url", "POST", true,
@@ -103,7 +102,7 @@ public class APIRateTopicHandlerTest extends BaseTest {
     Rating ratingResult = RatingDAO.getInstance()
         .findById(new RatingKey(user.getId(), topic.getId()));
     assertNotNull(ratingResult);
-    assertEquals(RatingEnum.POOR, ratingResult.getRating());
+    assertEquals(RatingEnum.Poor, ratingResult.getRating());
   }
 
   private HttpRequest buildRequest(String url, String method, boolean setLoggedIn) {
@@ -118,7 +117,7 @@ public class APIRateTopicHandlerTest extends BaseTest {
   private HttpRequest buildRequestContent(String url, String method, boolean setLoggedIn) {
     JSONObject content = new JSONObject();
     content.put("topicID", topic.getId());
-    content.put("rating", RatingConverter.convertEnumToFullRatingName(RatingEnum.GOOD));
+    content.put("rating", RatingEnum.Good.toString());
 
     return buildRequestContent(url, method, setLoggedIn, content.toString());
   }
