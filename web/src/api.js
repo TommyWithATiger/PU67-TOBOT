@@ -30,6 +30,8 @@ const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
 const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
 
+const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
+
 export const api = {
   /**
    * Get the user from API.
@@ -298,6 +300,29 @@ export const api = {
     .then(res => res.json())
     .then(callback)
     .catch(error)
+  },
+
+  /**
+   * Create exercise
+   * @param {object} ctx Context.
+   * @param {string} content Exercise content, that is the HTML
+   * @param {array} tags Array of topic ids for the exercise
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  createExercise (ctx, content, tags, callback, error) {
+    let data = {
+      title: '',
+      text: content,
+      difficulty: 'Unknown',
+      topicIDs: tags
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, CREATE_EXERCISE_URL, req, callback, error)
   },
 
   /**
