@@ -243,6 +243,18 @@ public class Subject extends AbstractBaseEntity {
   }
 
   /**
+   * Returns true if the user is an participant of this subject
+   *
+   * @param user, the user to check for
+   * @return boolean, true if user is participant
+   */
+  public boolean isParticipant(User user) {
+    return participants.contains(user);
+  }
+
+  /**
+
+  /**
    * Get the participants of this subject
    *
    * @return Collection of User Objects
