@@ -5,6 +5,11 @@
     </div>
 		<div class="context_container" v-html="creationContext">
 		</div>
+    <div class="global_exercise_options">
+      <div class="add_exercise" v-on:click="toggleAddExercise">
+        +
+      </div>
+    </div>
     <div class="add_tag_full hidden" id="add_tag_background">
       
     </div>
@@ -45,7 +50,8 @@ export default {
       },
       selected: null,
       tags: [],
-      submitInfo: ''
+      submitInfo: '',
+      creation: false
     }
   },
   created () {
@@ -69,74 +75,25 @@ export default {
   },
   mounted () {
     let exercises = document.getElementsByClassName('exercise')
-    let context = this
 
     for (let index = 0; index < exercises.length; index++) {
-      let exercise = exercises[index]
-
-      exercise.onmousedown = function (event) {
-        if (context.selected === null) {
-          if (context.hoveringBottomOfExercise(exercise, event)) {
-            context.moving.exercise = exercise
-            context.moving.direction = 'down'
-          } else if (context.hoveringTopOfExercise(exercise, event)) {
-            context.moving.exercise = exercise
-            context.moving.direction = 'up'
-          }
-        }
-        if (!(context.hoveringTopOfExercise(exercise, event) || context.hoveringBottomOfExercise(exercise, event))) {
-          context.toggleSelected(exercise)
-        }
-        event.stopPropagation()
-      }
-
-      exercise.onmousemove = function (event) {
-        if (context.selected === null) {
-          if (context.hoveringTopOfExercise(exercise, event)) {
-            if (exercise.hasChildNodes() && context.canMoveExerciseUp(exercise)) {
-              exercise.style.cursor = 'ns-resize'
-            } else if (exercise.hasChildNodes()) {
-              exercise.style.cursor = 's-resize'
-            } else if (context.canMoveExerciseUp(exercise)) {
-              exercise.style.cursor = 'n-resize'
-            } else {
-              exercise.style.cursor = 'pointer'
-            }
-          } else if (context.hoveringBottomOfExercise(exercise, event)) {
-            if (exercise.hasChildNodes() && context.canMoveExerciseUp(exercise)) {
-              exercise.style.cursor = 'ns-resize'
-            } else if (exercise.hasChildNodes()) {
-              exercise.style.cursor = 'n-resize'
-            } else if (context.canMoveExerciseDown(exercise)) {
-              exercise.style.cursor = 's-resize'
-            } else {
-              exercise.style.cursor = 'pointer'
-            }
-          } else {
-            exercise.style.cursor = 'pointer'
-          }
-        } else {
-          if (context.selected === exercise) {
-            exercise.style.cursor = 'pointer'
-          } else {
-            exercise.style.cursor = 'default'
-          }
-        }
-      }
-
-      document.onselectstart = function (event) {
-        return false
-      }
-
-      let exerciseContainer = document.getElementsByClassName('container')[0]
-      exerciseContainer.style.height = parseFloat(exerciseContainer.lastChild.style.top) + this.getHeight(exerciseContainer.lastChild) + 'pt'
+      this.addExerciseEventHandlers(exercises[index])
     }
+
+    document.onselectstart = function (event) {
+      return false
+    }
+
+    let words = document.getElementsByClassName('p')
+    for (let index = 0; index < words.length; index++) {
+      let word = words[index]
+      word.onclick = this.createExercise
+    }
+
+    let exerciseContainer = document.getElementsByClassName('container')[0]
+    exerciseContainer.style.height = parseFloat(exerciseContainer.lastChild.style.top) + this.getHeight(exerciseContainer.lastChild) + 'pt'
   },
   methods: {
-    setupExerciseHandlers () {
-      // Add handlers for dragging on the top/bottom
-      // Add handlers for deleting, and selecting the exercise
-    },
     deleteSelected (event) {
       let topSelected = parseFloat(this.selected.style.top)
       let firstChild = this.selected.firstChild
@@ -144,7 +101,6 @@ export default {
         firstChild.style.top = topSelected + parseFloat(firstChild.style.top) + 'pt'
         this.selected.removeChild(firstChild)
         this.selected.parentNode.insertBefore(firstChild, this.selected)
-        // statement
       }
       this.blurOtherExercises(this.selected, false)
       this.selected.parentNode.removeChild(this.selected)
@@ -225,7 +181,7 @@ export default {
     },
     moveExerciseTopUp (exercise, y) {
       let node = exercise
-      while ((node = node.previousSibling) !== null) {
+      while ((node = exercise.previousSibling) !== null) {
         if (node.offsetTop + node.parentNode.offsetTop < y || node.classList.contains('exercise')) {
           break
         }
@@ -408,6 +364,86 @@ export default {
       } else {
         this.submitInfo = 'Make sure all exercises have at least one tag before submitting. All exercises missing tags have been marked red'
       }
+    },
+    toggleAddExercise () {
+      this.creation = !this.creation
+      document.body.style.cursor = 'default'
+      if (this.creation) {
+        document.body.style.cursor = 'crosshair'
+      }
+    },
+    createExercise (event) {
+      if (this.creation) {
+        event.stopPropagation()
+        let targetNode = event.target
+        if (targetNode.parentNode.classList.contains('exercise')) {
+          return
+        }
+        let exercise = document.createElement('div')
+        exercise.classList.toggle('exercise', true)
+        exercise.style.top = targetNode.style.top
+        exercise.style.height = this.getHeight(targetNode) + 'pt'
+        targetNode.parentNode.insertBefore(exercise, targetNode)
+        targetNode.parentNode.removeChild(targetNode)
+        targetNode.style.top = 0
+        exercise.appendChild(targetNode)
+        this.addExerciseEventHandlers(exercise)
+        this.moveExerciseTopUp(exercise, exercise.offsetTop + exercise.parentNode.offsetTop - 5)
+        this.moveExerciseBottomDown(exercise, exercise.offsetTop + exercise.parentNode.offsetTop + parseFloat(exercise.style.height) / 0.75 + 5)
+        this.toggleAddExercise()
+      }
+    },
+    addExerciseEventHandlers (exercise) {
+      let context = this
+      exercise.onmousedown = function (event) {
+        if (context.selected === null) {
+          if (context.hoveringBottomOfExercise(exercise, event)) {
+            context.moving.exercise = exercise
+            context.moving.direction = 'down'
+          } else if (context.hoveringTopOfExercise(exercise, event)) {
+            context.moving.exercise = exercise
+            context.moving.direction = 'up'
+          }
+        }
+        if (!(context.hoveringTopOfExercise(exercise, event) || context.hoveringBottomOfExercise(exercise, event))) {
+          context.toggleSelected(exercise)
+        }
+        event.stopPropagation()
+      }
+
+      exercise.onmousemove = function (event) {
+        if (context.selected === null) {
+          if (context.hoveringTopOfExercise(exercise, event)) {
+            if (exercise.hasChildNodes() && context.canMoveExerciseUp(exercise)) {
+              exercise.style.cursor = 'ns-resize'
+            } else if (exercise.hasChildNodes()) {
+              exercise.style.cursor = 's-resize'
+            } else if (context.canMoveExerciseUp(exercise)) {
+              exercise.style.cursor = 'n-resize'
+            } else {
+              exercise.style.cursor = 'pointer'
+            }
+          } else if (context.hoveringBottomOfExercise(exercise, event)) {
+            if (exercise.hasChildNodes() && context.canMoveExerciseUp(exercise)) {
+              exercise.style.cursor = 'ns-resize'
+            } else if (exercise.hasChildNodes()) {
+              exercise.style.cursor = 'n-resize'
+            } else if (context.canMoveExerciseDown(exercise)) {
+              exercise.style.cursor = 's-resize'
+            } else {
+              exercise.style.cursor = 'pointer'
+            }
+          } else {
+            exercise.style.cursor = 'pointer'
+          }
+        } else {
+          if (context.selected === exercise) {
+            exercise.style.cursor = 'pointer'
+          } else {
+            exercise.style.cursor = 'default'
+          }
+        }
+      }
     }
   }
 }
@@ -581,6 +617,25 @@ export default {
 .submitInfo {
   margin-top: 20px;
   margin-bottom: 5px;
+}
+
+.global_exercise_options {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  position: fixed;
+  right: 0;
+  top: 200px;
+  background-color: var(--p-color-1);
+}
+
+.global_exercise_options:hover {
+  cursor: pointer;
+  background-color: var(--p-color-3);
+}
+
+.add_exercise {
+  font-size: 25px;
 }
 
 </style>
