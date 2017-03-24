@@ -10,6 +10,7 @@ COPY . ./
 
 # Install dependencies and build frontend
 RUN make frontend-build-prod
+RUN npm install babel-plugin-transform-runtime node-libs-browser
 
 # Build backend
 RUN make backend-build
