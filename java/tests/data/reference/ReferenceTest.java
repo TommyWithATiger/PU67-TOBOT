@@ -65,7 +65,7 @@ public class ReferenceTest extends BaseTest {
 
   @Test
   public void getSetLink() throws Exception {
-    assertEquals("www.google.com", reference.getLink());
+    assertEquals("https://www.google.com", reference.getLink());
     reference.setLink("https://google.com");
     assertEquals("https://google.com", reference.getLink());
   }
