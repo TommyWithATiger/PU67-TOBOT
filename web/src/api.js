@@ -28,6 +28,10 @@ const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
+const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
+
+const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
+
 export const api = {
   /**
    * Get the user from API.
@@ -267,6 +271,58 @@ export const api = {
     }
 
     return this.postRequest(ctx, SUBJECT_TOPIC_RELATE_URL, req, callback, error)
+  },
+
+  /**
+   * Upload a pdf, has to handle it's request content a bit different. This is because in PDFs all characters are important
+   * and translating the content to a json string would replace the byte values, with others due to the character encoding
+   * @param {object} ctx Context.
+   * @param {object} file ArrayBuffer of a file
+   * @param {function} callback Handler the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request
+   */
+  uploadPDF (ctx, file, callback, error) {
+    let req = {
+      body: file
+    }
+
+    req.headers = Object.assign({}, req.headers || {}, {
+      'Authorization': auth.getAuthHeader()['Authorization'],
+      'X-Username': auth.getUsername()
+    })
+
+    req.method = 'POST'
+    let h = req.headers
+    req.headers = new Headers(h)
+
+    return fetch(new Request(UPLOAD_PDF_URL, req))
+    .then(res => res.json())
+    .then(callback)
+    .catch(error)
+  },
+
+  /**
+   * Create exercise
+   * @param {object} ctx Context.
+   * @param {string} content Exercise content, that is the HTML
+   * @param {array} tags Array of topic ids for the exercise
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  createExercise (ctx, content, tags, callback, error) {
+    let data = {
+      title: '',
+      text: content,
+      difficulty: 'Unknown',
+      topicIDs: tags
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, CREATE_EXERCISE_URL, req, callback, error)
   },
 
   /**
