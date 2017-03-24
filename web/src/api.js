@@ -30,6 +30,7 @@ const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
 const REFERENCE_GET_URL = `${API_URL}/reference/get/`
 const REFERENCE_GET_ID_URL = `${API_URL}/reference/get/?id=`
+const REFERENCE_ADD_URL = `${API_URL}/reference/create`
 
 const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
 
@@ -238,6 +239,30 @@ export const api = {
     }
 
     return this.postRequest(ctx, TOPIC_ADD_URL, req, callback, error)
+  },
+
+  /**
+   * Add reference.
+   * @param {object} ctx Context.
+   * @param {object} reference The reference to post in request.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  addReference (ctx, reference, callback, error) {
+    let data = {
+      title: reference.title,
+      description: reference.description,
+      link: reference.link,
+      type: reference.type,
+      tags: reference.tags
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, REFERENCE_ADD_URL, req, callback, error)
   },
 
   /**
