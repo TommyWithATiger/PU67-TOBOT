@@ -19,19 +19,16 @@ public class RatingConverter implements AttributeConverter<RatingEnum, Integer> 
     return RatingEnum.get(dbData);
   }
 
-  /**
-   * @deprecated Use RatingEnum.valueOf instead
-   */
-  @Deprecated
   public static RatingEnum convertFullRatingNameToEnum(String fullRatingName) {
-    return RatingEnum.valueOf(fullRatingName);
+    return RatingEnum.valueOf(
+        fullRatingName.substring(0, 1).toUpperCase() + fullRatingName.substring(1).toLowerCase());
   }
 
   /**
    * @deprecated Use ratingEnum.toString instead
    */
   @Deprecated
-  public static String convertEnumToFullRatingName(RatingEnum ratingEnum){
+  public static String convertEnumToFullRatingName(RatingEnum ratingEnum) {
     return ratingEnum.toString();
   }
 }

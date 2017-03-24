@@ -38,12 +38,12 @@ public class UserTypeConverter implements AttributeConverter<UserType, String> {
   }
 
   public static UserType stringToUserType(String fullRatingName) {
-    switch (fullRatingName) {
-      case "Student":
+    switch (fullRatingName.toLowerCase()) {
+      case "student":
         return UserType.STUDENT;
-      case "Teacher":
+      case "teacher":
         return UserType.TEACHER;
-      case "Admin":
+      case "admin":
         return UserType.ADMIN;
       default:
         throw new IllegalArgumentException("Unknown " + fullRatingName);

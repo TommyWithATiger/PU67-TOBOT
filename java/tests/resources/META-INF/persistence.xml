@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--suppress JpaConfigDomFacetInspection -->
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
@@ -12,6 +13,12 @@
         <class>data.Subject</class>
         <class>data.rating.Rating</class>
         <class>data.rating.RatingConverter</class>
+        <class>data.reference.Reference</class>
+        <class>data.reference.ReferenceTypeConverter</class>
+        <class>data.exercise.Exercise</class>
+        <class>data.exerciserating.ExerciseRating</class>
+        <class>data.exerciserating.ExerciseRatingConverter</class>
+        <class>data.exerciseattempthistory.ExerciseAttemptHistory</class>
 
         <properties>
             <!-- Configuring JDBC properties -->

@@ -1,15 +1,12 @@
 package data;
 
 import data.dao.TopicDAO;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import java.util.HashSet;
 import org.json.JSONObject;
 
+import javax.persistence.*;
+import data.exercise.Exercise;
+import java.util.Collection;
 
 @Entity
 @NamedQueries({
@@ -26,7 +23,7 @@ import org.json.JSONObject;
     )
 })
 @Table
-public class Topic {
+public class Topic extends AbstractBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +32,12 @@ public class Topic {
   private String description;
   private int parentId;
 
-  public Topic() {
+  @ManyToMany
+  private Collection<Exercise> exercises;
+
+  protected Topic() {
     super();
+    exercises = new HashSet<>();
   }
 
   /**
@@ -139,6 +140,24 @@ public class Topic {
    */
   public void addToSubject(Subject subject) {
     subject.addTopic(this);
+  }
+
+  /**
+   * Adds an exercise to this topic
+   *
+   * @param exercise, the Exercise you want to add to this topic
+   */
+  public void addExercise(Exercise exercise) {
+    exercises.add(exercise);
+  }
+
+  /**
+   * Removes an exercise from this topic
+   *
+   * @param exercise, the Exercise you want to remove
+   */
+  public void removeExercise(Exercise exercise) {
+    exercises.remove(exercise);
   }
 
   /**

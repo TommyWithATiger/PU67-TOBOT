@@ -54,7 +54,7 @@ public class RatingDAOTest extends BaseTest{
     topic2.create();
     topic3.create();
 
-    subject = new Subject();
+    subject = new Subject("Math & Philosophy & Programming", "Do stuff");
     subject.addParticipant(user1);
     subject.addParticipant(user2);
     subject.addTopic(topic1);
@@ -77,17 +77,6 @@ public class RatingDAOTest extends BaseTest{
     rating21.create();
     rating13.create();
     rating23.create();
-  }
-
-  @Test
-  public void testFindAll() throws Exception {
-    List result = RatingDAO.getInstance().findAll();
-    assertTrue(result.contains(rating11));
-    assertTrue(result.contains(rating12));
-    assertTrue(result.contains(rating21));
-    assertTrue(result.contains(rating13));
-    assertTrue(result.contains(rating23));
-    assertEquals(5, result.size());
   }
 
   @Test

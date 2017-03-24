@@ -50,7 +50,7 @@ public class RatingKey implements Serializable {
     }
     else if(other instanceof RatingKey){
       RatingKey otherRatingKey = (RatingKey) other;
-      return userID == otherRatingKey.userID && topicID == otherRatingKey.topicID;
+      return userID.equals(otherRatingKey.userID) && topicID.equals(otherRatingKey.topicID);
     }
     return false;
   }

@@ -112,7 +112,8 @@ export class Format {
    * @param {number} value The digit to prepend to.
    * @param {number} places Minimun amount of digits.
    */
-  static digits (value, places = 2) {
-    return (Array(places).join('0') + value).slice(-(places))
+  static digits (value, places = 2, revert = false) {
+    if (revert) return (value + Array(places).join('0')).slice(0, places)
+    return (Array(places).join('0') + value).slice(-places)
   }
 }

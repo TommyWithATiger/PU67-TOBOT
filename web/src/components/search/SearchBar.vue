@@ -5,15 +5,15 @@
       @topicResult="topicHandler"
       @subjectResult="subjectHandler"
       @search="termChange"
-      placeholder="Søk..."
+      placeholder="Search ..."
     />
     <div class="search-result" v-if="showBar && ((subjects && subjects.length) || (topics && topics.length))">
       <router-link v-for="s in subjects" :to="'/subject/' + s.id">{{ s.title }}</router-link>
       <router-link v-for="s in topics" :to="'/topic/' + s.id">{{ s.title }}</router-link>
-      <router-link :to="'/search/' + search">Flere resultater...</router-link>
+      <router-link :to="'/search/' + search">More results ...</router-link>
     </div>
     <div class="search-result" v-else-if="search.length > 1 && showBar">
-      <p>Fant ingen resultater.</p>
+      <p>Could not find any results.</p>
     </div>
   </div>
 </template>
@@ -81,17 +81,23 @@ export default {
 .search-result {
   position: absolute;
   width: 100%;
-  background-color: #aaa;
+  margin-top: 8px;
+  background-color: #fff;
+  background-color: var(--n-color-1);
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--box-shadow-2);
 }
 
 .search-result > a,
 .search-result > p {
-  padding: 4px 8px;
+  padding: 8px 12px;
   box-sizing: border-box;
 }
+
 .search-result > a:hover {
-  background-color: #888;
+  background-color: #ddd;
+  background-color: var(--n-color-2);
 }
 </style>

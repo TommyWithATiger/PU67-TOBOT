@@ -38,6 +38,7 @@ public class TopicDAOTest extends BaseTest{
     topic2 = new Topic("Philosophy 102", "Think and argue some more");
     topic3 = new Topic("Programming", "Make the computer do stuff");
     topic4 = new Topic("Math", "Add ones and zeros");
+
     topic1.create();
     topic2.create();
     topic3.create();

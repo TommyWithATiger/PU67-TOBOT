@@ -55,7 +55,7 @@ function requireAuth (to, from, next) {
         if (to.meta.users.indexOf(store.state.user.usertype) !== -1) {
           next()
         } else {
-          if (store.state.user.usertype === 'undefined') {
+          if (store.state.user.usertype === 'undefined' || store.state.user.usertype === null) {
             api.getUser(this, (data) => {
               store.state.user.username = data.username
               store.state.user.usertype = data.userType
