@@ -96,7 +96,7 @@ public class PDFParser {
       }
 
       // Fix a graphical bug with nodes with text content starting with a dash
-      if (!node.getTextContent().isEmpty() && node.getTextContent().charAt(0) == '-') {
+      if (!node.getTextContent().isEmpty() && node.getTextContent().contains("-")) {
         GraphicFixer.fixDashNode(node);
       }
 
