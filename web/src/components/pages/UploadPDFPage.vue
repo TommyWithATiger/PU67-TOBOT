@@ -9,7 +9,7 @@
       <div class="spinner">
       </div>
       <div>
-        Extracting exercises from the PDF, this will take a couple of seconds. Sit tight!
+        Extracting exercises from the PDF, just a moment. Sit tight!
       </div>
 		</div>
 	</div>
