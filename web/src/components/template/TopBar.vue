@@ -16,8 +16,9 @@
           v-if="authenticated"
           @click="userMenu = !userMenu">
           {{ state.user.username }} 
-          <svg viewBox="0 0 10 10" class="user-menu-icon">
-            <rect x="0" y="0" width="5" height="5" transform="rotate(-45)" />
+          <svg viewBox="0 0 10 10" :class="`user-menu-icon ${userMenu ? 'open' : ''}`">
+            <rect x="-7" y="7" width="5" height="5" transform="rotate(-45)" v-if="userMenu" />
+            <rect x="0" y="0" width="5" height="5" transform="rotate(-45)" v-else />
           </svg>
         </button>
         <div :class="`user-menu ${userMenu ? 'show' : ''}`" v-if="authenticated">
@@ -224,7 +225,12 @@ export default {
 .user-menu-icon {
   fill: #000;
   width: 10px;
-  margin-top: 4px;
-  margin-bottom: -4px;
+  margin-top: 5px;
+  margin-bottom: -5px;
+}
+
+.user-menu-icon.open {
+  margin-top: -2px;
+  margin-bottom: 2px;
 }
 </style>

@@ -16,7 +16,7 @@ public class TopicDAOTest extends BaseTest{
   private static Topic topic3;
 
   @Before
-  public void populate(){
+  public void populate() {
     topic1 = new Topic("Programming", "Make the computer do stuff");
     topic1.create();
     topic2 = new Topic("Philosophy 101", "Think and argue");

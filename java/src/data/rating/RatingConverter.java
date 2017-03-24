@@ -48,16 +48,16 @@ public class RatingConverter implements AttributeConverter<RatingEnum, String> {
   }
 
   public static RatingEnum convertFullRatingNameToEnum(String fullRatingName) {
-    switch (fullRatingName) {
-      case "None":
+    switch (fullRatingName.toLowerCase()) {
+      case "none":
         return NONE;
-      case "Poor":
+      case "poor":
         return POOR;
-      case "Ok":
+      case "ok":
         return OK;
-      case "Good":
+      case "good":
         return GOOD;
-      case "Superb":
+      case "superb":
         return SUPERB;
       default:
         throw new IllegalArgumentException("Unknown " + fullRatingName);
