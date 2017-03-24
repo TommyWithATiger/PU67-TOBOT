@@ -63,6 +63,11 @@ export default {
           name: 'Upload',
           path: '/upload',
           users: ['Admin', 'Teacher', 'Student']
+        },
+        {
+          name: 'References',
+          path: '/reference',
+          users: ['Admin', 'Teacher', 'Student']
         }
       ]
     }

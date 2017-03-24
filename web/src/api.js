@@ -28,6 +28,10 @@ const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
+const REFERENCE_GET_URL = `${API_URL}/reference/get/`
+const REFERENCE_GET_ID_URL = `${API_URL}/reference/get/?id=`
+const REFERENCE_ADD_URL = `${API_URL}/reference/create`
+
 const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
 
 const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
@@ -117,6 +121,29 @@ export const api = {
    */
   getSubjectById (ctx, id, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_ID_URL + id, callback, error)
+  },
+
+  /**
+   * Get all references from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getReferences (ctx, callback, error) {
+    return this.getRequest(ctx, REFERENCE_GET_URL, callback, error)
+  },
+
+  /**
+   * Get the reference with the given id from API.
+   * @param {object} ctx Context.
+   * @param {integer} id The topic id.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getReferenceById (ctx, id, callback, error) {
+    return this.getRequest(ctx, REFERENCE_GET_ID_URL + id, callback, error)
   },
 
   /**
@@ -212,6 +239,30 @@ export const api = {
     }
 
     return this.postRequest(ctx, TOPIC_ADD_URL, req, callback, error)
+  },
+
+  /**
+   * Add reference.
+   * @param {object} ctx Context.
+   * @param {object} reference The reference to post in request.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  addReference (ctx, reference, callback, error) {
+    let data = {
+      title: reference.title,
+      description: reference.description,
+      link: reference.link,
+      type: reference.type,
+      tags: reference.tags
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, REFERENCE_ADD_URL, req, callback, error)
   },
 
   /**
