@@ -74,13 +74,13 @@ export const auth = {
     if (error && error.message) {
       switch (error.message) {
         case 'Failed to fetch':
-          msg = 'Kunne ikke koble til serveren.'
+          msg = 'Could not connect to server.'
           break
         case 'Unexpected end of JSON input':
-          msg = 'Feil brukernavn eller passord.'
+          msg = 'Wrong username or password.'
           break
         default:
-          msg = 'Klarte ikke å logge inn.'
+          msg = 'Could not log in.'
           break
       }
     }
