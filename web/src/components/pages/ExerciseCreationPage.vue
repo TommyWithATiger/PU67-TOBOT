@@ -221,7 +221,7 @@ export default {
     },
     moveExerciseBottomDown (exercise, y) {
       let node = exercise
-      while ((node = node.nextSibling) !== null) {
+      while ((node = exercise.nextSibling) !== null) {
         if (node.offsetTop + node.parentNode.offsetTop + parseFloat(this.getHeight(node)) / 0.75 > y || node.classList.contains('exercise')) {
           break
         }
@@ -360,7 +360,17 @@ export default {
         exercise.classList.toggle('missing_tags', !hasTags)
       }
       if (canSubmit) {
-        this.submitInfo = 'Submitting exercises'
+        this.submitInfo = 'Submitting exercises, you will be redirected when all exercises have been submitted'
+        for (let exerciseIndex = 0; exerciseIndex < exercises.length; exerciseIndex++) {
+          let exercise = exercises[exerciseIndex]
+          let tagsSplit = exercise.getAttribute('tags').split(';')
+          let tags = []
+          for (let index = 0; index < tagsSplit.length; index++) {
+            tags[index] = parseInt(tagsSplit[index].split(':')[0])
+          }
+          api.createExercise(this, exercise.innerHTML, tags, () => {}, () => {})
+        }
+        this.$router.push('/')
       } else {
         this.submitInfo = 'Make sure all exercises have at least one tag before submitting. All exercises missing tags have been marked red'
       }
