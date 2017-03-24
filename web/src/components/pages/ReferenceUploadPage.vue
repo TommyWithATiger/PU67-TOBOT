@@ -1,5 +1,8 @@
 <template>
   <div class="page-content">
+    <div class="error"> 
+      {{ error }}
+    </div>
     <div class="reference_form">
       <div class="input-field">
         <label for="title"> Title: </label>
@@ -29,25 +32,76 @@
           <option value="Notes">Notes</option>
         </select>
       </div>  
+      <input class="submit_button" type="submit" v-on:click="submitReference"/>
+    </div>
+    <div class="reference_form_tags">
+      <div class="topic_list">
+        <div>
+          Tags: 
+        </div>
+        <div class="tags" id="topic_tags">
+
+        </div>
+      </div>
+
+      <div class="add_tag_container" id="add_tag_container">
+        <div class="add_tag_input">
+          <input type="text" id="tag_input" v-on:keyup="searchTag" placeholder="Search for tag">
+          <div class="tag_search_results" id="tag_search_result">
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { api } from 'api'
 
 export default {
   name: 'referenceupload',
   data () {
     return {
+      tags: [],
       link: '',
       title: '',
       description: '',
-      type: 'Website'
+      type: 'Website',
+      error: ''
     }
+  },
+  created () {
+    api.getTopics(this, (data) => {
+      this.tags = data.topics
+    }, () => {
+      this.tags = []
+    })
   },
   methods: {
     submitReference () {
+      if (this.title === '') {
+        this.error = 'Title must be set'
+        return
+      }
+      if (this.description === '') {
+        this.error = 'Description must be set'
+        return
+      }
+      if (this.link === '') {
+        this.error = 'Link must be set'
+        return
+      }
+      let tags = document.getElementsByClassName('topic_tag')
+      if (tags.length === 0) {
+        this.error = 'The reference must have at least one tag'
+        return
+      }
 
+      let tagIDs = []
+      for (let tagIndex = 0;  tagIndex < tags.length; tagIndex++) {
+        tagID[tagIndex] = parseInt(tags[tagIndex].getAttribute('tagID'))
+      }
     },
     createTag (id, title) {
       let tag = document.createElement('div')
@@ -74,6 +128,32 @@ export default {
         }
       } while ((child = child.nextSibling) !== null)
       return false
+    },
+    searchTag () {
+      let search = document.getElementById('tag_input').value
+      let resultBox = document.getElementById('tag_search_result')
+      let child = resultBox.firstChild
+      while ((child = resultBox.firstChild) != null) {
+        resultBox.removeChild(child)
+      }
+      if (search === '') {
+        return
+      }
+      for (let tagIndex = 0; tagIndex < this.tags.length; tagIndex++) {
+        if (this.tags[tagIndex].title.toLowerCase().includes(search.toLowerCase()) && !this.hasTag(this.tags[tagIndex].id)) {
+          let tag = document.createElement('div')
+          let context = this
+          tag.onclick = function () {
+            if (!context.hasTag(context.tags[tagIndex].id)) {
+              context.createTag(context.tags[tagIndex].id, context.tags[tagIndex].title)
+            }
+            tag.parentNode.removeChild(tag)
+          }
+          tag.classList.toggle('tag_search_result', true)
+          tag.textContent = this.tags[tagIndex].title
+          resultBox.appendChild(tag)
+        }
+      }
     }
   }
 }
@@ -82,9 +162,49 @@ export default {
 
 <style scoped>
 
+.reference_form{
+  display: inline-block;
+  width: 400px;
+  min-height: 200px;
+  vertical-align: top;
+}
+
+.reference_form_tags {
+  display: inline-block;
+  width: 500px;
+  min-height: 200px;
+  vertical-align: top;
+}
+
+.submit_button {
+  margin-top: 30px;
+}
+
+.tags {
+  width: 450px;
+}
+
+.topic_list > div:first-child {
+  vertical-align: top
+}
+
+.error {
+  color: #ff0000;
+}
+
 .input-field label {
   width: 100px;
   display: inline-block;
+}
+
+.topic_list > div {
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.add_tag_container {
+  margin-left: -10px;
 }
 
 </style>
