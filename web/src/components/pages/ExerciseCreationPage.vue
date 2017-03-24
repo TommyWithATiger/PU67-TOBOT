@@ -605,7 +605,7 @@ export default {
 </style>
 
 <style scoped>
-  .add_tag_container input[type=text] {
+.add_tag_container input[type=text] {
   width: 260px;
 }
 
@@ -631,8 +631,6 @@ export default {
 .close_tag_input:hover {
   cursor: pointer;
 }
-
-
 
 .add_tag_container {
   z-index: 11;
