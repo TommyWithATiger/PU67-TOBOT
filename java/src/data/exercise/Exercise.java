@@ -106,6 +106,19 @@ public class Exercise extends AbstractBaseEntity{
     this.solution = solution;
   }
 
+  /**
+   * Adds this exercise to all topics in a collection
+   *
+   * @param topics the topics to add this exercise to
+   */
+  public void addToTopics(Collection<Topic> topics){
+    topics.forEach(topic ->
+        {topic.addExercise(this);
+         topic.update();
+        }
+    );
+  }
+
   public JSONObject createAbout(){
     JSONObject response = new JSONObject();
     response.put("id", id);
