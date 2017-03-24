@@ -16,6 +16,7 @@ import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import ReferencePage from 'components/pages/ReferencePage'
 import UploadPDFPage from 'components/pages/UploadPDFPage'
 import ExerciseCreationPage from 'components/pages/ExerciseCreationPage'
+import ReferenceUpload from 'components/pages/ReferenceUploadPage'
 import { auth } from 'auth'
 import { api } from 'api'
 import { store } from 'store'
@@ -137,6 +138,13 @@ export const router = new Router({
       path: '/reference/:id',
       name: 'Reference',
       component: ReferencePage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/reference',
+      name: 'ReferenceUpload',
+      component: ReferenceUpload,
       meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
