@@ -192,7 +192,7 @@ input[type=reset][disabled] {
   color: var(--nn-color-1);
 }
 
-input[type=text], input {
+input[type=text], input, textarea {
   background-color: #999;
   background-color: var(--n-color-3);
   color: #999;
