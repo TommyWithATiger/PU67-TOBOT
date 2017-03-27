@@ -10,6 +10,12 @@ import org.w3c.dom.Node;
 
 public class ImageExtractor {
 
+  /**
+   * Extracts images from the given container node, giving them to an ImageSaver for saving on an
+   * external image host.
+   *
+   * @param containerNode The node to extract images from
+   */
   public static void extractImages(Node containerNode) {
     List<ImageSaver> imageSavers = new ArrayList<>();
 

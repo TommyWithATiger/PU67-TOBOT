@@ -13,6 +13,11 @@ import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+/**
+ * Saves given images to an external host and changes the content of the image nodes to links of
+ * the given image instead. Works as a thread so that the images can be saved in parallel saving
+ * a lot of uploading time
+ */
 public class ImageSaver extends Thread {
 
   public static final String BASEURL = "http://cdn.tobot.hummel.io:8080/images/";
@@ -29,6 +34,12 @@ public class ImageSaver extends Thread {
     ((Element) imageNode).setAttribute("src", saveBase64Image(base64));
   }
 
+  /**
+   * Saves a base 64 image
+   *
+   * @param base64 The base64 string of the image
+   * @return
+   */
   private String saveBase64Image(String base64) {
     try {
       return makeSaveRequest(base64.substring(base64.indexOf(",") + 1));
@@ -37,7 +48,15 @@ public class ImageSaver extends Thread {
     }
   }
 
-  private String makeSaveRequest(String base64Image) throws IOException, HttpException {
+  /**
+   * Makes a request to save the given image to the external host
+   *
+   * @param image The given image
+   * @return A URL for the image on the external host
+   * @throws IOException Problems writing to the socket
+   * @throws HttpException No content in response
+   */
+  private String makeSaveRequest(String image) throws IOException, HttpException {
     Socket socket = new Socket();
     socket.connect(new InetSocketAddress("cdn.tobot.hummel.io", 8080));
 
@@ -47,7 +66,7 @@ public class ImageSaver extends Thread {
     sessionInputBuffer.bind(socket.getInputStream());
     DefaultHttpResponseParser responseParser = new DefaultHttpResponseParser(sessionInputBuffer);
 
-    printWriter.write("POST /save.php HTTP/1.1\r\nContent-Type: application/x-www-form-urlencoded\r\nHost: cdn.tobot.hummel.io:8080\nContent-Length: " + (6 + base64Image.length()) + "\r\n\r\nimage=" + base64Image + "\r\n\r\n");
+    printWriter.write("POST /save.php HTTP/1.1\r\nContent-Type: application/x-www-form-urlencoded\r\nHost: cdn.tobot.hummel.io:8080\nContent-Length: " + (6 + image.length()) + "\r\n\r\nimage=" + image + "\r\n\r\n");
     printWriter.flush();
     HttpResponse httpResponse = responseParser.parse();
     if (sessionInputBuffer.available() == 0){
