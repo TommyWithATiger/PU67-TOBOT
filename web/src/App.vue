@@ -192,7 +192,7 @@ input[type=reset][disabled] {
   color: var(--nn-color-1);
 }
 
-input[type=text], input, textarea {
+input[type=text], input, textarea, select {
   background-color: #999;
   background-color: var(--n-color-3);
   color: #999;
@@ -203,6 +203,10 @@ input[type=text], input, textarea {
   padding: 8px;
   margin: 4px 8px;
   transition: background-color .2s;
+}
+
+select {
+  height: 22px;
 }
 
 input[type=text]:focus, input:focus {
