@@ -38,7 +38,7 @@ public class ImageSaver extends Thread {
    * Saves a base 64 image
    *
    * @param base64 The base64 string of the image
-   * @return
+   * @return The url of the image on the image host
    */
   private String saveBase64Image(String base64) {
     try {
