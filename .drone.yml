@@ -3,6 +3,10 @@ pipeline:
     image: registry.niklasmh.no/tobot-prod:latest
     when:
       event: push, pull_request
+    environment:
+      - DOCKER_LOGIN=${DOCKER_LOGIN}
+      - DOCKER_PASSWORD=${DOCKER_PASSWORD}
+      - DOCKER_EMAIL=${DOCKER_EMAIL}
     commands:
       - make drone-container-prod
 
