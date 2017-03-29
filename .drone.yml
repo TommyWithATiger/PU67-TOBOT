@@ -11,6 +11,7 @@ pipeline:
       - cd /home/tobot
       - date >> file.txt
       - echo Testing ...
+      - echo Testing2 ...
 
   deployment:
     image: plugins/ssh
