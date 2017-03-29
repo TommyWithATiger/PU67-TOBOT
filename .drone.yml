@@ -14,7 +14,6 @@ pipeline:
       event: push
     commands:
       - echo "${DB_LOGIN}" > file.txt
-      - echo ${DB_LOGIN} 2 >> file.txt
       - cat file.txt
       - make backend-build-tests
 
