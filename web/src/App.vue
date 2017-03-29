@@ -200,13 +200,11 @@ input[type=text], input, textarea, select {
   outline: none;
   border: none;
   border-radius: 4px;
-  padding: 8px;
+  border: 8px solid #999;
+  border-color: var(--n-color-3);
+  box-sizing: border-box;
   margin: 4px 8px;
   transition: background-color .2s;
-}
-
-select {
-  height: 22px;
 }
 
 input[type=text]:focus, input:focus {
