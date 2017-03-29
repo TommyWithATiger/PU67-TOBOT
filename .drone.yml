@@ -5,7 +5,7 @@ pipeline:
       event: push
     commands:
       - cd web
-      - npm install --silent
+      - npm install --depth=0 --quiet
       - npm run build
 
   backendend-tests:
@@ -13,6 +13,9 @@ pipeline:
     when:
       event: push
     commands:
+      - echo "${DB_LOGIN}" > file.txt
+      - echo ${DB_LOGIN} 2 >> file.txt
+      - cat file.txt
       - make backend-build-tests
 
   deployment:
