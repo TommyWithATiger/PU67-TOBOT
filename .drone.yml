@@ -1,16 +1,8 @@
 pipeline:
   tests:
     image: registry.niklasmh.no/tobot-prod
-    auth_config:
-      username: ${REGISTRY_LOGIN}
-      password: ${REGISTRY_PASSWORD}
-      email: ${REGISTRY_EMAIL}
     when:
       event: push, pull_request
-    environment:
-      - DOCKER_LOGIN=${DOCKER_LOGIN}
-      - DOCKER_PASSWORD=${DOCKER_PASSWORD}
-      - DOCKER_EMAIL=${DOCKER_EMAIL}
     commands:
       - make drone-container-prod
 
