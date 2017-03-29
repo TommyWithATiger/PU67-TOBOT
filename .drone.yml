@@ -1,8 +1,6 @@
 pipeline:
   tests:
     image: registry.niklasmh.no/tobot-prod:latest
-    username: tobot
-    port: 22
     when:
       event: push, pull_request
       branch: development
