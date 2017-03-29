@@ -1,9 +1,8 @@
 pipeline:
   tests:
     image: registry.niklasmh.no/tobot-prod
-    when:
-      event: push, pull_request
     commands:
+      - echo Test
       - make drone-container-prod
 
   deployment:
