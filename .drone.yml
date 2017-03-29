@@ -3,8 +3,8 @@ pipeline:
     image: registry.niklasmh.no/tobot-prod
     commands:
       - cd web
-      - mkdir -p node_modules
-      - cp -R /home/tobot/tdt4140-bot-project/web/node_modules ./node_modules
+      - ls
+      - ls node_modules
       - npm run build
 
   backendend-tests:
