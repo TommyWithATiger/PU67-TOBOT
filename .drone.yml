@@ -3,7 +3,6 @@ pipeline:
     image: registry.niklasmh.no/tobot-prod:latest
     when:
       event: push, pull_request
-      branch: development
     commands:
       - make drone-container-prod
 
