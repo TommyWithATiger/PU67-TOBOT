@@ -2,6 +2,8 @@ pipeline:
   tests:
     image: registry.niklasmh.no/tobot-prod
     commands:
+      - which apt-get
+      - which apk
       - make docker-container-prod
 
   deployment:
