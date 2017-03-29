@@ -385,15 +385,7 @@ export const api = {
    * @param {function} error Feedback error.
   */
   getExercise (ctx, id, callback, error) {
-    let data = {
-      id: id
-    }
-
-    let req = {
-      body: data
-    }
-
-    return this.postRequest(ctx, GET_EXERCISE_URL, req, callback, error)
+    return this.getRequest(ctx, GET_EXERCISE_URL + id, callback, error)
   },
 
   /**
