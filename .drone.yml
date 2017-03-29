@@ -1,6 +1,6 @@
 pipeline:
   tests:
-    image: registry.niklasmh.no/tobot-prod:latest
+    image: registry.niklasmh.no/tobot-prod
     when:
       event: push, pull_request
     environment:
