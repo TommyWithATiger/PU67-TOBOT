@@ -1,13 +1,13 @@
 pipeline:
   ssh:
-    image: plugins/ssh
-    host: ci.niklasmh.no
+    image: Dockerfile.baseimage
     username: tobot
     port: 22
     when:
-      event: pull_request
+      event: push, pull_request
       branch: development
-    script:
+    commands:
+      - echo pwd
       - make drone-image-prod
       - make drone-container-prod
 
