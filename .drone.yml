@@ -1,6 +1,6 @@
 pipeline:
   ssh:
-    image: Dockerfile.baseimage
+    image: tobot/tobot-prod
     username: tobot
     port: 22
     when:
