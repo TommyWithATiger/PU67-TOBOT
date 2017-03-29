@@ -8,11 +8,11 @@ pipeline:
       event: pull_request
       branch: development
     script:
-      - cd /home/tobot
-      - date >> file.txt
-      - echo Testing ...
-      - echo Testing2 ...
-      - echo Testing3 ...
+      - cd /home/tobot/tdt4140-bot-project
+      - echo ${DRONE_BRANCH}
+      - git pull origin ${DRONE_BRANCH}
+      - make drone-image-prod
+      - make drone-container-prod
 
   deployment:
     image: plugins/ssh
