@@ -1,10 +1,11 @@
 pipeline:
   frontend-tests:
     image: registry.niklasmh.no/tobot-prod
+    when:
+      event: push
     commands:
       - cd web
-      - ls
-      - ls node_modules
+      - npm list -g --depth=0
       - npm run build
 
   backendend-tests:
