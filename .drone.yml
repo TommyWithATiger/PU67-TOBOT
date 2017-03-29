@@ -2,9 +2,9 @@ pipeline:
   tests:
     image: registry.niklasmh.no/tobot-prod
     auth_config:
-      - username: ${REGISTRY_LOGIN}
-      - password: ${REGISTRY_PASSWORD}
-      - email: ${REGISTRY_EMAIL}
+      username: ${REGISTRY_LOGIN}
+      password: ${REGISTRY_PASSWORD}
+      email: ${REGISTRY_EMAIL}
     when:
       event: push, pull_request
     environment:
