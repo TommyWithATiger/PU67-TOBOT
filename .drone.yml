@@ -1,10 +1,18 @@
 pipeline:
-  tests:
+  frontend-tests:
     image: registry.niklasmh.no/tobot-prod
     commands:
-      - which apt-get
-      - which apk
-      - make docker-container-prod
+      - node \
+        --max_semi_space_size=1 \
+        --max_old_space_size=198 \
+        --max_executable_size=148
+      - npm install --silent
+      - npm run build
+
+  backendend-tests:
+    image: registry.niklasmh.no/tobot-prod
+    commands:
+      - make backend-build-tests
 
   deployment:
     image: plugins/ssh
