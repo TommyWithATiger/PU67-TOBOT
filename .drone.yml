@@ -1,4 +1,17 @@
 pipeline:
+  test:
+    image: plugins/ssh
+    host: ci.niklasmh.no
+    username: tobot
+    port: 22
+    when:
+      event: pull_request
+      branch: development
+    script:
+      - cd /home/tobot
+      - date >> file.txt
+      - echo Testing ...
+
   deployment:
     image: plugins/ssh
     host: ci.niklasmh.no
