@@ -38,12 +38,24 @@ frontend-api:
 # Building backend
 backend-build:
 	@echo Building java application ...
+	@cd java && mvn -Dmaven.test.skip=true install
+	@echo Done!
+
+# Building backend
+backend-build-clean:
+	@echo Building java application  from scratch ...
 	@cd java && mvn -Dmaven.test.skip=true clean install
 	@echo Done!
 
 # Building backend with tests
 backend-build-tests:
-	@echo Builing java application ...
+	@echo Builing java application with tests ...
+	@cd java && mvn install
+	@echo Done!
+
+# Building backend with tests
+backend-build-tests-clean:
+	@echo Builing java application with tests from scratch ...
 	@cd java && mvn clean install
 	@echo Done!
 
