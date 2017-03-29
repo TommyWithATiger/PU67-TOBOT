@@ -462,15 +462,6 @@ export default {
 
 <style>
 
-.context_container {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
 .context_container .p, .context_container .r {
   position: absolute;
 }
@@ -605,6 +596,15 @@ export default {
 </style>
 
 <style scoped>
+.context_container {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .add_tag_container input[type=text] {
   width: 260px;
 }
