@@ -357,13 +357,14 @@ export const api = {
    * Create exercise
    * @param {object} ctx Context.
    * @param {string} content Exercise content, that is the HTML
+   * @param {string} title Exercise title
    * @param {array} tags Array of topic ids for the exercise
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
   */
-  createExercise (ctx, content, tags, callback, error) {
+  createExercise (ctx, content, title, tags, callback, error) {
     let data = {
-      title: '',
+      title: title,
       text: content,
       difficulty: 'Unknown',
       topicIDs: tags
