@@ -13,8 +13,8 @@ pipeline:
     when:
       event: push
     commands:
-      - echo "${DB_LOGIN}" > file.txt
-      - cat file.txt
+      - echo "${DB_LOGIN}" > java/src/META-INF/db_login.xml
+      - echo "${MAIL_LOGIN}" > java/src/META-INF/mail_login.xml
       - make backend-build-tests
 
   deployment:
