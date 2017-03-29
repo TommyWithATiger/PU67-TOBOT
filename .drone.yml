@@ -2,6 +2,7 @@ pipeline:
   frontend-tests:
     image: registry.niklasmh.no/tobot-prod
     commands:
+      - cd web
       - node --max_semi_space_size=1 --max_old_space_size=198 --max_executable_size=148
       - npm install --silent
       - npm run build
