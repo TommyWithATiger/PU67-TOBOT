@@ -1,4 +1,14 @@
 pipeline:
+  backendend-tests:
+    image: registry.niklasmh.no/tobot-baseimage
+    when:
+      event: push
+    commands:
+      - echo "${DB_LOGIN}" > java/src/META-INF/db_login.xml
+      - echo "${MAIL_LOGIN}" > java/src/META-INF/mail_login.xml
+      - echo "${MAIL_PASSWORD}" >> java/src/META-INF/mail_login.xml
+      - make backend-build-tests
+
   frontend-tests:
     image: registry.niklasmh.no/tobot-baseimage
     when:
@@ -7,15 +17,6 @@ pipeline:
       - cd web
       - npm install --depth=0 --quiet
       - npm run build
-
-  backendend-tests:
-    image: registry.niklasmh.no/tobot-baseimage
-    when:
-      event: push
-    commands:
-      - echo "${DB_LOGIN}" > java/src/META-INF/db_login.xml
-      - echo "${MAIL_LOGIN}" > java/src/META-INF/mail_login.xml
-      - make backend-build-tests
 
   deployment:
     image: plugins/ssh
