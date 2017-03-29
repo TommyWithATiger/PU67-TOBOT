@@ -22,6 +22,7 @@ import pdf.dom.StyleHandler;
 
 
 public class PDFParser {
+
   /**
    * Converts the PDDocument given in to HTML
    *
@@ -98,6 +99,16 @@ public class PDFParser {
       // Fix a graphical bug with nodes with text content starting with a dash
       if (!node.getTextContent().isEmpty() && node.getTextContent().contains("-")) {
         GraphicFixer.fixDashNode(node);
+      }
+
+      // Fixes a bug where some text would have a gigantic font-size
+      StyleHandler styleHandler = new StyleHandler(node);
+      if (styleHandler.hasStyleTag("font-size") && styleHandler.hasStyleTag("line-height")
+          && styleHandler.getFloatValue("font-size") > styleHandler.getFloatValue("line-height")) {
+        // Multiply with 0.84 due to the line including both high and low letters
+        styleHandler
+            .setStyleTag("font-size", styleHandler.getFloatValue("line-height") * 0.84 + "pt");
+        styleHandler.updateNodeStyle();
       }
 
       container.appendChild(node);
