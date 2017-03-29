@@ -35,6 +35,7 @@ const REFERENCE_ADD_URL = `${API_URL}/reference/create`
 const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
 
 const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
+const GET_EXERCISE_URL = `${API_URL}/exercise/get/?id=`
 
 export const api = {
   /**
@@ -374,6 +375,25 @@ export const api = {
     }
 
     return this.postRequest(ctx, CREATE_EXERCISE_URL, req, callback, error)
+  },
+
+  /**
+   * Get exercise by ID
+   * @param {object} ctx Context.
+   * @param {int} id Exercise ID
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  getExercise (ctx, id, callback, error) {
+    let data = {
+      id: id
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, GET_EXERCISE_URL, req, callback, error)
   },
 
   /**
