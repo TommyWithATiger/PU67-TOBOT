@@ -1,15 +1,13 @@
 package api.handlers.relators;
 
-import static api.handlers.topic.APIGetTopicHandler.createAboutTopic;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
-import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
+import static api.helpers.UrlArgumentHelper.getIntegerURIField;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.SubjectDAO;
 import data.Subject;
 import data.Topic;
 import java.util.Collection;
-import java.util.HashMap;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,26 +19,12 @@ public class APIGetRelatedTopicsSubjectHandler {
    *
    * @param httpRequest The request to handle
    * @return A JSON object containing a variable "related-topics" which is an JSON array where each
-   * topic follows the structure of the createAboutTopic method
+   * topic follows the structure of the topic.createAbout method
    */
   public static String getRelatedTopicsSubjectID(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
 
-    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
-
-    // Require id
-    if (!uriArguments.containsKey("id")) {
-      throw new APIBadRequestException("id must be given");
-    }
-
-
-    // id must be integer
-    int subjectID;
-    try {
-      subjectID = Integer.parseInt(uriArguments.get("id"));
-    } catch (NumberFormatException nfe) {
-      throw new APIBadRequestException("id must be integer");
-    }
+    Integer subjectID = getIntegerURIField(httpRequest, "id");
 
     Subject subject = SubjectDAO.getInstance().findById(subjectID);
 
@@ -52,7 +36,7 @@ public class APIGetRelatedTopicsSubjectHandler {
 
     JSONObject response = new JSONObject();
     JSONArray topics = new JSONArray();
-    relatedTopics.forEach(topic -> topics.put(createAboutTopic(topic)));
+    relatedTopics.forEach(topic -> topics.put(topic.createAbout()));
     response.put("related_topics", topics);
 
     return response.toString();

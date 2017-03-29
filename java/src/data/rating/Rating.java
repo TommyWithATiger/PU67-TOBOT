@@ -1,5 +1,6 @@
 package data.rating;
 
+import data.AbstractBaseEntity;
 import data.dao.RatingDAO;
 import javax.persistence.Convert;
 import javax.persistence.EmbeddedId;
@@ -13,18 +14,19 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findAllRatings", query = "SELECT r FROM Rating r"),
     @NamedQuery(name = "findRatingByUser", query = "SELECT r FROM Rating r WHERE r.ratingKeyPK.userID = :userID"),
     @NamedQuery(name = "findRatingByTopic", query = "SELECT r FROM Rating r WHERE r.ratingKeyPK.topicID = :topicID"),
-    @NamedQuery(name = "findRatingByRatingKey", query = "SELECT r FROM Rating r WHERE r.ratingKeyPK.topicID = :topicID AND r.ratingKeyPK.userID = :userID"),
     @NamedQuery(name = "findParticipatingRatingBySubjectTopic", query = "SELECT r FROM Rating r JOIN User u JOIN Subject s JOIN Topic t"
             + " WHERE u MEMBER OF s.participants AND u.id = r.ratingKeyPK.userID"
             + " AND t MEMBER OF s.topics AND t.id = r.ratingKeyPK.topicID"
-            + " AND s.id = :subjectID AND t.id = :topicID"
+            + " AND s.id = :subjectID AND t.id = :topicID"),
+    @NamedQuery(name = "findRatingBySubjectUser", query = "SELECT r FROM Rating r JOIN User u JOIN Subject s JOIN Topic t"
+            + " WHERE t MEMBER OF s.topics"
+            + " AND s.id = :subjectID AND u.id = :userID"
     )
 })
-@Table
-public class Rating {
+@Table(name = "RATING_INT")
+public class Rating extends AbstractBaseEntity {
 
   @EmbeddedId
   private RatingKey ratingKeyPK;
@@ -33,7 +35,7 @@ public class Rating {
   @Convert(converter = RatingConverter.class)
   private RatingEnum rating;
 
-  public Rating() {
+  protected Rating() {
     super();
     ratingKeyPK = new RatingKey();
   }

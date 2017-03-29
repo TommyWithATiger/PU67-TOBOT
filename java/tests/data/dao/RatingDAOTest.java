@@ -54,7 +54,7 @@ public class RatingDAOTest extends BaseTest{
     topic2.create();
     topic3.create();
 
-    subject = new Subject();
+    subject = new Subject("Math & Philosophy & Programming", "Do stuff");
     subject.addParticipant(user1);
     subject.addParticipant(user2);
     subject.addTopic(topic1);
@@ -67,27 +67,16 @@ public class RatingDAOTest extends BaseTest{
     rk13 = new RatingKey(user1.getId(), topic3.getId());
     rk23 = new RatingKey(user2.getId(), topic3.getId());
 
-    rating11 = new Rating(rk11.getUserID(), rk11.getTopicID(), RatingEnum.GOOD);
-    rating12 = new Rating(rk12.getUserID(), rk12.getTopicID(), RatingEnum.POOR);
-    rating21 = new Rating(rk21.getUserID(), rk21.getTopicID(), RatingEnum.SUPERB);
-    rating13 = new Rating(rk13.getUserID(), rk13.getTopicID(), RatingEnum.OK);
-    rating23 = new Rating(rk23.getUserID(), rk23.getTopicID(), RatingEnum.NONE);
+    rating11 = new Rating(rk11.getUserID(), rk11.getTopicID(), RatingEnum.Good);
+    rating12 = new Rating(rk12.getUserID(), rk12.getTopicID(), RatingEnum.Poor);
+    rating21 = new Rating(rk21.getUserID(), rk21.getTopicID(), RatingEnum.Superb);
+    rating13 = new Rating(rk13.getUserID(), rk13.getTopicID(), RatingEnum.Ok);
+    rating23 = new Rating(rk23.getUserID(), rk23.getTopicID(), RatingEnum.None);
     rating11.create();
     rating12.create();
     rating21.create();
     rating13.create();
     rating23.create();
-  }
-
-  @Test
-  public void testFindAll() throws Exception {
-    List result = RatingDAO.getInstance().findAll();
-    assertTrue(result.contains(rating11));
-    assertTrue(result.contains(rating12));
-    assertTrue(result.contains(rating21));
-    assertTrue(result.contains(rating13));
-    assertTrue(result.contains(rating23));
-    assertEquals(5, result.size());
   }
 
   @Test

@@ -1,5 +1,8 @@
 package data.user;
 
+import static data.user.UserTypeConverter.userTypeToString;
+
+import data.AbstractBaseEntity;
 import data.dao.UserDAO;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,15 +19,15 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findAllUsers", query = "SELECT u FROM User u"),
     @NamedQuery(name = "findUsersByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
     @NamedQuery(name = "findUsersByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
 })
-public class User {
+public class User extends AbstractBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,7 +48,7 @@ public class User {
   @Temporal(TemporalType.TIMESTAMP)
   private Date passwordResetTokenExpireDate;
 
-  public User() {
+  protected User() {
     super();
   }
 
@@ -369,6 +372,16 @@ public class User {
    */
   public void setPasswordResetTokenExpireDate(Date passwordResetTokenExpireDate) {
     this.passwordResetTokenExpireDate = passwordResetTokenExpireDate;
+  }
+
+  public JSONObject createAbout(){
+    JSONObject response = new JSONObject();
+
+    response.put("username", username);
+    response.put("token", sessionToken);
+    response.put("userType", userTypeToString(userType));
+    response.put("email", email);
+    return response;
   }
 
   /**

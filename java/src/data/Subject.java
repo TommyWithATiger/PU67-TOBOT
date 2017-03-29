@@ -2,8 +2,8 @@ package data;
 
 import data.dao.SubjectDAO;
 import data.user.User;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.json.JSONObject;
 
 @Entity
 @NamedQueries({
@@ -20,10 +21,20 @@ import javax.persistence.Table;
     @NamedQuery(name = "findSubjectsByTitle", query = "SELECT s FROM Subject s WHERE s.title LIKE CONCAT('%', :title, '%')"),
     @NamedQuery(name = "findSubjectsByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode LIKE CONCAT('%', :subjectCode, '%')"),
     @NamedQuery(name = "findSubjectsByInstitution", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%')"),
-    @NamedQuery(name = "findSubjectsByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%') AND s.subjectCode LIKE CONCAT('%', :subjectCode, '%')")
+    @NamedQuery(name = "findSubjectsByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%') AND s.subjectCode LIKE CONCAT('%', :subjectCode, '%')"),
+    @NamedQuery(name = "findSubjectsByTopic",
+        query = " SELECT s FROM Subject s"
+              + " JOIN Topic t"
+              + " WHERE t.id = :topicID"
+              + " AND t MEMBER OF s.topics"),
+    @NamedQuery(name = "findSubjectsByEditor",
+        query = " SELECT s FROM Subject s"
+            + " JOIN User u"
+            + " WHERE u.id = :editorID"
+            + " AND u MEMBER OF s.editors")
 })
 @Table
-public class Subject {
+public class Subject extends AbstractBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +55,11 @@ public class Subject {
   @JoinTable(name="PARTICIPANTS")
   private Collection<User> participants;
 
-  public Subject() {
+  protected Subject() {
     super();
-    topics = new ArrayList<>();
-    editors = new ArrayList<>();
-    participants = new ArrayList<>();
+    topics = new HashSet<>();
+    editors = new HashSet<>();
+    participants = new HashSet<>();
   }
 
   /**
@@ -164,7 +175,7 @@ public class Subject {
    * @return Collection of Topic Objects
    */
   public Collection<Topic> getTopics() {
-    return new ArrayList<Topic>(topics);
+    return new HashSet<>(topics);
   }
 
   /**
@@ -232,12 +243,24 @@ public class Subject {
   }
 
   /**
+   * Returns true if the user is an participant of this subject
+   *
+   * @param user, the user to check for
+   * @return boolean, true if user is participant
+   */
+  public boolean isParticipant(User user) {
+    return participants.contains(user);
+  }
+
+  /**
+
+  /**
    * Get the participants of this subject
    *
    * @return Collection of User Objects
    */
   public Collection<User> getParticipants() {
-    return new ArrayList<User>(participants);
+    return new HashSet<>(participants);
   }
 
 
@@ -282,6 +305,26 @@ public class Subject {
    */
   public void update() {
     SubjectDAO.getInstance().merge(this);
+  }
+
+  /**
+   * Creates a JSON object about the subject
+   *
+   * @return A JSON object with the following data
+   *        id (int): the subject id
+   *        title (String): the subject title
+   *        description (String): the subject description
+   *        institution (String): the institution that arranges the subject
+   *        subjectCode (String): the subject code
+   */
+  public JSONObject createAbout() {
+    JSONObject aboutSubject = new JSONObject();
+    aboutSubject.put("id", id);
+    aboutSubject.put("title", title);
+    aboutSubject.put("description", description);
+    aboutSubject.put("institution", institution);
+    aboutSubject.put("subjectCode", subjectCode);
+    return aboutSubject;
   }
 
   /**

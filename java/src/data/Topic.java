@@ -1,23 +1,29 @@
 package data;
 
 import data.dao.TopicDAO;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import java.util.HashSet;
+import org.json.JSONObject;
 
+import javax.persistence.*;
+import data.exercise.Exercise;
+import java.util.Collection;
 
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findAllTopics", query = "SELECT t FROM Topic t"),
     @NamedQuery(name = "findTopicsByTitle", query = "SELECT t FROM Topic t WHERE t.title LIKE CONCAT('%', :title, '%')"),
     @NamedQuery(name = "findTopicsByParentId", query = "SELECT t FROM Topic t WHERE t.parentId = :parerentId"),
+    @NamedQuery(name = "findTopicBySubjectUserSortedByRating", query =
+          " SELECT t FROM Rating r JOIN User u JOIN Subject s JOIN Topic t"
+        + " WHERE t MEMBER OF s.topics"
+        + " AND s.id = :subjectID"
+        + " AND u.id = :userID AND r.ratingKeyPK.userID = :userID"
+        + " AND t.id = r.ratingKeyPK.topicID"
+        + " ORDER BY r.rating"
+    )
 })
 @Table
-public class Topic {
+public class Topic extends AbstractBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +32,12 @@ public class Topic {
   private String description;
   private int parentId;
 
-  public Topic() {
+  @ManyToMany
+  private Collection<Exercise> exercises;
+
+  protected Topic() {
     super();
+    exercises = new HashSet<>();
   }
 
   /**
@@ -133,6 +143,24 @@ public class Topic {
   }
 
   /**
+   * Adds an exercise to this topic
+   *
+   * @param exercise, the Exercise you want to add to this topic
+   */
+  public void addExercise(Exercise exercise) {
+    exercises.add(exercise);
+  }
+
+  /**
+   * Removes an exercise from this topic
+   *
+   * @param exercise, the Exercise you want to remove
+   */
+  public void removeExercise(Exercise exercise) {
+    exercises.remove(exercise);
+  }
+
+  /**
    * Removes this topic from the subject
    *
    * @param subject, the Subject this Topic will be removed from
@@ -160,6 +188,22 @@ public class Topic {
    */
   public void update() {
     TopicDAO.getInstance().merge(this);
+  }
+
+  /**
+   * Creates a JSON object with information about the topic
+   *
+   * @return A JSON object with the following data:
+   *        id (int): the topic id
+   *        title (String): the topic title
+   *        description (String): the topic description
+   */
+  public JSONObject createAbout(){
+    JSONObject aboutTopic = new JSONObject();
+    aboutTopic.put("id", id);
+    aboutTopic.put("title", title);
+    aboutTopic.put("description", description);
+    return aboutTopic;
   }
 
   /**

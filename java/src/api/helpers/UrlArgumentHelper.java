@@ -38,4 +38,39 @@ public class UrlArgumentHelper {
     return arguments;
   }
 
+  /**
+   * A helper method for getting an url argument as a String
+   *
+   * @param httpRequest The HttpRequest to get URL argument from
+   * @return The value of the argument
+   * @throws APIBadRequestException An exception indicating required argument is not present in the
+   * request
+   */
+  public static String getURIField(HttpRequest httpRequest, String field)
+      throws APIBadRequestException {
+    HashMap<String, String> uriArguments = getArgumentsInURL(httpRequest);
+
+    if (!uriArguments.containsKey(field)) {
+      throw new APIBadRequestException(field + " must be given");
+    }
+    return uriArguments.get(field);
+  }
+
+  /**
+   * A helper method for getting an url argument as an Integer
+   *
+   * @param httpRequest The HttpRequest to get URL argument from
+   * @return The value of the argument
+   * @throws APIBadRequestException An exception indicating required argument is not present in the
+   * request
+   */
+  public static Integer getIntegerURIField(HttpRequest httpRequest, String field)
+      throws APIBadRequestException {
+      try {
+        return Integer.valueOf(getURIField(httpRequest, field));
+      } catch (NumberFormatException nfe) {
+        throw new APIBadRequestException(field + " must be int");
+      }
+  }
+
 }

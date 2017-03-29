@@ -49,14 +49,13 @@ public class AddMaintainUsers {
         user.update();
         System.out.println("User updated successfully!");
       } else {
-        User user = new User();
         System.out.print("Enter username: ");
-        user.setUsername(bufferedReader.readLine());
+        String username = bufferedReader.readLine();
         System.out.print("Enter email: ");
-        user.setEmail(bufferedReader.readLine());
+        String email = bufferedReader.readLine();
         System.out.print("Enter password: ");
-        user.setPassword(bufferedReader.readLine());
-
+        String password = bufferedReader.readLine();
+        User user = new User(username, email, password);
         user.create();
         System.out.println("User creation successful!");
         entityManagerFactory.close();

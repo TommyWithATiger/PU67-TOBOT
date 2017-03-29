@@ -1,11 +1,11 @@
 <template>
   <div class="page-content">
     <h1>{{subject.subjectCode}} - {{subject.title}}</h1>
-    <h1>Tilknyttede temaer</h1>
+    <h1>Connected topics</h1>
     <div v-if="relatedTopics.length">
       <div class="topic-info topic-info-header">
-            <div class="topic-title">Tittel</div>
-            <div class="topic-description">Beskrivelse</div>
+            <div class="topic-title">Title</div>
+            <div class="topic-description">Description</div>
           </div>
           <div v-for="t in relatedTopics" class="topic-info">
             <div class="topic-title">{{ t.title }}</div>
@@ -13,25 +13,23 @@
           </div>
     </div>
     <div v-else>
-      Dette emnet er ikke knyttet til noen temaer
+      This subject is not connected to any topics.
     </div>
-    <h1>Legge til temaer</h1>
+    <h1>Add topics</h1>
     <div v-if="topics.length">
       <div class="topic-info topic-info-header">
-            <div class="topic-title">Tittel</div>
-            <div class="topic-description">Beskrivelse</div>
-            <div class="topic-relate"></div>
-          </div>
-          <div v-for="t in topics">
-            <div v-if="!isRelated(t)" class="topic-info">
-              <div class="topic-title">{{ t.title }}</div>
-              <div class="topic-description">{{ t.description }}</div>
-              <div @click="relateTopic(t)" class="topic-relate">Knytt til</div>
-            </div>
-          </div>
+        <div class="topic-title">Title</div>
+        <div class="topic-description">Description</div>
+        <div class="topic-relate"></div>
+      </div>
+      <div v-for="t in topics" v-if="!isRelated(t)" class="topic-info">
+        <div class="topic-title">{{ t.title }}</div>
+        <div class="topic-description">{{ t.description }}</div>
+        <button @click="relateTopic(t)" class="topic-relate">Connect</button>
+      </div>
     </div>
     <div v-else>
-      Ingen temaer tilgjenglig
+      No topics available.
     </div>
     <p class="error">{{ getFeedback }}</p>
   </div>
@@ -115,38 +113,29 @@ export default {
 }
 
 .topic-relate {
-	flex-grow: 0.3;
-	text-decoration: underline;
-	color: #0645AD;
+	flex: 0 0 90px;
 	cursor: pointer;
+  align-self: center;
 }
 
 .topic-description {
   flex-grow: 3;
 }
 
+.topic-info:nth-child(even) {
+  background-color: #ccc;
+  background-color: var(--n-color-3);
+  border-radius: 4px;
+}
+
 .topic-info {
   display: flex;
-  display: -webkit-flex;
-  flex-direction: row;
-  webkit-flex-direction: row;
-  flex-wrap: wrap;
-  webkit-flex-wrap: wrap;
-  flex-grow: 0;
-  webkit-flex-grow: grow;
-  padding-left: 15px;
-  padding-right: 15px;
-  border-bottom: 1px solid #d6d6d6;
-  max-width: 1500px;
-  background-color: #f9f9f9;
-  padding-top: 1px;
-  padding-bottom: 2px;
+  flex-flow: row wrap;
+  padding: 10px 12px;
 }
 
 .topic-info-header {
   font-weight: bold;
   font-size: 1.2em;
-  background-color: #eeeeee;
 }
-
 </style>
