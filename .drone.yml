@@ -1,5 +1,5 @@
 pipeline:
-  test:
+  ssh:
     image: plugins/ssh
     host: ci.niklasmh.no
     username: tobot
