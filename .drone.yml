@@ -3,6 +3,8 @@ pipeline:
     image: registry.niklasmh.no/tobot-prod
     commands:
       - echo Test
+      - echo $(ls)
+      - echo $(pwd)
       - make drone-container-prod
 
   deployment:
