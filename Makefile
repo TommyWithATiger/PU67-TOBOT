@@ -50,13 +50,13 @@ backend-build-clean:
 # Building backend with tests
 backend-build-tests:
 	@echo Builing java application with tests ...
-	@cd java && mvn install
+	@cd java && mvn install -q
 	@echo Done!
 
 # Building backend with tests
 backend-build-tests-clean:
 	@echo Builing java application with tests from scratch ...
-	@cd java && mvn clean install
+	@cd java && mvn clean install -q
 	@echo Done!
 
 # Running backend

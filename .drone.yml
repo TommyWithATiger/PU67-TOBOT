@@ -1,15 +1,17 @@
 pipeline:
   frontend-tests:
-    image: registry.niklasmh.no/tobot-prod
+    image: registry.niklasmh.no/tobot-baseimage
     when:
       event: push
     commands:
       - cd web
-      - npm list -g --depth=0
+      - npm install --silent
       - npm run build
 
   backendend-tests:
-    image: registry.niklasmh.no/tobot-prod
+    image: registry.niklasmh.no/tobot-baseimage
+    when:
+      event: push
     commands:
       - make backend-build-tests
 
@@ -22,4 +24,5 @@ pipeline:
       event: push
       branch: development
     script:
+      - cd /home/tobot/tdt4140-bot-project
       - make drone-prod
