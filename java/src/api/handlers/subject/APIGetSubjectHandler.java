@@ -3,13 +3,18 @@ package api.handlers.subject;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getArgumentsInURL;
 import static api.helpers.UrlArgumentHelper.getIntegerURIField;
+import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
 import data.dao.SubjectDAO;
 import data.Subject;
+import data.user.User;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,7 +54,7 @@ public class APIGetSubjectHandler {
    *        title (String): the subject title to search for
    * @param httpRequest The request to handle
    * @return A JSON object containing a variable "subjects" which is an array of JSON objects on the
-   * from of the createAboutSubject method below for each subject
+   * form of the subject.createAbout method for each subject
    */
   public static String getSubjectsByTitle(HttpRequest httpRequest) {
     checkRequestMethod("GET", httpRequest);
@@ -79,7 +84,7 @@ public class APIGetSubjectHandler {
    *
    * @param httpRequest The request to handle
    * @return A JSON object containing a variable "subjects" which is an array of JSON objects on the
-   * from of the createAboutSubject method below for each subject
+   * form of the subject.createAbout method for each subject
    */
   public static String getAllSubjects(HttpRequest httpRequest){
     checkRequestMethod("GET", httpRequest);
@@ -90,6 +95,53 @@ public class APIGetSubjectHandler {
     JSONObject response = new JSONObject();
     JSONArray subjectArray = new JSONArray();
     subjects.forEach(subject -> subjectArray.put(subject.createAbout()));
+    response.put("subjects", subjectArray);
+
+    return response.toString();
+  }
+
+  /**
+   * An API handler for getting all subjects that a user is participating in
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON object containing a variable "subjects" which is an array of JSON objects on the
+   * from of the subject.createAbout method for each subject
+   */
+  public static String getParticipatingSubjects(HttpRequest httpRequest){
+    return getMemberSubjects(httpRequest, user -> SubjectDAO.getInstance().findSubjectsByParticipant(user));
+  }
+
+  /**
+   * An API handler for getting all subjects that a user is an editor for
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON object containing a variable "subjects" which is an array of JSON objects on the
+   * from of the subject.createAbout method for each subject
+   */
+  public static String getEditorSubjects(HttpRequest httpRequest){
+    return getMemberSubjects(httpRequest, user -> SubjectDAO.getInstance().findSubjectsByEditor(user));
+  }
+
+  /**
+   * An API handler for getting all subjects that a user is a member of either as a participant
+   * or as an editor
+   *
+   * @param httpRequest The request to handle
+   * @param getSubjectsFunc a function to get the relevant subjects for this user
+   * @return A JSON object containing a variable "subjects" which is an array of JSON objects on the
+   * from of the subject.createAbout method for each subject
+   */
+  private static String getMemberSubjects(HttpRequest httpRequest,
+      Function<User, List<Subject>> getSubjectsFunc){
+    checkRequestMethod("GET", httpRequest);
+
+    User user = getUserFromRequest(httpRequest, ", cannot get subjects");
+
+    List<Subject> subjects = getSubjectsFunc.apply(user);
+
+    JSONObject response = new JSONObject();
+    JSONArray subjectArray = new JSONArray(subjects.stream().map(Subject::createAbout).collect(
+        Collectors.toList()));
     response.put("subjects", subjectArray);
 
     return response.toString();
