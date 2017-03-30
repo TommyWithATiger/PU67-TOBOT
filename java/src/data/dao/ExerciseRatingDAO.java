@@ -25,7 +25,7 @@ public class ExerciseRatingDAO extends AbstractBaseDAO<ExerciseRating, ExerciseR
       exerciseRating = new ExerciseRating(user, exercise, difficulty);
       exerciseRating.create();
     } else {
-      exerciseRating.setExerciseRating(difficulty);
+      exerciseRating.updateExerciseRating(difficulty);
       exerciseRating.update();
     }
     return exerciseRating;
