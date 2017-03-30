@@ -30,7 +30,7 @@ pipeline:
     port: 22
     when:
       event: tag
-      branch: development, master
+      branch: development, master, fix/deploy/release
     script:
       - echo "Release ${DRONE_TAG}"
       - ./deploy.sh ${DRONE_TAG}
