@@ -35,8 +35,11 @@ pipeline:
       - ./deploy.sh "${DRONE_TAG}"
 
   notify:
-    image: plugins/slack
+    image: plugins/drone-slack
     channel: drone
     username: Pekka
     icon_url: https://www.idi.ntnu.no/bilder/ansatte/pekkaa.jpg
     webhook: https://hooks.slack.com/services/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
+    when:
+      event: [ push, tag, deployment, pull_request ]
+      status: [ success, failure ]
