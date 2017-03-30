@@ -61,6 +61,7 @@ public class APIAddExerciseHandler {
     String solution;
     try{
       solution = getJSONField(httpRequest, String.class, "solution");
+      solution = policy.sanitize(solution);
     } catch (APIBadRequestException are){
       solution = null;
     }
