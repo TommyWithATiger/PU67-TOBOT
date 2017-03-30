@@ -29,8 +29,18 @@ pipeline:
     username: tobot
     port: 22
     when:
-      event: tag
-      branch: development, master, fix/deploy/release
+      branch: development, master
     script:
       - echo "Release ${DRONE_TAG}"
       - ./deploy.sh ${DRONE_TAG}
+
+  slack:
+      image: plugins/slack
+      webhook: https://hooks.slack.com/services/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
+      channel: drone
+      username: Pekka
+      icon_url: https://www.idi.ntnu.no/bilder/ansatte/pekkaa.jpg
+      image_url: https://www.idi.ntnu.no/bilder/ansatte/pekkaa.jpg
+      when:
+        event: [ push, tag, deployment, pull_request ]
+        status: [ success ]
