@@ -34,6 +34,7 @@ pipeline:
       - echo "Release ${DRONE_TAG}"
       - ./deploy.sh ${DRONE_TAG}
 
+plugins:
   notify:
     image: plugins/slack
     webhook: https://hooks.slack.com/services/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
