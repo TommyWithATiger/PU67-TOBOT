@@ -34,6 +34,7 @@ pipeline:
       - echo "Release ${DRONE_TAG}"
       - ./deploy.sh "${DRONE_TAG}"
 
+plugin:
   notify:
     image: drone-plugins/slack
     channel: drone
