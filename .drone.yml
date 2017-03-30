@@ -15,7 +15,7 @@ pipeline:
       - make backend-build-tests
       - cd java
       - mvn cobertura:cobertura
-      - bash <(curl -s https://codecov.io/bash)
+      - curl -s https://codecov.io/bash | bash -
 
   frontend-tests:
     image: registry.niklasmh.no/tobot-baseimage
