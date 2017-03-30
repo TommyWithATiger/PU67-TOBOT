@@ -3,6 +3,7 @@ package http.handlers;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
+import base.IndexPageTest;
 import base.ServerBaseTest;
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import org.apache.http.HttpResponse;
 import org.junit.Test;
 import server.http.HttpFileHandler;
 
-public class IndexPageHTTPHandlerTest extends ServerBaseTest {
+public class IndexPageHTTPHandlerTest extends IndexPageTest {
 
   @Test
   public void testIndexRequest() throws IOException, HttpException, InterruptedException {
