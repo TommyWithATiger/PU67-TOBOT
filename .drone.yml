@@ -27,8 +27,8 @@ pipeline:
     username: tobot
     port: 22
     when:
-      event: push
-      branch: development
+      event: tag
+      branch: development, master
     script:
-      - cd /home/tobot/tdt4140-bot-project
-      - make drone-prod
+      - echo "Release ${DRONE_TAG}"
+      - ./deploy.sh ${DRONE_TAG}
