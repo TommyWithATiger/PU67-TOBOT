@@ -23,18 +23,6 @@ pipeline:
       - npm install --depth=0 --quiet
       - npm run build
 
-  deployment:
-    image: plugins/ssh
-    host: ci.niklasmh.no
-    username: tobot
-    port: 22
-    when:
-      branch: development, master
-    script:
-      - echo "Release ${DRONE_TAG}"
-      - ./deploy.sh ${DRONE_TAG}
-
-plugins:
   notify:
     image: plugins/slack
     webhook: https://hooks.slack.com/services/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
@@ -44,3 +32,14 @@ plugins:
     when:
       event: [ push, tag, deployment, pull_request ]
       status: [ success, failure ]
+
+  deployment:
+    image: plugins/ssh
+    host: ci.niklasmh.no
+    username: tobot
+    port: 22
+    when:
+      branch: development, master
+    script:
+      - echo "Release ${DRONE_TAG}"
+      - ./deploy.sh "${DRONE_TAG}"
