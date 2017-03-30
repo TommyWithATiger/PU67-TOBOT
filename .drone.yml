@@ -5,8 +5,8 @@ pipeline:
       event: push
     commands:
       - echo "${DB_LOGIN}" > java/src/META-INF/db_login.xml
-      - echo "${MAIL_LOGIN}" > java/src/META-INF/mail_login.xml
-      - echo "${MAIL_PASSWORD}" >> java/src/META-INF/mail_login.xml
+      - echo "${MAIL_LOGIN}" > java/src/META-INF/mail_login.txt
+      - echo "${MAIL_PASSWORD}" >> java/src/META-INF/mail_login.txt
       - make backend-build-tests
 
   frontend-tests:
