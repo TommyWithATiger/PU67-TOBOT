@@ -9,18 +9,15 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
 })
-@Table
+@Table(name = "EXERCISERATING_FLOAT")
 public class ExerciseRating extends AbstractBaseEntity {
 
   @EmbeddedId
   private ExerciseRatingKey id;
 
-  @Enumerated(value = EnumType.STRING)
-  @Convert(converter = ExerciseRatingConverter.class)
-  private ExerciseRatingEnum rating;
+  private float rating;
 
-
-  public ExerciseRating() {
+  protected ExerciseRating() {
     super();
     id = new ExerciseRatingKey();
   }
@@ -100,17 +97,8 @@ public class ExerciseRating extends AbstractBaseEntity {
    *
    * @return the rating
    */
-  public ExerciseRatingEnum getRating() {
+  public float getRating() {
     return rating;
-  }
-
-  /**
-   * Get the rating as an integer from 1 to 3
-   *
-   * @return the integer representing rating
-   */
-  public int getIntRating() {
-    return rating.value();
   }
 
   /**
@@ -119,7 +107,17 @@ public class ExerciseRating extends AbstractBaseEntity {
    * @param ratingEnum the rating
    */
   public void setExerciseRating(ExerciseRatingEnum ratingEnum) {
-    this.rating = ratingEnum;
+    this.rating = ratingEnum.value();
+  }
+
+  /**
+   * Updates the rating to the mean of the previous rating and the new rating.
+   *
+   * @param ratingEnum the rating
+   */
+  public void updateExerciseRating(ExerciseRatingEnum ratingEnum) {
+    this.rating += ratingEnum.value();
+    this.rating /= 2;
   }
 
   /**

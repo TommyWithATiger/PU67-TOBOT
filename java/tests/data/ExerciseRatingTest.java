@@ -56,7 +56,7 @@ public class ExerciseRatingTest extends BaseTest {
     exerciserating.update();
 
     ExerciseRating exerciserating1 = ExerciseRatingDAO.getInstance().findById(id);
-    assertEquals(ExerciseRatingEnum.Easy, exerciserating1.getRating());
+    assertEquals(ExerciseRatingEnum.Easy.value(), exerciserating1.getRating(), 0.0001);
   }
 
 }
