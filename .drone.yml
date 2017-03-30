@@ -3,6 +3,8 @@ pipeline:
     image: registry.niklasmh.no/tobot-baseimage
     when:
       event: push
+    environment:
+      - CODECOV_TOKEN=${CODECOV_TOKEN}
     commands:
       - echo \<?xml version=\"1.0\" encoding=\"UTF-8\"?\> > java/src/META-INF/db_login.xml
       - echo \<property name=\"javax.persistence.jdbc.url\" value=\""${DB_LOGIN}"\"/\> >> java/src/META-INF/db_login.xml
@@ -11,6 +13,9 @@ pipeline:
       - echo "${MAIL_LOGIN}" > java/src/META-INF/mail_login.txt
       - echo "${MAIL_PASSWORD}" >> java/src/META-INF/mail_login.txt
       - make backend-build-tests
+      - cd java
+      - mvn cobertura:cobertura
+      - bash <(curl -s https://codecov.io/bash)
 
   frontend-tests:
     image: registry.niklasmh.no/tobot-baseimage
