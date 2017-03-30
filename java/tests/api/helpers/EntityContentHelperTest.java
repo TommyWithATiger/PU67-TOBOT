@@ -28,7 +28,7 @@ public class EntityContentHelperTest extends BaseTest {
 
   @Test
   public void testWithContent() {
-    String content = "Test String, 123æøå#$%";
+    String content = "Test String, 123abc#$%";
 
     HttpEntityEnclosingRequest httpRequest = new BasicHttpEntityEnclosingRequest("GET", "URL");
     BasicHttpEntity httpEntity = new BasicHttpEntity();

@@ -1,0 +1,34 @@
+pipeline:
+  backendend-tests:
+    image: registry.niklasmh.no/tobot-baseimage
+    when:
+      event: push
+    commands:
+      - echo \<?xml version=\"1.0\" encoding=\"UTF-8\"?\> > java/src/META-INF/db_login.xml
+      - echo \<property name=\"javax.persistence.jdbc.url\" value=\""${DB_LOGIN}"\"/\> >> java/src/META-INF/db_login.xml
+      - echo \<property name=\"javax.persistence.jdbc.user\" value=\""${DB_USERNAME}"\"/\> >> java/src/META-INF/db_login.xml
+      - echo \<property name=\"javax.persistence.jdbc.password\" value=\""${DB_PASSWORD}"\"/\> >> java/src/META-INF/db_login.xml
+      - echo "${MAIL_LOGIN}" > java/src/META-INF/mail_login.txt
+      - echo "${MAIL_PASSWORD}" >> java/src/META-INF/mail_login.txt
+      - make backend-build-tests
+
+  frontend-tests:
+    image: registry.niklasmh.no/tobot-baseimage
+    when:
+      event: push
+    commands:
+      - cd web
+      - npm install --depth=0 --quiet
+      - npm run build
+
+  deployment:
+    image: plugins/ssh
+    host: ci.niklasmh.no
+    username: tobot
+    port: 22
+    when:
+      event: push
+      branch: development
+    script:
+      - cd /home/tobot/tdt4140-bot-project
+      - make drone-prod
