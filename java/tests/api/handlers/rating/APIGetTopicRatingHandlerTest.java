@@ -12,7 +12,6 @@ import base.BaseTest;
 import data.Topic;
 import data.user.User;
 import data.rating.Rating;
-import data.rating.RatingConverter;
 import data.rating.RatingEnum;
 import org.apache.http.HttpRequest;
 import org.apache.http.message.BasicHeader;
@@ -37,7 +36,7 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
     topic = new Topic("Test topic", "Description");
     topic.create();
 
-    rating = new Rating(user.getId(), topic.getId(), RatingEnum.GOOD);
+    rating = new Rating(user.getId(), topic.getId(), RatingEnum.Good);
     rating.create();
   }
 
@@ -86,7 +85,7 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
         true);
     String response = getTopicRatingByTopicID(httpRequest);
     assertEquals(
-        "{\"rating\":\"" + RatingConverter.convertEnumToFullRatingName(rating.getRating()) + "\"}",
+        "{\"rating\":\"" + rating.getRating().toString() + "\"}",
         response);
   }
 
@@ -123,7 +122,7 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
   public void testGetTopicRatingsSeveral() {
     Topic topic2 = new Topic("Test topic 2", "Description");
     topic2.create();
-    Rating rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.POOR);
+    Rating rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.Poor);
     rating2.create();
 
     HttpRequest httpRequest = buildRequest("topic/url", "POST", true);
@@ -168,7 +167,7 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
   public void testGetTopicWithRatingsSeveralTopics() {
     Topic topic2 = new Topic("Test topic 2", "Description");
     topic2.create();
-    Rating rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.POOR);
+    Rating rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.Poor);
     rating2.create();
 
     HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", true);

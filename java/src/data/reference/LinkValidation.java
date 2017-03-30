@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import javax.net.ssl.SSLSocketFactory;
-import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.io.DefaultHttpResponseParser;
@@ -37,7 +36,7 @@ public class LinkValidation {
         "^((?:https?:)?//)?((?:www)\\.)?((?:youtube\\.com|youtu.be))(/(?:[\\w\\-]+\\?v=|embed/|v/)?)([\\w\\-]+)(\\S+)?$")) {
       return testLinkAccessible(link);
     }
-    throw new IllegalArgumentException("Video URL has to be from Youtube");
+    throw new IllegalArgumentException("Video URL has to be from Youtube.");
   }
 
   public static boolean testLinkAccessible(String link) throws IOException, HttpException {

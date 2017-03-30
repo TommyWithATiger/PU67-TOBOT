@@ -65,19 +65,19 @@ public class ReferenceTest extends BaseTest {
 
   @Test
   public void getSetLink() throws Exception {
-    assertEquals("www.google.com", reference.getLink());
+    assertEquals("http://www.google.com", reference.getLink());
     reference.setLink("https://google.com");
     assertEquals("https://google.com", reference.getLink());
   }
 
   @Test
   public void getSetVideoLink() throws Exception {
-    Reference videoRef = new Reference("T", "D", "www.youtube.com/watch?v=DFYRQ_zQ-gk", ReferenceType.VIDEO);
-    assertEquals("www.youtube.com/watch?v=DFYRQ_zQ-gk", videoRef.getLink());
-    videoRef.setLink("http://www.youtube.com/v/DFYRQ_zQ-gk?fs=1&hl=en_US");
-    assertEquals("http://www.youtube.com/v/DFYRQ_zQ-gk?fs=1&hl=en_US", videoRef.getLink());
-    videoRef.setLink("https://youtu.be/DFYRQ_zQ-gk");
-    assertEquals("https://youtu.be/DFYRQ_zQ-gk", videoRef.getLink());
+    Reference videoRef = new Reference("T", "D", "www.youtube.com/watch?v=0zM3nApSvMg", ReferenceType.VIDEO);
+    assertEquals("0zM3nApSvMg", videoRef.getLink());
+    videoRef.setLink("http://www.youtube.com/v/dQw4w9WgXcQ?fs=1&hl=en_US");
+    assertEquals("dQw4w9WgXcQ", videoRef.getLink());
+    videoRef.setLink("https://youtu.be/KdwsulMb8EQ");
+    assertEquals("KdwsulMb8EQ", videoRef.getLink());
   }
 
   @Test(expected = MalformedURLException.class)

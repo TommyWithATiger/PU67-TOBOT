@@ -109,7 +109,7 @@ export default {
       })
     },
     rateTopic (id, rating) {
-      api.rateTopic(this, id, this.numberToRating[rating], (data) => {
+      api.rateTopic(this, parseInt(id), this.numberToRating[rating], (data) => {
         this.$set(this.topics[id], 'rating', this.ratingToNumber[data.rating])
         this.$forceUpdate()
       })

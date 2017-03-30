@@ -1,11 +1,10 @@
 package data.dao;
 
 import data.Topic;
+import data.dao.util.FieldTuple;
 import data.reference.Reference;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 
 public class ReferenceDAO extends AbstractBaseDAO<Reference, Integer> {
 
@@ -36,20 +35,8 @@ public class ReferenceDAO extends AbstractBaseDAO<Reference, Integer> {
    * @return List of Reference objects
    */
   public List<Reference> findReferenceByTag(Topic tag) {
-    List<Reference> entityList;
-    try {
-      EntityManager entityManager = emFactory.createEntityManager();
-      Query query = entityManager.createNativeQuery(
-          "SELECT * FROM Reference WHERE id IN (SELECT Reference_id FROM REFERENCE_TAGS WHERE tags_id = ?)",
-          Reference.class);
-      query.setParameter(1, tag.getId());
-      entityList = (List<Reference>) query.getResultList(); //FIXME find a better fix
-      entityManager.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      entityList = null;
-    }
-    return entityList;
+      return super.find("findReferencesByTag",
+          new FieldTuple("tag", tag));
   }
 
   /**

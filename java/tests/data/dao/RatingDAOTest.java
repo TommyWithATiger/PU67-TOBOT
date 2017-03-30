@@ -67,11 +67,11 @@ public class RatingDAOTest extends BaseTest{
     rk13 = new RatingKey(user1.getId(), topic3.getId());
     rk23 = new RatingKey(user2.getId(), topic3.getId());
 
-    rating11 = new Rating(rk11.getUserID(), rk11.getTopicID(), RatingEnum.GOOD);
-    rating12 = new Rating(rk12.getUserID(), rk12.getTopicID(), RatingEnum.POOR);
-    rating21 = new Rating(rk21.getUserID(), rk21.getTopicID(), RatingEnum.SUPERB);
-    rating13 = new Rating(rk13.getUserID(), rk13.getTopicID(), RatingEnum.OK);
-    rating23 = new Rating(rk23.getUserID(), rk23.getTopicID(), RatingEnum.NONE);
+    rating11 = new Rating(rk11.getUserID(), rk11.getTopicID(), RatingEnum.Good);
+    rating12 = new Rating(rk12.getUserID(), rk12.getTopicID(), RatingEnum.Poor);
+    rating21 = new Rating(rk21.getUserID(), rk21.getTopicID(), RatingEnum.Superb);
+    rating13 = new Rating(rk13.getUserID(), rk13.getTopicID(), RatingEnum.Ok);
+    rating23 = new Rating(rk23.getUserID(), rk23.getTopicID(), RatingEnum.None);
     rating11.create();
     rating12.create();
     rating21.create();

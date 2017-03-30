@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,11 +22,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.apache.http.HttpException;
+import org.json.JSONObject;
 
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findAllReferences", query = "SELECT r FROM Reference r"),
-    @NamedQuery(name = "findReferencesByTitle", query = "SELECT r FROM Reference r WHERE r.title LIKE CONCAT('%', :title, '%')")
+    @NamedQuery(name = "findReferencesByTitle", query = "SELECT r FROM Reference r WHERE r.title LIKE CONCAT('%', :title, '%')"),
+    @NamedQuery(name = "findReferencesByTag", query = "SELECT r FROM Reference r "
+        + "JOIN Topic t WHERE t = :tag AND t MEMBER OF r.tags"),
 })
 @Table
 public class Reference {
@@ -37,6 +43,7 @@ public class Reference {
 
   @Enumerated(value = EnumType.STRING)
   @Convert(converter = ReferenceTypeConverter.class)
+  @Column(name = "type")
   private ReferenceType referenceType;
 
   @ManyToMany
@@ -134,7 +141,18 @@ public class Reference {
    */
   public void setLink(String link) throws IOException, IllegalArgumentException, HttpException {
     if (LinkValidation.validateLink(this, link)) {
-      this.link = link;
+      if (referenceType == ReferenceType.VIDEO) {
+        String reg = "(?:youtube(?:-nocookie)?\\.com\\/(?:[^\\/\\n\\s]+\\/\\S+\\/|(?:v|e(?:mbed)?)\\/|\\S*?[?&]v=)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})";
+        Pattern pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(link);
+        if (matcher.find()) {
+          this.link = matcher.group(1);
+        } else {
+          throw new IllegalArgumentException("Could not get Youtube video ID");
+        }
+      } else if (!link.substring(0, 4).equals("http")) {
+        this.link = "http://" + link;
+      } else this.link = link;
     }
   }
 
@@ -253,4 +271,25 @@ public class Reference {
   public int hashCode() {
     return id;
   }
+
+  /**
+   * Creates a JSON object with information about the reference
+   *
+   * @return A JSON object with the following data:
+   *        id (int): the reference id
+   *        title (String): the reference title
+   *        description (String): the reference description
+   *        link (String): the reference link
+   *        type (String): the reference type
+   */
+  public JSONObject createAbout(){
+    JSONObject aboutTopic = new JSONObject();
+    aboutTopic.put("id", id);
+    aboutTopic.put("title", title);
+    aboutTopic.put("description", description);
+    aboutTopic.put("link", link);
+    aboutTopic.put("type", ReferenceTypeConverter.referenceTypeToString(referenceType));
+    return aboutTopic;
+  }
+
 }

@@ -28,6 +28,14 @@ const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
+const REFERENCE_GET_URL = `${API_URL}/reference/get/`
+const REFERENCE_GET_ID_URL = `${API_URL}/reference/get/?id=`
+const REFERENCE_ADD_URL = `${API_URL}/reference/create`
+
+const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
+
+const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
+
 export const api = {
   /**
    * Get the user from API.
@@ -113,6 +121,29 @@ export const api = {
    */
   getSubjectById (ctx, id, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_ID_URL + id, callback, error)
+  },
+
+  /**
+   * Get all references from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getReferences (ctx, callback, error) {
+    return this.getRequest(ctx, REFERENCE_GET_URL, callback, error)
+  },
+
+  /**
+   * Get the reference with the given id from API.
+   * @param {object} ctx Context.
+   * @param {integer} id The topic id.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getReferenceById (ctx, id, callback, error) {
+    return this.getRequest(ctx, REFERENCE_GET_ID_URL + id, callback, error)
   },
 
   /**
@@ -211,6 +242,30 @@ export const api = {
   },
 
   /**
+   * Add reference.
+   * @param {object} ctx Context.
+   * @param {object} reference The reference to post in request.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  addReference (ctx, reference, callback, error) {
+    let data = {
+      title: reference.title,
+      description: reference.description,
+      link: reference.link,
+      type: reference.type,
+      tags: reference.tags
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, REFERENCE_ADD_URL, req, callback, error)
+  },
+
+  /**
    * Rate a topic
    * @param {object} ctx Context.
    * @param {number} id The topic id to rate.
@@ -267,6 +322,58 @@ export const api = {
     }
 
     return this.postRequest(ctx, SUBJECT_TOPIC_RELATE_URL, req, callback, error)
+  },
+
+  /**
+   * Upload a pdf, has to handle it's request content a bit different. This is because in PDFs all characters are important
+   * and translating the content to a json string would replace the byte values, with others due to the character encoding
+   * @param {object} ctx Context.
+   * @param {object} file ArrayBuffer of a file
+   * @param {function} callback Handler the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request
+   */
+  uploadPDF (ctx, file, callback, error) {
+    let req = {
+      body: file
+    }
+
+    req.headers = Object.assign({}, req.headers || {}, {
+      'Authorization': auth.getAuthHeader()['Authorization'],
+      'X-Username': auth.getUsername()
+    })
+
+    req.method = 'POST'
+    let h = req.headers
+    req.headers = new Headers(h)
+
+    return fetch(new Request(UPLOAD_PDF_URL, req))
+    .then(res => res.json())
+    .then(callback)
+    .catch(error)
+  },
+
+  /**
+   * Create exercise
+   * @param {object} ctx Context.
+   * @param {string} content Exercise content, that is the HTML
+   * @param {array} tags Array of topic ids for the exercise
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  createExercise (ctx, content, tags, callback, error) {
+    let data = {
+      title: '',
+      text: content,
+      difficulty: 'Unknown',
+      topicIDs: tags
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, CREATE_EXERCISE_URL, req, callback, error)
   },
 
   /**

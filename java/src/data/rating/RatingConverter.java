@@ -1,83 +1,34 @@
 package data.rating;
 
-import static data.rating.RatingEnum.*;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * This class converts between RatingEnum and the corresponding chars in the database
+ * This class converts between RatingEnum and the corresponding ints in the database
  */
 @Converter
-public class RatingConverter implements AttributeConverter<RatingEnum, String> {
+public class RatingConverter implements AttributeConverter<RatingEnum, Integer> {
 
   @Override
-  public String convertToDatabaseColumn(RatingEnum attribute) {
-    switch (attribute) {
-      case NONE:
-        return "N";
-      case POOR:
-        return "P";
-      case OK:
-        return "O";
-      case GOOD:
-        return "G";
-      case SUPERB:
-        return "S";
-      default:
-        throw new IllegalArgumentException("Unknown " + attribute);
-    }
+  public Integer convertToDatabaseColumn(RatingEnum attribute) {
+    return attribute.value();
   }
 
   @Override
-  public RatingEnum convertToEntityAttribute(String dbData) {
-    switch (dbData) {
-      case "N":
-        return NONE;
-      case "P":
-        return POOR;
-      case "O":
-        return OK;
-      case "G":
-        return GOOD;
-      case "S":
-        return SUPERB;
-      default:
-        throw new IllegalArgumentException("Unknown " + dbData);
-    }
+  public RatingEnum convertToEntityAttribute(Integer dbData) {
+    return RatingEnum.get(dbData);
   }
 
   public static RatingEnum convertFullRatingNameToEnum(String fullRatingName) {
-    switch (fullRatingName.toLowerCase()) {
-      case "none":
-        return NONE;
-      case "poor":
-        return POOR;
-      case "ok":
-        return OK;
-      case "good":
-        return GOOD;
-      case "superb":
-        return SUPERB;
-      default:
-        throw new IllegalArgumentException("Unknown " + fullRatingName);
-    }
+    return RatingEnum.valueOf(
+        fullRatingName.substring(0, 1).toUpperCase() + fullRatingName.substring(1).toLowerCase());
   }
 
-  public static String convertEnumToFullRatingName(RatingEnum ratingEnum){
-    switch (ratingEnum) {
-      case NONE:
-        return "None";
-      case POOR:
-        return "Poor";
-      case OK:
-        return "Ok";
-      case GOOD:
-        return "Good";
-      case SUPERB:
-        return "Superb";
-      default:
-        throw new IllegalArgumentException("Unknown " + ratingEnum);
-    }
+  /**
+   * @deprecated Use ratingEnum.toString instead
+   */
+  @Deprecated
+  public static String convertEnumToFullRatingName(RatingEnum ratingEnum) {
+    return ratingEnum.toString();
   }
 }

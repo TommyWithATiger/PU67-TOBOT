@@ -13,6 +13,10 @@ import RegisterPage from 'components/pages/RegisterPage'
 import RequestResetPage from 'components/pages/RequestResetPage'
 import PasswordResetPage from 'components/pages/ResetPasswordPage'
 import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
+import ReferencePage from 'components/pages/ReferencePage'
+import UploadPDFPage from 'components/pages/UploadPDFPage'
+import ExerciseCreationPage from 'components/pages/ExerciseCreationPage'
+import ReferenceUpload from 'components/pages/ReferenceUploadPage'
 import { auth } from 'auth'
 import { api } from 'api'
 import { store } from 'store'
@@ -55,7 +59,7 @@ function requireAuth (to, from, next) {
         if (to.meta.users.indexOf(store.state.user.usertype) !== -1) {
           next()
         } else {
-          if (store.state.user.usertype === 'undefined') {
+          if (store.state.user.usertype === 'undefined' || store.state.user.usertype === null) {
             api.getUser(this, (data) => {
               store.state.user.username = data.username
               store.state.user.usertype = data.userType
@@ -131,6 +135,20 @@ export const router = new Router({
       beforeEnter: requireAuth
     },
     {
+      path: '/reference/:id',
+      name: 'Reference',
+      component: ReferencePage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/reference',
+      name: 'ReferenceUpload',
+      component: ReferenceUpload,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
+      beforeEnter: requireAuth
+    },
+    {
       path: '/topic',
       name: 'Topics',
       component: TopicsPage,
@@ -162,6 +180,20 @@ export const router = new Router({
       path: '/user/:user',
       name: 'User',
       component: UserPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/upload',
+      name: 'UploadPDF',
+      component: UploadPDFPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/exercise/create',
+      name: 'ExerciseCreate',
+      component: ExerciseCreationPage,
       meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },

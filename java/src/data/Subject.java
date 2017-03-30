@@ -21,7 +21,17 @@ import org.json.JSONObject;
     @NamedQuery(name = "findSubjectsByTitle", query = "SELECT s FROM Subject s WHERE s.title LIKE CONCAT('%', :title, '%')"),
     @NamedQuery(name = "findSubjectsByCode", query = "SELECT s FROM Subject s WHERE s.subjectCode LIKE CONCAT('%', :subjectCode, '%')"),
     @NamedQuery(name = "findSubjectsByInstitution", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%')"),
-    @NamedQuery(name = "findSubjectsByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%') AND s.subjectCode LIKE CONCAT('%', :subjectCode, '%')")
+    @NamedQuery(name = "findSubjectsByInstitutionAndCode", query = "SELECT s FROM Subject s WHERE s.institution LIKE CONCAT('%', :institution, '%') AND s.subjectCode LIKE CONCAT('%', :subjectCode, '%')"),
+    @NamedQuery(name = "findSubjectsByTopic",
+        query = " SELECT s FROM Subject s"
+              + " JOIN Topic t"
+              + " WHERE t.id = :topicID"
+              + " AND t MEMBER OF s.topics"),
+    @NamedQuery(name = "findSubjectsByEditor",
+        query = " SELECT s FROM Subject s"
+            + " JOIN User u"
+            + " WHERE u.id = :editorID"
+            + " AND u MEMBER OF s.editors")
 })
 @Table
 public class Subject extends AbstractBaseEntity {
@@ -231,6 +241,18 @@ public class Subject extends AbstractBaseEntity {
       editors.remove(user);
     }
   }
+
+  /**
+   * Returns true if the user is an participant of this subject
+   *
+   * @param user, the user to check for
+   * @return boolean, true if user is participant
+   */
+  public boolean isParticipant(User user) {
+    return participants.contains(user);
+  }
+
+  /**
 
   /**
    * Get the participants of this subject
