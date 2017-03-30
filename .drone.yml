@@ -4,7 +4,10 @@ pipeline:
     when:
       event: push
     commands:
-      - echo "${DB_LOGIN}" > java/src/META-INF/db_login.xml
+      - echo \<?xml version=\"1.0\" encoding=\"UTF-8\"?\> > java/src/META-INF/db_login.xml
+      - echo \<property name=\"javax.persistence.jdbc.url\" value=\""${DB_LOGIN}"\"/\> >> java/src/META-INF/db_login.xml
+      - echo \<property name=\"javax.persistence.jdbc.user\" value=\""${DB_USERNAME}"\"/\> >> java/src/META-INF/db_login.xml
+      - echo \<property name=\"javax.persistence.jdbc.password\" value=\""${DB_PASSWORD}"\"/\> >> java/src/META-INF/db_login.xml
       - echo "${MAIL_LOGIN}" > java/src/META-INF/mail_login.txt
       - echo "${MAIL_PASSWORD}" >> java/src/META-INF/mail_login.txt
       - make backend-build-tests
