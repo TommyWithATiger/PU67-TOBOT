@@ -3,11 +3,11 @@
     <h2 class="title">
       {{ title }}
     </h2>
-    <div class="tags" v-for="tag in tags">
+    <div class="tags">
       <h3 class="tags_title">
         Tags: 
       </h3>
-      <div class="topic_tag">
+      <div class="topic_tag" v-for="tag in tags">
         <div class="tag_title">
           {{ tag.title }}
         </div>
