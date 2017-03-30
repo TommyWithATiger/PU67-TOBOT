@@ -43,4 +43,3 @@ pipeline:
     image_url: https://www.idi.ntnu.no/bilder/ansatte/pekkaa.jpg
     when:
       event: [ push, tag, deployment, pull_request ]
-      status: [ success ]
