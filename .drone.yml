@@ -43,9 +43,9 @@ pipeline:
     template: >
       {{#if build.tag}}
         {{#success build.status}}
-          We have a new, working release! Pekka is having a nice day. Good job, everyone! {{build.link}}
+          {{uppercasefirst build.tag}} is our new, working release! Pekka is having a nice day. Good job, everyone! {{build.link}}
         {{else}}
-          Pekka sad...  Really sad.. The release was no success. No release party today. {{build.link}}
+          Pekka sad...  Really sad.. Release {{build.tag}} was no success. No release party today. {{build.link}}
         {{/success}}
       {{else}}
         {{#success build.status}}
