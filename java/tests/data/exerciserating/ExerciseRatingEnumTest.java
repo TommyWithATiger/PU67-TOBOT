@@ -1,4 +1,4 @@
-package data;
+package data.exerciserating;
 
 import static org.junit.Assert.assertEquals;
 
