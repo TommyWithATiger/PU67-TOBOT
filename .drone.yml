@@ -38,6 +38,5 @@ pipeline:
     image: plugins/slack
     webhook: ${SLACK_WEBHOOK}
     channel: drone
-    username: Pekka
     when:
       status: [ success, failure ]
