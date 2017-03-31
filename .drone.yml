@@ -38,5 +38,7 @@ pipeline:
     image: plugins/slack
     webhook: ${SLACK_WEBHOOK}
     channel: drone
+    username: pekka
+    icon_url: https://www.idi.ntnu.no/bilder/ansatte/pekkaa.jpg
     when:
       status: [ success, failure ]
