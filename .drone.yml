@@ -3,7 +3,7 @@ pipeline:
     image: registry.niklasmh.no/tobot-baseimage
     when:
       event: push
-      branch: [ development, master ]
+      branch: [ development, master, fix/*, feature/* ]
     commands:
       - echo \<?xml version=\"1.0\" encoding=\"UTF-8\"?\> > java/src/META-INF/db_login.xml
       - echo \<property name=\"javax.persistence.jdbc.url\" value=\""${DB_LOGIN}"\"/\> >> java/src/META-INF/db_login.xml
@@ -17,7 +17,7 @@ pipeline:
     image: registry.niklasmh.no/tobot-baseimage
     when:
       event: push
-      branch: [ development, master ]
+      branch: [ development, master, fix/*, feature/* ]
     commands:
       - cd web
       - npm install --depth=0 --quiet
