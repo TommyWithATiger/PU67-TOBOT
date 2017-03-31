@@ -27,10 +27,10 @@ pipeline:
     username: tobot
     port: 22
     when:
-      branch: development, master
+      event: tag
     script:
-      - echo "Release ${DRONE_TAG}"
-      - ./deploy.sh "${DRONE_TAG}"
+      - echo "Release ${DRONE_TAG} from branch ${DRONE_BRANCH}"
+      - ./deploy.sh "${DRONE_TAG}" "${DRONE_BRANCH}"
 
   slack:
     image: plugins/slack
