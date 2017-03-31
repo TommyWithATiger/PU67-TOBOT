@@ -27,8 +27,30 @@ pipeline:
     username: tobot
     port: 22
     when:
-      event: push
-      branch: development
+      event: tag
     script:
-      - cd /home/tobot/tdt4140-bot-project
-      - make drone-prod
+      - echo "Release ${DRONE_TAG} from branch ${DRONE_BRANCH}"
+      - ./deploy.sh "${DRONE_TAG}" "${DRONE_BRANCH}"
+
+  slack:
+    image: plugins/slack
+    webhook: ${SLACK_WEBHOOK}
+    channel: drone
+    username: pekka
+    icon_url: https://www.idi.ntnu.no/bilder/ansatte/pekkaa.jpg
+    template: >
+      {{#if build.tag}}
+        {{#success build.status}}
+          {{uppercasefirst build.tag}} is our new, working release! Pekka is having a nice day. Good job, everyone! {{build.link}}
+        {{else}}
+          Pekka sad...  Really sad.. Release {{build.tag}} was no success. No release party today. {{build.link}}
+        {{/success}}
+      {{else}}
+        {{#success build.status}}
+          Build {{build.number}} succeeded! Pekka is very happy. Good job, {{build.author}}. {{build.link}} ({{build.branch}})
+        {{else}}
+          Pekka sad... Please fix, {{build.author}}. {{build.link}} ({{build.branch}})
+        {{/success}}
+      {{/if}}
+    when:
+      status: [ success, failure ]
