@@ -30,6 +30,7 @@ pipeline:
       event: tag
     script:
       - echo "Release ${DRONE_TAG} from branch ${DRONE_BRANCH}"
+      - cd /home/tobot
       - ./deploy.sh "${DRONE_TAG}" "${DRONE_BRANCH}"
 
   slack:
