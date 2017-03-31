@@ -40,5 +40,19 @@ pipeline:
     channel: drone
     username: pekka
     icon_url: https://www.idi.ntnu.no/bilder/ansatte/pekkaa.jpg
+    template: >
+      {{ #tag build.event }}
+        {{ #success build.status }}
+          We have a new, working release! Pekka is having a nice day. Good job, everyone! {{ build.link }}
+        {{ else }}
+          Pekka sad...  Really sad.. The release was no success. No release party today. {{ build.link }}
+        {{ /success }}
+      {{ else }}
+        {{ #success build.status }}
+          Build {{ build.number }} succeeded! Pekka is very happy. Good job, {{ build.author }}
+        {{ else }}
+          Pekka sad... Please fix, {{ build.author }}. {{ build.link }} ({{ build.branch }})
+        {{ /success }}
+      {{ /tag }}
     when:
       status: [ success, failure ]
