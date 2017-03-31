@@ -2,8 +2,8 @@ pipeline:
   backendend-tests:
     image: registry.niklasmh.no/tobot-baseimage
     when:
-      event: pull_request
-      branch: development, master
+      event: push
+      branch: [ development, master ]
     commands:
       - echo \<?xml version=\"1.0\" encoding=\"UTF-8\"?\> > java/src/META-INF/db_login.xml
       - echo \<property name=\"javax.persistence.jdbc.url\" value=\""${DB_LOGIN}"\"/\> >> java/src/META-INF/db_login.xml
@@ -16,8 +16,8 @@ pipeline:
   frontend-tests:
     image: registry.niklasmh.no/tobot-baseimage
     when:
-      event: pull_request
-      branch: development, master
+      event: push
+      branch: [ development, master ]
     commands:
       - cd web
       - npm install --depth=0 --quiet
