@@ -41,8 +41,7 @@ pipeline:
     username: pekka
     icon_url: https://www.idi.ntnu.no/bilder/ansatte/pekkaa.jpg
     template: >
-      {{build.tag}}
-      {{#if build.event}}
+      {{#if build.tag}}
         {{#success build.status}}
           We have a new, working release! Pekka is having a nice day. Good job, everyone! {{build.link}}
         {{else}}
