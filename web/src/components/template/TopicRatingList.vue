@@ -1,20 +1,12 @@
 <template>
   <div>
-    <h2>All topics</h2>
-      <div v-if="topics.length">
-        <div class="topic-info topic-info-header">
-          <div class="topic-title">Title</div>
-          <div class="topic-description">Description</div>
-          <div class="topic-rating-header">My knowledge</div>
-        </div>
-        <div v-for="(t, id) in topics" v-if="id != 'length'" class="topic-info">
-          <div class="topic-title"> {{ t.title }} </div>
-          <div class="topic-description"> {{ t.description }} </div>
-          <StarRating :id="t.id" :value="t.rating" @rate="rateTopic" />
-        </div>
-      </div>
-      <div v-else><span v-if="!getFeedback.length">No topics.</span></div>
-      <p class="error">{{ getFeedback }}</p>
+    <div v-for="(t, id) in topics" v-if="id != 'length'" class="topic-info">
+      <div class="topic-title"> {{ t.title }} </div>
+      <div class="topic-description"> {{ t.description }} </div>
+      <StarRating :id="t.id" :value="t.rating" @rate="rateTopic" />
+    </div>
+    <div v-else><span v-if="!getFeedback.length">No topics.</span></div>
+    <p class="error">{{ getFeedback }}</p>
   </div>
 </template>
 

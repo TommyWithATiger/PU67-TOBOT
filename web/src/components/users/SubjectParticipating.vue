@@ -1,11 +1,14 @@
 <template>
   <div>
     <h1>Subjects you participate in:</h1>
-    <div v-for="s in subjects">
-      <h2><router-link :to="'/subject/' + s.id">{{ s.title }}</router-link></h2>
+    <div v-for="s in subjects" class="subject-container">
+      <h2>
+        <router-link :to="'/subject/' + s.id">{{ s.title }}</router-link>
+        <StarRating class="rating-container" :id="s.id" :value="CalculateValue(s.id)" />
+      </h2>
       <p v-if="s.relatedTopics && !s.relatedTopics.length" class="related-topics-empty">No topics.</p>
       <div v-for="t in s.relatedTopics" class="related-topics">
-        <router-link :to="'/topic/' + t.id">{{ t.title }}</router-link>
+        <h3><router-link :to="'/topic/' + t.id">{{ t.title }}</router-link></h3>
       </div>
     </div>
   </div>
@@ -13,20 +16,13 @@
 
 <script>
 import { api } from 'api'
+import StarRating from 'components/template/StarRating'
 
 export default {
   name: 'subjectparticipating',
   data () {
     return {
-      subjects: {},
-      ratingToText: {
-        '0': 'Not rated',
-        '1': 'Bad',
-        '2': 'Below Average',
-        '3': 'Average',
-        '4': 'Good',
-        '5': 'Superb'
-      }
+      subjects: {}
     }
   },
   created () {
@@ -44,11 +40,32 @@ export default {
         })
       }
     })
+  },
+  methods: {
+    CalculateValue (subjectId) {
+      let sum = 0
+      for (let t of this.relatedTopics[subjectId]) {
+        sum += t.value
+      }
+      return Math.round(sum / this.relatedTopics[subjectId].length)
+    }
+  },
+  components: {
+    StarRating
   }
 }
 </script>
 
 <style scoped>
+.rating-container {
+  margin-right: 30px;
+  display: inline-block;
+}
+
+.subject-container {
+  margin: 80px;
+}
+
 .related-topics,
 .related-topics-empty {
   padding-left: 32px;

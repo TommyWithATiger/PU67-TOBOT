@@ -13,6 +13,14 @@
         <span class="error">{{ addFeedback }}</span>
       </p>
     </div>
+     <h2>All topics</h2>
+      <div v-if="topics.length">
+        <div class="topic-info topic-info-header">
+          <div class="topic-title">Title</div>
+          <div class="topic-description">Description</div>
+          <div class="topic-rating-header">My knowledge</div>
+        </div>
+      </div>
     <TopicRatingList />
   </div>
 </template>
