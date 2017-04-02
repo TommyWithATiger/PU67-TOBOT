@@ -54,7 +54,7 @@ import { api } from 'api'
 import StarRating from 'components/template/StarRating'
 
 export default {
-  name: 'topicpage',
+  name: 'doexercisepage',
   data () {
     return {
       title: '',
