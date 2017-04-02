@@ -19,7 +19,7 @@ RUN apk add --no-cache bash
 RUN apk add --no-cache openjdk8
 RUN [ "$JAVA_HOME" = "$(docker-java-home)" ]
 
-RUN apk add --update nodejs=6.10.1-r0 nodejs-npm make maven
+RUN apk add --update nodejs=6.10.1-r0 nodejs-npm make maven curl
 
 # RUN apt-get update
 # RUN apt-get -y upgrade
