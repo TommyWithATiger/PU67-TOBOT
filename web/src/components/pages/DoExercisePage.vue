@@ -29,7 +29,7 @@
       <div class="solution" id="solution" v-html="solution"></div>
     </div>
     <div class="solution" v-else-if="done">
-      <h3 class="solution_title"> 
+      <h3 class="solutionTitle"> 
         Solution:
       </h3>
       <div class="solution">
@@ -37,9 +37,8 @@
       </div>
     </div>
     <div v-if="done" class="ratingBar">
-      <button v-bind:title="[canContinue ? '' : 'Cannot continue without rating the exercise']" v-bind:class="[canContinue ? '' : 'disabled']" @click="next">Continue</button>
       <div class="ratingBox">
-        <div class="ratingTitle">How did you do</div>
+        <div class="ratingTitle">How did you do?</div>
         <div class="rating">
           <div title='Bad' class="inline">
             <svg v-bind:class="[ result=='BAD' ? 'clicked' : '']" @click="setResult('BAD')" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="red" viewBox="0 0 24 24"><path d="M19.406 14.442c1.426-.06 2.594-.858 2.594-2.506 0-1-.986-6.373-1.486-8.25-.714-2.689-2.471-3.686-5.009-3.686-2.283 0-4.079.617-5.336 1.158-2.585 1.113-4.665 1.842-8.169 1.842v9.928c3.086.401 6.43.956 8.4 7.744.483 1.66.972 3.328 2.833 3.328 3.448 0 3.005-5.531 2.196-8.814 1.107-.466 2.767-.692 3.977-.744zm-.207-1.992c-2.749.154-5.06 1.013-6.12 1.556.431 1.747.921 3.462.921 5.533 0 2.505-.781 3.666-1.679.574-1.993-6.859-5.057-8.364-8.321-9.113v-6c2.521-.072 4.72-1.041 6.959-2.005 1.731-.745 4.849-1.495 6.416-.614 1.295.836 1.114 1.734.292 1.661l-.771-.032c-.815-.094-.92 1.068-.109 1.141 0 0 1.321.062 1.745.115.976.123 1.028 1.607-.04 1.551-.457-.024-1.143-.041-1.143-.041-.797-.031-.875 1.078-.141 1.172 0 0 .714.005 1.761.099s1.078 1.609-.004 1.563c-.868-.037-1.069-.027-1.069-.027-.75.005-.874 1.028-.141 1.115l1.394.167c1.075.13 1.105 1.526.05 1.585z"/></svg>
@@ -50,7 +49,7 @@
         </div>
       </div>
       <div class="ratingBox ratingBoxRight">
-        <div class="ratingTitle">How difficult is the exercise</div>
+        <div class="ratingTitle">How difficult is the exercise?</div>
         <div class="rating">
           <div title='Hard' class="inline">
             <svg v-bind:class="[ difficulty=='Hard' ? 'clicked' : '']" @click="setDifficulty('Hard')" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="red" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.001 14c-2.332 0-4.145 1.636-5.093 2.797l.471.58c1.286-.819 2.732-1.308 4.622-1.308s3.336.489 4.622 1.308l.471-.58c-.948-1.161-2.761-2.797-5.093-2.797zm-3.501-6c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5zm7 0c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5z"/></svg>
@@ -63,6 +62,7 @@
           </div>
         </div>
       </div>
+      <button v-bind:title="[canContinue ? '' : 'Cannot continue without rating the exercise']" v-bind:class="[canContinue ? '' : 'disabled']" @click="next">Continue</button>
     </div>
   </div>
 </template>
@@ -186,19 +186,20 @@ svg:hover {
 }
 
 .ratingBar {
-  margin-top: 20px;
+  margin-top: 60px;
+  padding-left: 20px;
 }
 
-.ratingBar button, .ratingBox {
+.ratingBar button, .ratingBar .ratingBox {
   vertical-align: text-top;
   display: inline-block;
-  margin-right: 50px;
-  float: right;
+  margin-left: 50px;
   position: relative;
 }
 
 .ratingBar button {
   margin-top: 10px;
+  float: right;
 }
 
 .disabled {
@@ -210,7 +211,7 @@ svg:hover {
 }
 
 .ratingBar .ratingBox:nth-child(1) {
-  margin-right: 10px;
+  margin-left: 0;
 }
 
 .ratingTitle {
@@ -226,6 +227,10 @@ svg:hover {
 
 .solution {
   margin-left: 20px;
+}
+
+.solutionTitle {
+  margin-top: 60px;
 }
 
 </style>
