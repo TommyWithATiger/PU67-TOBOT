@@ -45,7 +45,7 @@ export default {
     CalculateValue (subjectId) {
       let sum = 0
       for (let t of this.subjects[subjectId].relatedTopics) {
-        sum += t.value
+        sum += isNaN(t.value) ? 1 : t.value
       }
       return Math.round(sum / this.subjects[subjectId].relatedTopics.length)
     }
