@@ -28,8 +28,8 @@ export default {
   created () {
     api.getSubjects(this, (data) => {
       for (let s of data.subjects) {
+        s.relatedTopics = []
         this.$set(this.subjects, s.id, s)
-
         api.getRelatedTopicsCount(this, s.id, (data) => {
           let rt = data.related_topics
           for (let i in data.related_topics) {
@@ -44,10 +44,10 @@ export default {
   methods: {
     CalculateValue (subjectId) {
       let sum = 0
-      for (let t of this.relatedTopics[subjectId]) {
+      for (let t of this.subjects[subjectId].relatedTopics) {
         sum += t.value
       }
-      return Math.round(sum / this.relatedTopics[subjectId].length)
+      return Math.round(sum / this.subjects[subjectId].relatedTopics.length)
     }
   },
   components: {
