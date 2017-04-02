@@ -44,6 +44,7 @@ export default {
     return {
       creationContext: '',
       options: null,
+      titlebox: null,
       moving: {
         'exercise': null,
         'direction': null
@@ -66,6 +67,14 @@ export default {
     this.options.innerHTML = '<div class="options_button"> Delete </div><div class="options_button"> Tags </div>'
     this.options.childNodes[0].onmousedown = this.deleteSelected
     this.options.childNodes[1].onmousedown = this.addTag
+
+    this.titlebox = document.createElement('input')
+    this.titlebox.setAttribute('placeholder', 'No title set')
+    this.titlebox.classList.toggle('titlebox', true)
+    this.titlebox.innerHTML = ''
+    this.titlebox.onmousedown = function (event) {
+      event.stopPropagation()
+    }
 
     api.getTopics(this, (data) => {
       this.tags = data.topics
@@ -141,14 +150,31 @@ export default {
     onTouchEnd (event) {
       this.onUp(event.touches[0])
     },
+    setTitleBoxContent (exercise) {
+      if (exercise.getAttribute('title') !== null) {
+        this.titlebox.value = exercise.getAttribute('title')
+      } else {
+        this.titlebox.value = ''
+      }
+    },
+    setTitleExercise (exercise) {
+      exercise.removeAttribute('title')
+      if (this.titlebox.value !== '') {
+        exercise.setAttribute('title', this.titlebox.value)
+      }
+    },
     toggleSelected (exercise) {
       if (this.selected === null) {
         this.selected = exercise
         this.selected.appendChild(this.options)
+        this.selected.appendChild(this.titlebox)
+        this.setTitleBoxContent(exercise)
         this.selected.classList.toggle('selected_exercise', true)
         this.blurOtherExercises(exercise, true)
       } else if (this.selected === exercise) {
+        this.setTitleExercise(exercise)
         this.selected.removeChild(this.options)
+        this.selected.removeChild(this.titlebox)
         this.blurOtherExercises(exercise, false)
         this.selected.classList.toggle('selected_exercise', false)
         this.selected = null
@@ -357,23 +383,25 @@ export default {
       for (let exerciseIndex = 0; exerciseIndex < exercises.length; exerciseIndex++) {
         let exercise = exercises[exerciseIndex]
         let hasTags = exercise.getAttribute('tags') !== null && exercise.getAttribute('tags') !== ''
-        canSubmit = canSubmit && hasTags
-        exercise.classList.toggle('missing_tags', !hasTags)
+        let hasTitle = exercise.getAttribute('title') !== null && exercise.getAttribute('title') !== ''
+        canSubmit = canSubmit && hasTags && hasTitle
+        exercise.classList.toggle('missing_tags', !hasTags || !hasTitle)
       }
       if (canSubmit) {
         this.submitInfo = 'Submitting exercises, you will be redirected when all exercises have been submitted'
         for (let exerciseIndex = 0; exerciseIndex < exercises.length; exerciseIndex++) {
           let exercise = exercises[exerciseIndex]
+          let title = exercise.getAttribute('title')
           let tagsSplit = exercise.getAttribute('tags').split(';')
           let tags = []
           for (let index = 0; index < tagsSplit.length; index++) {
             tags[index] = parseInt(tagsSplit[index].split(':')[0])
           }
-          api.createExercise(this, exercise.innerHTML, tags, () => {}, () => {})
+          api.createExercise(this, exercise.innerHTML, title, tags, () => {}, () => {})
         }
         this.$router.push('/')
       } else {
-        this.submitInfo = 'Make sure all exercises have at least one tag before submitting. All exercises missing tags have been marked red'
+        this.submitInfo = 'Make sure all exercises have at least one tag and a title before submitting. All exercises missing tags or title have been marked red'
       }
     },
     toggleAddExercise () {
@@ -593,6 +621,17 @@ export default {
   font-size: 25px;
 }
 
+.titlebox {
+  position: absolute;
+  top: -35px;
+  height: 35px;
+  left: -2px;
+  border: 2px solid var(--p-color-1);
+  border-radius: 0;
+  padding-left: 5px;
+  margin: 0;
+}
+
 </style>
 
 <style scoped>
@@ -608,7 +647,6 @@ export default {
 .add_tag_container input[type=text] {
   width: 260px;
 }
-
 .close_tag_input {
   position: absolute;
   border-radius: 3px;

@@ -56,7 +56,7 @@ public class ExerciseFinder {
    * @param node2 the second node
    * @return A boolean indicating if the nodes are on the same line
    */
-  private static boolean isOnSameLine(Node node1, Node node2) {
+  public static boolean isOnSameLine(Node node1, Node node2) {
     StyleHandler styleHandlerFirstNode = new StyleHandler(node1);
     StyleHandler styleHandlerSecondNode = new StyleHandler(node2);
 

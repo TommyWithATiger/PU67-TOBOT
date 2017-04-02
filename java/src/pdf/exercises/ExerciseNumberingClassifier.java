@@ -1,5 +1,7 @@
 package pdf.exercises;
 
+import static pdf.exercises.ExerciseFinder.isOnSameLine;
+
 import com.google.common.collect.Lists;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,6 +34,11 @@ public class ExerciseNumberingClassifier {
   private void classify(Node container) {
     for (int nodeIndex = 0; nodeIndex < container.getChildNodes().getLength(); nodeIndex++) {
       String nodeContent = container.getChildNodes().item(nodeIndex).getTextContent();
+      if (nodeIndex != 0 && isOnSameLine(container.getChildNodes().item(nodeIndex - 1),
+          container.getChildNodes().item(nodeIndex))) {
+        // Skip the things that are not at the start of the lines, they are not numberings
+        continue;
+      }
       numberingFormats.keySet().stream().filter(nodeContent::matches).forEach(numberingFormat ->
           numberingFormats.put(numberingFormat, numberingFormats.get(numberingFormat) + 1));
     }

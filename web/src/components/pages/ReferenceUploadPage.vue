@@ -10,7 +10,7 @@
       <div class="input-field">
         <!-- Fix to textarea -->
         <label for="description"> Description: </label>
-        <input type="text" v-model="description" @keydown.enter="submitReference" placeholder="Description" id="description"/>
+        <textarea v-model="description" @keydown.enter="submitReference" placeholder="Description" id="description"></textarea> 
       </div>
 
       <div class="input-field">
@@ -209,6 +209,8 @@ export default {
 .input-field label {
   width: 100px;
   display: inline-block;
+  vertical-align: top;
+  padding-top: 8px;
 }
 
 .topic_list > div {

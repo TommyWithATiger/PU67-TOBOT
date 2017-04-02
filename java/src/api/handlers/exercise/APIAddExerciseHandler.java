@@ -64,8 +64,8 @@ public class APIAddExerciseHandler {
     }
 
     Exercise exercise = new Exercise(title, text, solution);
-    exercise.addToTopics(topics);
     exercise.create();
+    exercise.addToTopics(topics);
 
     ExerciseRatingDAO.getInstance().createOrUpdate(user, exercise, difficulty);
 
