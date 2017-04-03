@@ -211,15 +211,26 @@ public class Subject extends AbstractBaseEntity {
   }
 
   /**
-   * Returns true if the user as an editor of this subject or is an admin
+   * Returns true if the user is an editor of this subject or is an admin
    *
    * @param user, the user to check for
    * @return boolean, true if editor or admin
    */
   public boolean isEditor(User user) {
-    return user.isAdmin() || editors.contains(user);
+    return user.isAdmin() || isEditorNoAdminCheck(user);
   }
 
+  /**
+   * Returns true if the user is an editor of this subject
+   *
+   * @param user, the user to check for
+   * @return boolean, true if user is editor
+   */
+  public boolean isEditorNoAdminCheck(User user) {
+    return editors.contains(user);
+  }
+
+  /**
   /**
    * Adds a user to the subjects editor list
    *
