@@ -8,30 +8,32 @@
             <div class="topic-description">Description</div>
           </div>
           <div v-for="t in relatedTopics" class="topic-info">
-            <div class="topic-title">{{ t.title }}</div>
+            <div class="topic-title"><router-link :to="'/topic/' + t.id">{{ t.title }}</router-link></div>
             <div class="topic-description">{{ t.description }}</div>
           </div>
     </div>
     <div v-else>
       This subject is not connected to any topics.
     </div>
-    <h1>Add topics</h1>
-    <div v-if="topics.length">
-      <div class="topic-info topic-info-header">
-        <div class="topic-title">Title</div>
-        <div class="topic-description">Description</div>
-        <div class="topic-relate"></div>
+    <div v-if="canAdd()">
+      <h1>Add topics</h1>
+      <div v-if="topics.length">
+        <div class="topic-info topic-info-header">
+          <div class="topic-title">Title</div>
+          <div class="topic-description">Description</div>
+          <div class="topic-relate"></div>
+        </div>
+        <div v-for="t in topics" v-if="!isRelated(t)" class="topic-info">
+          <div class="topic-title">{{ t.title }}</div>
+          <div class="topic-description">{{ t.description }}</div>
+          <button @click="relateTopic(t)" class="topic-relate">Connect</button>
+        </div>
       </div>
-      <div v-for="t in topics" v-if="!isRelated(t)" class="topic-info">
-        <div class="topic-title">{{ t.title }}</div>
-        <div class="topic-description">{{ t.description }}</div>
-        <button @click="relateTopic(t)" class="topic-relate">Connect</button>
+      <div v-else>
+        No topics available.
       </div>
+      <p class="error">{{ getFeedback }}</p>
     </div>
-    <div v-else>
-      No topics available.
-    </div>
-    <p class="error">{{ getFeedback }}</p>
   </div>
 </template>
 
@@ -39,7 +41,7 @@
 import { api } from 'api'
 
 export default {
-  name: 'relatetopicsubjectpage',
+  name: 'subjectpage',
   data () {
     return {
       relatedTopics: [],
@@ -74,6 +76,9 @@ export default {
           this.relatedTopics.push(topic)
         }
       })
+    },
+    canAdd () {
+      return this.$store.state.user.usertype !== 'Student'
     },
     isRelated (topic) {
       for (var index = 0; index < this.relatedTopics.length; index++) {
