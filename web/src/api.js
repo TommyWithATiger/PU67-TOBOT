@@ -29,7 +29,7 @@ const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
 const REFERENCE_GET_URL = `${API_URL}/reference/get/`
-const REFERENCE_GET_BY_TOPIC_URL = `${API_URL}/references/get/?topic=`
+const REFERENCE_GET_BY_TOPIC_URL = `${API_URL}/reference/get/?topic=`
 const REFERENCE_GET_ID_URL = `${API_URL}/reference/get/?id=`
 const REFERENCE_ADD_URL = `${API_URL}/reference/create`
 
