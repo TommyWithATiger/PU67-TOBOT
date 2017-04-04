@@ -133,7 +133,7 @@ public class APIGetSubjectHandler {
    */
   private static String getMemberSubjects(HttpRequest httpRequest,
       Function<User, List<Subject>> getSubjectsFunc){
-    checkRequestMethod("GET", httpRequest);
+    checkRequestMethod("POST", httpRequest);
 
     User user = getUserFromRequest(httpRequest, ", cannot get subjects");
 
