@@ -122,20 +122,20 @@ export default {
       event.stopPropagation()
     },
     onMove (event) {
-      if (this.moving.exercise !== null) {
-        if (this.moving.direction === 'up') {
-          if (this.canMoveExerciseUp(this.moving.exercise)) {
-            this.moveExerciseTopUp(this.moving.exercise, this.translateHoverYPosition(event))
+      let exercise = this.moving.exercise
+      let direction = this.moving.direction
+      if (exercise !== null) {
+        if (direction === 'up') {
+          if (this.canMoveExerciseUp(exercise) && this.translateHoverYPosition(event) < this.getOffsetTop(exercise)) {
+            this.moveExerciseTopUp(exercise, this.translateHoverYPosition(event))
+          } else if (exercise.hasChildNodes()) {
+            this.moveExerciseTopDown(exercise, this.translateHoverYPosition(event))
           }
-          if (this.moving.exercise.hasChildNodes()) {
-            this.moveExerciseTopDown(this.moving.exercise, this.translateHoverYPosition(event))
-          }
-        } else if (this.moving.direction === 'down') {
-          if (this.moving.exercise.hasChildNodes()) {
+        } else if (direction === 'down') {
+          if (exercise.hasChildNodes() && this.translateHoverYPosition(event) < this.getOffsetTop(exercise) + parseFloat(exercise.style.height) / 0.75) {
             this.moveExerciseBottomUp(this.moving.exercise, this.translateHoverYPosition(event))
-          }
-          if (this.canMoveExerciseDown(this.moving.exercise)) {
-            this.moveExerciseBottomDown(this.moving.exercise, this.translateHoverYPosition(event))
+          } else if (this.canMoveExerciseDown(exercise)) {
+            this.moveExerciseBottomDown(exercise, this.translateHoverYPosition(event))
           }
         }
       } else {
@@ -234,7 +234,7 @@ export default {
       let node = exercise.firstChild
       let reduceDiff = y - this.getOffsetTop(exercise)
       while (node != null) {
-        if ((parseFloat(node.style.top) + this.getHeight(node)) / 0.75 >= reduceDiff) {
+        if ((parseFloat(node.style.top) + this.getHeight(node)) / 0.75 >= reduceDiff && (!(node.classList.contains('r') && parseFloat(node.style.top) >= reduceDiff))) {
           break
         }
         if (node.classList.contains('solution')) {
@@ -250,8 +250,12 @@ export default {
       }
 
       if (exercise.hasChildNodes()) {
-        let changedTop = parseFloat(exercise.firstChild.style.top)
-        exercise.style.top = parseFloat(exercise.style.top) + parseFloat(exercise.firstChild.style.top) + 'pt'
+        let startChild = exercise.firstChild
+        while (startChild !== null && startChild.classList.contains('r')) {
+          startChild = startChild.nextSibling
+        }
+        let changedTop = parseFloat(startChild.style.top)
+        exercise.style.top = parseFloat(exercise.style.top) + parseFloat(startChild.style.top) + 'pt'
         this.moveExerciseChildern(exercise, changedTop)
         exercise.style.height = parseFloat(exercise.lastChild.style.top) + this.getHeight(exercise.lastChild) + 'pt'
       } else {
@@ -264,7 +268,7 @@ export default {
         if (this.getOffsetTop(exercise) + parseFloat(this.getHeight(node)) / 0.75 > y || node.classList.contains('exercise') || node.classList.contains('options')) {
           break
         }
-        if (parseFloat(exercise.style.top) + parseFloat(exercise.style.height) < parseFloat(node.style.top) + this.getHeight(node)) {
+        if (parseFloat(exercise.style.top) + parseFloat(exercise.style.height) < parseFloat(node.style.top) + this.getHeight(node) && !node.classList.contains('r')) {
           exercise.style.height = parseFloat(node.style.top) + this.getHeight(node) - parseFloat(exercise.style.top) + 'pt'
         }
         node.style.top = parseFloat(node.style.top) - parseFloat(exercise.style.top) + 'pt'
@@ -275,7 +279,7 @@ export default {
     moveExerciseBottomUp (exercise, y) {
       let node = exercise.lastChild
       let reduceDiff = y - this.getOffsetTop(exercise)
-      while (node != null) {
+      while (node !== null) {
         if ((parseFloat(node.style.top)) / 0.75 <= reduceDiff) {
           break
         }
@@ -296,7 +300,7 @@ export default {
         while (endChild !== null && endChild.classList.contains('r')) {
           endChild = endChild.previousSibling
         }
-        exercise.style.height = parseFloat(exercise.lastChild.style.top) + this.getHeight(endChild) + 'pt'
+        exercise.style.height = parseFloat(endChild.style.top) + this.getHeight(endChild) + 'pt'
       } else {
         exercise.parentNode.removeChild(exercise)
       }
