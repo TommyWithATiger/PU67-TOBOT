@@ -29,6 +29,7 @@ const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
 const SUBJECT_GET_PARTICIPATING_URL = `${API_URL}/subject/get/participant`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
+const SUBJECT_TOPIC_UNRELATE_URL = `${API_URL}/subject/topic/unrelate`
 
 const REFERENCE_GET_URL = `${API_URL}/reference/get/`
 const REFERENCE_GET_BY_TOPIC_URL = `${API_URL}/reference/get/?topic=`
@@ -362,6 +363,28 @@ export const api = {
     }
 
     return this.postRequest(ctx, SUBJECT_TOPIC_RELATE_URL, req, callback, error)
+  },
+
+  /**
+   * Un-relate subject and topic
+   * @param {object} ctx Context.
+   * @param {object} topic The topic to relate
+   * @param {object} subject The subject to relate
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  unrelateSubjectTopic (ctx, topic, subject, callback, error) {
+    let data = {
+      subjectID: subject.id,
+      topicID: topic.id
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, SUBJECT_TOPIC_UNRELATE_URL, req, callback, error)
   },
 
   /**

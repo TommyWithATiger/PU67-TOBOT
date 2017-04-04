@@ -38,6 +38,7 @@ public class APIRelateSubjectTopicHandlerTest extends BaseTest {
     topic.create();
 
     subject = new Subject("Test subject", "Description");
+    subject.addEditor(user);
     subject.create();
   }
 

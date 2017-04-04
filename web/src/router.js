@@ -12,7 +12,7 @@ import SearchPage from 'components/pages/SearchPage'
 import RegisterPage from 'components/pages/RegisterPage'
 import RequestResetPage from 'components/pages/RequestResetPage'
 import PasswordResetPage from 'components/pages/ResetPasswordPage'
-import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
+import SubjectPage from 'components/pages/SubjectPage'
 import ReferencePage from 'components/pages/ReferencePage'
 import UploadPDFPage from 'components/pages/UploadPDFPage'
 import ExerciseCreationPage from 'components/pages/ExerciseCreationPage'
@@ -125,14 +125,14 @@ export const router = new Router({
       path: '/subject',
       name: 'Subject',
       component: SubjectsPage,
-      meta: { users: [ 'Admin', 'Teacher' ] },
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {
       path: '/subject/:id',
       name: 'RelateSubjectTopic',
-      component: RelateSubjectTopicPage,
-      meta: { users: [ 'Admin', 'Teacher' ] },
+      component: SubjectPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {
@@ -153,14 +153,14 @@ export const router = new Router({
       path: '/topic',
       name: 'Topics',
       component: TopicsPage,
-      meta: { users: [ 'Admin', 'Teacher' ] },
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {
       path: '/topic/:id',
       name: 'Topic',
       component: TopicPage,
-      meta: { users: [ 'Admin', 'Teacher' ] },
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },
     {

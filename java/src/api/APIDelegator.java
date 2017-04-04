@@ -80,6 +80,8 @@ public class APIDelegator {
     handlerRegistry.put("subject\\/create", APIAddSubjectHandler::handleAddSubject);
     handlerRegistry
         .put("subject\\/topic\\/relate", APIRelateSubjectTopicHandler::relateSubjectTopicHandler);
+    handlerRegistry
+            .put("subject\\/topic\\/unrelate", APIRelateSubjectTopicHandler::unrelateSubjectTopicHandler);
 
     handlerRegistry.put("subject\\/related\\/\\?id=.*",
         APIGetRelatedTopicsSubjectHandler::getRelatedTopicsSubjectID);

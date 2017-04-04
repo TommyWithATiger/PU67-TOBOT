@@ -9,6 +9,7 @@ import data.dao.SubjectDAO;
 import data.dao.TopicDAO;
 import data.Subject;
 import data.Topic;
+import data.user.User;
 import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 
@@ -29,7 +30,7 @@ public class APIRelateSubjectTopicHandler {
     checkRequestMethod("POST", httpRequest);
 
     // User must be logged in
-    getUserFromRequest(httpRequest, ", cannot create a new subject");
+    User user = getUserFromRequest(httpRequest, ", cannot create a new subject");
 
     Subject subject = SubjectDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "subjectID"));
     Topic topic = TopicDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "topicID"));
@@ -42,8 +43,47 @@ public class APIRelateSubjectTopicHandler {
     response.put("already-related", subject.hasTopic(topic));
 
     // Relate them if they are not already related
-    if (!subject.hasTopic(topic)) {
+    if (!subject.hasTopic(topic) && subject.isEditor(user)) {
       topic.addToSubject(subject);
+      topic.update();
+      subject.update();
+    }
+
+    response.put("is-related", subject.hasTopic(topic));
+
+    return response.toString();
+  }
+
+  /**
+   * A API handler method for un-relating a subject and a topic. This require the user to be logged in
+   * and the following data:
+   *        subjectID (int): the id of the subject
+   *        topicID (int): the id of the topic
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON string with two variables:
+   *        already-related (boolean): indicates whether the subject and topic was already related
+   *        is-related (boolean): indicates whether the subject and topic is related now
+   */
+  public static String unrelateSubjectTopicHandler(HttpRequest httpRequest) {
+    checkRequestMethod("POST", httpRequest);
+
+    // User must be logged in
+    User user = getUserFromRequest(httpRequest, ", cannot create a new subject");
+
+    Subject subject = SubjectDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "subjectID"));
+    Topic topic = TopicDAO.getInstance().findById(getJSONField(httpRequest, Integer.class, "topicID"));
+
+    if (subject == null || topic == null) {
+      throw new APIBadRequestException("One of the id's does not exists");
+    }
+
+    JSONObject response = new JSONObject();
+    response.put("already-related", subject.hasTopic(topic));
+
+    // Relate them if they are not already related
+    if (subject.hasTopic(topic) && subject.isEditor(user)) {
+      topic.removeFromSubject(subject);
       topic.update();
       subject.update();
     }
