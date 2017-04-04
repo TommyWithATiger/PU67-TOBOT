@@ -34,7 +34,7 @@ export default {
     }
   },
   created () {
-    api.getSubjects(this, (data) => {
+    api.getSubjectsEditor(this, (data) => {
       for (let s of data.subjects) {
         this.$set(this.subjects, s.id, s)
 

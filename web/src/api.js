@@ -20,6 +20,7 @@ const TOPIC_RATE_URL = `${API_URL}/rating/rate`
 const TOPIC_GET_RATED_URL = `${API_URL}/rating/get`
 
 const SUBJECT_GET_URL = `${API_URL}/subject/get`
+const SUBJECT_GET_EDITOR_URL = `${API_URL}/subject/get/editor`
 const SUBJECT_GET_TITLE_URL = `${API_URL}/subject/get/?title=`
 const SUBJECT_GET_ID_URL = `${API_URL}/subject/get/?id=`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
@@ -75,6 +76,17 @@ export const api = {
    */
   getSubjects (ctx, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_URL, callback, error)
+  },
+
+  /**
+   * Get all subjects the user is editor in from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getSubjectsEditor (ctx, callback, error) {
+    return this.postRequest(ctx, SUBJECT_GET_EDITOR_URL, {}, callback, error)
   },
 
   /**
