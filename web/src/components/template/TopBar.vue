@@ -52,12 +52,12 @@ export default {
         {
           name: 'Subjects',
           path: '/subject',
-          users: ['Admin', 'Teacher']
+          users: ['Admin', 'Teacher', 'Student']
         },
         {
           name: 'Topics',
           path: '/topic',
-          users: ['Admin', 'Teacher']
+          users: ['Admin', 'Teacher', 'Student']
         },
         {
           name: 'Upload',
