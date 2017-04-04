@@ -94,6 +94,13 @@ export default {
       return false
     }
 
+    let context = this
+    document.onmousedown = function (event) {
+      if (context.selected !== null && document.getElementById('add_tag_container').classList.contains('hidden')) {
+        context.toggleSelected(context.selected)
+      }
+    }
+
     let words = document.getElementsByClassName('p')
     for (let index = 0; index < words.length; index++) {
       let word = words[index]
