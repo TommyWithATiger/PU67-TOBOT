@@ -1,14 +1,17 @@
 <template>
   <div>
-    <h1>Subjects you participate in:</h1>
+    <h2>Subjects you participate in:</h2>
     <div v-for="s in subjects" class="subject-container">
-      <h2>
+      <h3>
         <router-link :to="'/subject/' + s.id">{{ s.title }}</router-link>
         <StarRating class="rating-container" :id="s.id" :value="CalculateValue(s.id)" />
-      </h2>
+      </h3>
       <p v-if="s.relatedTopics && !s.relatedTopics.length" class="related-topics-empty">No topics.</p>
       <div v-for="t in s.relatedTopics" class="related-topics">
-        <h3><router-link :to="'/topic/' + t.id">{{ t.title + "\t&rarr;" }}</router-link></h3>
+        <router-link :to="'/topic/' + t.id"><div class="related-topic-container">{{ t.title }}</div></router-link>
+        <div class="exercise-container">
+          Do exercise
+        </div>
       </div>
     </div>
   </div>
@@ -63,12 +66,30 @@ export default {
 }
 
 .subject-container {
-  margin: 80px;
+  margin-bottom: 35px;
 }
 
-.related-topics,
-.related-topics-empty {
-  padding-left: 32px;
+.subject-container > .related-topics:nth-child(2n) .related-topic-container, .subject-container > .related-topics:nth-child(2n + 1) .exercise-container {
+  background-color: var(--n-color-4);
+}
+
+.subject-container > .related-topics:nth-child(2n + 1) .related-topic-container, .subject-container > .related-topics:nth-child(2n) .exercise-container {
+  background-color: var(--n-color-3);
+}
+
+.related-topic-container,
+.related-topics-empty,
+.exercise-container {
+  padding: 4px;
+  margin: 0;
+  text-align: center;
+  width: 228px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.related-topic-container {
+  margin-right: -4px;
 }
 
 .related-topics-empty {
