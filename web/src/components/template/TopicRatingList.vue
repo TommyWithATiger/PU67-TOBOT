@@ -3,7 +3,7 @@
     <div v-for="(t, id) in topics" v-if="id != 'length'" class="topic-info">
       <div class="topic-title"> {{ t.title }} </div>
       <div class="topic-description"> {{ t.description }} </div>
-      <StarRating :id="t.id" :value="t.rating" @rate="rateTopic" />
+      <StarRatingInteractive :id="t.id" :value="t.rating" @rate="rateTopic" />
     </div>
     <div v-else><span v-if="!getFeedback.length">No topics.</span></div>
     <p class="error">{{ getFeedback }}</p>
@@ -12,7 +12,7 @@
 
 <script>
 import { api } from 'api'
-import StarRating from 'components/template/StarRating'
+import StarRatingInteractive from 'components/template/StarRatingInteractive'
 
 export default {
   name: 'topic-rating-list',
@@ -74,7 +74,7 @@ export default {
     }
   },
   components: {
-    StarRating
+    StarRatingInteractive
   }
 }
 </script>

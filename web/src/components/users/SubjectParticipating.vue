@@ -8,12 +8,12 @@
       </h2>
       <p v-if="s.relatedTopics && !s.relatedTopics.length" class="related-topics-empty">No topics.</p>
       <div v-for="t in s.relatedTopics" class="related-topics">
-        <h3><router-link :to="'/topic/' + t.id">{{ t.title }}</router-link></h3>
+        <h3><router-link :to="'/topic/' + t.id">{{ t.title + "\t&rarr;" }}</router-link></h3>
       </div>
     </div>
   </div>
 </template>
-
+data
 <script>
 import { api } from 'api'
 import StarRating from 'components/template/StarRating'
@@ -26,7 +26,7 @@ export default {
     }
   },
   created () {
-    api.getSubjects(this, (data) => {
+    api.getParticipatingSubjects(this, (data) => {
       for (let s of data.subjects) {
         s.relatedTopics = []
         this.$set(this.subjects, s.id, s)
@@ -78,4 +78,5 @@ export default {
 a {
   text-decoration: none;
 }
+
 </style>
