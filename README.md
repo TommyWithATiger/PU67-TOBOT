@@ -1,5 +1,7 @@
 # TOBOT
 
+[![Build Status](https://ci.niklasmh.no/api/badges/TommyWithATiger/TOBOT/status.svg)](https://ci.niklasmh.no/TommyWithATiger/TOBOT)
+
 ## Development environment
 
 ### Tools to get started

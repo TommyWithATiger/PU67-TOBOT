@@ -97,6 +97,17 @@ public class SubjectDAO extends AbstractBaseDAO<Subject, Integer> {
   }
 
   /**
+   * Finds subjects with user as an participant
+   *
+   * @param participant, the user to query for
+   * @return List of Subject objects that has the user as an participant
+   */
+  public List<Subject> findSubjectsByParticipant(User participant) {
+    return super.find("findSubjectsByParticipant",
+        new FieldTuple("participantID", participant.getId()));
+  }
+
+  /**
    * Returns the static SubjectDAO instance
    *
    * @return SubjectDAO, null if not instantiated

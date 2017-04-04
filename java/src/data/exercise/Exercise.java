@@ -6,6 +6,7 @@ import data.dao.ExerciseDAO;
 import java.util.Collection;
 import java.util.HashSet;
 import javax.persistence.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 @Entity
@@ -125,6 +126,11 @@ public class Exercise extends AbstractBaseEntity{
     response.put("title", title);
     response.put("text", text);
     response.put("solution", solution);
+    JSONArray tags = new JSONArray();
+    for (Topic tag: topics) {
+      tags.put(tag.createAbout());
+    }
+    response.put("tags", tags);
     return response;
   }
 
