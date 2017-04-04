@@ -35,6 +35,8 @@ const REFERENCE_ADD_URL = `${API_URL}/reference/create`
 const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
 
 const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
+const GET_EXERCISE_URL = `${API_URL}/exercise/get/?id=`
+const REGISTER_EXERCISE_ATTEMPT_URL = `${API_URL}/exercise/register`
 
 export const api = {
   /**
@@ -361,7 +363,7 @@ export const api = {
    * @param {array} tags Array of topic ids for the exercise
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
-  */
+   */
   createExercise (ctx, content, title, tags, callback, error) {
     let data = {
       title: title,
@@ -400,6 +402,40 @@ export const api = {
     }
 
     return this.postRequest(ctx, CREATE_EXERCISE_URL, req, callback, error)
+  },
+
+  /*
+   * Get exercise by ID
+   * @param {object} ctx Context.
+   * @param {int} id Exercise ID
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  getExercise (ctx, id, callback, error) {
+    return this.getRequest(ctx, GET_EXERCISE_URL + id, callback, error)
+  },
+
+  /**
+   * Register exercise attempt
+   * @param {object} ctx Context.
+   * @param {int} id The ID for the exercise
+   * @param {string} difficulty The difficulty of the exercise, Easy, Medium or Hard
+   * @param {boolean} success Was the exercise solved successfully
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  registerExerciseAttempt (ctx, id, difficulty, success, callback, error) {
+    let data = {
+      exerciseID: id,
+      difficulty: difficulty,
+      success: success
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, REGISTER_EXERCISE_ATTEMPT_URL, req, callback, error)
   },
 
   /**

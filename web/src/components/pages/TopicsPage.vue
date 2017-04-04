@@ -13,28 +13,13 @@
         <span class="error">{{ addFeedback }}</span>
       </p>
     </div>
-    <h2>All topics</h2>
-    <div v-if="topics.length">
-      <div class="topic-info topic-info-header">
-        <div class="topic-title">Title</div>
-        <div class="topic-description">Description</div>
-        <div class="topic-rating-header">My knowledge</div>
-      </div>
-      <div v-for="(t, id) in topics" v-if="id != 'length'" class="topic-info">
-        <div class="topic-title"> {{ t.title }} </div>
-        <div class="topic-description"> {{ t.description }} </div>
-        <div class="topic-rating">
-          <span v-for="n in 5" @click="rateTopic(id, 6 - n)" v-bind:class="{ selected: isSelected(t.rating, 6 - n) }">☆</span>
-        </div>
-      </div>
-    </div>
-    <div v-else><span v-if="!getFeedback.length">No topics.</span></div>
-    <p class="error">{{ getFeedback }}</p>
+    <TopicRatingList />
   </div>
 </template>
 
 <script>
 import { api } from 'api'
+import TopicRatingList from 'components/template/TopicRatingList'
 
 export default {
   name: 'topicpage',
@@ -63,35 +48,7 @@ export default {
       getFeedback: 'Loading ...'
     }
   },
-  created () {
-    api.getTopics(this, (data) => {
-      this.topics = {
-        length: 0
-      }
-      for (let t of data.topics) {
-        this.topics[t.id] = t
-        this.topics[t.id].rating = 0
-        this.topics.length++
-        this.$set(this.topics[t.id], 'rating', 0)
-      }
-      this.getFeedback = ''
-    }, () => {
-      this.topics = []
-      this.getFeedback = 'Could not fetch topics.'
-    })
-    api.getRatedTopics(this, (data) => {
-      for (let t of data.ratings) {
-        this.topics[t.topicID].rating = this.ratingToNumber[t.rating]
-        this.$set(this.topics[t.topicID], 'rating', this.ratingToNumber[t.rating])
-      }
-      this.$forceUpdate()
-    }, () => {
-    })
-  },
   methods: {
-    isSelected (rating, star) {
-      return rating >= star
-    },
     addTopic () {
       this.addFeedback = ''
       api.addTopic(this, this.topic, (data) => {
@@ -107,13 +64,10 @@ export default {
       }, () => {
         this.addFeedback = 'Failed to add topic.'
       })
-    },
-    rateTopic (id, rating) {
-      api.rateTopic(this, parseInt(id), this.numberToRating[rating], (data) => {
-        this.$set(this.topics[id], 'rating', this.ratingToNumber[data.rating])
-        this.$forceUpdate()
-      })
     }
+  },
+  components: {
+    TopicRatingList
   }
 }
 </script>
@@ -151,31 +105,4 @@ export default {
   font-size: 1.2em;
 }
 
-.topic-rating {
-  unicode-bidi: bidi-override;
-  direction: rtl;
-}
-
-.topic-rating > span {
-  display: inline-block;
-  position: relative;
-  width: 1.1em;
-}
-
-.topic-rating > .selected:before,
-.topic-rating > .selected ~ span:before {
-   content: "\2605";
-   position: absolute;
-   color: #dddd00;
-   color: var(--p-color-1);
-}
-
-.topic-rating > span:hover:before,
-.topic-rating > span:hover ~ span:before {
-   content: "\2605";
-   position: absolute;
-   color: #ffff00;
-   color: var(--nn-color-2);
-   cursor: pointer;
-}
 </style>

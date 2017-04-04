@@ -16,6 +16,7 @@ import RelateSubjectTopicPage from 'components/pages/RelateSubjectTopicPage'
 import ReferencePage from 'components/pages/ReferencePage'
 import UploadPDFPage from 'components/pages/UploadPDFPage'
 import ExerciseCreationPage from 'components/pages/ExerciseCreationPage'
+import DoExercisePage from 'components/pages/DoExercisePage'
 import ReferenceUpload from 'components/pages/ReferenceUploadPage'
 import { auth } from 'auth'
 import { api } from 'api'
@@ -194,6 +195,13 @@ export const router = new Router({
       path: '/exercise/create',
       name: 'ExerciseCreate',
       component: ExerciseCreationPage,
+      meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/exercise/:id',
+      name: 'Exercise',
+      component: DoExercisePage,
       meta: { users: [ 'Admin', 'Teacher', 'Student' ] },
       beforeEnter: requireAuth
     },

@@ -55,6 +55,7 @@ public class APIAddSubjectHandlerTest extends BaseTest {
     String response = handleAddSubject(httpRequest);
     Subject subject = SubjectDAO.getInstance().findSubjectsByTitle("Test title").get(0);
     assertNotNull(subject);
+    assertTrue(subject.isEditor(user));
     assertEquals("Test description", subject.getDescription());
     assertEquals("IDI-NTNU", subject.getInstitution());
     assertEquals("TDT4100", subject.getSubjectCode());
