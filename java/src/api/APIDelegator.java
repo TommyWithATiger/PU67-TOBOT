@@ -101,6 +101,8 @@ public class APIDelegator {
     handlerRegistry.put("subject\\/leave/participant", APIJoinSubjectHandler::leaveSubjectParticipantHandler);
     handlerRegistry.put("subject\\/leave/editor", APIJoinSubjectHandler::leaveSubjectEditorHandler);
 
+    handlerRegistry.put("subject\\/join\\/is", APIJoinSubjectHandler::hasJoinedSubject);
+
     handlerRegistry.put("topic\\/get\\/\\?id=.*", APIGetTopicHandler::getTopicByID);
     handlerRegistry.put("topic\\/get\\/\\?title=.*", APIGetTopicHandler::getTopicsByTitle);
     handlerRegistry.put("topic\\/get", APIGetTopicHandler::getAllTopics);
