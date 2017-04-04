@@ -420,13 +420,29 @@ export default {
         this.submitInfo = 'Submitting exercises, you will be redirected when all exercises have been submitted'
         for (let exerciseIndex = 0; exerciseIndex < exercises.length; exerciseIndex++) {
           let exercise = exercises[exerciseIndex]
+          let solution = null
+          let afterSolution = null
+          if (this.hasSolution(exercise)) {
+            solution = this.getSolution(exercise)
+            afterSolution = solution.nextSibling
+            exercise.removeChild(solution)
+          }
           let title = exercise.getAttribute('title')
           let tagsSplit = exercise.getAttribute('tags').split(';')
           let tags = []
           for (let index = 0; index < tagsSplit.length; index++) {
             tags[index] = parseInt(tagsSplit[index].split(':')[0])
           }
-          api.createExercise(this, exercise.innerHTML, title, tags, () => {}, () => {})
+          if (solution !== null) {
+            api.createExerciseWithSolution(this, exercise.innerHTML, solution.innerHTML, title, tags, () => {}, () => {})
+            if (afterSolution === null) {
+              exercise.appendChild(solution)
+            } else {
+              exercise.insertBefore(solution, afterSolution)
+            }
+          } else {
+            api.createExercise(this, exercise.innerHTML, title, tags, () => {}, () => {})
+          }
         }
         this.$router.push('/')
       } else {
