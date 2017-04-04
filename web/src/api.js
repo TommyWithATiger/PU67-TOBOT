@@ -380,6 +380,31 @@ export const api = {
   },
 
   /**
+   * Create exercise
+   * @param {object} ctx Context.
+   * @param {string} content Exercise content, that is the HTML
+   * @param {string} title Exercise title
+   * @param {array} tags Array of topic ids for the exercise
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  createExerciseWithSolution (ctx, content, solution, title, tags, callback, error) {
+    let data = {
+      title: title,
+      text: content,
+      difficulty: 'Unknown',
+      topicIDs: tags,
+      solution: solution
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, CREATE_EXERCISE_URL, req, callback, error)
+  },
+
+  /*
    * Get exercise by ID
    * @param {object} ctx Context.
    * @param {int} id Exercise ID
