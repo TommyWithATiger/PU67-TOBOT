@@ -26,6 +26,7 @@ const SUBJECT_GET_ID_URL = `${API_URL}/subject/get/?id=`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 const SUBJECT_GET_RELATED_URL = `${API_URL}/subject/related/?id=`
 const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
+const SUBJECT_GET_PARTICIPATING_URL = `${API_URL}/subject/get/participant`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
@@ -102,6 +103,17 @@ export const api = {
    */
   getSubjectsByTitle (ctx, term, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_TITLE_URL + term, callback, error)
+  },
+
+  /**
+   * Get all subjects from API based on a search term.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getParticipatingSubjects (ctx, callback, error) {
+    return this.postRequest(ctx, SUBJECT_GET_PARTICIPATING_URL, {}, callback, error)
   },
 
   /**

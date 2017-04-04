@@ -6,14 +6,13 @@ import static api.helpers.UrlArgumentHelper.getIntegerURIField;
 import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
-import data.dao.SubjectDAO;
 import data.Subject;
+import data.dao.SubjectDAO;
 import data.user.User;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
