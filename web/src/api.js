@@ -36,6 +36,7 @@ const REFERENCE_ADD_URL = `${API_URL}/reference/create`
 const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
 
 const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
+const GET_EXERCISES_BY_TOPIC_URL = `${API_URL}/exercise/get/?topic=`
 const GET_EXERCISE_URL = `${API_URL}/exercise/get/?id=`
 const REGISTER_EXERCISE_ATTEMPT_URL = `${API_URL}/exercise/register`
 
@@ -400,6 +401,17 @@ export const api = {
   */
   getExercise (ctx, id, callback, error) {
     return this.getRequest(ctx, GET_EXERCISE_URL + id, callback, error)
+  },
+
+  /**
+   * Get exercises by topic ID
+   * @param {object} ctx Context.
+   * @param {int} topicID topic ID
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  getExercisesByTopic (ctx, topicID, callback, error) {
+    return this.getRequest(ctx, GET_EXERCISES_BY_TOPIC_URL + topicID, callback, error)
   },
 
   /**
