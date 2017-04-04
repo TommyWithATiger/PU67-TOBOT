@@ -33,7 +33,7 @@
         <div class="subject-code">{{ s.subjectCode }}</div>
         <div class="subject-title">{{ s.title }}</div>
         <div class="subject-description">{{ s.description }}</div>
-        <div class="subject-relate"><router-link class="colored-link" :to="{ name: 'SubjectPage', params: {id: s.id}}">details ➜</router-link></div>
+        <div class="subject-relate"><router-link class="colored-link" :to="'/subject/' + s.id">details</router-link></div>
       </div>
     </div>
     <div v-else><span v-if="!getFeedback.length">Not subjects.</span></div>
