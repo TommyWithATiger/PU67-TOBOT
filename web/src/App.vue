@@ -209,6 +209,7 @@ input[type=text], input, textarea, select {
 select {
   border: 8px solid #999;
   border-color: var(--n-color-3);
+  padding: 0;
 }
 
 input[type=text]:focus, input:focus {
