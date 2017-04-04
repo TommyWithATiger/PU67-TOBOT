@@ -3,6 +3,8 @@ pipeline:
     image: registry.niklasmh.no/tobot-baseimage
     when:
       event: push
+      branch:
+        exclude: development
     environment:
       - CODECOV_TOKEN=${CODECOV_TOKEN}
     commands:
@@ -21,6 +23,8 @@ pipeline:
     image: registry.niklasmh.no/tobot-baseimage
     when:
       event: push
+      branch:
+        exclude: development
     commands:
       - cd web
       - npm install --depth=0 --quiet
