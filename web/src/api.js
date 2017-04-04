@@ -31,13 +31,16 @@ const SUBJECT_GET_PARTICIPATING_URL = `${API_URL}/subject/get/participant`
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 
 const REFERENCE_GET_URL = `${API_URL}/reference/get/`
+const REFERENCE_GET_BY_TOPIC_URL = `${API_URL}/reference/get/?topic=`
 const REFERENCE_GET_ID_URL = `${API_URL}/reference/get/?id=`
 const REFERENCE_ADD_URL = `${API_URL}/reference/create`
 
 const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
 
 const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
+const GET_EXERCISES_BY_TOPIC_URL = `${API_URL}/exercise/get/?topic=`
 const GET_EXERCISE_URL = `${API_URL}/exercise/get/?id=`
+const GET_NEXT_EXERCISE_ULR = `${API_URL}/exercise/next`
 const REGISTER_EXERCISE_ATTEMPT_URL = `${API_URL}/exercise/register`
 
 export const api = {
@@ -158,6 +161,17 @@ export const api = {
    */
   getReferences (ctx, callback, error) {
     return this.getRequest(ctx, REFERENCE_GET_URL, callback, error)
+  },
+
+  /**
+   * Get all references from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getReferencesByTopic (ctx, topicID, callback, error) {
+    return this.getRequest(ctx, REFERENCE_GET_BY_TOPIC_URL + topicID, callback, error)
   },
 
   /**
@@ -437,6 +451,36 @@ export const api = {
   */
   getExercise (ctx, id, callback, error) {
     return this.getRequest(ctx, GET_EXERCISE_URL + id, callback, error)
+  },
+
+  /**
+   * Get exercises by topic ID
+   * @param {object} ctx Context.
+   * @param {int} topicID topic ID
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  getExercisesByTopic (ctx, topicID, callback, error) {
+    return this.getRequest(ctx, GET_EXERCISES_BY_TOPIC_URL + topicID, callback, error)
+  },
+
+  /**
+   * Get next exercise for a topic
+   * @param {object} ctx Context.
+   * @param {int} topicID The id for the topic
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  getNextExercise (ctx, topicID, callback, error) {
+    let data = {
+      topicID: topicID
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, GET_NEXT_EXERCISE_ULR, req, callback, error)
   },
 
   /**
