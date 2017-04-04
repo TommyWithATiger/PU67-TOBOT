@@ -106,7 +106,7 @@ export default {
     },
     getNextExercise () {
       api.getNextExercise(this, parseInt(this.$route.params.id), (data) => {
-        this.next_exercise = data.id
+        this.next_exercise = data.exercises[0].id
       }, () => {})
     },
     link (reference) {
