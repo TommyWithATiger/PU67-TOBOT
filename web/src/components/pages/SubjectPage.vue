@@ -29,6 +29,9 @@
           <span class="error">{{ addFeedback }}</span>
         </p>
       </div>
+      <div class="searchTopic">
+        <input v-model="search" v-on:keyup="restrictTopics" type="text" placeholder="Search for topic" />
+      </div>
       <div v-if="topics.length">
         <div class="topic-info topic-info-header">
           <div class="topic-title">Title</div>
@@ -63,6 +66,8 @@ export default {
       },
       addFeedback: '',
       topics: [],
+      allTopics: [],
+      search: '',
       canAdd: false,
       getFeedback: '',
       subject: {
@@ -88,12 +93,13 @@ export default {
       this.addFeedback = ''
       api.addTopic(this, this.topic, (data) => {
         let t = data
-        this.topics.push({
+        this.allTopics.push({
           title: t.title,
           description: t.description,
           id: t.id,
           rating: 0
         })
+        this.restrictTopics()
         this.addFeedback = 'Added to database.'
       }, () => {
         this.addFeedback = 'Failed to add topic.'
@@ -113,6 +119,19 @@ export default {
         }
       })
     },
+    restrictTopics () {
+      this.topics = []
+      if (this.search === '') {
+        this.topics = this.allTopics
+      } else {
+        for (let topicIndex = 0; topicIndex < this.allTopics.length; topicIndex++) {
+          let topic = this.allTopics[topicIndex]
+          if (topic.title.toLowerCase().includes(this.search.toLowerCase())) {
+            this.topics.push(topic)
+          }
+        }
+      }
+    },
     isRelated (topic) {
       for (var index = 0; index < this.relatedTopics.length; index++) {
         if (this.relatedTopics[index].id === topic.id) {
@@ -123,9 +142,10 @@ export default {
     },
     updateData () {
       api.getTopics(this, (data) => {
-        this.topics = data.topics
+        this.allTopics = data.topics
+        this.restrictTopics()
       }, () => {
-        this.topics = []
+        this.allTopics = []
       })
 
       api.getSubjectById(this, this.$route.params.id, (data) => {
