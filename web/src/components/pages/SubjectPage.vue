@@ -10,12 +10,13 @@
           <div v-for="t in relatedTopics" class="topic-info">
             <div class="topic-title"><router-link :to="'/topic/' + t.id">{{ t.title }}</router-link></div>
             <div class="topic-description">{{ t.description }}</div>
+            <button @click="unrelateTopic(t)" v-if="canAdd" class="topic-relate">Unrelate</button>
           </div>
     </div>
     <div v-else>
       This subject is not connected to any topics.
     </div>
-    <div v-if="canAdd()">
+    <div v-if="canAdd">
       <h1>Add topics</h1>
       <div v-if="topics.length">
         <div class="topic-info topic-info-header">
@@ -51,6 +52,7 @@ export default {
       },
       addFeedback: '',
       topics: [],
+      canAdd: false,
       getFeedback: '',
       subject: {
         title: '',
@@ -68,6 +70,7 @@ export default {
   },
   created () {
     this.updateData()
+    this.checkCanAdd()
   },
   methods: {
     relateTopic (topic) {
@@ -77,8 +80,12 @@ export default {
         }
       })
     },
-    canAdd () {
-      return this.$store.state.user.usertype !== 'Student'
+    unrelateTopic (topic) {
+      api.unrelateSubjectTopic(this, topic, this.subject, (data) => {
+        if (data['already-related'] !== data['is-related']) {
+          this.relatedTopics.splice(this.relatedTopics.indexOf(topic), 1)
+        }
+      })
     },
     isRelated (topic) {
       for (var index = 0; index < this.relatedTopics.length; index++) {
@@ -104,6 +111,20 @@ export default {
       api.getRelatedTopics(this, this.$route.params.id, (data) => {
         this.relatedTopics = data.related_topics
       })
+    },
+    checkCanAdd () {
+      if (this.$store.state.user.usertype === 'Admin') {
+        this.canAdd = true
+      } else if (this.$store.state.user.usertype === 'Teacher') {
+        api.getSubjectsEditor(this, (data) => {
+          for (let subjectIndex in data.subjects) {
+            if (data.subjects[subjectIndex].id === parseInt(this.$route.params.id)) {
+              this.canAdd = true
+              break
+            }
+          }
+        }, () => {})
+      }
     }
   }
 }
