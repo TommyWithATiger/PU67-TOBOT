@@ -15,7 +15,7 @@
           </div>
         </router-link>
         <div class="exercise-container" v-else>
-          No exercise
+          No exercises
         </div>
       </div>
     </div>
