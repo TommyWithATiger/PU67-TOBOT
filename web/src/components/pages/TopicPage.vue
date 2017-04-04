@@ -5,12 +5,22 @@
 
     <div class="exercises" v-if="exercises.length">
       <h2> Exercises: </h2>
-      <div v-for="exercise in exercises">
-
+      <div class="exercise" v-for="exercise in exercises" v-if="exercise.title.replace(' ', '').length">
+        <router-link :to="'/exercise/' + exercise.id">
+          <div class="exercise">
+            {{ exercise.title }}
+          </div>
+        </router-link>
       </div>
+      <router-link :to="'/exercise/' + next_exercise" v-if="next_exercise !== -1">
+        <button class="recommended_exercise">
+          Recommended exercise
+        </button>
+      </router-link>
     </div>
 
     <div class="videos" v-if="videos.length">
+      <h2>Videos:</h2>
       <div class="video_containers">
         <div class="video_container" v-for="video in videos">
           <h3> {{ video.title }} </h3>
@@ -19,7 +29,7 @@
       </div>
     </div>
     <div class="references" v-if="references.length">
-      <h2>References</h2>
+      <h2>References:</h2>
       <div class="reference_container" v-for="reference in references">
         <a v-bind:href=" link(reference) ">
           <h3> {{ reference.title }} </h3>
@@ -49,7 +59,8 @@ export default {
       description: '',
       exercises: [],
       videos: [],
-      references: []
+      references: [],
+      next_exercise: -1
     }
   },
   watch: {
@@ -65,6 +76,7 @@ export default {
       api.getTopicById(this, this.$route.params.id, (data) => {
         this.title = data.title
         this.description = data.description
+        this.getExercises()
         this.getReferences()
       }, () => {
         this.title = ''
@@ -85,6 +97,18 @@ export default {
         }
       }, () => {})
     },
+    getExercises () {
+      this.exercises = []
+      api.getExercisesByTopic(this, this.$route.params.id, (data) => {
+        this.exercises = data.exercises
+        this.getNextExercise()
+      }, () => {})
+    },
+    getNextExercise () {
+      api.getNextExercise(this, parseInt(this.$route.params.id), (data) => {
+        this.next_exercise = data.id
+      }, () => {})
+    },
     link (reference) {
       return reference.link
     }
@@ -96,6 +120,8 @@ export default {
 
 .video_container {
   display: inline-block;
+  padding: 20px;
+  margin-top: 20px;
 }
 
 @media (min-width:830px) {
@@ -108,7 +134,8 @@ export default {
 .reference_container {
   display: inline-block;
   width: 300px;
-  margin-right: 30px;
+  min-height: 150px;
+  padding: 10px;
   vertical-align: text-top;
 }
 
@@ -116,8 +143,28 @@ export default {
   cursor: pointer;
 }
 
-.references, .videos, .exercise {
+.references, .videos, .exercises {
   margin-bottom: 50px;
+}
+
+.exercise {
+  width: 228px;
+  margin-bottom: 5px;
+  padding: 2px;
+  text-align: center;
+  display: inline-block;
+}
+
+.recommended_exercise {
+  margin-top: 10px;
+}
+
+.exercises > .exercise:nth-child(2n), .references > .reference_container:nth-child(2n), .video_containers > .video_container:nth-child(2n) {
+  background-color: var(--n-color-3);
+}
+
+.exercises > .exercise:nth-child(2n + 1), .references > .reference_container:nth-child(2n + 1), .video_containers > .video_container:nth-child(2n + 1) {
+  background-color: var(--n-color-4);
 }
 
 </style>
