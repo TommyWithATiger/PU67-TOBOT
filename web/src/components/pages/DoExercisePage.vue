@@ -26,7 +26,7 @@
       <h3 class="solution_title"> 
         Solution:
       </h3>
-      <div class="solution" id="solution" v-html="solution"></div>
+      <div v-bind:style="{ height: solution_height + 'pt' }" class="solution" id="solution" v-html="solution"></div>
     </div>
     <div class="solution" v-else-if="done">
       <h3 class="solutionTitle"> 
@@ -77,6 +77,7 @@ export default {
     return {
       title: '',
       solution: '',
+      solution_height: 0,
       content: '',
       tags: [],
       id: parseInt(this.$route.params.id),
@@ -90,9 +91,6 @@ export default {
   },
   mounted () {
     document.getElementById('context_container').addEventListener('DOMSubtreeModified', this.setContentHeight)
-    if (document.getElementById('solution') !== null) {
-      document.getElementById('solution').addEventListener('DOMSubtreeModified', this.setContentHeight)
-    }
   },
   methods: {
     updateData () {
@@ -102,6 +100,9 @@ export default {
         this.title = data.title
         if (data.solution !== null && data.solution !== undefined) {
           this.solution = data.solution
+          let heightElement = document.createElement('div')
+          heightElement.innerHTML = this.solution
+          this.solution_height = this.getContentHeight(heightElement)
         }
       }, () => {
         this.content = ''
@@ -112,12 +113,13 @@ export default {
     },
     setContentHeight (event) {
       let container = event.target
-      if (container.lastChild !== null) {
-        container.style.height = parseFloat(container.lastChild.style.top) + this.getHeight(container.lastChild) + 'pt'
-      }
+      container.style.height = this.getContentHeight(container) + 'pt'
     },
     getHeight (node) {
       return node.style.height !== '' ? parseFloat(node.style.height) : (node.style.lineHeight !== '' ? parseFloat(node.style.lineHeight) : 0)
+    },
+    getContentHeight: function (container) {
+      return container.lastChild === null ? 0 : parseFloat(container.lastChild.style.top) + this.getHeight(container.lastChild)
     },
     setDifficulty (difficulty) {
       this.difficulty = difficulty
@@ -152,6 +154,13 @@ export default {
 </script>
 
 
+<style>
+
+.solution .p, .solution .r {
+  position: absolute;
+}
+
+</style>
 
 <style scoped> 
 
@@ -188,6 +197,7 @@ svg:hover {
 .ratingBar {
   margin-top: 60px;
   padding-left: 20px;
+  margin-bottom: 60px;
 }
 
 .ratingBar button, .ratingBar .ratingBox {
@@ -227,6 +237,7 @@ svg:hover {
 
 .solution {
   margin-left: 20px;
+  position: relative;
 }
 
 .solutionTitle {

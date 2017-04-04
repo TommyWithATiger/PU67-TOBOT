@@ -19,10 +19,10 @@ import org.json.JSONObject;
         + " LEFT JOIN ExerciseAttemptHistory eah ON eah.exercise = e"
         + " LEFT JOIN ExerciseRating er ON er.id.exerciseID = e.id"
         + " LEFT JOIN User u ON eah.user = u"
-        + " WHERE u = :user"
+        + " WHERE u = :user OR u IS NULL"
         + " AND :topic MEMBER OF e.topics"
         + " GROUP BY e"
-        + " ORDER BY SUM(eah.success), AVG(er.rating) NULLS LAST"),
+        + " ORDER BY SUM(eah.success), AVG(er.rating)"),
 })
 @Table
 public class Exercise extends AbstractBaseEntity{
