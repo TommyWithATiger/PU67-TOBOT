@@ -9,8 +9,13 @@
       <p v-if="s.relatedTopics && !s.relatedTopics.length" class="related-topics-empty">No topics.</p>
       <div v-for="t in s.relatedTopics" class="related-topics">
         <router-link :to="'/topic/' + t.id"><div class="related-topic-container">{{ t.title }}</div></router-link>
-        <div class="exercise-container">
-          Do exercise
+        <router-link :to="'/exercise/' + t.exercise" v-if="t.exercise">
+          <div class="exercise-container">
+            Do exercise
+          </div>
+        </router-link>
+        <div class="exercise-container" v-else>
+          No exercise
         </div>
       </div>
     </div>
@@ -38,6 +43,11 @@ export default {
           for (let i in data.related_topics) {
             let rating = rt[i].ratingCount.reduce((e, a) => e > a ? e : a, 0)
             rt[i].maxRating = rating
+            api.getNextExercise(this, rt[i].id, (data) => {
+              if (data.exercises.length) {
+                this.$set(this.subjects[s.id].relatedTopics[i], 'exercise', data.exercises[0].id)
+              }
+            }, () => {})
           }
           this.$set(this.subjects[s.id], 'relatedTopics', rt)
         })
