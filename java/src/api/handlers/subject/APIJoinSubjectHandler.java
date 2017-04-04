@@ -46,7 +46,7 @@ public class APIJoinSubjectHandler {
     User user = getUserFromRequest(httpRequest, ", cannot check if unlogged in user has joined subject");
 
 
-    Integer subjectID = getIntegerURIField(httpRequest, "id");
+    Integer subjectID = getJSONField(httpRequest, Integer.class, "subjectID");
 
     Subject subject = SubjectDAO.getInstance().findById(subjectID);
 
