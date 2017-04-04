@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1>Statistics from students:</h1>
+    <h2>Statistics from students in your subjects:</h2>
     <div v-for="s in subjects">
-      <h2><router-link :to="'/subject/' + s.id">{{ s.title }}</router-link></h2>
+      <h3><router-link :to="'/subject/' + s.id">{{ s.title }}</router-link></h3>
       <p v-if="s.relatedTopics && !s.relatedTopics.length" class="related-topics-empty">No topics.</p>
       <div v-for="t in s.relatedTopics" class="related-topics">
         <router-link :to="'/topic/' + t.id">{{ t.title }}</router-link>
@@ -55,18 +55,18 @@ export default {
       return {
         chart: {
           type: 'pie',
-          width: 200,
+          width: 150,
           height: 65,
           spacingBottom: 0,
           spacingTop: 0,
-          spacingLeft: 0,
-          spacingRight: 100
+          spacingLeft: 25,
+          spacingRight: 25
         },
         title: {
           text: ''
         },
         tooltip: {
-          pointFormat: '{series.name}: <b>{point.percentage}%</b><br />Count: <b>{point.y}</b>'
+          pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b><br />Count: <b>{point.y}</b>'
         },
         plotOptions: {
           pie: {
@@ -99,6 +99,10 @@ export default {
 .related-topics,
 .related-topics-empty {
   padding-left: 32px;
+  display: inline-block;
+  text-align: center;
+  width: 150px;
+  font-weight: bold;
 }
 
 .related-topics-empty {
@@ -114,6 +118,7 @@ a {
 [data-highcharts-chart] {
   display: block;
   width: auto;
+  position: relative;
 }
 
 .highcharts-container {
