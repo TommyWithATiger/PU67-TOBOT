@@ -18,6 +18,17 @@
     </div>
     <div v-if="canAdd">
       <h1>Add topics</h1>
+      <div class="topic-add-fields">
+        <label>Title: </label>
+        <input @keydown.enter="addTopic" v-model="topic.title" type="text" />
+        <br>
+        <label>Description: </label>
+        <input @keydown.enter="addTopic" v-model="topic.description" type="text" />
+        <p>
+          <button @click="addTopic">Add</button>
+          <span class="error">{{ addFeedback }}</span>
+        </p>
+      </div>
       <div v-if="topics.length">
         <div class="topic-info topic-info-header">
           <div class="topic-title">Title</div>
@@ -73,6 +84,21 @@ export default {
     this.checkCanAdd()
   },
   methods: {
+    addTopic () {
+      this.addFeedback = ''
+      api.addTopic(this, this.topic, (data) => {
+        let t = data
+        this.topics.push({
+          title: t.title,
+          description: t.description,
+          id: t.id,
+          rating: 0
+        })
+        this.addFeedback = 'Added to database.'
+      }, () => {
+        this.addFeedback = 'Failed to add topic.'
+      })
+    },
     relateTopic (topic) {
       api.relateSubjectTopic(this, topic, this.subject, (data) => {
         if (data['already-related'] !== data['is-related']) {
@@ -132,6 +158,11 @@ export default {
 
 <style scoped>
 
+.topic-add-fields > label {
+  width: 5em;
+  display: inline-block;
+}
+
 .topic-title, .topic-description, .topic-relate {
   padding-right: 20px;
   flex-grow: 1;
@@ -164,4 +195,6 @@ export default {
   font-weight: bold;
   font-size: 1.2em;
 }
+
+
 </style>
