@@ -72,7 +72,7 @@ public class APIGetExerciseHandlerTest extends BaseTest {
         "exercise/url?id=" + String.valueOf(exercise1.getId()));
     String response = getExerciseByID(httpRequest);
     assertEquals("{\"id\":" + exercise1.getId() + ",\"text\":\"" + exercise1.getText() +
-        "\",\"title\":\"" + exercise1.getTitle() + "\"}", response);
+        "\",\"title\":\"" + exercise1.getTitle() + "\",\"tags\":[]}", response);
   }
 
   @Test(expected = APIBadMethodException.class)
@@ -114,9 +114,9 @@ public class APIGetExerciseHandlerTest extends BaseTest {
     String response = getExercisesByTopic(httpRequest);
     assertEquals("{\"exercises\":" +
             "[{\"id\":" + exercise1.getId() + ",\"text\":\"" + exercise1.getText() +
-            "\",\"title\":\"" + exercise1.getTitle() + "\"}," +
+            "\",\"title\":\"" + exercise1.getTitle() + "\",\"tags\":[]}," +
             "{\"id\":" + exercise2.getId() + ",\"text\":\"" + exercise2.getText() +
-            "\",\"title\":\"" + exercise2.getTitle() + "\"}]}",
+            "\",\"title\":\"" + exercise2.getTitle() + "\",\"tags\":[]}]}",
         response);
   }
 }
