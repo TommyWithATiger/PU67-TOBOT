@@ -76,14 +76,6 @@ public class ExerciseAttemptHistory extends AbstractBaseEntity {
     ExerciseAttemptHistoryDAO.getInstance().remove(this);
   }
 
-  /**
-   * Updates the ExerciseAttemptHistory's database entry
-   */
-  public void update() {
-    ExerciseAttemptHistoryDAO.getInstance().merge(this);
-  }
-
-
   @Override
   public boolean equals(Object other) {
     if (other == null || !(other instanceof ExerciseAttemptHistory)) {
