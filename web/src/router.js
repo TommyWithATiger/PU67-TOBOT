@@ -31,55 +31,63 @@ Vue.use(Router)
  * @param {object} next The function which completes the redirection.
  */
 function requireAuth (to, from, next) {
+  let fromLink = from.name !== null
+
   if (auth.hasToken()) {
     if (/^\/login|^\/register/.test(from.path)) {
       store.state.user.username = ''
       store.state.user.usertype = ''
+      fromLink = false
     }
 
-    auth.isAuth(() => {
-      if (/^\/login|^\/register|^\/restricted/.test(from.path)) {
-        api.getUser(this, (data) => {
-          store.state.user.username = data.username
-          store.state.user.usertype = data.userType
-          store.state.user.email = data.email
+    if (fromLink) {
+      next()
+    } else {
+      auth.isAuth(() => {
+        let hasUserType = store.state.user.usertype && store.state.user.usertype !== 'undefined'
 
-          if (to.meta.users.indexOf(data.userType) !== -1) {
+        if (/^\/login|^\/register|^\/restricted/.test(from.path) || !hasUserType) {
+          api.getUser(this, (data) => {
+            store.state.user.username = data.username
+            store.state.user.usertype = data.userType
+            store.state.user.email = data.email
+            if (to.meta.users.indexOf(data.userType) !== -1) {
+              next()
+            } else {
+              next(getRestrictedRoute(to))
+            }
+          })
+        } else {
+          api.getUser(this, (data) => {
+            store.state.user.username = data.username
+            store.state.user.usertype = data.userType
+            store.state.user.email = data.email
+          })
+
+          if (hasUserType && to.meta.users.indexOf(store.state.user.usertype) !== -1) {
             next()
           } else {
-            next(getRestrictedRoute(to))
-          }
-        })
-      } else {
-        api.getUser(this, (data) => {
-          store.state.user.username = data.username
-          store.state.user.usertype = data.userType
-          store.state.user.email = data.email
-        })
+            if (hasUserType) {
+              next(getRestrictedRoute(to))
+            } else {
+              api.getUser(this, (data) => {
+                store.state.user.username = data.username
+                store.state.user.usertype = data.userType
+                store.state.user.email = data.email
 
-        if (to.meta.users.indexOf(store.state.user.usertype) !== -1) {
-          next()
-        } else {
-          if (store.state.user.usertype === 'undefined' || store.state.user.usertype === null) {
-            api.getUser(this, (data) => {
-              store.state.user.username = data.username
-              store.state.user.usertype = data.userType
-              store.state.user.email = data.email
-
-              if (to.meta.users.indexOf(store.state.user.usertype) !== -1) {
-                next()
-              } else {
-                next(getRestrictedRoute(to))
-              }
-            })
-          } else {
-            next(getRestrictedRoute(to))
+                if (to.meta.users.indexOf(store.state.user.usertype) !== -1) {
+                  next()
+                } else {
+                  next(getRestrictedRoute(to))
+                }
+              })
+            }
           }
         }
-      }
-    }, () => {
-      next(getLoginRoute(to))
-    })
+      }, () => {
+        next(getLoginRoute(to))
+      })
+    }
   } else {
     next(getLoginRoute(to))
   }
