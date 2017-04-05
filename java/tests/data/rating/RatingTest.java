@@ -1,4 +1,4 @@
-package data;
+package data.rating;
 
 import static junit.framework.TestCase.assertEquals;
 
