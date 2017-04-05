@@ -20,6 +20,10 @@ public class RatingTest extends BaseTest {
 
     Rating rating1 = RatingDAO.getInstance().findById(new RatingKey(1, 1));
     assertEquals(rating, rating1);
+    assertEquals((Integer) 1,  rating1.getUserID());
+    assertEquals((Integer) 1, rating1.getTopicID());
+    assertEquals(RatingEnum.Good, rating1.getRating());
+    assertEquals(RatingEnum.Good.value(), rating1.getIntRating());
   }
 
   @Test
