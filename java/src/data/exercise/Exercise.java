@@ -49,13 +49,13 @@ public class Exercise extends AbstractBaseEntity{
 
   public Exercise(String title, String text) {
     this();
-    this.title = title;
-    this.text = text;
+    setTitle(title);
+    setText(text);
   }
 
   public Exercise(String title, String text, String solution) {
     this(title, text);
-    this.solution = solution;
+    setSolution(solution);
   }
 
   /**
