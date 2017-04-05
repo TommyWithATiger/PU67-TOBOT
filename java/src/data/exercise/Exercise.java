@@ -118,6 +118,8 @@ public class Exercise extends AbstractBaseEntity{
          topic.update();
         }
     );
+    this.topics.addAll(topics);
+    update();
   }
 
   public JSONObject createAbout(){
