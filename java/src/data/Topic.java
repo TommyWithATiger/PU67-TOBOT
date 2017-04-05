@@ -74,6 +74,15 @@ public class Topic extends AbstractBaseEntity {
   }
 
   /**
+   * Get the exercises of the topic.
+   *
+   * @return the exercises of the topic.
+   */
+  public Collection<Exercise> getExercises() {
+    return new HashSet<>(exercises);
+  }
+
+  /**
    * Set the parent of the topic.
    *
    * @param parentId Id of the new parent topic
