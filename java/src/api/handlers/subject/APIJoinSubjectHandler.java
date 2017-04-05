@@ -2,6 +2,7 @@ package api.handlers.subject;
 
 import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
+import static api.helpers.UrlArgumentHelper.getIntegerURIField;
 import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
@@ -27,6 +28,31 @@ public class APIJoinSubjectHandler {
    */
   public static String joinSubjectParticipantHandler(HttpRequest httpRequest) {
     return joinSubject(httpRequest, Subject::isParticipant, Subject::addParticipant).toString();
+  }
+
+  /**
+   * An API handler for checking if the user has joined the given subject. This requires the user to be logged in
+   * and the following data:
+   *      subjectID (int): the id of the subject
+   *
+   * @param httpRequest The request to handle
+   * @return A JSON string with one variable:
+   *      joined (boolean): indicates whether the user has joined the subject
+   */
+  public static String hasJoinedSubject(HttpRequest httpRequest) {
+    checkRequestMethod("POST", httpRequest);
+
+    // User must be logged in
+    User user = getUserFromRequest(httpRequest, ", cannot check if unlogged in user has joined subject");
+
+
+    Integer subjectID = getJSONField(httpRequest, Integer.class, "subjectID");
+
+    Subject subject = SubjectDAO.getInstance().findById(subjectID);
+
+    JSONObject response = new JSONObject();
+    response.put("joined", subject.isParticipant(user));
+    return response.toString();
   }
 
   /**

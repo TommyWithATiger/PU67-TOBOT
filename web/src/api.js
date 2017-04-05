@@ -31,6 +31,10 @@ const SUBJECT_GET_PARTICIPATING_URL = `${API_URL}/subject/get/participant`
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
 const SUBJECT_TOPIC_UNRELATE_URL = `${API_URL}/subject/topic/unrelate`
 
+const SUBJECT_JOIN_PARTICIPANT_URL = `${API_URL}/subject/join/participant`
+const SUBJECT_LEAVE_PARTICIPANT_URL = `${API_URL}/subject/leave/participant`
+const SUBJECT_IS_PARTICIPANT_URL = `${API_URL}/subject/join/is`
+
 const REFERENCE_GET_URL = `${API_URL}/reference/get/`
 const REFERENCE_GET_BY_TOPIC_URL = `${API_URL}/reference/get/?topic=`
 const REFERENCE_GET_ID_URL = `${API_URL}/reference/get/?id=`
@@ -385,6 +389,66 @@ export const api = {
     }
 
     return this.postRequest(ctx, SUBJECT_TOPIC_UNRELATE_URL, req, callback, error)
+  },
+
+  /**
+   * Join subject as participant
+   * @param {object} ctx Context.
+   * @param {object} subjectID The id of the subject to join
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  joinSubjectParticipant (ctx, subjectID, callback, error) {
+    let data = {
+      subjectID: subjectID
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, SUBJECT_JOIN_PARTICIPANT_URL, req, callback, error)
+  },
+
+  /**
+   * Leave subject as participant
+   * @param {object} ctx Context.
+   * @param {object} subjectID The id of the subject to leave
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  leaveSubjectParticipant (ctx, subjectID, callback, error) {
+    let data = {
+      subjectID: subjectID
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, SUBJECT_LEAVE_PARTICIPANT_URL, req, callback, error)
+  },
+
+  /**
+   * Check if is participant in subject
+   * @param {object} ctx Context.
+   * @param {object} subjectID The id of the subject to check
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  isParticipantSubject (ctx, subjectID, callback, error) {
+    let data = {
+      subjectID: subjectID
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, SUBJECT_IS_PARTICIPANT_URL, req, callback, error)
   },
 
   /**

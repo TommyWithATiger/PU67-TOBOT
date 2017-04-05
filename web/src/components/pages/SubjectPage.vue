@@ -1,6 +1,10 @@
 <template>
   <div class="page-content">
-    <h1>{{subject.subjectCode}} - {{subject.title}}</h1>
+    <h1 class="subject-title">{{subject.subjectCode}} - {{subject.title}}</h1>
+    <div class="join-leave" v-if="$store.state.user.usertype === 'Student'">
+      <button @click="joinSubject" v-if="!joined"> Join Subject</button>
+      <button @click="leaveSubject" v-else> Leave Subject </button>
+    </div>
     <h1>Connected topics</h1>
     <div v-if="relatedTopics.length">
       <div class="topic-info topic-info-header">
@@ -64,6 +68,7 @@ export default {
         title: '',
         description: ''
       },
+      joined: false,
       addFeedback: '',
       topics: [],
       allTopics: [],
@@ -87,6 +92,7 @@ export default {
   created () {
     this.updateData()
     this.checkCanAdd()
+    this.checkJoined()
   },
   methods: {
     addTopic () {
@@ -132,6 +138,16 @@ export default {
         }
       }
     },
+    joinSubject () {
+      api.joinSubjectParticipant(this, parseInt(this.$route.params.id), (data) => {
+        this.joined = data['is-joined']
+      }, () => {})
+    },
+    leaveSubject () {
+      api.leaveSubjectParticipant(this, parseInt(this.$route.params.id), (data) => {
+        this.joined = data['is-joined']
+      }, () => {})
+    },
     isRelated (topic) {
       for (var index = 0; index < this.relatedTopics.length; index++) {
         if (this.relatedTopics[index].id === topic.id) {
@@ -169,6 +185,13 @@ export default {
               break
             }
           }
+        }, () => {})
+      }
+    },
+    checkJoined () {
+      if (this.$store.state.user.usertype === 'Student') {
+        api.isParticipantSubject(this, parseInt(this.$route.params.id), (data) => {
+          this.joined = data.joined
         }, () => {})
       }
     }
@@ -216,5 +239,12 @@ export default {
   font-size: 1.2em;
 }
 
+.subject-title, .join-leave {
+  display: inline-block;
+}
+
+.join-leave {
+  float: right;
+}
 
 </style>
