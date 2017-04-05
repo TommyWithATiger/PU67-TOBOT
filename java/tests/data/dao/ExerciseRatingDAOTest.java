@@ -35,13 +35,13 @@ public class ExerciseRatingDAOTest extends BaseTest{
   }
 
   @Test
-  public void testCreateOrUpdate(){
+  public void testCreateOrUpdate1() {
     ExerciseRatingDAO.getInstance().createOrUpdate(user, exercise1, ExerciseRatingEnum.Hard);
-    assertEquals(ExerciseRatingEnum.Hard, ExerciseRatingDAO.getInstance()
-        .findById(new ExerciseRatingKey(user, exercise1)).getRating());
+    assertEquals(ExerciseRatingEnum.Medium, ExerciseRatingEnum.get(ExerciseRatingDAO.getInstance()
+        .findById(new ExerciseRatingKey(user, exercise1)).getRating()));
 
     ExerciseRatingDAO.getInstance().createOrUpdate(user, exercise2, ExerciseRatingEnum.Easy);
-    assertEquals(ExerciseRatingEnum.Easy, ExerciseRatingDAO.getInstance()
-        .findById(new ExerciseRatingKey(user, exercise2)).getRating());
+    assertEquals(ExerciseRatingEnum.Easy, ExerciseRatingEnum.get(ExerciseRatingDAO.getInstance()
+        .findById(new ExerciseRatingKey(user, exercise2)).getRating()));
   }
 }
