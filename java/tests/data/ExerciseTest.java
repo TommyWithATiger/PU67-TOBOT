@@ -1,10 +1,15 @@
 package data;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import base.BaseTest;
 import data.dao.ExerciseDAO;
 import data.exercise.Exercise;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
 public class ExerciseTest extends BaseTest {
@@ -42,6 +47,28 @@ public class ExerciseTest extends BaseTest {
 
     Exercise exercise1 = ExerciseDAO.getInstance().findById(exercise.getId());
     assertEquals("<html stuff new solution/>", exercise1.getSolution());
+  }
+
+  @Test
+  public void testAddToTopics() throws Exception {
+    Exercise exercise = new Exercise("Title", "<html stuff/>", "<html stuff solution/>");
+    exercise.create();
+
+    Topic topic1 = new Topic("Title1", "description1");
+    topic1.create();
+    Topic topic2 = new Topic("Title2", "description2");
+    topic2.create();
+    List<Topic> topics = new ArrayList<>();
+    topics.add(topic1);
+    topics.add(topic2);
+
+    exercise.addToTopics(topics);
+    exercise.update();
+
+    Exercise exercise1 = ExerciseDAO.getInstance().findById(exercise.getId());
+    assertTrue(CollectionUtils.isEqualCollection(topic1.getExercises(), Collections.singletonList(exercise1)));
+    assertTrue(CollectionUtils.isEqualCollection(topic2.getExercises(), Collections.singletonList(exercise1)));
+
   }
 
 }
