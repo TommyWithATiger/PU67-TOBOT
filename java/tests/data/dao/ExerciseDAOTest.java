@@ -62,28 +62,6 @@ public class ExerciseDAOTest extends BaseTest{
 
   }
 
-  @Test
-  public void testGetNextExercises(){
-    List<Exercise> exercises = ExerciseDAO.getInstance().getNextExercises(user1, topic1, 1000);
-    assertEquals(exercise1, exercises.get(0));
-    assertEquals(exercise2, exercises.get(1));
-    assertEquals(2, exercises.size());
-
-    exercises = ExerciseDAO.getInstance().getNextExercises(user2, topic1, 1000);
-    assertEquals(exercise2, exercises.get(0));
-    assertEquals(exercise1, exercises.get(1));
-    assertEquals(2, exercises.size());
-
-    exercises = ExerciseDAO.getInstance().getNextExercises(user1, topic2, 1000);
-    assertEquals(exercise2, exercises.get(0));
-    assertEquals(1, exercises.size());
-
-    exercises = ExerciseDAO.getInstance().getNextExercises(user2, topic2, 1000);
-    assertEquals(exercise2, exercises.get(0));
-    assertEquals(1, exercises.size());
-
-    assertEquals(1, ExerciseDAO.getInstance().getNextExercises(user1, topic1, 1).size());
-  }
 
   @Test
   public void testFindExerciseByTopic(){
