@@ -16,6 +16,9 @@ public class ExerciseTest extends BaseTest {
 
     Exercise exercise1 = ExerciseDAO.getInstance().findById(exercise.getId());
     assertEquals(exercise, exercise1);
+    assertEquals(exercise.getText(), "<html stuff/>");
+    assertEquals(exercise.getSolution(), "<html stuff solution/>");
+    assertEquals(exercise.getTitle(), "Title");
   }
 
   @Test
