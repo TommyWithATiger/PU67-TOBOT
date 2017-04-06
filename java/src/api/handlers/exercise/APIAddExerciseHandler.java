@@ -90,7 +90,4 @@ public class APIAddExerciseHandler {
     return exercise.createAbout().toString();
   }
 
-  public static void main(String[] args) {
-  }
-
 }
