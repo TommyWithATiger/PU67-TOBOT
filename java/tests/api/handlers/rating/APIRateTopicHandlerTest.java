@@ -14,10 +14,7 @@ import data.user.User;
 import data.rating.Rating;
 import data.rating.RatingEnum;
 import data.rating.RatingKey;
-import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
-import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,27 +49,27 @@ public class APIRateTopicHandlerTest extends BaseTest {
 
   @Test(expected = APIBadRequestException.class)
   public void testRateTopicFieldsNotSet() {
-    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", true, "{}");
+    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", user, true, "{}");
     rateTopic(httpRequest);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testRateTopicTopicIDNotInteger() {
-    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", true,
+    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", user, true,
         "{\"topicID\":test,\"rating\":\"Good\"}");
     rateTopic(httpRequest);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testRateTopicTopicIDNotCorrect() {
-    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", true,
+    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", user, true,
         "{\"topicID\":-12,\"rating\":\"Good\"}");
     rateTopic(httpRequest);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testRateTopicRatingNotValid() {
-    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", true,
+    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", user, true,
         "{\"topicID\":" + String.valueOf(topic.getId()) + ",\"rating\":\"asdfhkjjgsfdjklhg\"}");
     rateTopic(httpRequest);
   }
@@ -94,7 +91,7 @@ public class APIRateTopicHandlerTest extends BaseTest {
     Rating rating = new Rating(user.getId(), topic.getId(), RatingEnum.Good);
     rating.create();
 
-    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", true,
+    HttpRequest httpRequest = buildRequestContent("rate/url", "POST", user, true,
         "{\"topicID\":" + String.valueOf(topic.getId()) + ",\"rating\":\"Poor\"}");
     String response = rateTopic(httpRequest);
     assertEquals("{\"topicID\":" + String.valueOf(topic.getId()) + ",\"rating\":\"Poor\"}",
@@ -105,35 +102,12 @@ public class APIRateTopicHandlerTest extends BaseTest {
     assertEquals(RatingEnum.Poor, ratingResult.getRating());
   }
 
-  private HttpRequest buildRequest(String url, String method, boolean setLoggedIn) {
-    BasicHttpEntityEnclosingRequest httpRequest = new BasicHttpEntityEnclosingRequest(method, url);
-    if (setLoggedIn) {
-      httpRequest.addHeader("X-Username", user.getUsername());
-      httpRequest.addHeader("Authorization", "Bearer " + user.getSessionToken());
-    }
-    return httpRequest;
-  }
-
   private HttpRequest buildRequestContent(String url, String method, boolean setLoggedIn) {
     JSONObject content = new JSONObject();
     content.put("topicID", topic.getId());
     content.put("rating", RatingEnum.Good.toString());
 
-    return buildRequestContent(url, method, setLoggedIn, content.toString());
-  }
-
-  private HttpRequest buildRequestContent(String url, String method, boolean setLoggedIn,
-      String content) {
-    BasicHttpEntityEnclosingRequest httpRequest = (BasicHttpEntityEnclosingRequest) buildRequest(
-        url, method, setLoggedIn);
-
-    BasicHttpEntity httpEntity = new BasicHttpEntity();
-
-    httpEntity.setContent(new ByteArrayInputStream(content.getBytes()));
-
-    httpRequest.setEntity(httpEntity);
-
-    return httpRequest;
+    return buildRequestContent(url, method, user, setLoggedIn, content.toString());
   }
 
 }

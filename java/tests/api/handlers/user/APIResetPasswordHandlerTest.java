@@ -10,10 +10,7 @@ import api.exceptions.APIRequestForbiddenException;
 import base.BaseTest;
 import data.dao.UserDAO;
 import data.user.User;
-import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
-import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.message.BasicHttpRequest;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -139,10 +136,6 @@ public class APIResetPasswordHandlerTest extends BaseTest {
     assertTrue(user.hasResetToken());
   }
 
-  private HttpRequest buildRequest(String url, String method) {
-    return new BasicHttpEntityEnclosingRequest(method, url);
-  }
-
   private HttpRequest buildRequestContentResetPassword(String url, String method, String resetToken,
       String password, String email) {
     JSONObject jsonObject = new JSONObject();
@@ -157,19 +150,6 @@ public class APIResetPasswordHandlerTest extends BaseTest {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("email", email);
     return buildRequestContent(url, method, jsonObject.toString());
-  }
-
-  private HttpRequest buildRequestContent(String url, String method, String content) {
-    BasicHttpEntityEnclosingRequest httpRequest = (BasicHttpEntityEnclosingRequest) buildRequest(
-        url, method);
-
-    BasicHttpEntity httpEntity = new BasicHttpEntity();
-
-    httpEntity.setContent(new ByteArrayInputStream(content.getBytes()));
-
-    httpRequest.setEntity(httpEntity);
-
-    return httpRequest;
   }
 
 }

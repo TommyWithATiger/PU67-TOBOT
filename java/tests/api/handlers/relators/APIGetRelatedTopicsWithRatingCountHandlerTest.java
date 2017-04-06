@@ -12,7 +12,6 @@ import data.rating.Rating;
 import data.rating.RatingEnum;
 import data.user.User;
 import org.apache.http.HttpRequest;
-import org.apache.http.message.BasicHttpRequest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -130,7 +129,4 @@ public class APIGetRelatedTopicsWithRatingCountHandlerTest extends BaseTest {
             .valueOf(topic2.getId()) + ",\"title\":\"Test topic 2\",\"ratingCount\":[0,0,1,1,0,1]}]}", response);
   }
 
-  private HttpRequest buildRequest(String url, String method) {
-    return new BasicHttpRequest(method, url);
-  }
 }
