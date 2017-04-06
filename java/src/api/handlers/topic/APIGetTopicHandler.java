@@ -1,7 +1,5 @@
 package api.handlers.topic;
 
-import static api.helpers.EntityContentHelper.checkAndGetEntityContent;
-import static api.helpers.JSONCheckerHelper.checkAndGetJSON;
 import static api.helpers.JSONCheckerHelper.getJSONField;
 import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.UrlArgumentHelper.getIntegerURIField;
@@ -9,7 +7,6 @@ import static api.helpers.UrlArgumentHelper.getURIField;
 import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import api.exceptions.APIBadRequestException;
-import api.exceptions.APIRequestForbiddenException;
 import data.Subject;
 import data.dao.SubjectDAO;
 import data.dao.TopicDAO;
@@ -18,7 +15,6 @@ import data.user.User;
 import java.util.List;
 import org.apache.http.HttpRequest;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class APIGetTopicHandler {
