@@ -71,9 +71,6 @@ public class APIJoinSubjectHandler {
   }
 
   /**
-   * A helper method to join a user to a subject. Requires the user to be logged in and the following
-
-  /**
    * A API handler method for setting a user as an editor in a subject. This requires the user
    * to be logged in  and the following data:
    *        subjectID (int): the id of the subject
