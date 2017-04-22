@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.baseimage
+    command: make backend-run
+    ports:
+      - 8081:5032
+    volumes:
+      - .:/tobot
+    working_dir: /tobot
+    restart: always
+    depends_on:
+      - frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.baseimage
+    command: make frontend-build-prod
+    volumes:
+      - .:/tobot
+    working_dir: /tobot
