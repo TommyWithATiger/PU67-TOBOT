@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.baseimage
+      dockerfile: Dockerfile
     command: make backend-run
     ports:
       - 8081:5032
@@ -17,7 +17,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.baseimage
+      dockerfile: Dockerfile
     command: make frontend-build-prod
     volumes:
       - .:/tobot
