@@ -21,16 +21,7 @@ RUN [ "$JAVA_HOME" = "$(docker-java-home)" ]
 
 RUN apk add --update nodejs=6.10.1-r0 nodejs-npm make maven curl
 
-# RUN apt-get update
-# RUN apt-get -y upgrade
-# RUN apt-get install -y vim wget curl maven build-essential nodejs npm
-
-# Upgrade node
-# RUN npm cache clean
-# RUN npm install -g n
-# RUN n stable
-# RUN curl -L https://npmjs.org/install.sh | sh
-
+# Add environment variable
 ENV APP_DIR /tobot
 
 # Creating project folder
