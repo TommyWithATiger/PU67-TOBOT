@@ -1,0 +1,3 @@
+#!/bin/bash
+export MAVEN_OPTS="-Xmx4096m -XX:MaxPermSize=1024m"
+make "$@"
