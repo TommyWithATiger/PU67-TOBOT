@@ -10,7 +10,6 @@ import data.Subject;
 import data.Topic;
 import data.user.User;
 import org.apache.http.HttpRequest;
-import org.apache.http.message.BasicHttpRequest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -77,7 +76,4 @@ public class APIGetRelatedTopicsSubjectHandlerTest extends BaseTest {
         .valueOf(topic.getId()) + ",\"title\":\"Test topic\"}]}", response);
   }
 
-  private HttpRequest buildRequest(String url, String method) {
-    return new BasicHttpRequest(method, url);
-  }
 }

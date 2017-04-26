@@ -63,30 +63,12 @@ public class Rating extends AbstractBaseEntity {
   }
 
   /**
-   * Set the Id of the user that made the rating
-   *
-   * @param userID the id of the user
-   */
-  public void setUserID(Integer userID) {
-    ratingKeyPK.setUserID(userID);
-  }
-
-  /**
    * Get the Id of the topic that was rated
    *
    * @return the Id of the topic
    */
   public Integer getTopicID() {
     return ratingKeyPK.getTopicID();
-  }
-
-  /**
-   * Set the Id of the topic that was rated
-   *
-   * @param topicID the id of the topic
-   */
-  public void setTopicID(Integer topicID) {
-    ratingKeyPK.setTopicID(topicID);
   }
 
   /**

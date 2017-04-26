@@ -11,10 +11,7 @@ import data.dao.SubjectDAO;
 import data.Subject;
 import data.Topic;
 import data.user.User;
-import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
-import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.message.BasicHttpRequest;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -64,27 +61,27 @@ public class APIRelateSubjectTopicHandlerTest extends BaseTest {
 
   @Test(expected = APIBadRequestException.class)
   public void testRelateSubjectTopicIDNotSet() {
-    HttpRequest request = buildRequestContent("relate/url", "POST", true, "{}");
+    HttpRequest request = buildRequestContent("relate/url", "POST", user, true, "{}");
     relateSubjectTopicHandler(request);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testRelateSubjectTopicTopicIDNotInt() {
-    HttpRequest request = buildRequestContent("relate/url", "POST", true,
+    HttpRequest request = buildRequestContent("relate/url", "POST", user, true,
         "{\"subjectID\":" + String.valueOf(subject.getId()) + ",\"topicID\":\"test\"}");
     relateSubjectTopicHandler(request);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testRelateSubjectTopicSubjectIDNotInt() {
-    HttpRequest request = buildRequestContent("relate/url", "POST", true,
+    HttpRequest request = buildRequestContent("relate/url", "POST", user, true,
         "{\"topicID\":" + String.valueOf(topic.getId()) + ",\"subjectID\":\"test\"}");
     relateSubjectTopicHandler(request);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testRelateSubjectTopicTopicIDNotValid() {
-    HttpRequest request = buildRequestContent("relate/url", "POST", true,
+    HttpRequest request = buildRequestContent("relate/url", "POST", user, true,
         "{\"subjectID\":" + String.valueOf(subject.getId()) + ",\"topicID\":-12}");
     relateSubjectTopicHandler(request);
   }
@@ -92,7 +89,7 @@ public class APIRelateSubjectTopicHandlerTest extends BaseTest {
 
   @Test(expected = APIBadRequestException.class)
   public void testRelateSubjectTopicSubjectIDNotValid() {
-    HttpRequest request = buildRequestContent("relate/url", "POST", true,
+    HttpRequest request = buildRequestContent("relate/url", "POST", user, true,
         "{\"topicID\":" + String.valueOf(topic.getId()) + ",\"subjectID\":-12}");
     relateSubjectTopicHandler(request);
   }
@@ -119,35 +116,12 @@ public class APIRelateSubjectTopicHandlerTest extends BaseTest {
   }
 
 
-  private HttpRequest buildRequest(String url, String method, boolean setLoggedIn) {
-    BasicHttpEntityEnclosingRequest httpRequest = new BasicHttpEntityEnclosingRequest(method, url);
-    if (setLoggedIn) {
-      httpRequest.addHeader("X-Username", user.getUsername());
-      httpRequest.addHeader("Authorization", "Bearer " + user.getSessionToken());
-    }
-    return httpRequest;
-  }
-
   private HttpRequest buildRequestContent(String url, String method, boolean setLoggedIn) {
     JSONObject content = new JSONObject();
     content.put("topicID", topic.getId());
     content.put("subjectID", subject.getId());
 
-    return buildRequestContent(url, method, setLoggedIn, content.toString());
-  }
-
-  private HttpRequest buildRequestContent(String url, String method, boolean setLoggedIn,
-      String content) {
-    BasicHttpEntityEnclosingRequest httpRequest = (BasicHttpEntityEnclosingRequest) buildRequest(
-        url, method, setLoggedIn);
-
-    BasicHttpEntity httpEntity = new BasicHttpEntity();
-
-    httpEntity.setContent(new ByteArrayInputStream(content.getBytes()));
-
-    httpRequest.setEntity(httpEntity);
-
-    return httpRequest;
+    return buildRequestContent(url, method, user, setLoggedIn, content.toString());
   }
 
 }

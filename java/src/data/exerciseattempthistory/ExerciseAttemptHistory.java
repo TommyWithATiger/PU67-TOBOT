@@ -63,26 +63,18 @@ public class ExerciseAttemptHistory extends AbstractBaseEntity {
   }
 
   /**
-   * Adds the Exercise to the database
+   * Adds the ExerciseAttemptHistory to the database
    */
   public void create() {
     ExerciseAttemptHistoryDAO.getInstance().persist(this);
   }
 
   /**
-   * Removes the Exercise from the database
+   * Removes the ExerciseAttemptHistory from the database
    */
   public void delete() {
     ExerciseAttemptHistoryDAO.getInstance().remove(this);
   }
-
-  /**
-   * Updates the Exercise's database entry
-   */
-  public void update() {
-    ExerciseAttemptHistoryDAO.getInstance().merge(this);
-  }
-
 
   @Override
   public boolean equals(Object other) {
