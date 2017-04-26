@@ -13,6 +13,7 @@ RUN { \
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 ENV PATH $PATH:$JAVA_HOME/bin
 ENV JAVA_VERSION 8u92
+ENV MAVEN_OPTS "-Xmx4096m -XX:MaxPermSize=1024m"
 
 RUN apk update && apk upgrade
 RUN apk add --no-cache bash
