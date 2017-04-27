@@ -20,21 +20,33 @@ const TOPIC_RATE_URL = `${API_URL}/rating/rate`
 const TOPIC_GET_RATED_URL = `${API_URL}/rating/get`
 
 const SUBJECT_GET_URL = `${API_URL}/subject/get`
+const SUBJECT_GET_EDITOR_URL = `${API_URL}/subject/get/editor`
 const SUBJECT_GET_TITLE_URL = `${API_URL}/subject/get/?title=`
 const SUBJECT_GET_ID_URL = `${API_URL}/subject/get/?id=`
 const SUBJECT_ADD_URL = `${API_URL}/subject/create`
 const SUBJECT_GET_RELATED_URL = `${API_URL}/subject/related/?id=`
 const SUBJECT_GET_RELATED_COUNT_URL = `${API_URL}/subject/related/count/?id=`
+const SUBJECT_GET_PARTICIPATING_URL = `${API_URL}/subject/get/participant`
 
 const SUBJECT_TOPIC_RELATE_URL = `${API_URL}/subject/topic/relate`
+const SUBJECT_TOPIC_UNRELATE_URL = `${API_URL}/subject/topic/unrelate`
+
+const SUBJECT_JOIN_PARTICIPANT_URL = `${API_URL}/subject/join/participant`
+const SUBJECT_LEAVE_PARTICIPANT_URL = `${API_URL}/subject/leave/participant`
+const SUBJECT_IS_PARTICIPANT_URL = `${API_URL}/subject/join/is`
 
 const REFERENCE_GET_URL = `${API_URL}/reference/get/`
+const REFERENCE_GET_BY_TOPIC_URL = `${API_URL}/reference/get/?topic=`
 const REFERENCE_GET_ID_URL = `${API_URL}/reference/get/?id=`
 const REFERENCE_ADD_URL = `${API_URL}/reference/create`
 
 const UPLOAD_PDF_URL = `${API_URL}/pdf/split`
 
 const CREATE_EXERCISE_URL = `${API_URL}/exercise/create`
+const GET_EXERCISES_BY_TOPIC_URL = `${API_URL}/exercise/get/?topic=`
+const GET_EXERCISE_URL = `${API_URL}/exercise/get/?id=`
+const GET_NEXT_EXERCISE_ULR = `${API_URL}/exercise/next`
+const REGISTER_EXERCISE_ATTEMPT_URL = `${API_URL}/exercise/register`
 
 export const api = {
   /**
@@ -76,6 +88,17 @@ export const api = {
   },
 
   /**
+   * Get all subjects the user is editor in from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getSubjectsEditor (ctx, callback, error) {
+    return this.postRequest(ctx, SUBJECT_GET_EDITOR_URL, {}, callback, error)
+  },
+
+  /**
    * Get all subjects from API based on a search term.
    * @param {object} ctx Context.
    * @param {string} term The search term to search for.
@@ -85,6 +108,17 @@ export const api = {
    */
   getSubjectsByTitle (ctx, term, callback, error) {
     return this.getRequest(ctx, SUBJECT_GET_TITLE_URL + term, callback, error)
+  },
+
+  /**
+   * Get all subjects from API based on a search term.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getParticipatingSubjects (ctx, callback, error) {
+    return this.postRequest(ctx, SUBJECT_GET_PARTICIPATING_URL, {}, callback, error)
   },
 
   /**
@@ -132,6 +166,17 @@ export const api = {
    */
   getReferences (ctx, callback, error) {
     return this.getRequest(ctx, REFERENCE_GET_URL, callback, error)
+  },
+
+  /**
+   * Get all references from API.
+   * @param {object} ctx Context.
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  getReferencesByTopic (ctx, topicID, callback, error) {
+    return this.getRequest(ctx, REFERENCE_GET_BY_TOPIC_URL + topicID, callback, error)
   },
 
   /**
@@ -325,6 +370,88 @@ export const api = {
   },
 
   /**
+   * Un-relate subject and topic
+   * @param {object} ctx Context.
+   * @param {object} topic The topic to relate
+   * @param {object} subject The subject to relate
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  unrelateSubjectTopic (ctx, topic, subject, callback, error) {
+    let data = {
+      subjectID: subject.id,
+      topicID: topic.id
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, SUBJECT_TOPIC_UNRELATE_URL, req, callback, error)
+  },
+
+  /**
+   * Join subject as participant
+   * @param {object} ctx Context.
+   * @param {object} subjectID The id of the subject to join
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  joinSubjectParticipant (ctx, subjectID, callback, error) {
+    let data = {
+      subjectID: subjectID
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, SUBJECT_JOIN_PARTICIPANT_URL, req, callback, error)
+  },
+
+  /**
+   * Leave subject as participant
+   * @param {object} ctx Context.
+   * @param {object} subjectID The id of the subject to leave
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  leaveSubjectParticipant (ctx, subjectID, callback, error) {
+    let data = {
+      subjectID: subjectID
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, SUBJECT_LEAVE_PARTICIPANT_URL, req, callback, error)
+  },
+
+  /**
+   * Check if is participant in subject
+   * @param {object} ctx Context.
+   * @param {object} subjectID The id of the subject to check
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   * @returns {Promise} A promise from the request.
+   */
+  isParticipantSubject (ctx, subjectID, callback, error) {
+    let data = {
+      subjectID: subjectID
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, SUBJECT_IS_PARTICIPANT_URL, req, callback, error)
+  },
+
+  /**
    * Upload a pdf, has to handle it's request content a bit different. This is because in PDFs all characters are important
    * and translating the content to a json string would replace the byte values, with others due to the character encoding
    * @param {object} ctx Context.
@@ -357,13 +484,14 @@ export const api = {
    * Create exercise
    * @param {object} ctx Context.
    * @param {string} content Exercise content, that is the HTML
+   * @param {string} title Exercise title
    * @param {array} tags Array of topic ids for the exercise
    * @param {function} callback Handle the request output.
    * @param {function} error Feedback error.
-  */
-  createExercise (ctx, content, tags, callback, error) {
+   */
+  createExercise (ctx, content, title, tags, callback, error) {
     let data = {
-      title: '',
+      title: title,
       text: content,
       difficulty: 'Unknown',
       topicIDs: tags
@@ -374,6 +502,95 @@ export const api = {
     }
 
     return this.postRequest(ctx, CREATE_EXERCISE_URL, req, callback, error)
+  },
+
+  /**
+   * Create exercise
+   * @param {object} ctx Context.
+   * @param {string} content Exercise content, that is the HTML
+   * @param {string} title Exercise title
+   * @param {array} tags Array of topic ids for the exercise
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  createExerciseWithSolution (ctx, content, solution, title, tags, callback, error) {
+    let data = {
+      title: title,
+      text: content,
+      difficulty: 'Unknown',
+      topicIDs: tags,
+      solution: solution
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, CREATE_EXERCISE_URL, req, callback, error)
+  },
+
+  /*
+   * Get exercise by ID
+   * @param {object} ctx Context.
+   * @param {int} id Exercise ID
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  getExercise (ctx, id, callback, error) {
+    return this.getRequest(ctx, GET_EXERCISE_URL + id, callback, error)
+  },
+
+  /**
+   * Get exercises by topic ID
+   * @param {object} ctx Context.
+   * @param {int} topicID topic ID
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+  */
+  getExercisesByTopic (ctx, topicID, callback, error) {
+    return this.getRequest(ctx, GET_EXERCISES_BY_TOPIC_URL + topicID, callback, error)
+  },
+
+  /**
+   * Get next exercise for a topic
+   * @param {object} ctx Context.
+   * @param {int} topicID The id for the topic
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  getNextExercise (ctx, topicID, callback, error) {
+    let data = {
+      topicID: topicID
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, GET_NEXT_EXERCISE_ULR, req, callback, error)
+  },
+
+  /**
+   * Register exercise attempt
+   * @param {object} ctx Context.
+   * @param {int} id The ID for the exercise
+   * @param {string} difficulty The difficulty of the exercise, Easy, Medium or Hard
+   * @param {boolean} success Was the exercise solved successfully
+   * @param {function} callback Handle the request output.
+   * @param {function} error Feedback error.
+   */
+  registerExerciseAttempt (ctx, id, difficulty, success, callback, error) {
+    let data = {
+      exerciseID: id,
+      difficulty: difficulty,
+      success: success
+    }
+
+    let req = {
+      body: data
+    }
+
+    return this.postRequest(ctx, REGISTER_EXERCISE_ATTEMPT_URL, req, callback, error)
   },
 
   /**

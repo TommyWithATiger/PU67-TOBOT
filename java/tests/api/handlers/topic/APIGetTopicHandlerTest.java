@@ -2,13 +2,19 @@ package api.handlers.topic;
 
 import static api.handlers.topic.APIGetTopicHandler.getAllTopics;
 import static api.handlers.topic.APIGetTopicHandler.getTopicByID;
+import static api.handlers.topic.APIGetTopicHandler.getTopicsBySubjectSortedByRating;
 import static api.handlers.topic.APIGetTopicHandler.getTopicsByTitle;
 import static org.junit.Assert.*;
 
 import api.exceptions.APIBadMethodException;
 import api.exceptions.APIBadRequestException;
+import api.exceptions.APIRequestForbiddenException;
 import base.BaseTest;
+import data.Subject;
 import data.Topic;
+import data.rating.Rating;
+import data.rating.RatingEnum;
+import data.user.User;
 import org.apache.http.HttpRequest;
 import org.apache.http.message.BasicHttpRequest;
 import org.json.JSONObject;
@@ -18,11 +24,27 @@ import org.junit.Test;
 public class APIGetTopicHandlerTest extends BaseTest {
 
   private Topic topic;
+  private User user;
+  private Subject subject;
 
   @Before
   public void setUp() throws Exception {
+    user = new User("username", "user@email.com", "password");
+    user.create();
+    user.createSessionToken();
+    user.update();
+
     topic = new Topic("Test title", "Test description");
     topic.create();
+
+    Rating rating = new Rating(user.getId(), topic.getId(), RatingEnum.Ok);
+    rating.create();
+
+    subject = new Subject("Test title", "Test subject");
+    subject.create();
+    subject.addParticipant(user);
+    subject.addTopic(topic);
+    subject.update();
   }
 
   @Test
@@ -128,6 +150,55 @@ public class APIGetTopicHandlerTest extends BaseTest {
     String response = getTopicByID(httpRequest);
     assertEquals("{\"description\":\"Test description\",\"id\":" + topic.getId()
         + ",\"title\":\"Test title\"}", response);
+  }
+
+  @Test(expected = APIBadMethodException.class)
+  public void testGetTopicsBySubjectSortedByRatingWrongMethod() {
+    HttpRequest httpRequest = buildRequestContent("topic/subject/ordered", "GET", true);
+    getTopicsBySubjectSortedByRating(httpRequest);
+  }
+
+  @Test(expected = APIRequestForbiddenException.class)
+  public void testGetTopicsBySubjectSortedByRatingNotLoggedIn() {
+    HttpRequest httpRequest = buildRequestContent("topic/subject/ordered", "POST", false);
+    getTopicsBySubjectSortedByRating(httpRequest);
+  }
+
+
+  @Test(expected = APIBadRequestException.class)
+  public void testGetTopicsBySubjectSortedByRatingFieldsNotSet() {
+    HttpRequest httpRequest = buildRequestContent("topic/subject/ordered", "POST", user, true,
+        "{}");
+    getTopicsBySubjectSortedByRating(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testGetTopicsBySubjectSortedByRatingSubjectIDNotInteger() {
+    HttpRequest httpRequest = buildRequestContent("topic/subject/ordered", "POST", user, true,
+        "{\"subjectID\":\"lol\"");
+    getTopicsBySubjectSortedByRating(httpRequest);
+  }
+
+  @Test(expected = APIBadRequestException.class)
+  public void testGetTopicsBySubjectSortedByRatingSubjectIDNotCorrect() {
+    HttpRequest httpRequest = buildRequestContent("topic/subject/ordered", "POST", user, true,
+        "{\"subjectID\":-1");
+    getTopicsBySubjectSortedByRating(httpRequest);
+  }
+
+  @Test
+  public void testGetTopicsBySubjectSortedByRating() {
+    HttpRequest httpRequest = buildRequestContent("topic/subject/ordered", "POST", true);
+    String response = getTopicsBySubjectSortedByRating(httpRequest);
+    assertEquals("{\"topics\":[" + topic.createAbout().toString() + "]}",
+        response);
+  }
+
+  private HttpRequest buildRequestContent(String url, String method, boolean setLoggedIn) {
+    JSONObject content = new JSONObject();
+    content.put("subjectID", subject.getId());
+
+    return buildRequestContent("topic/subject/ordered", method, user, setLoggedIn, content.toString());
   }
 
 }

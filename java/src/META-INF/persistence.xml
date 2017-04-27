@@ -21,7 +21,6 @@
         <class>data.reference.ReferenceTypeConverter</class>
         <class>data.exercise.Exercise</class>
         <class>data.exerciserating.ExerciseRating</class>
-        <class>data.exerciserating.ExerciseRatingConverter</class>
         <class>data.exerciseattempthistory.ExerciseAttemptHistory</class>
 
         <properties>

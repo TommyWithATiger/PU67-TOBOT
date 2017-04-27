@@ -1,39 +1,58 @@
 <template>
   <div class="page-content">
-    <h1>Emner</h1>
-    <h2>Legg til emne</h2>
-    <p class="subject-add-fields">
-      <label>Tittel: </label>
-      <input @keydown.enter="addSubject" v-model="subject.title" type="text" />
-      <br>
-      <label>Institusjon: </label>
-      <input @keydown.enter="addSubject" v-model="subject.institution" type="text" />
-      <br>
-      <label>Fagkode: </label>
-      <input @keydown.enter="addSubject" v-model="subject.subjectCode" type="text" />
-      <br>
-      <label>Beskrivelse: </label>
-      <input @keydown.enter="addSubject" v-model="subject.description" type="text" />
-      <button @click="addSubject">Legg til</button>
-      <span class="error">{{ addFeedback }}</span>
-    </p>
-    <h2>Alle emner</h2>
-    <div v-if="subjects.length">
-      <div class="subject-info subject-info-header">
-        <div class="subject-code"> Emnekode </div>
-        <div class="subject-title"> Tittel </div>
-        <div class="subject-description"> Beskrivelse </div>
-        <div class="subject-relate"> Temaer </div>
-      </div>
-      <div v-for="s in subjects" class="subject-info">
-        <div class="subject-code"> {{ s.subjectCode }} </div>
-        <div class="subject-title"> {{ s.title }} </div>
-        <div class="subject-description"> {{ s.description }} </div>
-        <div class="subject-relate"> <router-link :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">Temaer</router-link> </div>
-      </div>
+    <h1 class="subject-title">{{subject.subjectCode}} - {{subject.title}}</h1>
+    <div class="join-leave" v-if="$store.state.user.usertype === 'Student'">
+      <button @click="joinSubject" v-if="!joined"> Join Subject</button>
+      <button @click="leaveSubject" v-else> Leave Subject </button>
     </div>
-    <div v-else><span v-if="!getFeedback.length">Ingen emner.</span></div>
-    <p class="error">{{ getFeedback }}</p>
+    <h1>Connected topics</h1>
+    <div v-if="relatedTopics.length">
+      <div class="topic-info topic-info-header">
+            <div class="topic-title">Title</div>
+            <div class="topic-description">Description</div>
+          </div>
+          <div v-for="t in relatedTopics" class="topic-info">
+            <div class="topic-title"><router-link :to="'/topic/' + t.id">{{ t.title }}</router-link></div>
+            <div class="topic-description">{{ t.description }}</div>
+            <button @click="unrelateTopic(t)" v-if="canAdd" class="topic-relate">Unrelate</button>
+          </div>
+    </div>
+    <div v-else>
+      This subject is not connected to any topics.
+    </div>
+    <div v-if="canAdd">
+      <h1>Add topics</h1>
+      <div class="topic-add-fields">
+        <label>Title: </label>
+        <input @keydown.enter="addTopic" v-model="topic.title" type="text" />
+        <br>
+        <label>Description: </label>
+        <input @keydown.enter="addTopic" v-model="topic.description" type="text" />
+        <p>
+          <button @click="addTopic">Add</button>
+          <span class="error">{{ addFeedback }}</span>
+        </p>
+      </div>
+      <div class="searchTopic">
+        <input v-model="search" v-on:keyup="restrictTopics" type="text" placeholder="Search for topic" />
+      </div>
+      <div v-if="topics.length">
+        <div class="topic-info topic-info-header">
+          <div class="topic-title">Title</div>
+          <div class="topic-description">Description</div>
+          <div class="topic-relate"></div>
+        </div>
+        <div v-for="t in topics" v-if="!isRelated(t)" class="topic-info">
+          <div class="topic-title">{{ t.title }}</div>
+          <div class="topic-description">{{ t.description }}</div>
+          <button @click="relateTopic(t)" class="topic-relate">Connect</button>
+        </div>
+      </div>
+      <div v-else>
+        No topics available.
+      </div>
+      <p class="error">{{ getFeedback }}</p>
+    </div>
   </div>
 </template>
 
@@ -44,104 +63,188 @@ export default {
   name: 'subjectpage',
   data () {
     return {
-      subject: {
+      relatedTopics: [],
+      topic: {
         title: '',
-        institution: '',
-        subjectCode: '',
         description: ''
       },
+      joined: false,
       addFeedback: '',
-      subjects: [],
-      getFeedback: 'Laster inn ...'
+      topics: [],
+      allTopics: [],
+      search: '',
+      canAdd: false,
+      getFeedback: '',
+      subject: {
+        title: '',
+        description: '',
+        institution: '',
+        subjectCode: '',
+        id: this.$route.params.id
+      }
+    }
+  },
+  watch: {
+    '$route' () {
+      this.updateData()
     }
   },
   created () {
-    api.getSubjects(this, (data) => {
-      this.subjects = data.subjects
-      this.getFeedback = ''
-    }, () => {
-      this.subjects = []
-      this.getFeedback = 'Klarte ikke å hente emner.'
-    })
-  },
-  computed: {
+    this.updateData()
+    this.checkCanAdd()
+    this.checkJoined()
   },
   methods: {
-    addSubject () {
+    addTopic () {
       this.addFeedback = ''
-      api.addSubject(this, this.subject, () => {
-        location.reload()
-        this.addFeedback = 'Lagt til i database.'
+      api.addTopic(this, this.topic, (data) => {
+        let t = data
+        this.allTopics.push({
+          title: t.title,
+          description: t.description,
+          id: t.id,
+          rating: 0
+        })
+        this.restrictTopics()
+        this.addFeedback = 'Added to database.'
       }, () => {
-        this.addFeedback = 'Feilet med å legge til.'
+        this.addFeedback = 'Failed to add topic.'
       })
+    },
+    relateTopic (topic) {
+      api.relateSubjectTopic(this, topic, this.subject, (data) => {
+        if (data['already-related'] !== data['is-related']) {
+          this.relatedTopics.push(topic)
+        }
+      })
+    },
+    unrelateTopic (topic) {
+      api.unrelateSubjectTopic(this, topic, this.subject, (data) => {
+        if (data['already-related'] !== data['is-related']) {
+          this.relatedTopics.splice(this.relatedTopics.indexOf(topic), 1)
+        }
+      })
+    },
+    restrictTopics () {
+      this.topics = []
+      if (this.search === '') {
+        this.topics = this.allTopics
+      } else {
+        for (let topicIndex = 0; topicIndex < this.allTopics.length; topicIndex++) {
+          let topic = this.allTopics[topicIndex]
+          if (topic.title.toLowerCase().includes(this.search.toLowerCase())) {
+            this.topics.push(topic)
+          }
+        }
+      }
+    },
+    joinSubject () {
+      api.joinSubjectParticipant(this, parseInt(this.$route.params.id), (data) => {
+        this.joined = data['is-joined']
+      }, () => {})
+    },
+    leaveSubject () {
+      api.leaveSubjectParticipant(this, parseInt(this.$route.params.id), (data) => {
+        this.joined = data['is-joined']
+      }, () => {})
+    },
+    isRelated (topic) {
+      for (var index = 0; index < this.relatedTopics.length; index++) {
+        if (this.relatedTopics[index].id === topic.id) {
+          return true
+        }
+      }
+      return false
+    },
+    updateData () {
+      api.getTopics(this, (data) => {
+        this.allTopics = data.topics
+        this.restrictTopics()
+      }, () => {
+        this.allTopics = []
+      })
+
+      api.getSubjectById(this, this.$route.params.id, (data) => {
+        this.subject = data
+      }, () => {
+        window.location.href = '/subject'
+      })
+
+      api.getRelatedTopics(this, this.$route.params.id, (data) => {
+        this.relatedTopics = data.related_topics
+      })
+    },
+    checkCanAdd () {
+      if (this.$store.state.user.usertype === 'Admin') {
+        this.canAdd = true
+      } else if (this.$store.state.user.usertype === 'Teacher') {
+        api.getSubjectsEditor(this, (data) => {
+          for (let subjectIndex in data.subjects) {
+            if (data.subjects[subjectIndex].id === parseInt(this.$route.params.id)) {
+              this.canAdd = true
+              break
+            }
+          }
+        }, () => {})
+      }
+    },
+    checkJoined () {
+      if (this.$store.state.user.usertype === 'Student') {
+        api.isParticipantSubject(this, parseInt(this.$route.params.id), (data) => {
+          this.joined = data.joined
+        }, () => {})
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.subject-add-fields > label {
+
+.topic-add-fields > label {
   width: 5em;
   display: inline-block;
 }
 
-.subject-add-fields > button {
-  display: block;
-  width: 100px;
-  height: 25px;
-  border: 1px solid #666;
-  border-radius: 4px;
-  background-color: #e9e9e9;
-  margin-top: 8px;
-  margin-left: 30px;
-}
-
-.subject-add-fields > button:hover {
-  border: 1px solid #333;
-  background-color: #e1e1e1;
-}
-
-.subject-title, .subject-description, .subject-code, .subject-relate {
+.topic-title, .topic-description, .topic-relate {
   padding-right: 20px;
   flex-grow: 1;
   width: 120px;
 }
 
-.subject-relate {
-  flex-grow: 0.3;
+.topic-relate {
+	flex: 0 0 90px;
+	cursor: pointer;
+  align-self: center;
 }
 
-.subject-title {
-  flex-grow: 2;
+.topic-description {
+  flex-grow: 3;
 }
 
-.subject-description {
-  flex-grow: 4;
+.topic-info:nth-child(even) {
+  background-color: #ccc;
+  background-color: var(--n-color-3);
+  border-radius: 4px;
 }
 
-.subject-info {
+.topic-info {
   display: flex;
-  display: -webkit-flex;
-  flex-direction: row;
-  webkit-flex-direction: row;
-  flex-wrap: wrap;
-  webkit-flex-wrap: wrap;
-  flex-grow: 0;
-  webkit-flex-grow: grow;
-  padding-left: 15px;
-  padding-right: 15px;
-  border-bottom: 1px solid #d6d6d6;
-  max-width: 1500px;
-  background-color: #f9f9f9;
-  padding-top: 1px;
-  padding-bottom: 2px;
+  flex-flow: row wrap;
+  padding: 10px 12px;
 }
 
-.subject-info-header {
+.topic-info-header {
   font-weight: bold;
   font-size: 1.2em;
-  background-color: #eeeeee;
+}
+
+.subject-title, .join-leave {
+  display: inline-block;
+}
+
+.join-leave {
+  float: right;
 }
 
 </style>

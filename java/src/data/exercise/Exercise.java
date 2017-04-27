@@ -6,6 +6,7 @@ import data.dao.ExerciseDAO;
 import java.util.Collection;
 import java.util.HashSet;
 import javax.persistence.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 @Entity
@@ -18,10 +19,10 @@ import org.json.JSONObject;
         + " LEFT JOIN ExerciseAttemptHistory eah ON eah.exercise = e"
         + " LEFT JOIN ExerciseRating er ON er.id.exerciseID = e.id"
         + " LEFT JOIN User u ON eah.user = u"
-        + " WHERE u = :user"
+        + " WHERE u = :user OR u IS NULL"
         + " AND :topic MEMBER OF e.topics"
         + " GROUP BY e"
-        + " ORDER BY SUM(eah.success), AVG(er.rating) NULLS LAST"),
+        + " ORDER BY SUM(eah.success), AVG(er.rating)"),
 })
 @Table
 public class Exercise extends AbstractBaseEntity{
@@ -48,13 +49,13 @@ public class Exercise extends AbstractBaseEntity{
 
   public Exercise(String title, String text) {
     this();
-    this.title = title;
-    this.text = text;
+    setTitle(title);
+    setText(text);
   }
 
   public Exercise(String title, String text, String solution) {
     this(title, text);
-    this.solution = solution;
+    setSolution(solution);
   }
 
   /**
@@ -117,6 +118,8 @@ public class Exercise extends AbstractBaseEntity{
          topic.update();
         }
     );
+    this.topics.addAll(topics);
+    update();
   }
 
   public JSONObject createAbout(){
@@ -125,6 +128,11 @@ public class Exercise extends AbstractBaseEntity{
     response.put("title", title);
     response.put("text", text);
     response.put("solution", solution);
+    JSONArray tags = new JSONArray();
+    for (Topic tag: topics) {
+      tags.put(tag.createAbout());
+    }
+    response.put("tags", tags);
     return response;
   }
 

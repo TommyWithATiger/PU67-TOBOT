@@ -10,10 +10,7 @@ import base.BaseTest;
 import data.dao.UserDAO;
 import data.user.User;
 import data.user.UserType;
-import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
-import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.message.BasicHttpRequest;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -126,10 +123,6 @@ public class APIRegistrationHandlerTest extends BaseTest {
     assertEquals(UserType.STUDENT, user.getUserType());
   }
 
-  private HttpRequest buildRequest(String url, String method) {
-    return new BasicHttpEntityEnclosingRequest(method, url);
-  }
-
   private HttpRequest buildRequestContentRegistrationCheck(String url, String method,
       String username, String password, String email) {
     JSONObject jsonObject = new JSONObject();
@@ -147,19 +140,6 @@ public class APIRegistrationHandlerTest extends BaseTest {
     jsonObject.put("email", email);
     jsonObject.put("user_type", userType);
     return buildRequestContent(url, method, jsonObject.toString());
-  }
-
-  private HttpRequest buildRequestContent(String url, String method, String content) {
-    BasicHttpEntityEnclosingRequest httpRequest = (BasicHttpEntityEnclosingRequest) buildRequest(
-        url, method);
-
-    BasicHttpEntity httpEntity = new BasicHttpEntity();
-
-    httpEntity.setContent(new ByteArrayInputStream(content.getBytes()));
-
-    httpRequest.setEntity(httpEntity);
-
-    return httpRequest;
   }
 
 }

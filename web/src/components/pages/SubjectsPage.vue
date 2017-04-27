@@ -1,24 +1,26 @@
 <template>
   <div class="page-content">
     <h1>Subjects</h1>
-    <h2>Add subject</h2>
-    <p class="subject-add-fields">
-      <label>Title: </label>
-      <input @keydown.enter="addSubject" v-model="subject.title" type="text" />
-      <br>
-      <label>Institution: </label>
-      <input @keydown.enter="addSubject" v-model="subject.institution" type="text" />
-      <br>
-      <label>Subject code: </label>
-      <input @keydown.enter="addSubject" v-model="subject.subjectCode" type="text" />
-      <br>
-      <label>Description: </label>
-      <input @keydown.enter="addSubject" v-model="subject.description" type="text" />
-      <div>
-      <button @click="addSubject">Add</button>
-      <span class="error">{{ addFeedback }}</span>
-      </div>
-    </p>
+    <div v-if="canAdd()">
+      <h2>Add subject</h2>
+      <p class="subject-add-fields">
+        <label>Title: </label>
+        <input @keydown.enter="addSubject" v-model="subject.title" type="text" />
+        <br>
+        <label>Institution: </label>
+        <input @keydown.enter="addSubject" v-model="subject.institution" type="text" />
+        <br>
+        <label>Subject code: </label>
+        <input @keydown.enter="addSubject" v-model="subject.subjectCode" type="text" />
+        <br>
+        <label>Description: </label>
+        <input @keydown.enter="addSubject" v-model="subject.description" type="text" />
+        <div>
+        <button @click="addSubject">Add</button>
+        <span class="error">{{ addFeedback }}</span>
+        </div>
+      </p>
+    </div>
     <h2>All subjects</h2>
     <div v-if="subjects.length">
       <div class="subject-info subject-info-header">
@@ -31,7 +33,7 @@
         <div class="subject-code">{{ s.subjectCode }}</div>
         <div class="subject-title">{{ s.title }}</div>
         <div class="subject-description">{{ s.description }}</div>
-        <div class="subject-relate"><router-link class="colored-link" :to="{ name: 'RelateSubjectTopic', params: {id: s.id}}">details ➜</router-link></div>
+        <div class="subject-relate"><router-link class="colored-link" :to="'/subject/' + s.id">details</router-link></div>
       </div>
     </div>
     <div v-else><span v-if="!getFeedback.length">Not subjects.</span></div>
@@ -75,6 +77,9 @@ export default {
       }, () => {
         this.addFeedback = 'Feilet med å legge til.'
       })
+    },
+    canAdd () {
+      return this.$store.state.user.usertype !== 'Student'
     }
   }
 }

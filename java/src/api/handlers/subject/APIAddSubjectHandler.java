@@ -5,6 +5,7 @@ import static api.helpers.RequestMethodHelper.checkRequestMethod;
 import static api.helpers.isLoggedInHelper.getUserFromRequest;
 
 import data.Subject;
+import data.user.User;
 import org.apache.http.HttpRequest;
 
 public class APIAddSubjectHandler {
@@ -23,7 +24,7 @@ public class APIAddSubjectHandler {
     checkRequestMethod("POST", httpRequest);
 
     // User must be logged in
-    getUserFromRequest(httpRequest, ", cannot create a new subject");
+    User user = getUserFromRequest(httpRequest, ", cannot create a new subject");
 
     String title = getJSONField(httpRequest, String.class, "title");
     String institution = getJSONField(httpRequest, String.class, "institution");
@@ -31,9 +32,11 @@ public class APIAddSubjectHandler {
     String description = getJSONField(httpRequest, String.class, "description");
 
     Subject subject = new Subject(title, institution, subjectCode, description);
+    subject.addEditor(user);
     subject.create();
 
     return subject.createAbout().toString();
   }
+
 
 }

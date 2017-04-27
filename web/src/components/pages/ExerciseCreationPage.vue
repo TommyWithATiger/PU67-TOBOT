@@ -5,7 +5,7 @@
     </div>
 		<div class="context_container" v-html="creationContext">
 		</div>
-    <div class="global_exercise_options">
+    <div class="global_exercise_options" v-if="selected === null">
       <div class="add_exercise" v-on:click="toggleAddExercise">
         +
       </div>
@@ -44,6 +44,7 @@ export default {
     return {
       creationContext: '',
       options: null,
+      titlebox: null,
       moving: {
         'exercise': null,
         'direction': null
@@ -63,9 +64,18 @@ export default {
 
     this.options = document.createElement('div')
     this.options.classList.toggle('options', true)
-    this.options.innerHTML = '<div class="options_button"> Delete </div><div class="options_button"> Tags </div>'
+    this.options.innerHTML = '<div class="options_button"> Delete </div><div class="options_button"> Tags </div><div class="options_button">Solution+</div>'
     this.options.childNodes[0].onmousedown = this.deleteSelected
     this.options.childNodes[1].onmousedown = this.addTag
+    this.options.childNodes[2].onmousedown = this.toggleAddSolution
+
+    this.titlebox = document.createElement('input')
+    this.titlebox.setAttribute('placeholder', 'No title set')
+    this.titlebox.classList.toggle('titlebox', true)
+    this.titlebox.innerHTML = ''
+    this.titlebox.onmousedown = function (event) {
+      event.stopPropagation()
+    }
 
     api.getTopics(this, (data) => {
       this.tags = data.topics
@@ -84,6 +94,13 @@ export default {
       return false
     }
 
+    let context = this
+    document.onmousedown = function (event) {
+      if (context.selected !== null && document.getElementById('add_tag_container').classList.contains('hidden')) {
+        context.toggleSelected(context.selected)
+      }
+    }
+
     let words = document.getElementsByClassName('p')
     for (let index = 0; index < words.length; index++) {
       let word = words[index]
@@ -98,6 +115,10 @@ export default {
       let topSelected = parseFloat(this.selected.style.top)
       let firstChild = this.selected.firstChild
       while ((firstChild = this.selected.firstChild) !== this.options) {
+        if (firstChild.classList.contains('solution')) {
+          this.deleteSolution(firstChild)
+          continue
+        }
         firstChild.style.top = topSelected + parseFloat(firstChild.style.top) + 'pt'
         this.selected.removeChild(firstChild)
         this.selected.parentNode.insertBefore(firstChild, this.selected)
@@ -108,20 +129,20 @@ export default {
       event.stopPropagation()
     },
     onMove (event) {
-      if (this.moving.exercise !== null) {
-        if (this.moving.direction === 'up') {
-          if (this.canMoveExerciseUp(this.moving.exercise)) {
-            this.moveExerciseTopUp(this.moving.exercise, this.translateHoverYPosition(event))
+      let exercise = this.moving.exercise
+      let direction = this.moving.direction
+      if (exercise !== null) {
+        if (direction === 'up') {
+          if (this.canMoveExerciseUp(exercise) && this.translateHoverYPosition(event) < this.getOffsetTop(exercise)) {
+            this.moveExerciseTopUp(exercise, this.translateHoverYPosition(event))
+          } else if (exercise.hasChildNodes()) {
+            this.moveExerciseTopDown(exercise, this.translateHoverYPosition(event))
           }
-          if (this.moving.exercise.hasChildNodes()) {
-            this.moveExerciseTopDown(this.moving.exercise, this.translateHoverYPosition(event))
-          }
-        } else if (this.moving.direction === 'down') {
-          if (this.moving.exercise.hasChildNodes()) {
+        } else if (direction === 'down') {
+          if (exercise.hasChildNodes() && this.translateHoverYPosition(event) < this.getOffsetTop(exercise) + parseFloat(exercise.style.height) / 0.75) {
             this.moveExerciseBottomUp(this.moving.exercise, this.translateHoverYPosition(event))
-          }
-          if (this.canMoveExerciseDown(this.moving.exercise)) {
-            this.moveExerciseBottomDown(this.moving.exercise, this.translateHoverYPosition(event))
+          } else if (this.canMoveExerciseDown(exercise)) {
+            this.moveExerciseBottomDown(exercise, this.translateHoverYPosition(event))
           }
         }
       } else {
@@ -141,14 +162,34 @@ export default {
     onTouchEnd (event) {
       this.onUp(event.touches[0])
     },
+    setTitleBoxContent (exercise) {
+      if (exercise.getAttribute('title') !== null) {
+        this.titlebox.value = exercise.getAttribute('title')
+      } else {
+        this.titlebox.value = ''
+      }
+    },
+    setTitleExercise (exercise) {
+      exercise.removeAttribute('title')
+      if (this.titlebox.value !== '') {
+        exercise.setAttribute('title', this.titlebox.value)
+      }
+    },
     toggleSelected (exercise) {
+      if (this.creation) {
+        return
+      }
       if (this.selected === null) {
         this.selected = exercise
         this.selected.appendChild(this.options)
+        this.selected.appendChild(this.titlebox)
+        this.setTitleBoxContent(exercise)
         this.selected.classList.toggle('selected_exercise', true)
         this.blurOtherExercises(exercise, true)
       } else if (this.selected === exercise) {
+        this.setTitleExercise(exercise)
         this.selected.removeChild(this.options)
+        this.selected.removeChild(this.titlebox)
         this.blurOtherExercises(exercise, false)
         this.selected.classList.toggle('selected_exercise', false)
         this.selected = null
@@ -164,12 +205,12 @@ export default {
       } while ((child = child.nextSibling) != null)
     },
     hoveringTopOfExercise (exercise, event) {
-      let exerciseTop = exercise.offsetTop + exercise.parentNode.offsetTop
+      let exerciseTop = this.getOffsetTop(exercise)
       let y = this.translateHoverYPosition(event)
       return exerciseTop <= y && y < exerciseTop + 5
     },
     hoveringBottomOfExercise (exercise, event) {
-      let exerciseBottom = exercise.offsetTop + exercise.parentNode.offsetTop + parseFloat(exercise.style.height) / 0.75
+      let exerciseBottom = this.getOffsetTop(exercise) + parseFloat(exercise.style.height) / 0.75
       let y = this.translateHoverYPosition(event)
       return exerciseBottom - 5 <= y && y <= exerciseBottom + 1
     },
@@ -182,7 +223,7 @@ export default {
     moveExerciseTopUp (exercise, y) {
       let node = exercise
       while ((node = exercise.previousSibling) !== null) {
-        if (node.offsetTop + node.parentNode.offsetTop < y || node.classList.contains('exercise')) {
+        if (this.getOffsetTop(node) < y || node.classList.contains('exercise')) {
           break
         }
         if (exercise.offsetTop > node.offsetTop) {
@@ -198,10 +239,15 @@ export default {
     },
     moveExerciseTopDown (exercise, y) {
       let node = exercise.firstChild
-      let reduceDiff = y - exercise.offsetTop - exercise.parentNode.offsetTop
+      let reduceDiff = y - this.getOffsetTop(exercise)
       while (node != null) {
-        if ((parseFloat(node.style.top) + this.getHeight(node)) / 0.75 >= reduceDiff) {
+        if ((parseFloat(node.style.top) + this.getHeight(node)) / 0.75 >= reduceDiff && (!(node.classList.contains('r') && parseFloat(node.style.top) >= reduceDiff))) {
           break
+        }
+        if (node.classList.contains('solution')) {
+          this.deleteSolution(node)
+          this.moveExerciseTopDown(exercise, y)
+          return
         }
         let nextNode = node.nextSibling
         exercise.removeChild(node)
@@ -211,8 +257,12 @@ export default {
       }
 
       if (exercise.hasChildNodes()) {
-        let changedTop = parseFloat(exercise.firstChild.style.top)
-        exercise.style.top = parseFloat(exercise.style.top) + parseFloat(exercise.firstChild.style.top) + 'pt'
+        let startChild = exercise.firstChild
+        while (startChild !== null && startChild.classList.contains('r')) {
+          startChild = startChild.nextSibling
+        }
+        let changedTop = parseFloat(startChild.style.top)
+        exercise.style.top = parseFloat(exercise.style.top) + parseFloat(startChild.style.top) + 'pt'
         this.moveExerciseChildern(exercise, changedTop)
         exercise.style.height = parseFloat(exercise.lastChild.style.top) + this.getHeight(exercise.lastChild) + 'pt'
       } else {
@@ -222,10 +272,10 @@ export default {
     moveExerciseBottomDown (exercise, y) {
       let node = exercise
       while ((node = exercise.nextSibling) !== null) {
-        if (node.offsetTop + node.parentNode.offsetTop + parseFloat(this.getHeight(node)) / 0.75 > y || node.classList.contains('exercise')) {
+        if (this.getOffsetTop(exercise) + parseFloat(this.getHeight(node)) / 0.75 > y || node.classList.contains('exercise') || node.classList.contains('options')) {
           break
         }
-        if (parseFloat(exercise.style.top) + parseFloat(exercise.style.height) < parseFloat(node.style.top) + this.getHeight(node)) {
+        if (parseFloat(exercise.style.top) + parseFloat(exercise.style.height) < parseFloat(node.style.top) + this.getHeight(node) && !node.classList.contains('r')) {
           exercise.style.height = parseFloat(node.style.top) + this.getHeight(node) - parseFloat(exercise.style.top) + 'pt'
         }
         node.style.top = parseFloat(node.style.top) - parseFloat(exercise.style.top) + 'pt'
@@ -235,10 +285,15 @@ export default {
     },
     moveExerciseBottomUp (exercise, y) {
       let node = exercise.lastChild
-      let reduceDiff = y - exercise.offsetTop - exercise.parentNode.offsetTop
-      while (node != null) {
+      let reduceDiff = y - this.getOffsetTop(exercise)
+      while (node !== null) {
         if ((parseFloat(node.style.top)) / 0.75 <= reduceDiff) {
           break
+        }
+        if (node.classList.contains('solution')) {
+          this.deleteSolution(node)
+          this.moveExerciseBottomUp(exercise, y)
+          return
         }
         let nextNode = node.previousSibling
         exercise.removeChild(node)
@@ -252,10 +307,18 @@ export default {
         while (endChild !== null && endChild.classList.contains('r')) {
           endChild = endChild.previousSibling
         }
-        exercise.style.height = parseFloat(exercise.lastChild.style.top) + this.getHeight(endChild) + 'pt'
+        exercise.style.height = parseFloat(endChild.style.top) + this.getHeight(endChild) + 'pt'
       } else {
         exercise.parentNode.removeChild(exercise)
       }
+    },
+    getOffsetTop (node) {
+      let offsetTop = node.offsetTop + node.parentNode.offsetTop
+      while (!node.parentNode.classList.contains('container')) {
+        node = node.parentNode
+        offsetTop += node.parentNode.offsetTop
+      }
+      return offsetTop
     },
     translateHoverYPosition (event) {
       return event.y + window.scrollY
@@ -356,38 +419,70 @@ export default {
       let exercises = document.getElementsByClassName('exercise')
       for (let exerciseIndex = 0; exerciseIndex < exercises.length; exerciseIndex++) {
         let exercise = exercises[exerciseIndex]
+        if (exercise.parentNode.classList.contains('exercise')) {
+          continue
+        }
         let hasTags = exercise.getAttribute('tags') !== null && exercise.getAttribute('tags') !== ''
-        canSubmit = canSubmit && hasTags
-        exercise.classList.toggle('missing_tags', !hasTags)
+        let hasTitle = exercise.getAttribute('title') !== null && exercise.getAttribute('title') !== ''
+        canSubmit = canSubmit && hasTags && hasTitle
+        exercise.classList.toggle('missing_tags', !hasTags || !hasTitle)
       }
       if (canSubmit) {
         this.submitInfo = 'Submitting exercises, you will be redirected when all exercises have been submitted'
         for (let exerciseIndex = 0; exerciseIndex < exercises.length; exerciseIndex++) {
           let exercise = exercises[exerciseIndex]
+          let solution = null
+          let afterSolution = null
+          if (this.hasSolution(exercise)) {
+            solution = this.getSolution(exercise)
+            afterSolution = solution.nextSibling
+            exercise.removeChild(solution)
+          }
+          let title = exercise.getAttribute('title')
           let tagsSplit = exercise.getAttribute('tags').split(';')
           let tags = []
           for (let index = 0; index < tagsSplit.length; index++) {
             tags[index] = parseInt(tagsSplit[index].split(':')[0])
           }
-          api.createExercise(this, exercise.innerHTML, tags, () => {}, () => {})
+          if (solution !== null) {
+            api.createExerciseWithSolution(this, exercise.innerHTML, solution.innerHTML, title, tags, () => {}, () => {})
+            if (afterSolution === null) {
+              exercise.appendChild(solution)
+            } else {
+              exercise.insertBefore(solution, afterSolution)
+            }
+          } else {
+            api.createExercise(this, exercise.innerHTML, title, tags, () => {}, () => {})
+          }
         }
         this.$router.push('/')
       } else {
-        this.submitInfo = 'Make sure all exercises have at least one tag before submitting. All exercises missing tags have been marked red'
+        this.submitInfo = 'Make sure all exercises have at least one tag and a title before submitting. All exercises missing tags or title have been marked red'
       }
     },
     toggleAddExercise () {
       this.creation = !this.creation
-      document.body.style.cursor = 'default'
-      if (this.creation) {
-        document.body.style.cursor = 'crosshair'
-      }
+      document.body.style.cursor = this.creation ? 'crosshair' : 'default'
     },
     createExercise (event) {
       if (this.creation) {
-        event.stopPropagation()
         let targetNode = event.target
         if (targetNode.parentNode.classList.contains('exercise')) {
+          if (this.selected !== null && this.selected === targetNode.parentNode && !this.hasSolution(this.selected)) {
+            let solution = document.createElement('div')
+            solution.classList.toggle('solution', true)
+            solution.style.top = targetNode.style.top
+            solution.style.height = this.getHeight(targetNode) + 'pt'
+            targetNode.parentNode.insertBefore(solution, targetNode)
+            targetNode.parentNode.removeChild(targetNode)
+            targetNode.style.top = 0
+            solution.appendChild(targetNode)
+            this.addSolutionEventHandlers(solution)
+            this.moveExerciseTopUp(solution, this.getOffsetTop(solution) - 5)
+            this.moveExerciseBottomDown(solution, this.getOffsetTop(solution) + parseFloat(solution.style.height) / 0.75 + 5)
+            this.toggleAddSolution(event)
+            event.stopPropagation()
+          }
           return
         }
         let exercise = document.createElement('div')
@@ -399,10 +494,80 @@ export default {
         targetNode.style.top = 0
         exercise.appendChild(targetNode)
         this.addExerciseEventHandlers(exercise)
-        this.moveExerciseTopUp(exercise, exercise.offsetTop + exercise.parentNode.offsetTop - 5)
-        this.moveExerciseBottomDown(exercise, exercise.offsetTop + exercise.parentNode.offsetTop + parseFloat(exercise.style.height) / 0.75 + 5)
+        this.moveExerciseTopUp(exercise, this.getOffsetTop(exercise) - 5)
+        this.moveExerciseBottomDown(exercise, this.getOffsetTop(exercise) + parseFloat(exercise.style.height) / 0.75 + 5)
         this.toggleAddExercise()
       }
+    },
+    getSolution (exercise) {
+      let child = exercise.firstChild
+      while (child !== null) {
+        if (child.classList.contains('solution')) {
+          return child
+        }
+        child = child.nextSibling
+      }
+      return null
+    },
+    hasSolution (exercise) {
+      return this.getSolution(exercise) !== null
+    },
+    toggleAddSolution (event) {
+      event.stopPropagation()
+      if (this.selected !== null) {
+        this.creation = !this.creation
+        if (this.hasSolution(this.selected)) {
+          this.creation = false
+        }
+      }
+    },
+    deleteSolution (solution) {
+      let top = parseFloat(solution.style.top)
+      let node = solution.firstChild
+      while ((node = solution.firstChild) !== null) {
+        node.style.top = top + parseFloat(node.style.top) + 'pt'
+        solution.removeChild(node)
+        solution.parentNode.insertBefore(node, solution)
+      }
+      solution.parentNode.removeChild(solution)
+    },
+    addCursorHandlers (container, inverse) {
+      let context = this
+      container.onmousemove = function (event) {
+        if ((context.selected === null && !inverse) || (context.selected !== null && inverse)) {
+          if (container.classList.contains('solution')) {
+          }
+          container.style.cursor = 'pointer'
+          if (context.hoveringTopOfExercise(container, event) && (container.hasChildNodes() || context.canMoveExerciseUp(container))) {
+            container.style.cursor = (context.canMoveExerciseUp(container) ? 'n' : '') + (container.hasChildNodes() ? 's' : '') + '-resize'
+          } else if (context.hoveringBottomOfExercise(container, event) && (container.hasChildNodes() || context.canMoveExerciseDown(container))) {
+            container.style.cursor = (container.hasChildNodes() ? 'n' : '') + (context.canMoveExerciseDown(container) ? 's' : '') + '-resize'
+          }
+        } else {
+          if (context.selected === container && context.creation) {
+            container.style.cursor = 'crosshair'
+          } else {
+            container.style.cursor = 'default'
+          }
+        }
+      }
+    },
+    addSolutionEventHandlers (solution) {
+      let context = this
+      solution.onmousedown = function (event) {
+        if (context.selected === solution.parentNode) {
+          if (context.hoveringBottomOfExercise(solution, event)) {
+            context.moving.exercise = solution
+            context.moving.direction = 'down'
+            event.stopPropagation()
+          } else if (context.hoveringTopOfExercise(solution, event)) {
+            context.moving.exercise = solution
+            context.moving.direction = 'up'
+            event.stopPropagation()
+          }
+        }
+      }
+      this.addCursorHandlers(solution, true)
     },
     addExerciseEventHandlers (exercise) {
       let context = this
@@ -421,55 +586,13 @@ export default {
         }
         event.stopPropagation()
       }
-
-      exercise.onmousemove = function (event) {
-        if (context.selected === null) {
-          if (context.hoveringTopOfExercise(exercise, event)) {
-            if (exercise.hasChildNodes() && context.canMoveExerciseUp(exercise)) {
-              exercise.style.cursor = 'ns-resize'
-            } else if (exercise.hasChildNodes()) {
-              exercise.style.cursor = 's-resize'
-            } else if (context.canMoveExerciseUp(exercise)) {
-              exercise.style.cursor = 'n-resize'
-            } else {
-              exercise.style.cursor = 'pointer'
-            }
-          } else if (context.hoveringBottomOfExercise(exercise, event)) {
-            if (exercise.hasChildNodes() && context.canMoveExerciseUp(exercise)) {
-              exercise.style.cursor = 'ns-resize'
-            } else if (exercise.hasChildNodes()) {
-              exercise.style.cursor = 'n-resize'
-            } else if (context.canMoveExerciseDown(exercise)) {
-              exercise.style.cursor = 's-resize'
-            } else {
-              exercise.style.cursor = 'pointer'
-            }
-          } else {
-            exercise.style.cursor = 'pointer'
-          }
-        } else {
-          if (context.selected === exercise) {
-            exercise.style.cursor = 'pointer'
-          } else {
-            exercise.style.cursor = 'default'
-          }
-        }
-      }
+      this.addCursorHandlers(exercise, false)
     }
   }
 }
 </script>
 
 <style>
-
-.context_container {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
 
 .context_container .p, .context_container .r {
   position: absolute;
@@ -495,7 +618,6 @@ export default {
 
 .options .options_button {
   height: 20px;
-  width: 50px;
   font-size: 15px;
   background-color: var(--p-color-1);
   border-bottom: 2px solid var(--p-color-1);
@@ -511,8 +633,19 @@ export default {
   z-index: 2;
 }
 
+.context_container .selected_exercise:hover {
+  cursor: auto;
+}
+
 .context_container .missing_tags {
   border-color: #ff0000;
+}
+
+.exercise .solution {
+  width: calc(100% - 4px);
+  border: 2px solid var(--n-color-5);
+  margin-top: -2px;
+  position: absolute;
 }
 
 .blurred {
@@ -529,8 +662,9 @@ export default {
 
 .options {
   left: calc(595pt + 4px);
-  width: 50px;
+  width: 70px;
   margin-top: -2px;
+  text-align: center;
   border: 2px solid var(--p-color-1);
   position: absolute;
   background-color: var(--n-color-2);
@@ -602,13 +736,32 @@ export default {
   font-size: 25px;
 }
 
+.titlebox {
+  position: absolute;
+  top: -35px;
+  height: 35px;
+  left: -2px;
+  border: 2px solid var(--p-color-1);
+  border-radius: 0;
+  padding-left: 5px;
+  margin: 0;
+}
+
 </style>
 
 <style scoped>
+.context_container {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .add_tag_container input[type=text] {
   width: 260px;
 }
-
 .close_tag_input {
   position: absolute;
   border-radius: 3px;

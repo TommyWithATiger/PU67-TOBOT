@@ -10,9 +10,7 @@ import base.BaseTest;
 import data.dao.SubjectDAO;
 import data.Subject;
 import data.user.User;
-import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
-import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -45,7 +43,7 @@ public class APIAddSubjectHandlerTest extends BaseTest {
 
   @Test(expected = APIBadRequestException.class)
   public void testHandleAddSubjectFieldsNotSet() {
-    HttpRequest httpRequest = buildRequestContent("subject/url", "POST", true, "{}");
+    HttpRequest httpRequest = buildRequestContent("subject/url", "POST", user, true, "{}");
     handleAddSubject(httpRequest);
   }
 
@@ -55,20 +53,12 @@ public class APIAddSubjectHandlerTest extends BaseTest {
     String response = handleAddSubject(httpRequest);
     Subject subject = SubjectDAO.getInstance().findSubjectsByTitle("Test title").get(0);
     assertNotNull(subject);
+    assertTrue(subject.isEditor(user));
     assertEquals("Test description", subject.getDescription());
     assertEquals("IDI-NTNU", subject.getInstitution());
     assertEquals("TDT4100", subject.getSubjectCode());
     assertEquals("{\"institution\":\"IDI-NTNU\",\"description\":\"Test description\",\"id\":"
         + subject.getId() + ",\"title\":\"Test title\",\"subjectCode\":\"TDT4100\"}", response);
-  }
-
-  private HttpRequest buildRequest(String url, String method, boolean setLoggedIn) {
-    BasicHttpEntityEnclosingRequest httpRequest = new BasicHttpEntityEnclosingRequest(method, url);
-    if (setLoggedIn) {
-      httpRequest.addHeader("X-Username", user.getUsername());
-      httpRequest.addHeader("Authorization", "Bearer " + user.getSessionToken());
-    }
-    return httpRequest;
   }
 
   private HttpRequest buildRequestContent(String url, String method, boolean setLoggedIn) {
@@ -78,21 +68,7 @@ public class APIAddSubjectHandlerTest extends BaseTest {
     content.put("institution", "IDI-NTNU");
     content.put("subjectCode", "TDT4100");
 
-    return buildRequestContent(url, method, setLoggedIn, content.toString());
-  }
-
-  private HttpRequest buildRequestContent(String url, String method, boolean setLoggedIn,
-      String content) {
-    BasicHttpEntityEnclosingRequest httpRequest = (BasicHttpEntityEnclosingRequest) buildRequest(
-        url, method, setLoggedIn);
-
-    BasicHttpEntity httpEntity = new BasicHttpEntity();
-
-    httpEntity.setContent(new ByteArrayInputStream(content.getBytes()));
-
-    httpRequest.setEntity(httpEntity);
-
-    return httpRequest;
+    return buildRequestContent(url, method, user, setLoggedIn, content.toString());
   }
 
 }

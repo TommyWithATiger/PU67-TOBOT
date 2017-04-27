@@ -8,7 +8,6 @@ import api.exceptions.APIRequestForbiddenException;
 import base.BaseTest;
 import data.user.User;
 import org.apache.http.HttpRequest;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,32 +26,23 @@ public class APIGetUserInfoHandlerTest extends BaseTest {
 
   @Test(expected = APIBadMethodException.class)
   public void testGetUserInfoBadMethod() {
-    HttpRequest httpRequest = buildRequest("user/info", "GET", true);
+    HttpRequest httpRequest = buildRequest("user/info", "GET", user, true);
     getUserInfo(httpRequest);
   }
 
   @Test(expected = APIRequestForbiddenException.class)
   public void testGetUserInfoNoLogin() {
-    HttpRequest httpRequest = buildRequest("user/info", "POST", false);
+    HttpRequest httpRequest = buildRequest("user/info", "POST", user, false);
     getUserInfo(httpRequest);
   }
 
   @Test
   public void testGetUserInfo() {
-    HttpRequest httpRequest = buildRequest("user/info", "POST", true);
+    HttpRequest httpRequest = buildRequest("user/info", "POST", user, true);
     String response = getUserInfo(httpRequest);
     assertEquals(
         "{\"userType\":\"Student\",\"email\":\"user@email.com\",\"username\":\"Username\",\"token\":\""
             + user.getSessionToken() + "\"}", response);
-  }
-
-  private HttpRequest buildRequest(String url, String method, boolean setLoggedIn) {
-    BasicHttpEntityEnclosingRequest httpRequest = new BasicHttpEntityEnclosingRequest(method, url);
-    if (setLoggedIn) {
-      httpRequest.addHeader("X-Username", user.getUsername());
-      httpRequest.addHeader("Authorization", "Bearer " + user.getSessionToken());
-    }
-    return httpRequest;
   }
 
 }

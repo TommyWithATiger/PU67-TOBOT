@@ -14,8 +14,6 @@ import data.user.User;
 import data.rating.Rating;
 import data.rating.RatingEnum;
 import org.apache.http.HttpRequest;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicHttpRequest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,31 +40,31 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
 
   @Test(expected = APIRequestForbiddenException.class)
   public void testGetTopicRatingByIDNoLogin() {
-    HttpRequest httpRequest = buildRequest("topic/url?id=12", "POST", false);
+    HttpRequest httpRequest = buildRequest("topic/url?id=12", "POST", user, false);
     getTopicRatingByTopicID(httpRequest);
   }
 
   @Test(expected = APIBadMethodException.class)
   public void testGetTopicRatingByIDWrongMethod() {
-    HttpRequest httpRequest = buildRequest("topic/url?id=12", "GET", true);
+    HttpRequest httpRequest = buildRequest("topic/url?id=12", "GET", user, true);
     getTopicRatingByTopicID(httpRequest);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testGetTopicRatingByIDNoIDInURL() {
-    HttpRequest httpRequest = buildRequest("topic/url?test=hei", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/url?test=hei", "POST", user, true);
     getTopicRatingByTopicID(httpRequest);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testGetTopicRatingByIDIDNotValid() {
-    HttpRequest httpRequest = buildRequest("topic/url?id=-21", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/url?id=-21", "POST", user, true);
     getTopicRatingByTopicID(httpRequest);
   }
 
   @Test(expected = APIBadRequestException.class)
   public void testGetTopicRatingByIDIDNotNumber() {
-    HttpRequest httpRequest = buildRequest("topic/url?id=hei", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/url?id=hei", "POST", user, true);
     getTopicRatingByTopicID(httpRequest);
   }
 
@@ -74,15 +72,15 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
   public void testGetTopicRatingByIDNoRatingSet() {
     rating.delete();
 
-    HttpRequest httpRequest = buildRequest("topic/url?id=" + String.valueOf(topic.getId()), "POST",
-        true);
+    HttpRequest httpRequest = buildRequest("topic/url?id=" + String.valueOf(topic.getId()),
+        "POST", user, true);
     getTopicRatingByTopicID(httpRequest);
   }
 
   @Test
   public void testGetTopicRatingByIDValid() {
-    HttpRequest httpRequest = buildRequest("topic/url?id=" + String.valueOf(topic.getId()), "POST",
-        true);
+    HttpRequest httpRequest = buildRequest("topic/url?id=" + String.valueOf(topic.getId()),
+        "POST", user, true);
     String response = getTopicRatingByTopicID(httpRequest);
     assertEquals(
         "{\"rating\":\"" + rating.getRating().toString() + "\"}",
@@ -91,19 +89,19 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
 
   @Test(expected = APIRequestForbiddenException.class)
   public void testGetTopicRatingsNoLogin() {
-    HttpRequest httpRequest = buildRequest("topic/url", "POST", false);
+    HttpRequest httpRequest = buildRequest("topic/url", "POST", user, false);
     getTopicRatings(httpRequest);
   }
 
   @Test(expected = APIBadMethodException.class)
   public void testGetTopicRatingsWrongMethod() {
-    HttpRequest httpRequest = buildRequest("topic/url", "GET", true);
+    HttpRequest httpRequest = buildRequest("topic/url", "GET", user, true);
     getTopicRatings(httpRequest);
   }
 
   @Test
   public void testGetTopicRatings() {
-    HttpRequest httpRequest = buildRequest("topic/url", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/url", "POST", user, true);
     String response = getTopicRatings(httpRequest);
     assertEquals(
         "{\"ratings\":[{\"topicID\":" + String.valueOf(topic.getId()) + ",\"rating\":\"Good\"}]}",
@@ -113,7 +111,7 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
   @Test
   public void testGetTopicRatingsEmpty() {
     rating.delete();
-    HttpRequest httpRequest = buildRequest("topic/url", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/url", "POST", user, true);
     String response = getTopicRatings(httpRequest);
     assertEquals("{\"ratings\":[]}", response);
   }
@@ -125,7 +123,7 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
     Rating rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.Poor);
     rating2.create();
 
-    HttpRequest httpRequest = buildRequest("topic/url", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/url", "POST", user, true);
     String response = getTopicRatings(httpRequest);
     assertEquals("{\"ratings\":[{\"topicID\":" + String.valueOf(topic.getId())
         + ",\"rating\":\"Good\"},{\"topicID\":" + String.valueOf(topic2.getId())
@@ -134,19 +132,19 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
 
   @Test(expected = APIRequestForbiddenException.class)
   public void testGetTopicsWithRatingsNoLogin() {
-    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", false);
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", user, false);
     getTopicsWithRatings(httpRequest);
   }
 
   @Test(expected = APIBadMethodException.class)
   public void testGetTopicWithRatingsWrongMethod() {
-    HttpRequest httpRequest = buildRequest("topic/rating/url", "GET", true);
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "GET", user, true);
     getTopicsWithRatings(httpRequest);
   }
 
   @Test
   public void testGetTopicsWithRatings() {
-    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", user, true);
     String response = getTopicsWithRatings(httpRequest);
     assertEquals(
         "{\"topics\":[{\"rating\":\"Good\",\"description\":\"Description\",\"has-rating\":true,\"id\":"
@@ -156,7 +154,7 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
   @Test
   public void testGetTopicsWithRatingsNoRating() {
     rating.delete();
-    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", user, true);
     String response = getTopicsWithRatings(httpRequest);
     assertEquals(
         "{\"topics\":[{\"description\":\"Description\",\"has-rating\":false,\"id\":"
@@ -170,23 +168,13 @@ public class APIGetTopicRatingHandlerTest extends BaseTest {
     Rating rating2 = new Rating(user.getId(), topic2.getId(), RatingEnum.Poor);
     rating2.create();
 
-    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", true);
+    HttpRequest httpRequest = buildRequest("topic/rating/url", "POST", user, true);
     String response = getTopicsWithRatings(httpRequest);
     assertEquals(
         "{\"topics\":[{\"rating\":\"Good\",\"description\":\"Description\",\"has-rating\":true,\"id\":"
             + String.valueOf(topic.getId())
             + ",\"title\":\"Test topic\"},{\"rating\":\"Poor\",\"description\":\"Description\",\"has-rating\":true,\"id\":"
             + String.valueOf(topic2.getId()) + ",\"title\":\"Test topic 2\"}]}", response);
-  }
-
-
-  private HttpRequest buildRequest(String url, String method, boolean setLogin) {
-    HttpRequest httpRequest = new BasicHttpRequest(method, url);
-    if (setLogin) {
-      httpRequest.setHeader(new BasicHeader("X-Username", user.getUsername()));
-      httpRequest.setHeader(new BasicHeader("Authorization", "Bearer " + user.getSessionToken()));
-    }
-    return httpRequest;
   }
 
 }

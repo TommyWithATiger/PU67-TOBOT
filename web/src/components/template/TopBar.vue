@@ -2,6 +2,7 @@
   <div class="header background-color-n1">
     <div class="header-container">
       <router-link to="/"><Logo class="header-img" /></router-link>
+      <router-link to="/"><TextLogo class="header-logo" /></router-link>
       <div class="header-links" v-if="authenticated">
         <router-link v-for="link in links"
           v-if="checkUsertype(link.users)"
@@ -33,6 +34,7 @@
 
 <script>
 import Logo from 'components/template/Logo'
+import TextLogo from 'components/template/TextLogo'
 import LogoutBtn from 'components/auth/LogoutBtn'
 import SearchBar from 'components/search/SearchBar'
 import { auth } from 'auth'
@@ -52,12 +54,12 @@ export default {
         {
           name: 'Subjects',
           path: '/subject',
-          users: ['Admin', 'Teacher']
+          users: ['Admin', 'Teacher', 'Student']
         },
         {
           name: 'Topics',
           path: '/topic',
-          users: ['Admin', 'Teacher']
+          users: ['Admin', 'Teacher', 'Student']
         },
         {
           name: 'Upload',
@@ -152,6 +154,7 @@ export default {
   },
   components: {
     Logo,
+    TextLogo,
     LogoutBtn,
     SearchBar
   }
@@ -167,6 +170,12 @@ export default {
 }
 
 .header-img {
+  max-width: 160px;
+  width: 100%;
+  height: inherit;
+}
+
+.header-logo {
   max-width: 160px;
   width: 100%;
   height: inherit;

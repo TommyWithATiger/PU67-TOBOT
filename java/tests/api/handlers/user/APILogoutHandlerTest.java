@@ -8,10 +8,7 @@ import api.exceptions.APIBadRequestException;
 import base.BaseTest;
 import data.dao.UserDAO;
 import data.user.User;
-import java.io.ByteArrayInputStream;
 import org.apache.http.HttpRequest;
-import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.message.BasicHttpRequest;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -86,29 +83,12 @@ public class APILogoutHandlerTest extends BaseTest {
     assertEquals("{\"logged_out\":true}", response);
   }
 
-  private HttpRequest buildRequest(String url, String method) {
-    return new BasicHttpEntityEnclosingRequest(method, url);
-  }
-
   private HttpRequest buildRequestContent(String url, String method) {
     JSONObject content = new JSONObject();
     content.put("username", user.getUsername());
     content.put("token", user.getSessionToken());
 
     return buildRequestContent(url, method, content.toString());
-  }
-
-  private HttpRequest buildRequestContent(String url, String method, String content) {
-    BasicHttpEntityEnclosingRequest httpRequest = (BasicHttpEntityEnclosingRequest) buildRequest(
-        url, method);
-
-    BasicHttpEntity httpEntity = new BasicHttpEntity();
-
-    httpEntity.setContent(new ByteArrayInputStream(content.getBytes()));
-
-    httpRequest.setEntity(httpEntity);
-
-    return httpRequest;
   }
 
 }

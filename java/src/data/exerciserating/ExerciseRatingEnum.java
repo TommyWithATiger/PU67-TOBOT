@@ -16,8 +16,8 @@ public enum ExerciseRatingEnum {
     return value;
   }
 
-  public static ExerciseRatingEnum get(int ratingValue){
-    switch (ratingValue){
+  public static ExerciseRatingEnum get(float ratingValue){
+    switch (Math.round(ratingValue)){
       case 1:
         return Easy;
       case 2:
